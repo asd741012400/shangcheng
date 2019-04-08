@@ -1,0 +1,102 @@
+* {
+    padding:0;
+    margin:0;
+}
+div, dl, dt, dd, form, h1, h2, h3, h4, h5, h6, img, ol, ul, li, table, th, td, p, span, a {
+    border:0;
+}
+img, input ,button{
+    border:none;
+    vertical-align:middle;
+    float: left;
+}
+img{
+    width: 100%;
+    float: left;
+}
+body {
+    font-family:Tahoma, Arial, Helvetica, "宋体";
+    font-size:.12rem;
+    background:#FFF;
+    color:#000;
+}
+html {
+    overflow-y:scroll;
+}
+ul, ol {
+    list-style:none;
+}
+th, td, input {
+    font-size:.12rem
+}
+input {
+    outline:none;
+    border:none;
+    box-shadow:none;
+}
+h3 {
+    font-size:.14rem
+}
+button {
+    border:none;
+    cursor:pointer;
+    font-size:.12rem;
+    background-color:transparent;
+}
+select {
+    border-width:1px;
+    _zoom:1;
+    border-style:solid;
+    padding-top:2px;
+    font-size:.12rem;
+}
+.clear {
+    clear:both;
+    font-size:1px;
+    height:0;
+    visibility:hidden;
+    line-height:0;
+}
+.clearfix:after {
+    content:"";
+    display:block;
+    clear:both;
+}
+.clearfix {
+    zoom:1;
+}
+a{
+    text-decoration: none;
+}
+.el-message-box .el-message-box__content{
+    text-align: center;
+}
+.el-message-box .el-message-box__btns .el-button{
+    margin: 0 auto;
+    float: none;
+    display: block;
+  }
+input::-webkit-input-placeholder{
+    color:rgba(255,255,255,.2);
+}
+input::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:rgba(255,255,255,.2);
+}
+input:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:rgba(255,255,255,.2);
+}
+input:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color:rgba(255,255,255,.2);
+}
+textarea::-webkit-input-placeholder{
+    color:rgba(255,255,255,.2);
+}
+textarea::-moz-placeholder{   /* Mozilla Firefox 19+ */
+    color:rgba(255,255,255,.2);
+}
+textarea:-moz-placeholder{    /* Mozilla Firefox 4 to 18 */
+    color:rgba(255,255,255,.2);
+}
+textarea:-ms-input-placeholder{  /* Internet Explorer 10-11 */ 
+    color:rgba(255,255,255,.2);
+}

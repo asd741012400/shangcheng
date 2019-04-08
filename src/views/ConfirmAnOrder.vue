@@ -1,0 +1,344 @@
+<template>
+  <div class="ConfirmAnOrder">
+    <header>
+      <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+      <div class="tel">确认订单</div>
+      <div class="add"></div>
+    </header>
+    
+    <div class="mian">
+      <div class="commodity">
+        <i><img src="../assets/img1.png" alt=""></i>
+        <ul>
+          <li>
+            <strong>龙湖时代天街悠游堂</strong>
+          </li>
+          <li>
+            <span>一大一小</span>
+          </li>
+          <li>
+            <p>
+              <b>￥99</b>
+              <em>×2</em>
+            </p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="number">
+        <b>数 量</b>
+        <div>
+          <span>-</span>
+          <p>1</p>
+          <a>+</a>
+        </div>
+      </div>
+
+      <div class="discounts">
+        <b>使用优惠</b>
+        <span>国庆卷</span>
+      </div>
+
+      <div class="message">
+        <ul>
+          <li>
+            <label>孩子姓名</label>
+            <p><input type="text" value="小宝"></p>
+          </li>
+          <li>
+            <label>手机号</label>
+            <p><input type="text" value="13526485978"></p>
+          </li>
+          <li>
+            <label>身份证</label>
+            <p><input type="text" value="564892512365487594"></p>
+          </li>
+          <li>
+            <label>游玩日期</label>
+            <p><input type="text" value="2019-1-1"><span><img src="../assets/icon_pull_down.png" alt=""></span></p>
+          </li>
+        </ul>
+      </div>
+
+      <div class="describe">
+        <span>已优惠:￥10</span>
+        <span>合计:￥188</span>
+      </div>
+    </div>
+
+    <div class="btns">
+      <span>合计:￥188</span>
+      <b>提交订单</b>
+    </div>
+
+  </div>
+</template>
+<script>
+
+export default {
+  name:'ConfirmAnOrder',
+  data(){
+    return{
+  
+    }
+  },
+  components:{
+  },
+  methods:{
+    
+    
+  },
+
+  // 创建前状态
+  beforeCreate(){
+  },
+
+  // 创建完毕状态 
+  created(){
+    document.body.style.background = "#F6F6F6";
+  },
+
+  // 挂载前状态
+  beforeMount(){
+  },
+
+  // 挂载结束状态
+  mounted(){
+  },
+  
+  // 更新前状态
+  beforeUpdate(){
+  },
+
+  // 更新完成状态
+  updated(){
+  },
+
+  // 销毁前状态
+  beforeDestroy(){
+  },
+
+  // 销毁完成状态
+  destroyed(){
+  } 
+  
+}
+</script>
+<style lang="scss" scoped>
+.ConfirmAnOrder{
+  header{
+    height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:  0 auto;
+    padding-top:.3rem; 
+    padding-bottom: .2rem;
+    background: #f6f6f6;
+    position: relative;
+    
+    .icon_return{
+      width: 1rem;
+      height: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      position: absolute;
+      left: .4rem;
+      span{
+        overflow: hidden;
+        width: .27rem;
+      }
+    }
+    .tel{
+      color:#515C6F;
+      font-weight: bold;
+      font-size: .32rem;
+      text-align: center;
+    }
+ 
+  }
+  .mian{
+    padding-bottom: 1.2rem;
+    .commodity{
+      display: flex;
+      padding: .28rem .6rem .32rem .46rem;
+      background: #fff;
+      i{
+        width: 2.04rem;
+        height: 2.04rem;
+        overflow: hidden;
+      }
+      ul{
+        padding-left: .26rem;
+        flex: 1;
+        li{
+          strong{
+            font-size: .28rem;
+            color: #535D70;
+            font-weight: normal;
+          }
+          span{
+            font-size: .24rem;
+            color: #999999;
+          }
+          p{
+            display: flex;
+            padding-top: .6rem;
+            b{
+              font-weight: normal;
+              flex: 1;
+              font-size: .28rem;
+              color: #535D70;
+            }
+            em{
+              font-style: normal;
+              font-size: .24rem;
+              color: #999999;
+            }
+          }
+        }
+      }
+    }
+    .number{
+      display: flex;
+      background: #fff;
+      margin-top: 10px;
+      align-items: center;
+      height: .8rem;
+      padding: 0 .6rem 0 .46rem;
+      b{
+        font-size: .28rem;
+        color: #515C6F;
+        flex: 1;
+      }
+      div{
+        display: flex;
+        width: 2.26rem;
+        height: .42rem;
+        border-radius: 50px;
+        overflow: hidden;
+        span{
+          width: .62rem;
+          height: .46rem;
+          background: #c8c8c8;
+          text-align: center;
+          line-height: .35rem;
+          font-size: .6rem;
+          color: #fff;
+        }
+        p{
+          flex: 1;
+          background: #f6f6f6;
+          text-align: center;
+          height: .46rem;
+          line-height: .46rem;
+          color: #515C6F;
+          font-size: .32rem;
+        }
+        a{
+          width: .62rem;
+          height: .46rem;
+          background: #999999;
+          text-align: center;
+          line-height: .37rem;
+          font-size: .4rem;
+          color: #fff;
+        }
+      }
+    }
+    .discounts{
+      display: flex;
+      background: #fff;
+      margin-top: 10px;
+      align-items: center;
+      height: .8rem;
+      padding: 0 .6rem 0 .46rem;
+      b{
+        font-size: .28rem;
+        color: #515C6F;
+        flex: 1;
+      }
+      span{
+        font-size: .28rem;
+        color: #FF6666;
+      }
+    }
+    .message{
+      margin-top: 10px;
+      background: #fff;
+      ul{
+        padding: .28rem .89rem .66rem;
+        li{
+          display: flex;
+          align-items: center;
+          margin-bottom: .08rem;
+          label{
+            width: 1rem;
+            text-align: right;
+            padding-right: .24rem;
+          }
+          p{
+            height: .6rem;
+            border: 1px solid #C8C8C8;
+            border-radius:5px;
+            flex: 1;
+            padding-left: .34rem;
+            display: flex;
+            align-items: center;
+            span{
+              width: .14rem;
+              overflow: hidden;
+              padding-right: .26rem;
+            }
+            input{
+              height: 100%;
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+    .describe{
+      margin-top: .4rem;
+      span{
+        padding: 0 .89rem;
+        height: .8rem;
+        line-height: .8rem;
+        text-align: right;
+        display: block;
+        background: #fff;
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  .btns{
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    span{
+      flex: 1;
+      text-align: right;
+      height: 1.16rem;
+      line-height: 1.16rem;
+      font-size: .4rem;
+      color: #515C6F;
+      padding-right: .34rem;
+    }
+    b{
+      width: 3.4rem;
+      line-height: 1.16rem;
+      height: 1.16rem;
+      text-align: center;
+      font-size: .32rem;
+      color: #FFFFFF;
+      background: #FF6666;
+    }
+  }
+}
+</style>
+
+
