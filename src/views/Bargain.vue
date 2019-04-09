@@ -3,7 +3,7 @@
 
     <div class="bargain_bg">
       <div class="bargain_img1">
-        <i><img src="" alt=""></i>
+        <i><img src="../assets/bargain_bg.png" alt=""></i>
         <div class="bargain_img1_text">
           <div>
             <span><img src="../assets/icon_timepiece.png" alt=""></span>
@@ -20,7 +20,7 @@
         <i><img src="../assets/icon_trumpet.png" alt=""></i>
         <p>PLUS会员享有直接购买权益，您可直接购买！</p>
       </div>
-      <div class="bargain_img2" v-else><img src="../assets/activity_img1.png" alt=""></div>
+      <div class="bargain_img2" v-else><img src="../assets/img4.png" alt=""></div>
 
     </div>
 
@@ -122,7 +122,7 @@ export default {
   data(){
     return{
       helpState:false,
-      vip:true
+      vip:false
     }
   },
   components:{

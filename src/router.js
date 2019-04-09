@@ -5,8 +5,9 @@ import Index from './views/Index.vue'
 import PersonalCenter from './views/PersonalCenter.vue'
 import MyShop from './views/MyShop.vue'
 import CommodityDetails from './views/CommodityDetails.vue'
+import CardProjectDetails from './views/CardProjectDetails.vue'
 import MyCardBag from './views/MyCardBag.vue'
-import Cardactivate from './views/Cardactivate.vue'
+import CardActivate from './views/CardActivate.vue'
 import UseCard from './views/UseCard.vue'
 import PaySucceed from './views/PaySucceed.vue'
 import WithdrawDeposit from './views/WithdrawDeposit.vue'
@@ -22,6 +23,9 @@ import DistributionThree from './views/DistributionThree.vue'
 import CardEquity from './views/CardEquity.vue'
 import CardDetailsTow from './views/CardDetailsTow.vue'
 import Bargain from './views/Bargain.vue'
+import ClassifyList from './views/ClassifyList.vue'
+import ShopDetails from './views/ShopDetails.vue'
+import City from './views/City.vue'
 
 Vue.use(Router)
 
@@ -55,14 +59,19 @@ export default new Router({
       component: CommodityDetails
     },
     {
+      path: '/CardProjectDetails',
+      name: 'CardProjectDetails',
+      component: CardProjectDetails
+    },
+    {
       path: '/MyCardBag',
       name: 'MyCardBag',
       component: MyCardBag
     },
     {
-      path: '/Cardactivate',
-      name: 'Cardactivate',
-      component: Cardactivate
+      path: '/CardActivate',
+      name: 'CardActivate',
+      component: CardActivate
     },
     {
       path: '/UseCard',
@@ -138,6 +147,21 @@ export default new Router({
       path: '/Bargain',
       name: 'Bargain',
       component: Bargain
+    },
+    {
+      path: '/ClassifyList',
+      name: 'ClassifyList',
+      component: ClassifyList
+    },
+    {
+      path: '/ShopDetails',
+      name: 'ShopDetails',
+      component: ShopDetails
+    },
+    {
+      path: '/City',
+      name: 'City',
+      component: City
     }
   ]
 })

@@ -1,5 +1,5 @@
 <template>
-  <div class="Cardactivate">
+  <div class="CardActivate">
     <header>
       <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
       <div class="tel">卡片激活</div>
@@ -132,7 +132,7 @@ import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
-  name:'Cardactivate',
+  name:'CardActivate',
   data(){
     return{
       imgUrl:'',
@@ -217,7 +217,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.Cardactivate{
+.CardActivate{
   header{
     height: 1rem;
     display: flex;
