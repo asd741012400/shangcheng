@@ -46,7 +46,7 @@
       </div>
       <div class="user_date box">
         <label>出生日期</label>
-        <div class="datePicker boxs" @click="openPicker">
+        <div class="datePicker boxs">
            <mt-datetime-picker
                 type="date"
                 ref="picker"
@@ -56,7 +56,8 @@
                 @confirm="handleConfirm"
                 :startDate="startDate">
             </mt-datetime-picker>
-         
+            <span>{{dateTime}}</span>
+            <p @click="openPicker"></p>
           <i><img src="../assets/icon_pull_down.png" alt=""></i>
         </div>
       </div>
@@ -140,7 +141,8 @@ export default {
       closeOnClickModalS:true,
       sexStuats:1,
       agreementStuats:false,
-      confirmPop:false
+      confirmPop:false,
+      dateTime:""
     }
   },
   components:{
@@ -163,23 +165,13 @@ export default {
 
     //点击确定按钮
     handleConfirm (data) {
-        let date = moment(data).format('YYYY.MM.DD')
-        this.dateTime = date
-        const that = this;
-        Vue.nextTick(function () {
-          that.$refs.picker.close()
-          
-        });
+      let date = moment(data).format('YYYY.MM.DD')
+      this.dateTime = date;
+      this.$refs.picker.close()
+      event.stopPropagation()
     },
 
-    //点击取消按钮
-    closeConfirm(){
-        const that = this;
-        Vue.nextTick(function () {
-            that.$refs.picker.close();
-        });
-    },
-
+   
     confirmPopShow(){
       this.confirmPop = true
     },
@@ -356,7 +348,16 @@ export default {
       div.boxs{
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: flex-start;
+        position: relative;
+        p{
+          position: absolute;
+          width: 100%;
+          height: 100%;
+        }
+        span{
+          flex: 1;
+        }
         i{
           width: .24rem;
         }
