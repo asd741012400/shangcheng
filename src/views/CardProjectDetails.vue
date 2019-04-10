@@ -94,14 +94,18 @@
 
     </div>
 
-    <footer>
+    <footer v-if="state">
       <div>
         <p><span><img src="../assets/btn_navigation.png" alt=""></span></p>
         <p><span><img src="../assets/btn_relation.png" alt=""></span></p>
       </div>
     </footer>
 
-    
+    <footer v-else>
+      <a>￥199立即购卡</a>
+    </footer>
+
+
 
   </div>
 </template>
@@ -110,6 +114,7 @@ export default {
   name:'CardProjectDetails',
   data(){
     return{
+      state:false,
     }
   },
   components:{
@@ -335,6 +340,20 @@ export default {
     bottom: .76rem;
     width: 100%;
     height: .8rem;
+    a{
+      width: 5rem;
+      box-shadow:0px 5px 10px rgba(255,128,128,0.6);
+      border-radius:50px;
+      height: .8rem;
+      line-height: .8rem;
+      text-align: center;
+      color: #fff;
+      margin: 0 auto;
+      display: block;
+      background: #FF8080;
+      font-size: .32rem;
+      font-weight:bold;
+    }
     div{
       padding: 0 .58rem;
       display: flex;

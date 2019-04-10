@@ -26,6 +26,7 @@ import Bargain from './views/Bargain.vue'
 import ClassifyList from './views/ClassifyList.vue'
 import ShopDetails from './views/ShopDetails.vue'
 import City from './views/City.vue'
+import SharePoster from './views/SharePoster.vue'
 
 Vue.use(Router)
 
@@ -162,6 +163,11 @@ export default new Router({
       path: '/City',
       name: 'City',
       component: City
+    },
+    {
+      path: '/SharePoster',
+      name: 'SharePoster',
+      component: SharePoster
     }
   ]
 })

@@ -50,14 +50,18 @@
     </div>
 
     <div class="click_share">
-      <div>
+      <div @click="shareShowFn">
         <span><img src="../assets/icon_share.png" alt=""></span>
         <p>分享店铺</p>
       </div>
     </div>
+
+    <Share ref="myShare"></Share>
+
   </div>
 </template>
 <script>
+import Share from '../components/Share'
 export default {
   name:'MyShop',
   data(){
@@ -65,8 +69,12 @@ export default {
     }
   },
   components:{
+    Share
   },
   methods:{
+    shareShowFn() {
+      this.$refs.myShare.shareShowFn();
+    }
   },
 
   // 创建前状态

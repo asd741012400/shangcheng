@@ -197,17 +197,19 @@
         </li>
       </ul>
       <div class="btn">
-        <div class="share">
+        <div class="share" @click="shareShowFn">
           <span>￥10</span>
           <p>分享赚</p>
         </div>
         <div class="buy"><span>立即购买</span></div>
       </div>
     </footer>
+    <Share ref="myShare"></Share>
 
   </div>
 </template>
 <script>
+import Share from '../components/Share'
 export default {
   name:'CommodityDetails',
   data(){
@@ -215,8 +217,12 @@ export default {
     }
   },
   components:{
+    Share
   },
   methods:{
+    shareShowFn() {
+      this.$refs.myShare.shareShowFn();
+    }
   },
 
   // 创建前状态
