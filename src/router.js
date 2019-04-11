@@ -27,6 +27,12 @@ import ClassifyList from './views/ClassifyList.vue'
 import ShopDetails from './views/ShopDetails.vue'
 import City from './views/City.vue'
 import SharePoster from './views/SharePoster.vue'
+import MerchantShop from './views/merchant/MerchantShop.vue'
+import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue'
+import TeamDel from './views/merchant/TeamDel.vue'
+import TeamDelTow from './views/merchant/TeamDelTow.vue'
+import MemberDel from './views/merchant/MemberDel.vue'
+import Generalize from './views/merchant/Generalize.vue'
 
 Vue.use(Router)
 
@@ -168,6 +174,36 @@ export default new Router({
       path: '/SharePoster',
       name: 'SharePoster',
       component: SharePoster
+    },
+    {
+      path: '/MerchantShop',
+      name: 'MerchantShop',
+      component: MerchantShop
+    },
+    {
+      path: '/WithdrawDepositDel',
+      name: 'WithdrawDepositDel',
+      component: WithdrawDepositDel
+    },
+    {
+      path: '/TeamDel',
+      name: 'TeamDel',
+      component: TeamDel
+    },
+    {
+      path: '/TeamDelTow',
+      name: 'TeamDelTow',
+      component: TeamDelTow
+    },
+    {
+      path: '/MemberDel',
+      name: 'MemberDel',
+      component: MemberDel
+    },
+    {
+      path: '/Generalize',
+      name: 'Generalize',
+      component: Generalize
     }
   ]
 })
