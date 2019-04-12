@@ -33,6 +33,7 @@ import TeamDel from './views/merchant/TeamDel.vue'
 import TeamDelTow from './views/merchant/TeamDelTow.vue'
 import MemberDel from './views/merchant/MemberDel.vue'
 import Generalize from './views/merchant/Generalize.vue'
+import PersonalStores from './views/merchant/PersonalStores.vue'
 
 Vue.use(Router)
 
@@ -204,6 +205,11 @@ export default new Router({
       path: '/Generalize',
       name: 'Generalize',
       component: Generalize
+    },
+    {
+      path: '/PersonalStores',
+      name: 'PersonalStores',
+      component: PersonalStores
     }
   ]
 })

@@ -42,7 +42,6 @@ export default {
         eleLink.click();
         // 然后移除
         document.body.removeChild(eleLink);
-
       });
     }
   },
