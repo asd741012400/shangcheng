@@ -125,10 +125,62 @@
 
 
         <div class="shop_del">
-          <h3>卡片详情</h3>
-          <div></div>
-        </div>
+          <h3>
+            <p :class="table == 1 ? 'active' : ''" @click="tabkeChage(1)">卡内商家</p>
+            <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">卡片详情</p>
+          </h3>
+          <div v-if="table == 1">
+            <ul>
+              <li class="vip_price">
+                <div class="img">
+                  <span></span>
+                  <div>
+                    <p>会员价</p>
+                    <i>￥</i>
+                    <a>20</a>
+                  </div>
+                </div>
+                <div class="project">
+                  <p>悠游堂亲子嘉年华</p>
+                  <span>报名　11/22</span>
+                </div>
+                <div class="share">
+                  <div class="price">
+                    <span>现价</span>
+                    <b>￥45.0</b>
+                    <a>￥345</a>
+                  </div>
+                </div>
+              </li>
+              <li class="vip_price">
+                <div class="img">
+                  <span></span>
+                  <div>
+                    <p>会员价</p>
+                    <i>￥</i>
+                    <a>20</a>
+                  </div>
+                </div>
+                <div class="project">
+                  <p>悠游堂亲子嘉年华</p>
+                  <span>报名　11/22</span>
+                </div>
+                <div class="share">
+                  <div class="price">
+                    <span>现价</span>
+                    <b>￥45.0</b>
+                    <a>￥345</a>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
 
+          <div v-if="table == 2" class="shop_del_div">
+            
+          </div>
+        </div>
+        
     </div>
 
 
@@ -208,12 +260,17 @@ export default {
   name:'CardDetails',
   data(){
     return{
-      cardDetailsState:4
+      cardDetailsState:4,
+      table:1
     }
   },
   components:{
   },
   methods:{
+    tabkeChage(num){
+      const that = this;
+      that.table = num;
+    },
   },
 
   // 创建前状态
@@ -517,15 +574,116 @@ export default {
       border-top:10px solid #f6f6f6;
       background: #fff;
       h3{
-        line-height: .8rem;
         font-size: .28rem;
         color: #515C6F;
-        padding-left: .6rem;
-        border-bottom:1px solid #f6f6f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: .82rem;
+        border-bottom:.1rem solid #f6f6f6;
+        p{
+          flex: 1;
+          text-align: center;
+          font-weight: bold;
+          &.active{
+            color: #FF6666;
+          }
+        }
+      }
+      .shop_del_div{
+        height: 5rem;
+        background: #ccc;
       }
       div{
-        height: 4.6rem;
-        background: #C8C8C8;
+        ul{
+          li{
+            background: #fff;
+            padding-top: .2rem;
+            border-bottom: .22rem solid #F6F6F6;
+            &.vip_price{
+              .img{
+                margin: 0 .2rem;
+                height: 3rem;
+                background: #ccc;
+                border-radius: 5px;
+                position: relative;
+                div{
+                  width: 2.48rem;
+                  background:linear-gradient(269deg,rgba(255,102,102,1) 0%,rgba(255,179,137,1) 100%);
+                  border-radius:0px 20px 20px 0px;
+                  position: absolute;
+                  bottom: -.12rem;
+                  display: flex;
+                  align-items: center;
+                  height: .62rem;
+                  justify-content: center;
+                  color: #fff;
+                  p{
+                    font-size: .28rem;
+                  }
+                  i{
+                    font-size: .32rem;
+                    font-style: normal;
+                  }
+                  a{
+                    font-size: .4rem;
+                  }
+                }
+              }
+              .project{
+                display: flex;
+                padding: .3rem .2rem;
+                p{
+                  flex: 1;
+                  color: #515C6F;
+                  padding-left: .28rem;
+                }
+                span{
+                  color: #FF6666;
+                }
+              }
+              .share{
+                display: flex;
+                .price{
+                  flex: 1;
+                  display: flex;
+                  align-items: center;
+                  padding-bottom: .4rem;
+                  justify-content: flex-start;
+                  padding-left: .46rem;
+                  span{
+                    color: #515C6F;
+                  }
+                  b{
+                    font-weight: normal;
+                    font-size: .36rem;
+                    padding-left: 2px;
+                    padding-right: .2rem;
+                  }
+                  a{
+                    text-decoration: line-through;
+                  }
+                }
+                p{
+                  background:linear-gradient(90deg,rgba(255,102,102,1) 0%,rgba(255,179,137,1) 100%);
+                  width: 2rem;
+                  height: .5rem;
+                  line-height: .5rem;
+                  border-radius:20px;
+                  text-align: center;
+                  font-size: .22rem;
+                  color: #fff;
+                  margin-right: .22rem;
+                  span{
+                    font-size: .28rem;
+                  }
+                }
+              }
+            }
+          }
+          
+        
+        }
       }
     }  
   }

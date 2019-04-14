@@ -149,6 +149,25 @@
         </li>
       </ul>
     </div>
+
+    <footer>
+      <div class="footer">
+        <div class="shop">
+          <span><a><img src="../assets/icon_shopA.png" alt=""></a></span>
+          <p>商城</p>
+        </div>
+        <div class="member">
+          <b><img src="../assets/icon_vip_imgA.png" alt=""></b>
+          <span></span>
+          <p>会员</p>
+        </div>
+        <div class="personal_center">
+          <span><a><img src="../assets/icon_myB.png" alt=""></a></span>
+          <p>个人中心</p>
+        </div>
+      </div>
+    </footer>
+
   </div>
 </template>
 <script>
@@ -173,6 +192,14 @@ export default {
   // 创建完毕状态 
   created(){
     document.body.style.background = "#F6F6F6";
+    const that = this;
+    that.$http.post('http://192.168.1.131/')
+      .then(response=>{
+                  
+      })  
+      .catch(function(error) {
+          console.log(error);
+      });
   },
 
   // 挂载前状态
@@ -364,6 +391,7 @@ export default {
   }
   .activity_list{
     padding-top: .6rem;
+    padding-bottom: 1.8rem;
     h3{
       display: flex;
       align-items: center;
@@ -557,8 +585,74 @@ export default {
           }
         }
       }
-      
-     
+    }
+  }
+  footer{
+    position: fixed;
+    bottom: 0;
+    box-shadow:0px 0px 6px rgba(0,0,0,0.1);
+    height: 1.64rem;
+    width: 100%;
+    background: #fff;
+    .footer{
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      .shop{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        span{
+          width: 1.2rem;
+          height: .9rem;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          a{
+            width: .6rem;
+          }
+        }
+      }
+      .member{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+
+        b{
+          width: .92rem;
+          padding: .14rem;
+          overflow: hidden;
+          position: absolute;
+          top: -.5rem;
+          background: #fff;
+          border-radius: 50%;
+          box-shadow:0px 0px 12px rgba(0,0,0,0.15);
+        }
+        span{
+          width: 1.2rem;
+          height: .9rem;
+        }
+      }
+      .personal_center{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        span{
+          width: 1.2rem;
+          height: .9rem;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          a{
+            width: .6rem;
+          }
+        }
+      }
     }
   }
 }
