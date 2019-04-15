@@ -8,7 +8,7 @@
             <span><img src="../assets/icon_search.png" alt=""></span>
             <input type="text" placeholder="亲子卡">
           </div>
-          <div class="more"><i class="iconfont icon-allgengduo"></i></div>
+          <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
         </div>
       </div>
       
@@ -25,25 +25,9 @@
     
     <div class="nav">
       <ul>
-        <li>
+        <li v-for="(item ,index) in NavList">
           <span><img src="../assets/icon_theme.png" alt=""></span>
-          <p>主题场馆</p>
-        </li>
-        <li>
-          <span><img src="../assets/icon_paradise.png" alt=""></span>
-          <p>亲子乐园</p>
-        </li>
-        <li>
-          <span><img src="../assets/icon_activity.png" alt=""></span>
-          <p>活动演出</p>
-        </li>
-        <li>
-          <span><img src="../assets/icon_interest.png" alt=""></span>
-          <p>兴趣启蒙</p>
-        </li>
-        <li>
-          <span><img src="../assets/icon_early_education.png" alt=""></span>
-          <p>亲子服务</p>
+          <p>{{item.c_name}}</p>
         </li>
       </ul>
     </div>
@@ -55,43 +39,17 @@
       </h3>
       <div class="play_freely_box">
         <ul>
-          <li>
+          <li v-for="(item , index) in Cardlist">
             <div class="img">
-              <span><img src="../assets/img3.png" alt=""></span>
+              <span><img :src="item.thumb_img" alt=""></span>
               <div>
                 <p>会员价</p>
                 <i>￥</i>
-                <a>20</a>
+                <a>{{item.cost_price}}</a>
               </div>
             </div>
             <div class="project">
-              <p>悠游堂亲子嘉年华</p>
-            </div>
-          </li>
-          <li>
-            <div class="img">
-              <span><img src="../assets/img3.png" alt=""></span>
-              <div>
-                <p>会员价</p>
-                <i>￥</i>
-                <a>20</a>
-              </div>
-            </div>
-            <div class="project">
-              <p>悠游堂亲子嘉年华</p>
-            </div>
-          </li>
-          <li>
-            <div class="img">
-              <span><img src="../assets/img3.png" alt=""></span>
-              <div>
-                <p>会员价</p>
-                <i>￥</i>
-                <a>20</a>
-              </div>
-            </div>
-            <div class="project">
-              <p>悠游堂亲子嘉年华</p>
+              <p>{{item.card_name}}</p>
             </div>
           </li>
         </ul>
@@ -104,48 +62,25 @@
         <a>爆款推荐</a>
       </h3>
       <ul>
-        <!-- <li class="shopping">
-          <div class="img"></div>
-          <div class="vip">
-            <div class="shop">
-              <span><a><img src="../assets/icon_shopB.png" alt=""></a></span>
-              <p>商城</p>
-            </div>
-            <div class="icon_vip">
-              <span><img src="../assets/icon_vip_imgA.png" alt=""></span>
-              <P>会员</P>
-            </div>
-            <div class="personage">
-              <span><a><img src="../assets/icon_myA.png" alt=""></a></span>
-              <P>个人中心</P>
-            </div>
-          </div>
-          <div class="price">
-            <span>现价</span>
-            <b>￥45.0</b>
-            <a>￥345</a>
-          </div>
-        </li> -->
-
-        <li class="vip_price">
+        <li class="vip_price" v-for="(item,index) in GoodsList">
           <div class="img">
-            <span></span>
+            <span><img :src="item.thumb_img" alt=""></span>
             <div>
               <p>会员价</p>
               <i>￥</i>
-              <a>20</a>
+              <a>{{item.cost_price}}</a>
             </div>
           </div>
           <div class="project">
-            <p>悠游堂亲子嘉年华</p>
-            <span>报名　11/22</span>
+            <p>{{item.goods_name}}</p>
+            <span>报名　{{item.sale_num}}/{{item.sale_num + item.store}}</span>
           </div>
           <div class="price">
             <span>现价</span>
-            <b>￥45.0</b>
-            <a>￥345</a>
+            <b>￥{{item.mkt_price}}</b>
+            <a>￥{{item.goods_price}}</a>
           </div>
-          <div class="status"><span><img src="../assets/icon_null.png" alt=""></span></div>
+          <div class="status" v-if="item.store > 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
         </li>
       </ul>
     </div>
@@ -178,11 +113,40 @@ export default {
   name:'Index',
   data(){
     return{
+      apiUrl:this.$common.ApiUrl(),
+      Cardlist:"",
+      NavList:"",
+      pages:1,
+      GoodsList:"",
+      goodsListsum:0,
     }
   },
   components:{
   },
   methods:{
+    skipPages(str){
+      this.$router.push({
+        name: str, 
+      });
+    },
+    GoodsListPush(){
+      that.$http.get(that.apiUrl+'home/GetGoodsList',{
+        params:{ 
+          'page': that.pages 
+        }
+      })
+        .then(response=>{
+          var data = JSON.parse(JSON.stringify(response.data))
+          if(data.code){
+            const resData = data.data;
+            that.GoodsList = that.GoodsList.concat(resData.list);
+          }
+
+        })  
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
   },
 
   // 创建前状态
@@ -193,13 +157,66 @@ export default {
   created(){
     document.body.style.background = "#F6F6F6";
     const that = this;
-    that.$http.post('http://192.168.1.131/')
+    that.$http.get(that.apiUrl+'home/getcardlist')
       .then(response=>{
-                  
+        var data = JSON.parse(JSON.stringify(response.data))
+        if(data.code){
+          const resData = data.data;
+          that.Cardlist = resData.list;
+        }
+
       })  
       .catch(function(error) {
           console.log(error);
       });
+
+    that.$http.get(that.apiUrl+'home/GetNavList')
+      .then(response=>{
+        var data = JSON.parse(JSON.stringify(response.data))
+        if(data.code){
+          const resData = data.data;
+          that.NavList = resData;
+        }
+
+      })  
+      .catch(function(error) {
+          console.log(error);
+      });
+
+    that.$http.get(that.apiUrl+'home/GetGoodsList',{
+      params:{ 
+        'page': that.pages 
+      }
+    })
+      .then(response=>{
+        var data = JSON.parse(JSON.stringify(response.data))
+        if(data.code){
+          const resData = data.data;
+          that.GoodsList = resData;
+        }
+
+      })  
+      .catch(function(error) {
+          console.log(error);
+      });
+
+    window.onscroll = function(){
+    //变量scrollTop是滚动条滚动时，距离顶部的距离
+    var scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
+    //变量windowHeight是可视区的高度
+    var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+    //变量scrollHeight是滚动条的总高度
+    var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
+           //滚动条到底部的条件
+          if(scrollTop+windowHeight==scrollHeight){
+            if(that.goodsListsum >= 10)
+            {
+              that.pages++;
+              that.GoodsListPush()
+            }
+          }   
+    }
+
   },
 
   // 挂载前状态

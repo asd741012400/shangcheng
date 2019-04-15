@@ -7,33 +7,9 @@
     </header>
     <div class="nav_list">
         <ul>
-          <li class="active">
+          <li :class="allCateIndex == index ? 'active' : ''" v-for="(item,index) in AllCate">
             <div>
-              <p>主题场馆</p>
-              <span></span>
-            </div>
-          </li>
-          <li>
-            <div>
-              <p>亲子乐园</p>
-              <span></span>
-            </div>
-          </li>
-          <li>
-            <div>
-              <p>活动演出</p>
-              <span></span>
-            </div>
-          </li>
-          <li>
-            <div>
-              <p>兴趣启蒙</p>
-              <span></span>
-            </div>
-          </li>
-          <li>
-            <div>
-              <p>亲子服务</p>
+              <p>{{item.c_name}}</p>
               <span></span>
             </div>
           </li>
@@ -95,6 +71,9 @@ export default {
   name:'ClassifyList',
   data(){
     return{
+      apiUrl:this.$common.ApiUrl(),
+      AllCate:"",
+      allCateIndex:0
     }
   },
   components:{
@@ -109,6 +88,25 @@ export default {
   // 创建完毕状态 
   created(){
     document.body.style.background = "#F6F6F6";
+    const that = this;
+    that.$http.get(that.apiUrl+'home/GetAllCate')
+      .then(response=>{
+        var data = JSON.parse(JSON.stringify(response.data))
+        if(data.code){
+          const resData = data.data;
+          that.AllCate = [
+            {
+              c_id:0,
+              c_name:"全部"
+            }
+          ]
+          that.AllCate = that.AllCate.concat(resData);
+        }
+
+      })  
+      .catch(function(error) {
+          console.log(error);
+      });
   },
 
   // 挂载前状态
