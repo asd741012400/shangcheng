@@ -12,11 +12,13 @@
     "html2canvas": "^1.0.0-rc.1",
     "mint-ui": "^2.2.13",
     "moment": "^2.24.0",
+    "store2": "^2.7.1",
     "swiper": "^4.5.0",
     "vue": "^2.6.6",
     "vue-clipboard2": "^0.3.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
+    "weixin-js-sdk": "^1.4.0-test",
     "wenlist": "^1.0.3"
   },
   "devDependencies": {
