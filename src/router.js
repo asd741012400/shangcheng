@@ -227,29 +227,29 @@ let router = new Router({
 
 // 进入页面判断是否微信授权 没授权 拉取授权
 //Router
-router.beforeEach((to, from, next) => {
+// router.beforeEach((to, from, next) => {
 
-    let openid = getParamString('openid');
-    let openid2 = localstore.get('openid')
+//     let openid = getParamString('openid');
+//     let openid2 = localstore.get('openid')
 
-    if (!openid2 && !openid) {
-        let url = window.location.href
-        getRequest('/wechat/check', { url: url }).then(res => {
-            window.location.href = res.data
-        })
-    }
-    if (openid) {
-        //保存openid
-        localstore.set('openid', openid)
-    }
+//     if (!openid2 && !openid) {
+//         let url = window.location.href
+//         getRequest('/wechat/check', { url: url }).then(res => {
+//             window.location.href = res.data
+//         })
+//     }
+//     if (openid) {
+//         //保存openid
+//         localstore.set('openid', openid)
+//     }
 
-    //使用 openid 获取用户资料 缓存本地
-    getRequest('/wechat/GetUserInfo', { openid: openid || openid2 }).then(res => {
-        console.log(res);
-    })
+//     //使用 openid 获取用户资料 缓存本地
+//     getRequest('/wechat/GetUserInfo', { openid: openid || openid2 }).then(res => {
+//         console.log(res);
+//     })
 
-    next()
-})
+//     next()
+// })
 
 export default router
 

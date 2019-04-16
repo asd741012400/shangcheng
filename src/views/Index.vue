@@ -39,7 +39,7 @@
       </h3>
       <div class="play_freely_box">
         <ul>
-          <li v-for="(item , index) in Cardlist">
+          <li v-for="(item , index) in Cardlist" @click="cardlistSkip(index)">
             <div class="img">
               <span><img :src="item.thumb_img" alt=""></span>
               <div>
@@ -80,7 +80,7 @@
             <b>￥{{item.mkt_price}}</b>
             <a>￥{{item.goods_price}}</a>
           </div>
-          <div class="status" v-if="item.store > 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
+          <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
         </li>
       </ul>
     </div>
@@ -118,7 +118,8 @@ export default {
       NavList:"",
       pages:1,
       GoodsList:"",
-      goodsListsum:0,
+      goodsListSum:0,
+      goodsListLength:0,
     }
   },
   components:{
@@ -140,12 +141,23 @@ export default {
           if(data.code){
             const resData = data.data;
             that.GoodsList = that.GoodsList.concat(resData.list);
+            that.goodsListLength = res.Data.list.length;
+            that.goodsListSum = res.Data.count;
           }
 
         })  
         .catch(function(error) {
             console.log(error);
         });
+    },
+    cardlistSkip(index){
+      const that = this;
+      that.$router.push({
+        name: "CardDetails", 
+        query:{
+          id:that.Cardlist[index].card_id
+        }
+      });
     }
   },
 
@@ -160,9 +172,9 @@ export default {
     that.$http.get(that.apiUrl+'home/getcardlist')
       .then(response=>{
         var data = JSON.parse(JSON.stringify(response.data))
-        if(data.code){
+        if(data.code == 1){
           const resData = data.data;
-          that.Cardlist = resData.list;
+          that.Cardlist = resData;
         }
 
       })  
@@ -173,7 +185,7 @@ export default {
     that.$http.get(that.apiUrl+'home/GetNavList')
       .then(response=>{
         var data = JSON.parse(JSON.stringify(response.data))
-        if(data.code){
+        if(data.code == 1){
           const resData = data.data;
           that.NavList = resData;
         }
@@ -190,9 +202,11 @@ export default {
     })
       .then(response=>{
         var data = JSON.parse(JSON.stringify(response.data))
-        if(data.code){
+        if(data.code == 1){
           const resData = data.data;
-          that.GoodsList = resData;
+          that.GoodsList = resData.list;
+          that.goodsListLength = resData.list.length;
+          that.goodsListSum = resData.count;
         }
 
       })  
@@ -209,7 +223,7 @@ export default {
     var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
            //滚动条到底部的条件
           if(scrollTop+windowHeight==scrollHeight){
-            if(that.goodsListsum >= 10)
+            if(that.goodsListLength >= that.goodsListSum)
             {
               that.pages++;
               that.GoodsListPush()

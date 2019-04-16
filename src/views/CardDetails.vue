@@ -18,22 +18,23 @@
 
     <div class="banner">
       <span><img src="../assets/img2.png" alt=""></span>
+      <!-- <span><img :src="CardDetail.def_pic[0]" alt=""></span> -->
       <div class="text">
-        <p>距离活动结束还有<em></em><b>24</b><em>时</em><b>24</b><em>分</em><b>24</b><em>秒</em></p>
+        <p>距离活动结束还有<em></em><b>{{countDownArr[0]}}</b><em>时</em><b>{{countDownArr[1]}}</b><em>分</em><b>{{countDownArr[2]}}</b><em>秒</em></p>
       </div>
     </div>
 
     <div class="main">
         <div class="project_title">
-          <h3>加勒比儿童票一大一小加勒比</h3>
+          <h3>{{CardDetail.card_name}}</h3>
           <div class="price">
             <div class="vip_price">
               <em>会员价</em>
               <i>￥</i>
-              <a>20</a>
+              <a>{{CardDetail.cost_price}}</a>
             </div>
-            <b>现价￥90</b>
-            <p>市场价<span>￥200</span></p>
+            <b>现价￥{{CardDetail.card_price}}</b>
+            <p>市场价<span>￥{{CardDetail.mkt_price}}</span></p>
           </div>
         </div>
 
@@ -200,7 +201,7 @@
           <span>￥10</span>
           <p>分享赚</p>
         </div>
-        <div class="buy"><span>立即购买</span></div>
+        <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
       </div>
     </footer>
 
@@ -260,8 +261,13 @@ export default {
   name:'CardDetails',
   data(){
     return{
+      apiUrl:this.$common.ApiUrl(),
       cardDetailsState:4,
-      table:1
+      table:1,
+      CardDetail:'',
+      countDownNum:0,
+      countDownArr:"",
+      id:'',
     }
   },
   components:{
@@ -271,6 +277,39 @@ export default {
       const that = this;
       that.table = num;
     },
+    diffTime(startDate,endDate) {  
+      var dateStart = new Date(startDate)
+      var dateEnd = new Date(endDate)
+      var diff=dateEnd.getTime() - dateStart.getTime();//时间差的毫秒数  
+      this.countDownNum = diff;
+      //计算出相差天数  
+      var days=Math.floor(diff/(24*3600*1000));  
+        
+      //计算出小时数  
+      var leave1=diff%(24*3600*1000);    //计算天数后剩余的毫秒数  
+      var hours=Math.floor(leave1/(3600*1000));  
+      //计算相差分钟数  
+      var leave2=leave1%(3600*1000);        //计算小时数后剩余的毫秒数  
+      var minutes=Math.floor(leave2/(60*1000));  
+        
+      //计算相差秒数  
+      var leave3=leave2%(60*1000);      //计算分钟数后剩余的毫秒数  
+      var seconds=Math.round(leave3/1000);  
+  
+      var  returnStr = [hours , minutes ,seconds]
+
+      return returnStr;  
+    } ,
+    ConfirmAnOrderPage(){
+      const that = this;
+      that.$router.push({
+        name: "ConfirmAnOrder", 
+        query:{
+          id:that.id,
+          arrival:"CardDetails",
+        }
+      });
+    } 
   },
 
   // 创建前状态
@@ -279,7 +318,43 @@ export default {
 
   // 创建完毕状态 
   created(){
-    
+    document.body.style.background = "#fff";
+    const that = this;
+    const caedId = this.$route.query.id
+    that.id = this.$route.query.id
+    that.$http.get(that.apiUrl+'home/GetCardDetail',{
+      params:{ 
+        'id': caedId
+      }
+    })
+      .then(response=>{
+        var data = JSON.parse(JSON.stringify(response.data))
+        if(data.code == 1){
+          const resData = data.data;
+          that.CardDetail = resData;
+          that.countDownArr = that.diffTime(that.CardDetail.sale_stime , that.CardDetail.sale_etime);
+          if(resData.store == 0)
+          {
+            that.cardDetailsState = 2
+          }
+          else if(resData.is_online == 0)
+          {
+            that.cardDetailsState = 3
+          }
+          // else if(resData.is_vip== 1)
+          // {
+          //   that.cardDetailsState = 4
+          // }
+          else
+          {
+            that.cardDetailsState = 1
+          }
+        }
+
+      })  
+      .catch(function(error) {
+          console.log(error);
+      });
   },
 
   // 挂载前状态
@@ -367,6 +442,7 @@ export default {
     span{
       overflow: hidden;
       display: block;
+      height: 6.16rem;
     }
     .text{
       position: absolute;

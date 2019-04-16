@@ -11,15 +11,15 @@
         <i><img src="../assets/img1.png" alt=""></i>
         <ul>
           <li>
-            <strong>龙湖时代天街悠游堂</strong>
+            <strong>{{CardDetail.card_name}}</strong>
           </li>
           <li>
-            <span>一大一小</span>
+            <!-- <span>一大一小</span> -->
           </li>
           <li>
             <p>
               <b>￥99</b>
-              <em>×2</em>
+              <em>×{{num}}</em>
             </p>
           </li>
         </ul>
@@ -28,9 +28,9 @@
       <div class="number">
         <b>数 量</b>
         <div>
-          <span>-</span>
-          <p>1</p>
-          <a>+</a>
+          <span @click="numChage('-')">-</span>
+          <p>{{num}}</p>
+          <a @click="numChage('+')">+</a>
         </div>
       </div>
 
@@ -43,19 +43,34 @@
         <ul>
           <li>
             <label>孩子姓名</label>
-            <p><input type="text" value="小宝"></p>
+            <p><input type="text"  placeholder="请输入姓名"></p>
           </li>
           <li>
             <label>手机号</label>
-            <p><input type="text" value="13526485978"></p>
+            <p><input type="text" placeholder="请输入正确的手机号码"></p>
           </li>
           <li>
             <label>身份证</label>
-            <p><input type="text" value="564892512365487594"></p>
+            <p><input type="text" placeholder="请输入正确的身份证号码"></p>
           </li>
           <li>
             <label>游玩日期</label>
-            <p><input type="text" value="2019-1-1"><span><img src="../assets/icon_pull_down.png" alt=""></span></p>
+            <p>
+              <b>
+                {{dateTime}}
+                <mt-datetime-picker
+                  type="date"
+                  ref="picker"
+                  year-format="{value} 年"
+                  month-format="{value} 月"
+                  date-format="{value} 日"
+                  @confirm="handleConfirm"
+                  :startDate="startDate">
+                </mt-datetime-picker>
+              </b>
+              <a @click="openPicker"></a>
+              <span><img src="../assets/icon_pull_down.png" alt=""></span>
+            </p>
           </li>
         </ul>
       </div>
@@ -74,18 +89,57 @@
   </div>
 </template>
 <script>
+import { DatetimePicker } from 'mint-ui';
+import moment from 'moment'
+import Vue from "vue";
 
+Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
   name:'ConfirmAnOrder',
   data(){
     return{
-  
+      apiUrl:this.$common.ApiUrl(),
+      CardDetail:'',
+      num:1,
+      dateTime:"请选择时间",
+      startDate: new Date('1968-01-01'),
     }
   },
   components:{
   },
   methods:{
-    
+    //开启时间选择器
+    openPicker () {
+        this.$refs.picker.open()
+    },
+
+    //点击确定按钮
+    handleConfirm (data) {
+      let date = moment(data).format('YYYY.MM.DD')
+      this.dateTime = date;
+      this.$refs.picker.close()
+      event.stopPropagation()
+    },
+
+    numChage(str){
+      const that = this;
+      if(str == "-")
+      {
+        if(that.num <= 1)
+        {
+          that.num = 1
+        }
+        else
+        {
+          that.num = --that.num
+        }
+      }
+      else
+      {
+        that.num = ++that.num
+      }
+    }
+
     
   },
 
@@ -96,6 +150,27 @@ export default {
   // 创建完毕状态 
   created(){
     document.body.style.background = "#F6F6F6";
+    const that = this;
+    const caedId = this.$route.query.id;
+    const arrival = this.$route.query.arrival;
+    if(arrival == "CardDetails")
+    {
+      that.$http.get(that.apiUrl+'home/GetCardDetail',{
+        params:{ 
+          'id': caedId
+        }
+      })
+        .then(response=>{
+          var data = JSON.parse(JSON.stringify(response.data))
+          if(data.code == 1){
+            const resData = data.data;
+            that.CardDetail = resData;
+          }
+        })  
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
   },
 
   // 挂载前状态
@@ -286,6 +361,7 @@ export default {
             padding-left: .34rem;
             display: flex;
             align-items: center;
+            position: relative;
             span{
               width: .14rem;
               overflow: hidden;
@@ -294,6 +370,15 @@ export default {
             input{
               height: 100%;
               width: 100%;
+            }
+            b{
+              flex: 1;
+              font-weight: normal;
+            }
+            a{
+              position: absolute;
+              width: 100%;
+              height: 100%;
             }
           }
         }
