@@ -86,7 +86,7 @@ export default {
             let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
             if (res.data.code == 1) {
                 let config = JSON.parse(res.data.data)
-                console.log(config);
+
                 wx.ready(function() {
                     // 这里获取到PHP生成签名参数包，注意是JSON格式
                     var options = config;
