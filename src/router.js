@@ -1,3 +1,4 @@
+
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dome from './views/Dome.vue'
@@ -27,6 +28,9 @@ import ClassifyList from './views/ClassifyList.vue'
 import ShopDetails from './views/ShopDetails.vue'
 import City from './views/City.vue'
 import SharePoster from './views/SharePoster.vue'
+import VipOrder from './views/VipOrder.vue'
+import VipOrderBuy from './views/VipOrderBuy.vue'
+import VipEquity from './views/VipEquity.vue'
 import MerchantShop from './views/merchant/MerchantShop.vue'
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue'
 import TeamDel from './views/merchant/TeamDel.vue'
@@ -34,6 +38,7 @@ import TeamDelTow from './views/merchant/TeamDelTow.vue'
 import MemberDel from './views/merchant/MemberDel.vue'
 import Generalize from './views/merchant/Generalize.vue'
 import PersonalStores from './views/merchant/PersonalStores.vue'
+import Order from './views/Order.vue'
 
 import localstore from 'store2' //本地存储
 import { getRequest, postRequest } from './lib/axios'
@@ -177,9 +182,29 @@ let router = new Router({
             component: City
         },
         {
+            path: '/Order',
+            name: 'Order',
+            component: Order
+        },
+        {
             path: '/SharePoster',
             name: 'SharePoster',
             component: SharePoster
+        },
+        {
+            path: '/VipOrder',
+            name: 'VipOrder',
+            component: VipOrder
+        },
+        {
+            path: '/VipOrderBuy',
+            name: 'VipOrderBuy',
+            component: VipOrderBuy
+        },
+        {
+            path: '/VipEquity',
+            name: 'VipEquity',
+            component: VipEquity
         },
         {
             path: '/MerchantShop',
@@ -236,9 +261,9 @@ router.beforeEach((to, from, next) => {
 
     if (!openid2 && !openid) {
         let url = window.location.href
-        getRequest('/wechat/check', { url: url }).then(res => {
-            window.location.href = res.data
-        })
+        // getRequest('/wechat/check', { url: url }).then(res => {
+        //     window.location.href = res.data
+        // })
     }
     if (openid) {
         //保存openid

@@ -4,18 +4,26 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import dayjs from 'dayjs'
-import Mint from 'mint-ui';
-import 'mint-ui/lib/style.css'
 import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
+import localstore from 'store2' //本地存储
+
+//ui库
+import Mint from 'mint-ui';
+import 'mint-ui/lib/style.css'
 Vue.use(Mint);
 
-import localstore from 'store2' //本地存储
+import { Tab, Tabs,Card,Button,Tag,Panel } from 'vant';
+import 'vant/lib/index.css';
+Vue.use(Tab).use(Tabs).use(Card).use(Button).use(Tag).use(Panel);
+
+
 
 //移动端调试
 import Vconsole from 'vconsole';
 const vConsole = new Vconsole();
 Vue.use(vConsole)
+
 
 
 import { Toast } from 'mint-ui';
