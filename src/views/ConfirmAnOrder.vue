@@ -1,63 +1,59 @@
 <template>
-  <div class="ConfirmAnOrder">
-    <header>
-      <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
-      <div class="tel">确认订单</div>
-      <div class="add"></div>
-    </header>
-    
-    <div class="mian">
-      <div class="commodity">
-        <i><img src="../assets/img1.png" alt=""></i>
-        <ul>
-          <li>
-            <strong>{{CardDetail.card_name}}</strong>
-          </li>
-          <li>
-            <!-- <span>一大一小</span> -->
-          </li>
-          <li>
-            <p>
-              <b>￥99</b>
-              <em>×{{num}}</em>
-            </p>
-          </li>
-        </ul>
-      </div>
-
-      <div class="number">
-        <b>数 量</b>
-        <div>
-          <span @click="numChage('-')">-</span>
-          <p>{{num}}</p>
-          <a @click="numChage('+')">+</a>
-        </div>
-      </div>
-
-      <div class="discounts">
-        <b>使用优惠</b>
-        <span>国庆卷</span>
-      </div>
-
-      <div class="message">
-        <ul>
-          <li>
-            <label>孩子姓名</label>
-            <p><input type="text"  placeholder="请输入姓名"></p>
-          </li>
-          <li>
-            <label>手机号</label>
-            <p><input type="text" placeholder="请输入正确的手机号码"></p>
-          </li>
-          <li>
-            <label>身份证</label>
-            <p><input type="text" placeholder="请输入正确的身份证号码"></p>
-          </li>
-          <li>
-            <label>游玩日期</label>
-            <p>
-              <b>
-                {{dateTime}}
+    <div class="ConfirmAnOrder">
+        <header>
+            <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+            <div class="tel">确认订单</div>
+            <div class="add"></div>
+        </header>
+        <div class="mian">
+            <div class="commodity">
+                <i><img src="../assets/img1.png" alt=""></i>
+                <ul>
+                    <li>
+                        <strong>{{CardDetail.card_name}}</strong>
+                    </li>
+                    <li>
+                        <!-- <span>一大一小</span> -->
+                    </li>
+                    <li>
+                        <p>
+                            <b>￥99</b>
+                            <em>×{{num}}</em>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="number">
+                <b>数 量</b>
+                <div>
+                    <span @click="numChage('-')">-</span>
+                    <p>{{num}}</p>
+                    <a @click="numChage('+')">+</a>
+                </div>
+            </div>
+            <div class="discounts">
+                <b>使用优惠</b>
+                <span>国庆卷</span>
+            </div>
+            <div class="message">
+                <ul>
+                    <li>
+                        <label>孩子姓名</label>
+                        <p><input type="text" v-model="real_name" placeholder="请输入姓名"></p>
+                    </li>
+                    <li>
+                        <label>手机号</label>
+                        <p><input type="text" v-model="tel" placeholder="请输入正确的手机号码"></p>
+                    </li>
+                    <li>
+                        <label>身份证</label>
+                        <p><input type="text" v-model="card_ID" placeholder="请输入正确的身份证号码"></p>
+                    </li>
+                    <li>
+                        <label>游玩日期</label>
+                        <p>
+                            <b>
+                {{play_time}}
                 <mt-datetime-picker
                   type="date"
                   ref="picker"
@@ -68,25 +64,22 @@
                   :startDate="startDate">
                 </mt-datetime-picker>
               </b>
-              <a @click="openPicker"></a>
-              <span><img src="../assets/icon_pull_down.png" alt=""></span>
-            </p>
-          </li>
-        </ul>
-      </div>
-
-      <div class="describe">
-        <span>已优惠:￥10</span>
-        <span>合计:￥188</span>
-      </div>
+                            <a @click="openPicker"></a>
+                            <span><img src="../assets/icon_pull_down.png" alt=""></span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <!--             <div class="describe">
+                <span>已优惠:￥10</span>
+                <span>合计:￥188</span>
+            </div> -->
+        </div>
+        <div class="btns">
+            <span>合计:￥{{total}}</span>
+            <b @click="addOrder">提交订单</b>
+        </div>
     </div>
-
-    <div class="btns">
-      <span>合计:￥188</span>
-      <b>提交订单</b>
-    </div>
-
-  </div>
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
@@ -95,335 +88,371 @@ import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
-  name:'ConfirmAnOrder',
-  data(){
-    return{
-      apiUrl:this.$common.ApiUrl(),
-      CardDetail:'',
-      num:1,
-      dateTime:"请选择时间",
-      startDate: new Date('1968-01-01'),
-    }
-  },
-  components:{
-  },
-  methods:{
-    //开启时间选择器
-    openPicker () {
-        this.$refs.picker.open()
+    name: 'ConfirmAnOrder',
+    data() {
+        let date = this.$dayjs().format('YYYY-MM-DD')
+        return {
+            apiUrl: this.$common.ApiUrl(),
+            real_name: '',
+            tel: '',
+            CardDetail: '',
+            card_ID: '',
+            num: 1,
+            play_time: date,
+            startDate: new Date(date),
+        }
+    },
+    components: {
+
+    },
+    methods: {
+        //开启时间选择器
+        openPicker() {
+            this.$refs.picker.open()
+        },
+
+        //点击确定按钮
+        handleConfirm(data) {
+            let date = moment(data).format('YYYY-MM-DD')
+            this.play_time = date;
+            this.$refs.picker.close()
+            event.stopPropagation()
+        },
+
+        //添加订单
+        async addOrder() {
+            let postData = {
+                order_type: this.$route.query.order_type,
+                goods_id: this.id,
+                goods_title: this.CardDetail.goods_title || this.CardDetail.card_name,
+                real_name: this.real_name,
+                play_time: this.play_time,
+                tel: this.tel,
+                order_num: this.num,
+                total_amount: this.total,
+                card_ID: this.card_ID,
+            }
+            let res = await this.$postRequest('/order/AddOrder', postData)
+            this.$message(res.data.msg)
+            if (res.data.code == 1) {
+                this.$router.push({ name: 'ConfirmPay',query: { id: res.data.data }})
+            }
+        },
+
+        numChage(str) {
+            const that = this;
+            if (str == "-") {
+                if (that.num <= 1) {
+                    that.num = 1
+                } else {
+                    that.num = --that.num
+                }
+            } else {
+                that.num = ++that.num
+            }
+        },
+
+        async getCard() {
+            const id = this.$route.query.id;
+            let res = await this.$getRequest('home/GetCardDetail', { id: id })
+            this.CardDetail = res.data.data
+        }
+
+
     },
 
-    //点击确定按钮
-    handleConfirm (data) {
-      let date = moment(data).format('YYYY.MM.DD')
-      this.dateTime = date;
-      this.$refs.picker.close()
-      event.stopPropagation()
+    // 创建前状态
+    beforeCreate() {},
+
+    // 创建完毕状态 
+    created() {
+        this.getCard()
+
     },
 
-    numChage(str){
-      const that = this;
-      if(str == "-")
-      {
-        if(that.num <= 1)
-        {
-          that.num = 1
+    computed: {
+        total() {
+            let total = this.num * this.CardDetail.card_price
+            return total
         }
-        else
-        {
-          that.num = --that.num
-        }
-      }
-      else
-      {
-        that.num = ++that.num
-      }
-    }
+    },
 
-    
-  },
+    // 挂载前状态
+    beforeMount() {},
 
-  // 创建前状态
-  beforeCreate(){
-  },
+    // 挂载结束状态
+    mounted() {},
 
-  // 创建完毕状态 
-  created(){
-    document.body.style.background = "#F6F6F6";
-    const that = this;
-    const caedId = this.$route.query.id;
-    const arrival = this.$route.query.arrival;
-    if(arrival == "CardDetails")
-    {
-      that.$http.get(that.apiUrl+'home/GetCardDetail',{
-        params:{ 
-          'id': caedId
-        }
-      })
-        .then(response=>{
-          var data = JSON.parse(JSON.stringify(response.data))
-          if(data.code == 1){
-            const resData = data.data;
-            that.CardDetail = resData;
-          }
-        })  
-        .catch(function(error) {
-            console.log(error);
-        });
-    }
-  },
+    // 更新前状态
+    beforeUpdate() {},
 
-  // 挂载前状态
-  beforeMount(){
-  },
+    // 更新完成状态
+    updated() {},
 
-  // 挂载结束状态
-  mounted(){
-  },
-  
-  // 更新前状态
-  beforeUpdate(){
-  },
+    // 销毁前状态
+    beforeDestroy() {},
 
-  // 更新完成状态
-  updated(){
-  },
+    // 销毁完成状态
+    destroyed() {}
 
-  // 销毁前状态
-  beforeDestroy(){
-  },
-
-  // 销毁完成状态
-  destroyed(){
-  } 
-  
 }
 </script>
 <style lang="scss" scoped>
-.ConfirmAnOrder{
-  header{
-    height: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin:  0 auto;
-    padding-top:.3rem; 
-    padding-bottom: .2rem;
-    background: #f6f6f6;
-    position: relative;
-    
-    .icon_return{
-      width: 1rem;
-      height: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      position: absolute;
-      left: .4rem;
-      span{
-        overflow: hidden;
-        width: .27rem;
-      }
-    }
-    .tel{
-      color:#515C6F;
-      font-weight: bold;
-      font-size: .32rem;
-      text-align: center;
-    }
- 
-  }
-  .mian{
-    padding-bottom: 1.2rem;
-    .commodity{
-      display: flex;
-      padding: .28rem .6rem .32rem .46rem;
-      background: #fff;
-      i{
-        width: 2.04rem;
-        height: 2.04rem;
-        overflow: hidden;
-      }
-      ul{
-        padding-left: .26rem;
-        flex: 1;
-        li{
-          strong{
-            font-size: .28rem;
-            color: #535D70;
-            font-weight: normal;
-          }
-          span{
-            font-size: .24rem;
-            color: #999999;
-          }
-          p{
-            display: flex;
-            padding-top: .6rem;
-            b{
-              font-weight: normal;
-              flex: 1;
-              font-size: .28rem;
-              color: #535D70;
-            }
-            em{
-              font-style: normal;
-              font-size: .24rem;
-              color: #999999;
-            }
-          }
-        }
-      }
-    }
-    .number{
-      display: flex;
-      background: #fff;
-      margin-top: 10px;
-      align-items: center;
-      height: .8rem;
-      padding: 0 .6rem 0 .46rem;
-      b{
-        font-size: .28rem;
-        color: #515C6F;
-        flex: 1;
-      }
-      div{
+.ConfirmAnOrder {
+    header {
+        height: 1rem;
         display: flex;
-        width: 2.26rem;
-        height: .42rem;
-        border-radius: 50px;
-        overflow: hidden;
-        span{
-          width: .62rem;
-          height: .46rem;
-          background: #c8c8c8;
-          text-align: center;
-          line-height: .35rem;
-          font-size: .6rem;
-          color: #fff;
-        }
-        p{
-          flex: 1;
-          background: #f6f6f6;
-          text-align: center;
-          height: .46rem;
-          line-height: .46rem;
-          color: #515C6F;
-          font-size: .32rem;
-        }
-        a{
-          width: .62rem;
-          height: .46rem;
-          background: #999999;
-          text-align: center;
-          line-height: .37rem;
-          font-size: .4rem;
-          color: #fff;
-        }
-      }
-    }
-    .discounts{
-      display: flex;
-      background: #fff;
-      margin-top: 10px;
-      align-items: center;
-      height: .8rem;
-      padding: 0 .6rem 0 .46rem;
-      b{
-        font-size: .28rem;
-        color: #515C6F;
-        flex: 1;
-      }
-      span{
-        font-size: .28rem;
-        color: #FF6666;
-      }
-    }
-    .message{
-      margin-top: 10px;
-      background: #fff;
-      ul{
-        padding: .28rem .89rem .66rem;
-        li{
-          display: flex;
-          align-items: center;
-          margin-bottom: .08rem;
-          label{
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        padding-top: .3rem;
+        padding-bottom: .2rem;
+        background: #f6f6f6;
+        position: relative;
+
+        .icon_return {
             width: 1rem;
-            text-align: right;
-            padding-right: .24rem;
-          }
-          p{
-            height: .6rem;
-            border: 1px solid #C8C8C8;
-            border-radius:5px;
-            flex: 1;
-            padding-left: .34rem;
+            height: 1rem;
             display: flex;
             align-items: center;
-            position: relative;
-            span{
-              width: .14rem;
-              overflow: hidden;
-              padding-right: .26rem;
-            }
-            input{
-              height: 100%;
-              width: 100%;
-            }
-            b{
-              flex: 1;
-              font-weight: normal;
-            }
-            a{
-              position: absolute;
-              width: 100%;
-              height: 100%;
-            }
-          }
-        }
-      }
-    }
-    .describe{
-      margin-top: .4rem;
-      span{
-        padding: 0 .89rem;
-        height: .8rem;
-        line-height: .8rem;
-        text-align: right;
-        display: block;
-        background: #fff;
-        margin-bottom: 2px;
-      }
-    }
-  }
+            justify-content: flex-start;
+            position: absolute;
+            left: .4rem;
 
-  .btns{
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #fff;
-    span{
-      flex: 1;
-      text-align: right;
-      height: 1.16rem;
-      line-height: 1.16rem;
-      font-size: .4rem;
-      color: #515C6F;
-      padding-right: .34rem;
+            span {
+                overflow: hidden;
+                width: .27rem;
+            }
+        }
+
+        .tel {
+            color: #515C6F;
+            font-weight: bold;
+            font-size: .32rem;
+            text-align: center;
+        }
+
     }
-    b{
-      width: 3.4rem;
-      line-height: 1.16rem;
-      height: 1.16rem;
-      text-align: center;
-      font-size: .32rem;
-      color: #FFFFFF;
-      background: #FF6666;
+
+    .mian {
+        padding-bottom: 1.2rem;
+
+        .commodity {
+            display: flex;
+            padding: .28rem .6rem .32rem .46rem;
+            background: #fff;
+
+            i {
+                width: 2.04rem;
+                height: 2.04rem;
+                overflow: hidden;
+            }
+
+            ul {
+                padding-left: .26rem;
+                flex: 1;
+
+                li {
+                    strong {
+                        font-size: .28rem;
+                        color: #535D70;
+                        font-weight: normal;
+                    }
+
+                    span {
+                        font-size: .24rem;
+                        color: #999999;
+                    }
+
+                    p {
+                        display: flex;
+                        padding-top: .6rem;
+
+                        b {
+                            font-weight: normal;
+                            flex: 1;
+                            font-size: .28rem;
+                            color: #535D70;
+                        }
+
+                        em {
+                            font-style: normal;
+                            font-size: .24rem;
+                            color: #999999;
+                        }
+                    }
+                }
+            }
+        }
+
+        .number {
+            display: flex;
+            background: #fff;
+            margin-top: 10px;
+            align-items: center;
+            height: .8rem;
+            padding: 0 .6rem 0 .46rem;
+
+            b {
+                font-size: .28rem;
+                color: #515C6F;
+                flex: 1;
+            }
+
+            div {
+                display: flex;
+                width: 2.26rem;
+                height: .42rem;
+                border-radius: 50px;
+                overflow: hidden;
+
+                span {
+                    width: .62rem;
+                    height: .46rem;
+                    background: #c8c8c8;
+                    text-align: center;
+                    line-height: .35rem;
+                    font-size: .6rem;
+                    color: #fff;
+                }
+
+                p {
+                    flex: 1;
+                    background: #f6f6f6;
+                    text-align: center;
+                    height: .46rem;
+                    line-height: .46rem;
+                    color: #515C6F;
+                    font-size: .32rem;
+                }
+
+                a {
+                    width: .62rem;
+                    height: .46rem;
+                    background: #999999;
+                    text-align: center;
+                    line-height: .37rem;
+                    font-size: .4rem;
+                    color: #fff;
+                }
+            }
+        }
+
+        .discounts {
+            display: flex;
+            background: #fff;
+            margin-top: 10px;
+            align-items: center;
+            height: .8rem;
+            padding: 0 .6rem 0 .46rem;
+
+            b {
+                font-size: .28rem;
+                color: #515C6F;
+                flex: 1;
+            }
+
+            span {
+                font-size: .28rem;
+                color: #FF6666;
+            }
+        }
+
+        .message {
+            margin-top: 10px;
+            background: #fff;
+
+            ul {
+                padding: .28rem .89rem .66rem;
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: .08rem;
+
+                    label {
+                        width: 1rem;
+                        text-align: right;
+                        padding-right: .24rem;
+                    }
+
+                    p {
+                        height: .6rem;
+                        border: 1px solid #C8C8C8;
+                        border-radius: 5px;
+                        flex: 1;
+                        padding-left: .34rem;
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+
+                        span {
+                            width: .14rem;
+                            overflow: hidden;
+                            padding-right: .26rem;
+                        }
+
+                        input {
+                            height: 100%;
+                            width: 100%;
+                        }
+
+                        b {
+                            flex: 1;
+                            font-weight: normal;
+                        }
+
+                        a {
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .describe {
+            margin-top: .4rem;
+
+            span {
+                padding: 0 .89rem;
+                height: .8rem;
+                line-height: .8rem;
+                text-align: right;
+                display: block;
+                background: #fff;
+                margin-bottom: 2px;
+            }
+        }
     }
-  }
+
+    .btns {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background: #fff;
+
+        span {
+            flex: 1;
+            text-align: right;
+            height: 1.16rem;
+            line-height: 1.16rem;
+            font-size: .4rem;
+            color: #515C6F;
+            padding-right: .34rem;
+        }
+
+        b {
+            width: 3.4rem;
+            line-height: 1.16rem;
+            height: 1.16rem;
+            text-align: center;
+            font-size: .32rem;
+            color: #FFFFFF;
+            background: #FF6666;
+        }
+    }
 }
 </style>
-
-

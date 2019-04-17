@@ -306,6 +306,7 @@ export default {
         name: "ConfirmAnOrder", 
         query:{
           id:that.id,
+          order_type:3,
           arrival:"CardDetails",
         }
       });

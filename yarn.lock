@@ -2503,6 +2503,11 @@ date-now@^0.1.4:
   resolved "http://registry.npm.taobao.org/date-now/download/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
+dayjs@^1.8.12:
+  version "1.8.12"
+  resolved "http://registry.npm.taobao.org/dayjs/download/dayjs-1.8.12.tgz#f9610fb9b115aa2fe2a07e742c130df418cee76a"
+  integrity sha1-+WEPubEVqi/ioH50LBMN9BjO52o=
+
 de-indent@^1.0.2:
   version "1.0.2"
   resolved "http://registry.npm.taobao.org/de-indent/download/de-indent-1.0.2.tgz#b2038e846dc33baa5796128d0804b455b8c1e21d"
@@ -7471,6 +7476,11 @@ vary@~1.1.2:
   version "1.1.2"
   resolved "http://registry.npm.taobao.org/vary/download/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
+
+vconsole@^3.3.0:
+  version "3.3.0"
+  resolved "http://registry.npm.taobao.org/vconsole/download/vconsole-3.3.0.tgz#42629c07fb3b6a72733d2bbc417ee3e84b2bc76e"
+  integrity sha1-QmKcB/s7anJzPSu8QX7j6Esrx24=
 
 vendors@^1.0.0:
   version "1.0.2"
