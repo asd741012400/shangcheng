@@ -27,6 +27,9 @@ import ClassifyList from './views/ClassifyList.vue'
 import ShopDetails from './views/ShopDetails.vue'
 import City from './views/City.vue'
 import SharePoster from './views/SharePoster.vue'
+import VipOrder from './views/VipOrder.vue'
+import VipOrderBuy from './views/VipOrderBuy.vue'
+import VipEquity from './views/VipEquity.vue'
 import MerchantShop from './views/merchant/MerchantShop.vue'
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue'
 import TeamDel from './views/merchant/TeamDel.vue'
@@ -180,6 +183,21 @@ let router = new Router({
             path: '/SharePoster',
             name: 'SharePoster',
             component: SharePoster
+        },
+        {
+            path: '/VipOrder',
+            name: 'VipOrder',
+            component: VipOrder
+        },
+        {
+            path: '/VipOrderBuy',
+            name: 'VipOrderBuy',
+            component: VipOrderBuy
+        },
+        {
+            path: '/VipEquity',
+            name: 'VipEquity',
+            component: VipEquity
         },
         {
             path: '/MerchantShop',
