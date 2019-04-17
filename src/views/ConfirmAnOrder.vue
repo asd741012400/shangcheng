@@ -128,6 +128,7 @@ export default {
                 real_name: this.real_name,
                 play_time: this.play_time,
                 tel: this.tel,
+                openid: this.$localstore.get('openid'),
                 order_num: this.num,
                 total_amount: this.total,
                 card_ID: this.card_ID,
@@ -151,7 +152,7 @@ export default {
                 that.num = ++that.num
             }
         },
-
+        //获取卡片详情
         async getCard() {
             const id = this.$route.query.id;
             let res = await this.$getRequest('home/GetCardDetail', { id: id })

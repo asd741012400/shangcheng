@@ -39,7 +39,8 @@
       </h3>
       <div class="play_freely_box">
         <ul>
-          <li v-for="(item , index) in Cardlist" @click="cardlistSkip(index)">
+          <li v-for="(item , index) in Cardlist">
+            <router-link :to="{name:'CardDetails',query:{id:item.card_id,type:3}}">
             <div class="img">
               <span><img :src="item.thumb_img" alt=""></span>
               <div>
@@ -51,6 +52,7 @@
             <div class="project">
               <p>{{item.card_name}}</p>
             </div>
+            </router-link>
           </li>
         </ul>
       </div>
@@ -63,6 +65,7 @@
       </h3>
       <ul>
         <li class="vip_price" v-for="(item,index) in GoodsList">
+         <router-link :to="{name:'CardDetails',query:{id:item.goods_id,type:1}}">
           <div class="img">
             <span><img :src="item.thumb_img" alt=""></span>
             <div>
@@ -81,6 +84,7 @@
             <a>￥{{item.goods_price}}</a>
           </div>
           <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
+         </router-link>
         </li>
       </ul>
     </div>
@@ -150,12 +154,12 @@ export default {
             console.log(error);
         });
     },
-    cardlistSkip(index){
+    cardlistSkip(id){
       const that = this;
       that.$router.push({
         name: "CardDetails", 
         query:{
-          id:that.Cardlist[index].card_id
+          id:id
         }
       });
     }

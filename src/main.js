@@ -10,6 +10,8 @@ import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 Vue.use(Mint);
 
+import localstore from 'store2' //本地存储
+
 //移动端调试
 import Vconsole from 'vconsole';
 const vConsole = new Vconsole();
@@ -21,6 +23,7 @@ import { Toast } from 'mint-ui';
 Vue.config.productionTip = false
 Vue.prototype.$message = Toast;
 Vue.prototype.$dayjs = dayjs;
+Vue.prototype.$localstore = localstore;
 Vue.prototype.$http = axios;
 Vue.prototype.$common = common;
 
