@@ -443,14 +443,14 @@ body {
             flex-direction: column;
             padding-right: .6rem;
             text-align: center;
+             width: 20%;
 
             a {
                 display: block;
-                width: .72rem;
+                width: 100%;
             }
 
             span {
-                width: .72rem;
                 overflow: hidden;
             }
         }

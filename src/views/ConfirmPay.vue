@@ -92,9 +92,13 @@ export default {
                     var options = config;
 
                     // 支付成功后的操作
-                    options.success = function(res) {
-                        console.log(res);
-                        that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id } })
+                    options.success = async function() {
+                        let res = await this.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        // if (res.data.code == 1) {
+                            that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id } })
+                        // } else {
+                        //     that.$message('订单状态修改失败')
+                        // }
                     };
 
                     //  取消支付的操作

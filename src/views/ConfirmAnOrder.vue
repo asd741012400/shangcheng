@@ -10,7 +10,7 @@
                 <i><img src="../assets/img1.png" alt=""></i>
                 <ul>
                     <li>
-                        <strong>{{CardDetail.card_name}}</strong>
+                        <strong>{{title}}</strong>
                     </li>
                     <li>
                         <!-- <span>一大一小</span> -->
@@ -94,8 +94,10 @@ export default {
         return {
             apiUrl: this.$common.ApiUrl(),
             real_name: '',
+            title: '',
+            price: '',
             tel: '',
-            CardDetail: '',
+            goods: '',
             card_ID: '',
             num: 1,
             play_time: date,
@@ -123,20 +125,22 @@ export default {
         async addOrder() {
             let postData = {
                 order_type: this.$route.query.order_type,
-                goods_id: this.id,
-                goods_title: this.CardDetail.goods_title || this.CardDetail.card_name,
+                goods_id: this.$route.query.id,
+                goods_title: this.title,
                 real_name: this.real_name,
                 play_time: this.play_time,
+                attr_id: this.$route.query.attr_id || 22,
                 tel: this.tel,
                 openid: this.$localstore.get('openid'),
                 order_num: this.num,
+                amount: this.price,
                 total_amount: this.total,
                 card_ID: this.card_ID,
             }
             let res = await this.$postRequest('/order/AddOrder', postData)
             this.$message(res.data.msg)
             if (res.data.code == 1) {
-                this.$router.push({ name: 'ConfirmPay',query: { id: res.data.data }})
+                this.$router.push({ name: 'ConfirmPay', query: { id: res.data.data } })
             }
         },
 
@@ -155,10 +159,19 @@ export default {
         //获取卡片详情
         async getCard() {
             const id = this.$route.query.id;
-            let res = await this.$getRequest('home/GetCardDetail', { id: id })
-            this.CardDetail = res.data.data
+            let type = this.$route.query.order_type
+            if (type == 1) {
+                let res = await this.$getRequest('home/GetGoodsDetail', { id: id })
+                this.goods = res.data.data
+                this.title = this.goods.goods_name
+                this.price = this.goods.goods_price
+            } else if (type == 3) {
+                let res = await this.$getRequest('home/GetCardDetail', { id: id })
+                this.goods = res.data.data
+                this.title = this.goods.card_name
+                this.price = this.goods.card_price
+            }
         }
-
 
     },
 
@@ -173,7 +186,7 @@ export default {
 
     computed: {
         total() {
-            let total = this.num * this.CardDetail.card_price
+            let total = this.num * this.price
             return total
         }
     },

@@ -17,9 +17,9 @@ import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css'
 Vue.use(Mint);
 
-import { Tab, Tabs,Card,Button,Tag,Panel } from 'vant';
+import Vant from 'vant';
 import 'vant/lib/index.css';
-Vue.use(Tab).use(Tabs).use(Card).use(Button).use(Tag).use(Panel);
+Vue.use(Vant);
 
 
 

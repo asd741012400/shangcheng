@@ -1,4 +1,3 @@
-
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dome from './views/Dome.vue'
@@ -31,6 +30,11 @@ import SharePoster from './views/SharePoster.vue'
 import VipOrder from './views/VipOrder.vue'
 import VipOrderBuy from './views/VipOrderBuy.vue'
 import VipEquity from './views/VipEquity.vue'
+import Order from './views/Order.vue'
+
+//分销商城
+import Login from './views/merchant/Login.vue'
+import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
 import MerchantShop from './views/merchant/MerchantShop.vue'
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue'
 import TeamDel from './views/merchant/TeamDel.vue'
@@ -38,7 +42,18 @@ import TeamDelTow from './views/merchant/TeamDelTow.vue'
 import MemberDel from './views/merchant/MemberDel.vue'
 import Generalize from './views/merchant/Generalize.vue'
 import PersonalStores from './views/merchant/PersonalStores.vue'
-import Order from './views/Order.vue'
+
+
+//核销
+import Login2 from './views/checkstore/Login.vue'
+import CheckHome from './views/checkstore/Home.vue'
+import CheckList from './views/checkstore/CheckList.vue'
+import StoreList from './views/checkstore/StoreList.vue'
+import CheckCode from './views/checkstore/CheckCode.vue'
+import CheckGoods from './views/checkstore/CheckGoods.vue'
+import CheckCard from './views/checkstore/CheckCard.vue'
+import Appointment from './views/checkstore/Appointment.vue' //预约记录
+
 
 import localstore from 'store2' //本地存储
 import { getRequest, postRequest } from './lib/axios'
@@ -60,6 +75,46 @@ let router = new Router({
             path: '/Index',
             name: 'Index',
             component: Index
+        },
+        {
+            path: '/Login',
+            name: 'Login',
+            component: Login
+        },
+        {
+            path: '/Login2',
+            name: 'Login2',
+            component: Login2
+        },
+        {
+            path: '/CheckHome',
+            name: 'CheckHome',
+            component: CheckHome
+        },
+        {
+            path: '/CheckCode',
+            name: 'CheckCode',
+            component: CheckCode
+        },
+        {
+            path: '/CheckList',
+            name: 'CheckList',
+            component: CheckList
+        },
+        {
+            path: '/StoreList',
+            name: 'StoreList',
+            component: StoreList
+        },
+        {
+            path: '/Appointment',
+            name: 'Appointment',
+            component: Appointment
+        },
+        {
+            path: '/WithdrawList',
+            name: 'WithdrawList',
+            component: WithdrawList
         },
         {
             path: '/PersonalCenter',
@@ -272,7 +327,7 @@ router.beforeEach((to, from, next) => {
 
     //使用 openid 获取用户资料 缓存本地
     getRequest('/wechat/GetUserInfo', { openid: openid || openid2 }).then(res => {
-           localstore.set('userInfo', res.data.data)
+        localstore.set('userInfo', res.data.data)
     })
 
     //获取微信jssdk
