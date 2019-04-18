@@ -34,7 +34,7 @@ import Order from './views/Order.vue'
 
 //分销商城
 import Login from './views/merchant/Login.vue'
-import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
+import WithdrawList from './views/merchant/WithdrawList.vue'
 import MerchantShop from './views/merchant/MerchantShop.vue'
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue'
 import TeamDel from './views/merchant/TeamDel.vue'
@@ -46,10 +46,13 @@ import PersonalStores from './views/merchant/PersonalStores.vue'
 
 //核销
 import Login2 from './views/checkstore/Login.vue'
-import CheckHome from './views/checkstore/Home.vue'
-import CheckList from './views/checkstore/CheckList.vue'
-import StoreList from './views/checkstore/StoreList.vue'
-import CheckCode from './views/checkstore/CheckCode.vue'
+import Administrator from './views/checkstore/Administrator.vue'//绑定管理员
+import CheckHome from './views/checkstore/Home.vue'//主页
+import CheckList from './views/checkstore/CheckList.vue' //核销记录
+import StoreList from './views/checkstore/StoreList.vue' //提现列表
+import CheckCode from './views/checkstore/CheckCode.vue' //核销码核销
+import CheckWithdrawDeposit from './views/checkstore/WithdrawDeposit.vue' //申请提现
+import Commodity from './views/checkstore/Commodity.vue' //商品核销
 import CheckGoods from './views/checkstore/CheckGoods.vue'
 import CheckCard from './views/checkstore/CheckCard.vue'
 import Appointment from './views/checkstore/Appointment.vue' //预约记录
@@ -87,6 +90,11 @@ let router = new Router({
             component: Login2
         },
         {
+            path: '/Administrator',
+            name: 'Administrator',
+            component: Administrator
+        },
+        {
             path: '/CheckHome',
             name: 'CheckHome',
             component: CheckHome
@@ -95,6 +103,16 @@ let router = new Router({
             path: '/CheckCode',
             name: 'CheckCode',
             component: CheckCode
+        },
+        {
+            path: '/CheckWithdrawDeposit',
+            name: 'CheckWithdrawDeposit',
+            component: CheckWithdrawDeposit
+        },
+        {
+            path: '/Commodity',
+            name: 'Commodity',
+            component: Commodity
         },
         {
             path: '/CheckList',
@@ -365,3 +383,18 @@ function getParamString(name) {
     }
     return params[name];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            

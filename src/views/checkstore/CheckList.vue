@@ -1,89 +1,123 @@
 <template>
-    <div class="list">
-        <van-nav-bar @click-left="onClickLeft"  left-arrow fixed title="核销记录" />
-        <div class="top-box">
+    <div class="CheckList">
+        <header>
             <div>
-                <p>9999</p>
-                <p>总核销</p>
+                <p>999</p>
+                <span>今日核销</span>
             </div>
             <div>
-                <p>66</p>
-                <p>核销数</p>
+                <p>999</p>
+                <span>总核销</span>
+            </div>
+        </header>
+        <div class="titles">
+            <p>核销记录</p>
+            <div>
+                <time>{{dateTime}}</time>
+                <span><img src="../../assets/icon_pull_down.png" alt=""></span>
+                <em @click="openPicker"></em>
             </div>
         </div>
-        <div class="select">
-            <div>核销记录</div>
-            <div>2018-8-9</div>
+        <div class="product">
+            <ul>
+                <li>
+                    <i>img</i>
+                    <div>
+                        <h3>游乐园亲子门票系列280元张</h3>
+                        <p>
+                            <span>用户：可可</span>
+                            <a>15283008371</a>
+                        </p>
+                        <p>
+                            <span>核销人：张大宏</span>
+                            <a>2018-5-6 10:00</a>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <i>img</i>
+                    <div>
+                        <h3>游乐园亲子门票系列280元张</h3>
+                        <p>
+                            <span>用户：可可</span>
+                            <a>15283008371</a>
+                        </p>
+                        <p>
+                            <span>核销人：张大宏</span>
+                            <a>2018-5-6 10:00</a>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <i>img</i>
+                    <div>
+                        <h3>游乐园亲子门票系列280元张</h3>
+                        <p>
+                            <span>用户：可可</span>
+                            <a>15283008371</a>
+                        </p>
+                        <p>
+                            <span>核销人：张大宏</span>
+                            <a>2018-5-6 10:00</a>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <i>img</i>
+                    <div>
+                        <h3>游乐园亲子门票系列280元张</h3>
+                        <p>
+                            <span>用户：可可</span>
+                            <a>15283008371</a>
+                        </p>
+                        <p>
+                            <span>核销人：张大宏</span>
+                            <a>2018-5-6 10:00</a>
+                        </p>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <ul class="check_list">
-            <li>
-                <div class="mid">
-                    <div class="img-box">
-                        <img src="../../assets/img1.png">
-                    </div>
-                        <div class="content-box">
-                            <div>商品名称商品名称商品名称</div>
-                            <div class="center">
-                                <div>可可</div>
-                                <div>15283008371</div>
-                            </div>
-                            <div class="right">
-                                <div>核销人：乐乐</div>
-                                <div>2018-5-6 10:00</div>
-                            </div>
-                        </div>
-                    </div>
-            </li>
-            <li>
-                <div class="mid">
-                    <div class="img-box">
-                        <img src="../../assets/img1.png">
-                    </div>
-                        <div class="content-box">
-                            <div>商品名称商品名称商品名称</div>
-                            <div class="center">
-                                <div>可可</div>
-                                <div>15283008371</div>
-                            </div>
-                            <div class="right">
-                                <div>核销人：乐乐</div>
-                                <div>2018-5-6 10:00</div>
-                            </div>
-                        </div>
-                    </div>
-            </li>
-            <li>
-                <div class="mid">
-                    <div class="img-box">
-                        <img src="../../assets/img1.png">
-                    </div>
-                        <div class="content-box">
-                            <div>商品名称商品名称商品名称</div>
-                            <div class="center">
-                                <div>可可</div>
-                                <div>15283008371</div>
-                            </div>
-                            <div class="right">
-                                <div>核销人：乐乐</div>
-                                <div>2018-5-6 10:00</div>
-                            </div>
-                        </div>
-                    </div>
-            </li>
-        </ul>
+ 
+        <mt-datetime-picker
+            type="date"
+            ref="picker"
+            year-format="{value} 年"
+            month-format="{value} 月"
+            date-format="{value} 日"
+            @confirm="handleConfirm"
+            :startDate="startDate">
+        </mt-datetime-picker>
     </div>
 </template>
 <script>
+import { DatetimePicker } from 'mint-ui';
+import moment from 'moment'
+import Vue from "vue";
+
+Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
-    name: 'WithdrawList',
+    name: 'CheckList',
     data() {
-        return {}
+        return {
+            startDate: new Date('1968-01-01'),
+            dateTime:'请选择时间'
+        }
     },
     components: {},
     methods: {
-        onClickLeft(){
-            this.$router.go(-1)
-        }
+        //开启时间选择器
+        openPicker () {
+            this.$refs.picker.open()
+        },
+        //点击确定按钮
+        handleConfirm (data) {
+            let date = moment(data).format('YYYY.MM.DD')
+            this.dateTime = date;
+            this.$refs.picker.close()
+            event.stopPropagation()
+        },
+
     },
 
     // 创建前状态
@@ -91,7 +125,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-        document.title = "提现明细"
+        document.title = "核销记录"
     },
 
     // 挂载前状态
@@ -115,85 +149,101 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.list {
-    height: 100vh;
-    background: #eee;
-}
-
-.top-box {
-    padding: 1rem 0;
-    background: rgb(22, 155, 213);
-    color: #fff;
-    font-size: 14px;
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-
-    &>div {
+.CheckList{
+    header{
+        height: 2.4rem;
+        background: #FF6C5F;
         display: flex;
-        flex: 1;
+        align-items: center;
+        justify-content: center;
+        div{
+        width: 2.6rem;
+        color: #fff;
+        display: flex;
+        align-items: center;
         flex-direction: column;
-        text-align: center;
-
-        &>p {
-            margin-top: 10px;
+        font-size: .28rem;
+        p{
+            font-size: .48rem;
+            padding-bottom: .1rem;
+        }
         }
     }
-}
-
-.select {
-    padding: .5rem .6rem;
-    background: #fff;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-}
-
-.check_list {
-    padding: 0.1rem 0.1rem;
-    background: #eee;
-
-    li {
-        margin-top: 5px;
+    .titles{
+        height: 1.15rem;
         display: flex;
-        flex-direction: column;
-        background: #fff;
-        padding: 0.2rem 0.2rem;
-
-        .mid {
-            margin-top: 0.2rem;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-
-            .img-box {
-                width: 20%;
-            }
-
-            .center {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-            }
-
-            .right {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-            }
-        }
-
-        .content-box {
-            display: flex;
+        align-items: center;
+        padding-right: .5rem;
+        p{
             flex: 1;
-            margin-left: 5px;
-            color: #666;
-            flex-direction: column;
-            justify-content: space-between;
+            font-size: 0.3rem;
+            padding-left: .43rem;
         }
-
+        div{
+            position: relative;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            width: 2rem;
+            time{
+                flex: 1;
+                font-size: 0.3rem;
+            }
+            span{
+                width: .3rem;
+                overflow: hidden;
+            }
+            em{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+        }
     }
+    .product{
+        ul{
+            li{
+                padding: 0.27rem .3rem .38rem;
+                border-top: 2px solid #f6f6f6;
+                display: flex;
+                align-items: center;
+                i{
+                    width: 1.26rem;
+                    height: 1.26rem;
+                    background-color: #f75835;
+                    border-radius: 0.12rem;
+                    overflow: hidden;
+                }
+                div{
+                    height: 1.26rem;
+                    flex: 1;
+                    padding-left: .36rem;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    h3{
+                        font-weight: bold;
+                        font-size: 0.3rem;
+                        width: 5.1rem;
+                        overflow: hidden;
+                        text-overflow:ellipsis;
+                        white-space: nowrap;
+                    }
+                    p{
+                        font-size: 0.24rem;
+                        display: flex;
+                        a{
+                            padding-left: .53rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+</style>
+<style>
+.el-message-box{
+    width: 80%;
 }
 </style>

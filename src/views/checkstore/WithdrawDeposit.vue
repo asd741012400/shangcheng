@@ -1,14 +1,16 @@
 <template>
-    <div class="CheckCode">
+    <div class="WithdrawDeposit">
         <div>
-            <p><input type="number" placeholder="请输入"></p>
+            <h3>可提现￥200</h3>
+            <p><input type="number" placeholder="请输入提现金额"></p>
+            <span>我们将收取X%的手续费</span>
             <a class="sub_btn">确定</a>
         </div>
     </div>
 </template>
 <script>
 export default {
-    name: 'CheckCode',
+    name: 'WithdrawDeposit',
     data() {
         return {
        
@@ -24,8 +26,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-        document.body.style.background = "#F0F0F0";
-        document.title = "核销码核销"
+        document.title = "申请提现"
     },
 
     // 挂载前状态
@@ -49,13 +50,23 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.CheckCode{
+.WithdrawDeposit{
+    background: #f0f0f0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top:0;
     div{
         margin: 0 .4rem;
         overflow: hidden;
+        h3{
+            padding-top: .5rem;
+            font-size: 0.36rem;
+        }
         p{
-            margin-top: .42rem;
             display: flex;
+            margin-top: .4rem;
 			height: 0.7rem;
 			padding-left: .4rem;
 			background-image: linear-gradient(
@@ -73,9 +84,14 @@ export default {
 				height: 100%;
 			}
         }
+        span{
+            font-size: 0.3rem;
+            padding-top: .2rem;
+            display: block;
+        }
         .sub_btn{
-            margin-top: .37rem;
             height: 0.8rem;
+            margin-top: .6rem;
             line-height: 0.8rem;
             background-color: #ff6c60;
             border-radius: 0.1rem;

@@ -316,17 +316,22 @@ export default {
                 align-items: center;
                 width: 20%;
                 text-align: center;
+                a{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
 
-                span {
-                    width: 1rem;
-                    overflow: hidden;
-                }
+                    span {
+                        width: 1rem;
+                        overflow: hidden;
+                    }
 
-                p {
-                    font-size: .24rem;
-                    color: #515C6F;
-                    padding-top: .08rem;
+                    p {
+                        font-size: .24rem;
+                        color: #515C6F;
+                        padding-top: .08rem;
 
+                    }
                 }
             }
         }

@@ -30,26 +30,26 @@
         <div class="menu">
             <router-link :to="{name:'TeamDel'}">
                 <p>
-                    <span></span>
-                    <a>我的成员</a>
+                    <span><img src="../../assets/merchant/icon_img1.png" alt=""></span>
+                    <em>我的成员</em>
                 </p>
             </router-link>
             <router-link :to="{name:'Generalize'}">
                 <p>
-                    <span></span>
-                    <a>我的推广</a>
+                    <span><img src="../../assets/merchant/icon_img2.png" alt=""></span>
+                    <em>我的推广</em>
                 </p>
             </router-link>
             <router-link :to="{name:'WithdrawDeposit'}">
                 <p>
-                    <span></span>
-                    <a>申请提现</a>
+                    <span><img src="../../assets/merchant/icon_img3.png" alt=""></span>
+                    <em>申请提现</em>
                 </p>
             </router-link>
             <router-link :to="{name:'WithdrawList'}">
                 <p>
-                    <span></span>
-                    <a>提现记录</a>
+                    <span><img src="../../assets/merchant/icon_img4.png" alt=""></span>
+                    <em>提现记录</em>
                 </p>
             </router-link>
         </div>
@@ -71,7 +71,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-        document.title = "我的推广"
+        document.title = "我的店铺"
     },
 
     // 挂载前状态
@@ -178,40 +178,44 @@ export default {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
+        a{
+            p {
+                width: 1.9rem;
+                height: 1.9rem;
+                border-radius: 8px;
+                margin-bottom: .4rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                span {
+                    width: .6rem;
+                    overflow: hidden;
+                }
 
-        p {
-            width: 1.9rem;
-            height: 1.9rem;
-            border-radius: 8px;
-            margin-bottom: .4rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-
-            span {
-                height: 1.3rem;
-                overflow: hidden;
+                em {
+                    color: #fff;
+                    font-size: .28rem;
+                    padding-top: .1rem;
+                    font-style: normal;
+                }
             }
 
-            a {
-                color: #fff;
-                font-size: .28rem;
-            }
+           
         }
-
-        p:nth-of-type(1) {
+        a:nth-of-type(1) p{
             background: #FF6C60;
         }
 
-        p:nth-of-type(2) {
+        a:nth-of-type(2) p{
             background: #806CF6;
         }
 
-        p:nth-of-type(3) {
+        a:nth-of-type(3) p{
             background: #F6AE42;
         }
 
-        p:nth-of-type(4) {
+        a:nth-of-type(4) p{
             background: #3498F7;
         }
     }
