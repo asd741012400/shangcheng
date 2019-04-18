@@ -6,7 +6,7 @@
                 <van-field @touchstart.stop="show = true" v-model="code" label="核销码" placeholder="请输入核销码" />
             </van-cell-group>
         </div>
-        <van-number-keyboard :show="show" extra-key="." close-button-text="完成" @blur="show = false" @input="onInput" @delete="onDelete" />
+        <van-number-keyboard :show="show" extra-key="." close-button-text="完成"  @hide="submit" @blur="show = false" @input="onInput" @delete="onDelete" />
     </div>
 </template>
 <script>
@@ -28,6 +28,15 @@ export default {
         },
         onDelete() {
             this.code = this.code.substring(0, this.code.length - 1);
+        },
+        //提交
+        async submit(){
+          let res = await this.$postRequest('/order/AddOrder', {code:this.code})
+            this.$message(res.data.msg)
+            if (res.data.code == 1) {
+               
+            }
+
         }
     },
 

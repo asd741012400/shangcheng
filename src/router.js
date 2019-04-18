@@ -69,7 +69,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Dome',
-            component: Index
+            component: Login2
         },
         {
             path: '/Index',
@@ -316,9 +316,9 @@ router.beforeEach((to, from, next) => {
 
     if (!openid2 && !openid) {
         let url = window.location.href
-        // getRequest('/wechat/check', { url: url }).then(res => {
-        //     window.location.href = res.data
-        // })
+        getRequest('/wechat/check', { url: url }).then(res => {
+            window.location.href = res.data
+        })
     }
     if (openid) {
         //保存openid

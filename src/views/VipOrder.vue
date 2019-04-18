@@ -56,10 +56,9 @@
         </div>
         <footer>
             <p>合计:￥{{plus.sale_price}}</p>
-            <b>
-            <router-link :to="{name:'VipOrderBuy',query:{type:2}}" style="color:#fff">
+            <b @click="addOrder">
                 提交订单
-            </router-link>
+
             </b>
         </footer>
     </div>
@@ -69,6 +68,7 @@ export default {
     name: 'VipOrder',
     data() {
         return {
+            plus: {},
             agreementState: false
         }
     },
@@ -79,7 +79,24 @@ export default {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
-        }
+        },
+        //添加订单
+        async addOrder() {
+            let postData = {
+                order_type: 2,
+                goods_id: this.plus.setting_id,
+                goods_title: this.plus.name,
+                openid: this.$localstore.get('openid'),
+                order_num: 1,
+                amount: this.plus.sale_price,
+                total_amount: this.plus.sale_price
+            }
+            let res = await this.$postRequest('/order/AddOrder', postData)
+            this.$message(res.data.msg)
+            if (res.data.code == 1) {
+                this.$router.push({ name: 'VipOrderBuy', query: { id: res.data.data } })
+            }
+        },
     },
 
     // 创建前状态

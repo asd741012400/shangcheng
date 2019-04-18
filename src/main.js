@@ -25,8 +25,8 @@ Vue.use(Vant);
 
 //移动端调试
 import Vconsole from 'vconsole';
-// const vConsole = new Vconsole();
-// Vue.use(vConsole)
+const vConsole = new Vconsole();
+Vue.use(vConsole)
 
 
 

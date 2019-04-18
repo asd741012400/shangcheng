@@ -93,7 +93,7 @@ export default {
 
                     // 支付成功后的操作
                     options.success = async function() {
-                        let res = await this.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
                         // if (res.data.code == 1) {
                             that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id } })
                         // } else {

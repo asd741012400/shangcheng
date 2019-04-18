@@ -49,28 +49,69 @@
                 <p>微信支付</p>
             </div>
             <div class="total">
-                <p>合计:￥599</p>
+                <p>合计:￥{{order.total_amount}}</p>
             </div>
         </div>
         <footer>
-            <p>合计:￥599</p>
-            <b>去支付</b>
+            <p>合计:￥{{order.total_amount}}</p>
+            <b @click="payOrder">去支付</b>
         </footer>
     </div>
 </template>
 <script>
+import wx from 'weixin-js-sdk' //微信sdk依赖
+
 export default {
     name: 'VipOrderBuy',
     data() {
-        return {}
+        return {
+          order:{}
+        }
     },
     components: {},
     methods: {
-        //获取PlUS
+        //获取订单
         async getOrder() {
             let id = this.$route.query.id
-            let res = await this.$getRequest('/home/GetPlus')
-            this.plus = res.data.data
+            let res = await this.$getRequest('/order/getOrder', { id: id })
+            this.order = res.data.data
+        },
+        //支付
+        async payOrder() {
+            let that = this
+            //获取微信支付
+            let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
+            if (res.data.code == 1) {
+                let config = JSON.parse(res.data.data)
+
+                wx.ready(function() {
+                    // 这里获取到PHP生成签名参数包，注意是JSON格式
+                    var options = config;
+
+                    // 支付成功后的操作
+                    options.success = async function() {
+                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        // if (res.data.code == 1) {
+                            that.$router.push({ name: 'PersonalCenter', query: { id: that.order.order_id } })
+                        // } else {
+                        //     that.$message('订单状态修改失败')
+                        // }
+                    };
+
+                    //  取消支付的操作
+                    options.cancel = function() {
+                        that.$message('已取消')
+                    };
+
+                    // 支付失败的处理 
+                    options.fail = function(res) {
+                        that.$message('支付失败')
+                    };
+
+                    // 传入参数，发起JSAPI支付
+                    wx.chooseWXPay(options);
+                });
+            }
         }
     },
 

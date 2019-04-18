@@ -129,7 +129,7 @@ export default {
                 goods_title: this.title,
                 real_name: this.real_name,
                 play_time: this.play_time,
-                attr_id: this.$route.query.attr_id || 22,
+                attr_id: this.$route.query.attr_id,
                 tel: this.tel,
                 openid: this.$localstore.get('openid'),
                 order_num: this.num,
@@ -156,7 +156,7 @@ export default {
                 that.num = ++that.num
             }
         },
-        //获取卡片详情
+        //获取详情
         async getCard() {
             const id = this.$route.query.id;
             let type = this.$route.query.order_type
