@@ -1,6 +1,6 @@
 <template>
   <div class="DistributionThree">
-    <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+    <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
     <header><span>我的推广</span></header>
     <div class="header">
       <div class="shop_message">

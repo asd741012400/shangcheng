@@ -1,7 +1,7 @@
 <template>
   <div class="CardDetailsTow">
     <header>
-        <div class="icon_return"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
+        <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
         <h3>权益中心</h3>
         <div class="to_be_used">
           <div class="image">

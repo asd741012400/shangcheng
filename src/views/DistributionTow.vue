@@ -1,6 +1,6 @@
 <template>
   <div class="DistributionTow">
-    <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+    <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
     <header><span>我的推广</span></header>
     <div class="header">
       <div class="shop_message">
@@ -49,8 +49,10 @@
         </li>
         <li>
           <div>
+              <router-link :to="{name:'WithdrawDeposit'}">
             <i><img src="../assets/icon_withdraw_deposit.png" alt=""></i>
             <p>申请提现</p>
+          </router-link>
           </div>
         </li>
         <li>

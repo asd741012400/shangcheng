@@ -1,7 +1,7 @@
 <template>
   <div class="ClassifyList">
     <header>
-      <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+      <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
       <div class="tel">分类列表</div>
       <div class="add"></div>
     </header>
@@ -18,6 +18,7 @@
     
     <div class="activity_list">
       <ul>
+        <router-link :to="{name:'CommodityDetails',query:{id:1,type:1}}">
         <li>
           <div class="img">
             <span></span>
@@ -39,27 +40,7 @@
             </div>
           </div>
         </li>
-        <li>
-          <div class="img">
-            <span></span>
-            <div>
-              <p>会员价</p>
-              <i>￥</i>
-              <a>20</a>
-            </div>
-          </div>
-          <div class="project">
-            <p>悠游堂亲子嘉年华</p>
-            <span>报名　11/22</span>
-          </div>
-          <div class="share">
-            <div class="price">
-              <span>现价</span>
-              <b>￥45.0</b>
-              <a>￥345</a>
-            </div>
-          </div>
-        </li>
+       </router-link>
       </ul>
     </div>
 

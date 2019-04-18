@@ -14,9 +14,9 @@
       
       <div class="swiper-container">
         <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="../assets/activity_img1.png" /></div>
-            <div class="swiper-slide"><img src="../assets/activity_img1.png" /></div>
-            <div class="swiper-slide"><img src="../assets/activity_img1.png" /></div>
+          <div class="swiper-slide"><img src="../assets/activity_img1.png" /></div>
+          <div class="swiper-slide"><img src="../assets/activity_img1.png" /></div>
+          <div class="swiper-slide"><img src="../assets/activity_img1.png" /></div>
         </div>
         <!-- 如果需要分页器 -->
         <div class="swiper-pagination"></div>
@@ -41,17 +41,17 @@
         <ul>
           <li v-for="(item , index) in Cardlist">
             <router-link :to="{name:'CardDetails',query:{id:item.card_id,type:3}}">
-            <div class="img">
-              <span><img :src="item.thumb_img" alt=""></span>
-              <div>
-                <p>会员价</p>
-                <i>￥</i>
-                <a>{{item.cost_price}}</a>
+              <div class="img">
+                <span><img :src="item.thumb_img" alt=""></span>
+                <div>
+                  <p>会员价</p>
+                  <i>￥</i>
+                  <a>{{item.cost_price}}</a>
+                </div>
               </div>
-            </div>
-            <div class="project">
-              <p>{{item.card_name}}</p>
-            </div>
+              <div class="project">
+                <p>{{item.card_name}}</p>
+              </div>
             </router-link>
           </li>
         </ul>
@@ -65,7 +65,7 @@
       </h3>
       <ul>
         <li class="vip_price" v-for="(item,index) in GoodsList">
-         <router-link :to="{name:'CardDetails',query:{id:item.goods_id,type:1}}">
+         <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
           <div class="img">
             <span><img :src="item.thumb_img" alt=""></span>
             <div>
@@ -84,62 +84,47 @@
             <a>￥{{item.goods_price}}</a>
           </div>
           <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
-         </router-link>
-        </li>
-      </ul>
-    </div>
-
-    <footer>
-      <div class="footer">
-        <div class="shop">
-          <span><a><img src="../assets/icon_shopA.png" alt=""></a></span>
-          <p>商城</p>
-        </div>
-        <div class="member">
-          <b><img src="../assets/icon_vip_imgA.png" alt=""></b>
-          <span></span>
-          <p>会员</p>
-        </div>
-        <div class="personal_center">
-          <span><a><img src="../assets/icon_myB.png" alt=""></a></span>
-          <p>个人中心</p>
-        </div>
-      </div>
-    </footer>
-
+        </router-link>
+      </li>
+    </ul>
   </div>
+
+<MyFooter></MyFooter>
+
+</div>
 </template>
 <script>
-import Swiper from 'swiper';
-import 'swiper/dist/css/swiper.css';
-import '../components/iconfont/iconfont.css'
-export default {
-  name:'Index',
-  data(){
-    return{
-      apiUrl:this.$common.ApiUrl(),
-      Cardlist:"",
-      NavList:"",
-      pages:1,
-      GoodsList:"",
-      goodsListSum:0,
-      goodsListLength:0,
-    }
-  },
-  components:{
-  },
-  methods:{
-    skipPages(str){
-      this.$router.push({
-        name: str, 
-      });
+  import Swiper from 'swiper';
+  import 'swiper/dist/css/swiper.css';
+  import '../components/iconfont/iconfont.css'
+  export default {
+    name:'Index',
+    data(){
+      return{
+        apiUrl:this.$common.ApiUrl(),
+        Cardlist:"",
+        NavList:"",
+        pages:1,
+        GoodsList:"",
+        goodsListSum:0,
+        goodsListLength:0,
+      }
     },
-    GoodsListPush(){
-      that.$http.get(that.apiUrl+'home/GetGoodsList',{
-        params:{ 
-          'page': that.pages 
-        }
-      })
+    components:{
+    },
+    methods:{
+      skipPages(str){
+        this.$router.push({
+          name: str, 
+        });
+      },
+      GoodsListPush(){
+        let that = this
+        that.$http.get(that.apiUrl+'home/GetGoodsList',{
+          params:{ 
+            'page': that.pages 
+          }
+        })
         .then(response=>{
           var data = JSON.parse(JSON.stringify(response.data))
           if(data.code){
@@ -151,19 +136,19 @@ export default {
 
         })  
         .catch(function(error) {
-            console.log(error);
+          console.log(error);
         });
+      },
+      cardlistSkip(id){
+        const that = this;
+        that.$router.push({
+          name: "CardDetails", 
+          query:{
+            id:id
+          }
+        });
+      }
     },
-    cardlistSkip(id){
-      const that = this;
-      that.$router.push({
-        name: "CardDetails", 
-        query:{
-          id:id
-        }
-      });
-    }
-  },
 
   // 创建前状态
   beforeCreate(){
@@ -174,49 +159,49 @@ export default {
     document.body.style.background = "#F6F6F6";
     const that = this;
     that.$http.get(that.apiUrl+'home/getcardlist')
-      .then(response=>{
-        var data = JSON.parse(JSON.stringify(response.data))
-        if(data.code == 1){
-          const resData = data.data;
-          that.Cardlist = resData;
-        }
+    .then(response=>{
+      var data = JSON.parse(JSON.stringify(response.data))
+      if(data.code == 1){
+        const resData = data.data;
+        that.Cardlist = resData;
+      }
 
-      })  
-      .catch(function(error) {
-          console.log(error);
-      });
+    })  
+    .catch(function(error) {
+      console.log(error);
+    });
 
     that.$http.get(that.apiUrl+'home/GetNavList')
-      .then(response=>{
-        var data = JSON.parse(JSON.stringify(response.data))
-        if(data.code == 1){
-          const resData = data.data;
-          that.NavList = resData;
-        }
+    .then(response=>{
+      var data = JSON.parse(JSON.stringify(response.data))
+      if(data.code == 1){
+        const resData = data.data;
+        that.NavList = resData;
+      }
 
-      })  
-      .catch(function(error) {
-          console.log(error);
-      });
+    })  
+    .catch(function(error) {
+      console.log(error);
+    });
 
     that.$http.get(that.apiUrl+'home/GetGoodsList',{
       params:{ 
         'page': that.pages 
       }
     })
-      .then(response=>{
-        var data = JSON.parse(JSON.stringify(response.data))
-        if(data.code == 1){
-          const resData = data.data;
-          that.GoodsList = resData.list;
-          that.goodsListLength = resData.list.length;
-          that.goodsListSum = resData.count;
-        }
+    .then(response=>{
+      var data = JSON.parse(JSON.stringify(response.data))
+      if(data.code == 1){
+        const resData = data.data;
+        that.GoodsList = resData.list;
+        that.goodsListLength = resData.list.length;
+        that.goodsListSum = resData.count;
+      }
 
-      })  
-      .catch(function(error) {
-          console.log(error);
-      });
+    })  
+    .catch(function(error) {
+      console.log(error);
+    });
 
     window.onscroll = function(){
     //变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -226,16 +211,16 @@ export default {
     //变量scrollHeight是滚动条的总高度
     var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
            //滚动条到底部的条件
-          if(scrollTop+windowHeight==scrollHeight){
+           if(scrollTop+windowHeight==scrollHeight){
             if(that.goodsListLength >= that.goodsListSum)
             {
               that.pages++;
               that.GoodsListPush()
             }
           }   
-    }
+        }
 
-  },
+      },
 
   // 挂载前状态
   beforeMount(){
@@ -622,74 +607,6 @@ export default {
       }
     }
   }
-  footer{
-    position: fixed;
-    bottom: 0;
-    box-shadow:0px 0px 6px rgba(0,0,0,0.1);
-    height: 1.64rem;
-    width: 100%;
-    background: #fff;
-    .footer{
-      padding: 0 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 100%;
-      .shop{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        span{
-          width: 1.2rem;
-          height: .9rem;
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          a{
-            width: .6rem;
-          }
-        }
-      }
-      .member{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        position: relative;
-
-        b{
-          width: .92rem;
-          padding: .14rem;
-          overflow: hidden;
-          position: absolute;
-          top: -.5rem;
-          background: #fff;
-          border-radius: 50%;
-          box-shadow:0px 0px 12px rgba(0,0,0,0.15);
-        }
-        span{
-          width: 1.2rem;
-          height: .9rem;
-        }
-      }
-      .personal_center{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        span{
-          width: 1.2rem;
-          height: .9rem;
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          a{
-            width: .6rem;
-          }
-        }
-      }
-    }
-  }
 }
 </style>
 <style>
@@ -713,4 +630,4 @@ export default {
 
 
 
-    
+

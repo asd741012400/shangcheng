@@ -8,6 +8,10 @@ import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
 
+// 引入全局组件
+//注册全局组件
+Vue.component('MyFooter', resolve => { require(['@/components/Footer'], resolve) }) //footer
+
 //ui库
 import Mint from 'mint-ui';
 import 'mint-ui/lib/style.css'
@@ -21,8 +25,8 @@ Vue.use(Tab).use(Tabs).use(Card).use(Button).use(Tag).use(Panel);
 
 //移动端调试
 import Vconsole from 'vconsole';
-const vConsole = new Vconsole();
-Vue.use(vConsole)
+// const vConsole = new Vconsole();
+// Vue.use(vConsole)
 
 
 

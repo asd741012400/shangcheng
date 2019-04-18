@@ -1,7 +1,7 @@
 <template>
     <div class="ConfirmAnOrder">
         <header>
-            <div class="icon_return"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+            <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">确认订单</div>
             <div class="add"></div>
         </header>

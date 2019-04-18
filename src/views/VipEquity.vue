@@ -1,5 +1,10 @@
 <template>
   <div class="VipEquity">
+    <header>
+      <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+      <div class="tel">会员权益</div>
+      <div class="add"></div>
+    </header>
     <div class="vip_card">
       <p>
         <span>累积为您节省：￥</span>
@@ -196,7 +201,38 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.VipEquity{
+  header{
+    height: .6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin:  0 auto;
+    padding-top:.3rem; 
+    padding-bottom: .2rem;
+    background: #FFFFFF;
+    position: relative;
+    .icon_return{
+      width: 1rem;
+      height: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      position: absolute;
+      left: .4rem;
+      span{
+        overflow: hidden;
+        width: .27rem;
+      }
+    }
+    .tel{
+      color:#515C6F;
+      font-weight: bold;
+      font-size: .32rem;
+      text-align: center;
+    }
+ 
+  }
+.VipEquity{  
   background: url('../assets/VipEquity_bg.png') top/100% 17.38rem no-repeat;
   .vip_card{
     height: 4.66rem;

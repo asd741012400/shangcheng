@@ -1,7 +1,7 @@
 <template>
   <div class="CommodityList">
     <header>
-      <div class="return"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
+      <div class="return" @click="$router.go(-1)"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
       <div class="shop_message">
         <span><img src="../assets/head_portrait.png" alt="" srcset=""></span>
         <div>
