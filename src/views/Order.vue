@@ -5,7 +5,7 @@
             <div class="tel">订单列表</div>
             <div class="add"></div>
         </header>
-        <van-tabs v-model="active">
+        <van-tabs v-model="active" @change="getOrderList">
             <van-tab title="全部"></van-tab>
             <van-tab title="待付款"></van-tab>
             <van-tab title="待使用"></van-tab>
@@ -13,7 +13,7 @@
             <van-tab title="退款"></van-tab>
         </van-tabs>
         <ul class="goods_list">
-            <li>
+            <li v-for="(item,index) in orderList">
                 <div class="top">
                     <span>待付款</span>
                 </div>
@@ -22,24 +22,24 @@
                         <img src="../assets/img1.png">
                     </div>
                         <div class="center">
-                            <div>商品名称商品名称商品名称</div>
+                            <div class="clip title">{{item.goods_title}}</div>
                             <div>有效期 2015-8-6 至 2018-8-9</div>
                         </div>
                         <div class="right">
-                            <div>￥99</div>
-                            <div>X1</div>
+                            <div>￥{{item.amount}}</div>
+                            <div>X {{item.order_num}}</div>
                         </div>
                     </div>
                     <div class="footer">
                         <div>
-                            <span>合计 ￥99</span>
+                            <span>合计 ￥{{item.total_amount}}</span>
                         </div>
                         <div>
-                            <van-button type="danger" size="mini">取消订单</van-button>
+                            <!-- <van-button type="danger" size="mini">取消订单</van-button> -->
                             <!-- <van-button type="danger" size="mini">申请退款</van-button> -->
                             <!-- <van-button type="primary" size="mini">还想买</van-button> -->
                             <!-- <van-button type="info" size="mini">去使用</van-button> -->
-                            <!-- <van-button type="info" size="mini">去评价</van-button> -->
+                            <van-button type="info" size="mini" @click="handleComment(item.order_id)">去评价</van-button>
                             <van-button type="info" size="mini">激活使用</van-button>
                         </div>
                     </div>
@@ -49,10 +49,15 @@
 </template>
 <script>
 export default {
-    name: 'ConfirmPay',
+    name: 'Order',
     data() {
         return {
-            order: '',
+            page: 1,
+            user_id: '',
+            order_status: '',
+            orderList: [],
+            currSize: 0,
+            pageSize: 10,
             active: 1
         }
     },
@@ -61,13 +66,47 @@ export default {
     },
     methods: {
         //获取订单
-        async getOrder() {
-            let id = this.$route.query.id
-            let res = await this.$getRequest('/order/getOrder', { id: id })
-            this.order = res.data.data
+        async getOrderList(index) {
+            this.orderList = []
+            index--
+            console.log(index);
+
+
+            switch (index) {
+                case 1:
+                    this.order_status = 1
+                    break;
+                case 2:
+                    this.order_status = 2
+                    break;
+                case 3:
+                    this.order_status = 1
+                    break;
+                case 4:
+                    this.order_status = 4
+                    break;
+                default:
+                    this.order_status = ''
+            }
+
+            let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
+            this.orderList = res.data.data.list
+            this.currSize = res.data.data.list.length
         },
-        //支付
-        async payOrder() {
+
+        //获取更多商品
+        async getOrderListMore(cid) {
+            let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
+            let data = res.data.data.list
+            this.orderList = this.orderList.concat(data);
+            this.currSize = res.data.data.list.length
+        },
+
+        //评价订单
+        async handleComment() {
+            let data = {}
+            let res = await this.$postRequest('order/Comment', data)
+
 
         }
     },
@@ -79,9 +118,27 @@ export default {
 
     // 创建完毕状态 
     created() {
-        this.getOrder()
+        let user = this.$localstore.get('userInfo')
+        this.user_id = user.user_id
+        this.getOrderList()
         document.body.style.background = "#F6F6F6";
-        
+
+        window.onscroll = () => {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (this.currSize >= this.pageSize) {
+                    this.page++;
+                    this.getOrderListMore(this.cid)
+                }
+            }
+        }
+
     },
 
     // 挂载前状态
@@ -113,7 +170,8 @@ export default {
         display: flex;
         flex-direction: column;
         background: #fff;
-        padding: 0.1rem 0.2rem;
+        padding: 0.2rem 0.2rem;
+        margin-top: 0.2rem;
 
         .top {
             text-align: right;
@@ -130,17 +188,23 @@ export default {
             }
 
             .center {
+                margin-left: 0.1rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
                 flex: 1;
+
+                .title {
+                    width: 160px;
+                }
             }
 
             .right {
+                margin-right: 0.1rem;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                width: 10%;
+                // width: 10%;
                 text-align: right;
             }
         }
@@ -157,7 +221,7 @@ export default {
 
 .van-tabs__content {
     display: none;
-    padding:0;
+    padding: 0;
 }
 
 .van-card {

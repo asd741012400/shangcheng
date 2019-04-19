@@ -16,22 +16,22 @@
                 <li v-for="(item,index) in goodsList">
                     <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
                         <div class="img">
-                            <span></span>
+                            <span><img :src="item.thumb_img" alt=""></span>
                             <div>
                                 <p>会员价</p>
                                 <i>￥</i>
-                                <a>20</a>
+                                <a>{{item.cost_price}}</a>
                             </div>
                         </div>
                         <div class="project">
-                            <p>悠游堂亲子嘉年华</p>
-                            <span>报名　11/22</span>
+                            <p>{{item.goods_name}}</p>
+                            <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span>
                         </div>
                         <div class="share">
                             <div class="price">
                                 <span>现价</span>
-                                <b>￥45.0</b>
-                                <a>￥345</a>
+                                <b>￥{{item.mkt_price}}</b>
+                                <a>￥{{item.goods_price}}</a>
                             </div>
                         </div>
                     </router-link>
@@ -130,8 +130,6 @@ export default {
             var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
             //滚动条到底部的条件
             if (scrollTop + windowHeight == scrollHeight) {
-                console.log(this.currSize);
-                console.log(this.pageSize);
                 if (this.currSize >= this.pageSize) {
                     this.page++;
                     this.getGoodsListMore(this.cid)
@@ -284,6 +282,7 @@ export default {
                         }
 
                         a {
+                            color:#fff;
                             font-size: .4rem;
                         }
                     }

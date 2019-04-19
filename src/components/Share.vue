@@ -13,7 +13,7 @@
             <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
             <a>朋友圈</a>
           </li>
-          <li>
+          <li @click="showPoster()">
             <span><img src="../assets/share_code.png" alt=""></span>
             <a>二维码海报</a>
           </li>
@@ -42,6 +42,11 @@ export default {
   components:{
   },
   methods:{
+    showPoster(){
+        this.$router.push({
+            name: "SharePoster",     
+        });
+    },
     shareShowFn(ev){
       this.shareShow = true;
     },

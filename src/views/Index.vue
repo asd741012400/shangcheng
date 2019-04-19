@@ -403,6 +403,7 @@ export default {
                             }
 
                             a {
+                                color:#fff;
                                 font-size: .4rem;
                             }
                         }
@@ -597,6 +598,7 @@ export default {
                             }
 
                             a {
+                                color:#fff;
                                 font-size: .4rem;
                             }
                         }

@@ -306,7 +306,7 @@ export default {
         name: "ConfirmAnOrder", 
         query:{
           id:that.id,
-          order_type:this.$route.query.type,
+          order_type:3,
           arrival:"CardDetails",
         }
       });

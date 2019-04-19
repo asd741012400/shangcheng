@@ -32,6 +32,7 @@ import VipOrderBuy from './views/VipOrderBuy.vue'
 import VipEquity from './views/VipEquity.vue'
 import Order from './views/Order.vue'
 
+
 //分销商城
 import Login from './views/merchant/Login.vue'
 import WithdrawList from './views/merchant/WithdrawList.vue'
@@ -46,8 +47,8 @@ import PersonalStores from './views/merchant/PersonalStores.vue'
 
 //核销
 import Login2 from './views/checkstore/Login.vue'
-import Administrator from './views/checkstore/Administrator.vue'//绑定管理员
-import CheckHome from './views/checkstore/Home.vue'//主页
+import Administrator from './views/checkstore/Administrator.vue' //绑定管理员
+import CheckHome from './views/checkstore/Home.vue' //主页
 import CheckList from './views/checkstore/CheckList.vue' //核销记录
 import StoreList from './views/checkstore/StoreList.vue' //提现列表
 import CheckCode from './views/checkstore/CheckCode.vue' //核销码核销
@@ -67,12 +68,12 @@ Vue.use(Router)
 
 
 let router = new Router({
-    mode: 'history',
-    base: process.env.BASE_URL,
+    // mode: 'history',
+    // base: process.env.BASE_URL,
     routes: [{
             path: '/',
             name: 'Dome',
-            component: Login2
+            component: Index
         },
         {
             path: '/Index',
@@ -329,8 +330,8 @@ import wx from 'weixin-js-sdk' //微信sdk依赖
 //Router
 router.beforeEach((to, from, next) => {
 
-    let openid = getParamString('openid');
-    let openid2 = localstore.get('openid')
+    let openid = getParamString('openid1');
+    let openid2 = localstore.get('openid1')
 
     if (!openid2 && !openid) {
         let url = window.location.href
@@ -338,15 +339,15 @@ router.beforeEach((to, from, next) => {
             window.location.href = res.data
         })
     }
+
     if (openid) {
         //保存openid
-        localstore.set('openid', openid)
+        localstore.set('openid1', openid)
+        //使用 openid 获取用户资料 缓存本地
+        getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
+            localstore.set('userInfo', res.data.data)
+        })
     }
-
-    //使用 openid 获取用户资料 缓存本地
-    getRequest('/wechat/GetUserInfo', { openid: openid || openid2 }).then(res => {
-        localstore.set('userInfo', res.data.data)
-    })
 
     //获取微信jssdk
     getRequest('/wechat/GetWxJSSDK').then(res => {
@@ -375,26 +376,11 @@ export default router
  * 返回值:tyler 
  */
 function getParamString(name) {
-    var paramUrl = window.location.search.substr(1);
-    var paramStrs = paramUrl.split('&');
-    var params = {};
-    for (var index = 0; index < paramStrs.length; index++) {
-        params[paramStrs[index].split('=')[0]] = decodeURI(paramStrs[index].split('=')[1]);
+    var url = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+    var newUrl = window.location.search.substr(1).match(url);
+    if (newUrl != null) {
+        return unescape(newUrl[2]);
+    } else {
+        return false;
     }
-    return params[name];
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            

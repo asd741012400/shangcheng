@@ -53,8 +53,15 @@ a,
 a:focus,
 a:hover,
 a:active {
-    // color: #666;
+    color: #666;
     outline: none;
     text-decoration: none;
+}
+
+/* 文字溢出隐藏 */
+.clip {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 </style>

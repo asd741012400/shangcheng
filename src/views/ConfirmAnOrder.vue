@@ -17,7 +17,7 @@
                     </li>
                     <li>
                         <p>
-                            <b>￥99</b>
+                            <b>￥{{price}}</b>
                             <em>×{{num}}</em>
                         </p>
                     </li>
@@ -127,11 +127,12 @@ export default {
                 order_type: this.$route.query.order_type,
                 goods_id: this.$route.query.id,
                 goods_title: this.title,
+                goods_img: this.goods.thumb_img,
                 real_name: this.real_name,
                 play_time: this.play_time,
                 attr_id: this.$route.query.attr_id,
                 tel: this.tel,
-                openid: this.$localstore.get('openid'),
+                openid: this.$localstore.get('openid1'),
                 order_num: this.num,
                 amount: this.price,
                 total_amount: this.total,

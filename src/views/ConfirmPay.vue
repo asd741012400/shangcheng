@@ -40,7 +40,7 @@
                     </li>
                     <li>
                         <label>游玩日期</label>
-                        <p>{{order.pay_time}}</p>
+                        <p>{{order.play_time}}</p>
                     </li>
                 </ul>
             </div>

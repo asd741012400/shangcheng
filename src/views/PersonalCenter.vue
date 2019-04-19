@@ -1,44 +1,44 @@
 <template>
     <div class="PersonalCenter">
-        <header v-if="vip" class="vip_class">
+        <header v-if="userInfo.status == 1" class="vip_class">
             <div class="user_message">
                 <div class="head_portrait">
-                    <span><img src="../assets/head_portrait.png" alt="" srcset=""></span>
+                    <span><img :src="userInfo.wechat_img" alt="" srcset=""></span>
                     <i><img src="../assets/icon_vip.png" alt=""></i>
                 </div>
                 <div class="user_name">
-                    <p>用户名称</p>
+                    <p>{{userInfo.username}}</p>
                     <div>
-                        <a>会员到期：2019-01-06</a>
+                        <a>会员到期：{{userInfo.over_time}}</a>
                         <i><img src="../assets/vt_renew.png" alt=""></i>
                     </div>
                 </div>
             </div>
             <ul>
                 <li>
-                    <p>￥799</p>
+                    <p>￥{{userInfo.history_money ||　0.00}}</p>
                     <a>历史收益</a>
                 </li>
                 <li>
-                    <p>￥799</p>
+                    <p>￥{{userInfo.freeze_money ||　0.00}}</p>
                     <a>可提现</a>
                 </li>
                 <li>
-                    <p>￥799</p>
+                    <p>￥{{userInfo.getmoney ||　0.00}}</p>
                     <a>待生效</a>
                 </li>
             </ul>
             <b><img src="../assets/PersonalCenter_headerBg2.png" alt="" srcset=""></b>
         </header>
         <header v-else class="user_class">
-            <span><img src="../assets/head_portrait.png" alt="" srcset=""></span>
+            <span><img :src="userInfo.wechat_img" alt="" srcset=""></span>
             <div>
-                <p>用户名称</p>
-                <a>13654895142</a>
+                <p>{{userInfo.username}}</p>
+                <a>{{userInfo.tel_phone}}</a>
             </div>
             <b><img src="../assets/PersonalCenter_headerBg.png" alt="" srcset=""></b>
         </header>
-        <div class="share" v-if="vip">
+        <div class="share" v-if="userInfo.status == 1">
             <p><img src="../assets/invitation.png" alt=""></p>
                 <router-link :to="{name:'MyShop'}">
                     <p><img src="../assets/my_shop.png" alt=""></p>
@@ -50,26 +50,34 @@
                     <span><img src="../assets/icon_order.png" alt=""></span>
                     <p>我的订单</p>
                 </div>
-                <a>全部订单 ></a>
+                <router-link :to="{name:'Order'}">
+                    全部订单&gt;
+                </router-link>
             </div>
             <ul>
                 <li>
-                    <span><img src="../assets/icon_payment.png" alt=""></span>
-                    <p>待付款</p>
+                    <router-link :to="{name:'Order'}">
+                        <span><img src="../assets/icon_payment.png" alt=""></span>
+                        <p>待付款</p>
+                    </router-link>
                 </li>
                 <li>
-                    <span><img src="../assets/icon_employ.png" alt=""></span>
-                    <p>待使用</p>
+                    <router-link :to="{name:'Order'}">
+                        <span><img src="../assets/icon_employ.png" alt=""></span>
+                        <p>待使用</p>
+                    </router-link>
                 </li>
                 <li>
-                    <span><img src="../assets/icon_evaluate.png" alt=""></span>
-                    <router-link :to="{name:'CommodityList'}">
+                    <router-link :to="{name:'Order'}">
+                        <span><img src="../assets/icon_evaluate.png" alt=""></span>
                         <p>待评价</p>
                     </router-link>
                 </li>
                 <li>
-                    <span><img src="../assets/icon_refund.png" alt=""></span>
-                    <p>退款</p>
+                    <router-link :to="{name:'Order'}">
+                        <span><img src="../assets/icon_refund.png" alt=""></span>
+                        <p>退款</p>
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -80,7 +88,7 @@
                 <a @click="popShowFn">直接兑换></a>
             </div>
         </div>
-        <ul :class="vip ? 'vip_function' : 'user_function'">
+        <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
             <li>
                 <span><img src="../assets/icon_collect.png" alt=""></span>
                 <p>收藏</p>
@@ -99,7 +107,7 @@
                 <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
                 <p>优惠券</p>
             </li>
-            <li v-if="vip">
+            <li v-if="userInfo.status == 1">
                 <router-link :to="{name:'DistributionTow'}">
                     <span><img src="../assets/icon_generalize.png" alt=""></span>
                     <p>我的推广</p>
@@ -137,7 +145,8 @@ export default {
     name: 'PersonalCenter',
     data() {
         return {
-            vip: true,
+            vip: 0,
+            userInfo: {},
             popState: 3,
             popShow: false
         }
@@ -151,6 +160,17 @@ export default {
         popHideFn() {
             const that = this;
             that.popShow = false;
+        },
+        async getUserInfo() {
+            let openid = this.$localstore.get('openid1')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { openid: openid })
+            if (res.data.code == 1) {
+                this.$localstore.set('userInfo', res.data.data)
+                this.userInfo = res.data.data
+                this.vip = this.userInfo.status
+            } else {
+                this.$message('获取用户资料失败！')
+            }
         }
 
     },
@@ -160,7 +180,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-
+        this.getUserInfo()
     },
 
     // 挂载前状态
@@ -206,6 +226,10 @@ body {
                 border: .08rem solid #83CDFB;
                 margin-left: .8rem;
                 margin-right: .28rem;
+            }
+
+            img {
+                border-radius: 50%;
             }
 
             div {
@@ -273,6 +297,7 @@ body {
                         align-items: center;
 
                         a {
+                            color: #fff;
                             font-size: .24rem;
                         }
 
@@ -297,6 +322,9 @@ body {
                     align-items: center;
                     flex-direction: column;
 
+                    a {
+                        color: #fff;
+                    }
 
                     p {
                         font-size: .4rem;
@@ -370,8 +398,11 @@ body {
                 align-items: center;
                 color: #515C6F;
                 font-size: .24rem;
+                text-align:center;
 
                 span {
+                    display:block;
+                    margin-top:2px;
                     overflow: hidden;
                     margin-bottom: .08rem;
                 }
@@ -420,6 +451,16 @@ body {
             flex-direction: column;
             padding-right: .6rem;
 
+            a {
+                display: block;
+                width: .72rem;
+                overflow: hidden;
+            }
+
+            p {
+                color: #666;
+            }
+
             span {
                 width: .72rem;
                 overflow: hidden;
@@ -443,7 +484,7 @@ body {
             flex-direction: column;
             padding-right: .6rem;
             text-align: center;
-             width: 20%;
+            width: 20%;
 
             a {
                 display: block;
