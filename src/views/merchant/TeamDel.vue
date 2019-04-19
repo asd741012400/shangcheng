@@ -157,6 +157,9 @@ export default {
         display: flex;
         font-size: .36rem;
         align-items: center;
+        a{
+          color: #fff;
+        }
         i{
           width: .26rem;
           height: .26rem;
@@ -169,6 +172,9 @@ export default {
         display: flex;
         align-items: center;
         font-size: .28rem;
+        a{
+          color: #fff;
+        }
         b{
           font-weight: normal;
           padding-left: .4rem;

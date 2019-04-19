@@ -40,8 +40,12 @@ import MerchantShop from './views/merchant/MerchantShop.vue'
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue'
 import TeamDel from './views/merchant/TeamDel.vue'
 import TeamDelTow from './views/merchant/TeamDelTow.vue'
+import MyTeam from './views/merchant/MyTeam.vue' //我的团队
+import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
+import ChageShop from './views/merchant/ChageShop.vue' //切换门店
 import MemberDel from './views/merchant/MemberDel.vue'
 import Generalize from './views/merchant/Generalize.vue'
+import MyGeneralize from './views/merchant/MyGeneralize.vue'//我的推广
 import PersonalStores from './views/merchant/PersonalStores.vue'
 
 
@@ -50,10 +54,11 @@ import Login2 from './views/checkstore/Login.vue'
 import Administrator from './views/checkstore/Administrator.vue' //绑定管理员
 import CheckHome from './views/checkstore/Home.vue' //主页
 import CheckList from './views/checkstore/CheckList.vue' //核销记录
-import StoreList from './views/checkstore/StoreList.vue' //提现列表
+import StoreList from './views/checkstore/StoreList.vue' //提现记录
 import CheckCode from './views/checkstore/CheckCode.vue' //核销码核销
 import CheckWithdrawDeposit from './views/checkstore/WithdrawDeposit.vue' //申请提现
 import Commodity from './views/checkstore/Commodity.vue' //商品核销
+import CardCheck from './views/checkstore/CardCheck.vue'//卡片核销
 import CheckGoods from './views/checkstore/CheckGoods.vue'
 import CheckCard from './views/checkstore/CheckCard.vue'
 import Appointment from './views/checkstore/Appointment.vue' //预约记录
@@ -104,6 +109,11 @@ let router = new Router({
             path: '/CheckCode',
             name: 'CheckCode',
             component: CheckCode
+        },
+        {
+            path: '/CardCheck',
+            name: 'CardCheck',
+            component: CardCheck
         },
         {
             path: '/CheckWithdrawDeposit',
@@ -296,6 +306,21 @@ let router = new Router({
             component: TeamDel
         },
         {
+            path: '/MyTeam',
+            name: 'MyTeam',
+            component: MyTeam
+        },
+        {
+            path: '/MyTeamTow',
+            name: 'MyTeamTow',
+            component: MyTeamTow
+        },
+        {
+            path: '/ChageShop',
+            name: 'ChageShop',
+            component: ChageShop
+        },
+        {
             path: '/TeamDelTow',
             name: 'TeamDelTow',
             component: TeamDelTow
@@ -309,6 +334,11 @@ let router = new Router({
             path: '/Generalize',
             name: 'Generalize',
             component: Generalize
+        },
+        {
+            path: '/MyGeneralize',
+            name: 'MyGeneralize',
+            component: MyGeneralize
         },
         {
             path: '/PersonalStores',
