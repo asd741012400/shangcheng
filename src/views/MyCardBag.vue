@@ -5,6 +5,42 @@
             <div class="tel">我的卡包</div>
             <div class="add" @click="cardAddPopShow">添加</div>
         </header>
+
+
+
+
+            <template v-for="(item,index) in cardList">
+
+                        <div class="to_be_used">
+            <i><img src="../assets/img3.png" alt=""></i>
+            <div class="user">
+                <span><img src="../assets/img1.png" alt=""></span>
+                <p>小宝</p>
+            </div>
+            <div class="content">
+                <div class="text">
+                    <p>幺儿陪伴卡幺儿陪伴卡幺儿陪伴卡</p>
+                    <span>剩余20天</span>
+                </div>
+                <div class="btn">
+                    <router-link :to="{name:'UseCard'}">
+                        <span>去使用</span>
+                    </router-link>
+                </div>
+            </div>
+        </div>
+
+                            </template>
+<!--                             <template v-else-if="active == 2">
+                            </template>
+                            <template v-else-if="active == 3">
+                            </template>
+                            <template v-else-if="active == 4">
+                            </template>
+                            <template v-else-if="active == 5">
+                            </template>
+ -->
+
         <div class="to_be_used">
             <i><img src="../assets/img3.png" alt=""></i>
             <div class="user">
@@ -40,7 +76,7 @@
                 </div>
                 <div class="btn">
                     <router-link :to="{name:'UseCard'}">
-                        <span>去使用</span>
+                        <span>转赠</span>
                     </router-link>
                 </div>
             </div>
@@ -80,6 +116,11 @@ export default {
     name: 'MyCardBag',
     data() {
         return {
+            user_id: '',
+            cardList: [],
+            page: 1,
+            currSize: 0,
+            pageSize: 10,
             cardAddPop: false
         }
     },
@@ -91,6 +132,23 @@ export default {
         cardAddPopHide() {
             this.cardAddPop = false;
         },
+        //获取卡包
+        async getCardList(index) {
+            this.cardList = []
+
+            let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
+            this.cardList = res.data.data.list
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
+        },
+
+        //获取更多卡包
+        async getCardListMore() {
+            let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
+            let data = res.data.data.list
+            this.cardList = this.cardList.concat(data);
+            this.currSize = res.data.data.list.length
+        },
     },
 
     // 创建前状态
@@ -98,7 +156,26 @@ export default {
 
     // 创建完毕状态 
     created() {
+        let user = this.$localstore.get('userInfo')
+        this.user_id = user.user_id
+        this.getCardList()
         document.body.style.background = "#F6F6F6";
+
+        window.onscroll = () => {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (this.currSize >= this.pageSize) {
+                    this.page++;
+                    this.getCardListMore()
+                }
+            }
+        }
     },
 
     // 挂载前状态
@@ -228,6 +305,10 @@ export default {
                 color: #fff;
                 background: #FF6666;
                 border-radius: 50px;
+
+                a {
+                    color: #fff;
+                }
             }
         }
     }
@@ -326,6 +407,10 @@ export default {
                 color: #fff;
                 background: #FF6666;
                 border-radius: 50px;
+
+                a {
+                    color: #fff;
+                }
             }
         }
     }

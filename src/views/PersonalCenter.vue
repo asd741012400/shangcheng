@@ -91,12 +91,12 @@
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
             <li>
                 <span><img src="../assets/icon_collect.png" alt=""></span>
-                <p>收藏</p>
+                <p>我的收藏</p>
             </li>
             <li>
                 <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_card_bag2.png" alt=""></span>
-                    <p>卡包</p>
+                    <p>我的卡包</p>
                 </router-link>
             </li>
             <li>
@@ -241,6 +241,7 @@ body {
                 }
 
                 a {
+                    color: #fff;
                     font-size: .24rem;
                 }
             }
@@ -398,11 +399,11 @@ body {
                 align-items: center;
                 color: #515C6F;
                 font-size: .24rem;
-                text-align:center;
+                text-align: center;
 
                 span {
-                    display:block;
-                    margin-top:2px;
+                    display: block;
+                    margin-top: 2px;
                     overflow: hidden;
                     margin-bottom: .08rem;
                 }
@@ -450,10 +451,10 @@ body {
             align-items: center;
             flex-direction: column;
             padding-right: .6rem;
-
+            flex: 0.20;
             a {
                 display: block;
-                width: .72rem;
+                // width: .72rem;
                 overflow: hidden;
             }
 
@@ -462,7 +463,7 @@ body {
             }
 
             span {
-                width: .72rem;
+                // width: .72rem;
                 overflow: hidden;
             }
         }

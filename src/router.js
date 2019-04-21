@@ -1,18 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Dome from './views/Dome.vue'
+
+
+//前台商城
 import Index from './views/Index.vue'
-import PersonalCenter from './views/PersonalCenter.vue'
-import MyShop from './views/MyShop.vue'
-import CommodityDetails from './views/CommodityDetails.vue'
-import CardProjectDetails from './views/CardProjectDetails.vue'
-import MyCardBag from './views/MyCardBag.vue'
-import CardActivate from './views/Cardactivate.vue'
-import UseCard from './views/UseCard.vue'
-import PaySucceed from './views/PaySucceed.vue'
-import WithdrawDeposit from './views/WithdrawDeposit.vue'
+import PersonalCenter from './views/PersonalCenter.vue' //个人中心
+import MyShop from './views/MyShop.vue' //我的店铺
+import CardProjectDetails from './views/CardProjectDetails.vue' //卡片项目详情
+import MyCardBag from './views/MyCardBag.vue' //我的卡包
+import UseCard from './views/UseCard.vue'  //使用卡片
+import CardActivate from './views/Cardactivate.vue'  // 卡片激活
+import PaySucceed from './views/PaySucceed.vue' //付款成功
+import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
 import MyShopUser from './views/MyShopUser.vue'
-import CardDetails from './views/CardDetails.vue'
+import CardDetails from './views/CardDetails.vue' //卡片详情
+import CommodityDetails from './views/CommodityDetails.vue' //商品详情
+import CommentMore from './views/CommentMore.vue'
 import Comment from './views/Comment.vue'
 import CommentSucceed from './views/CommentSucceed.vue'
 import CommodityList from './views/CommodityList.vue'
@@ -31,22 +34,25 @@ import VipOrder from './views/VipOrder.vue'
 import VipOrderBuy from './views/VipOrderBuy.vue'
 import VipEquity from './views/VipEquity.vue'
 import Order from './views/Order.vue'
+import error403 from './views/403.vue'
+import error404 from './views/404.vue'
+
 
 
 //分销商城
 import Login from './views/merchant/Login.vue'
-import WithdrawList from './views/merchant/WithdrawList.vue'
-import MerchantShop from './views/merchant/MerchantShop.vue'
-import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue'
-import TeamDel from './views/merchant/TeamDel.vue'
-import TeamDelTow from './views/merchant/TeamDelTow.vue'
+import MerchantShop from './views/merchant/MerchantShop.vue' //主页
+import WithdrawList from './views/merchant/WithdrawList.vue'//提现列表
+import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
+import TeamDel from './views/merchant/TeamDel.vue'  //团队详情
+import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
+import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
 import MyTeam from './views/merchant/MyTeam.vue' //我的团队
 import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
 import ChageShop from './views/merchant/ChageShop.vue' //切换门店
-import MemberDel from './views/merchant/MemberDel.vue'
-import Generalize from './views/merchant/Generalize.vue'
-import MyGeneralize from './views/merchant/MyGeneralize.vue'//我的推广
-import PersonalStores from './views/merchant/PersonalStores.vue'
+import MemberDel from './views/merchant/MemberDel.vue' //成员详情
+import Generalize from './views/merchant/Generalize.vue'  //我的推广
+import PersonalStores from './views/merchant/PersonalStores.vue' //我的店铺
 
 
 //核销
@@ -58,7 +64,7 @@ import StoreList from './views/checkstore/StoreList.vue' //提现记录
 import CheckCode from './views/checkstore/CheckCode.vue' //核销码核销
 import CheckWithdrawDeposit from './views/checkstore/WithdrawDeposit.vue' //申请提现
 import Commodity from './views/checkstore/Commodity.vue' //商品核销
-import CardCheck from './views/checkstore/CardCheck.vue'//卡片核销
+import CardCheck from './views/checkstore/CardCheck.vue' //卡片核销
 import CheckGoods from './views/checkstore/CheckGoods.vue'
 import CheckCard from './views/checkstore/CheckCard.vue'
 import Appointment from './views/checkstore/Appointment.vue' //预约记录
@@ -78,7 +84,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Dome',
-            component: Index
+            component: Administrator
         },
         {
             path: '/Index',
@@ -204,6 +210,11 @@ let router = new Router({
             path: '/Comment',
             name: 'Comment',
             component: Comment
+        },
+        {
+            path: '/CommentMore',
+            name: 'CommentMore',
+            component: CommentMore
         },
         {
             path: '/CommentSucceed',
@@ -346,6 +357,16 @@ let router = new Router({
             component: PersonalStores
         },
         {
+            path: '/error403',
+            name: 'error403',
+            component: error403
+        },
+        {
+            path: '/error404',
+            name: 'error404',
+            component: error404
+        },
+        {
             path: '*', //404页面跳转
             redirect: '/Index'
         }
@@ -361,6 +382,13 @@ import wx from 'weixin-js-sdk' //微信sdk依赖
 router.beforeEach((to, from, next) => {
 
     let openid = getParamString('openid1');
+
+    //门店id存储
+    let business_id = getParamString('business_id');
+    if (business_id) {
+        localstore.set('business_id', business_id)
+    }
+
     let openid2 = localstore.get('openid1')
 
     if (!openid2 && !openid) {
@@ -370,10 +398,10 @@ router.beforeEach((to, from, next) => {
         })
     }
 
+    //使用 openid 获取用户资料 缓存本地
     if (openid) {
         //保存openid
         localstore.set('openid1', openid)
-        //使用 openid 获取用户资料 缓存本地
         getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
             localstore.set('userInfo', res.data.data)
         })

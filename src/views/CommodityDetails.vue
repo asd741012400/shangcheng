@@ -18,7 +18,9 @@
         <div class="banner">
             <span><img src="../assets/img2.png" alt=""></span>
             <div class="text">
-                <p>距离活动结束还有<em></em><b>24</b><em>时</em><b>24</b><em>分</em><b>24</b><em>秒</em></p>
+                <yd-countdown slot="right" :time="GoodsDetail.sale_etime">
+                    <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
+                </yd-countdown>
             </div>
         </div>
         <div class="main">
@@ -34,14 +36,17 @@
                     <p>市场价<span>￥200</span></p>
                 </div>
                 <div class="purchase_limitation">限购一份</div>
-                <div class="option">
+<!--                 <div class="option">
                     <span class="active">一大一小</span>
                     <span>两大一小</span>
-                </div>
+                </div> -->
             </div>
             <div class="attention">
                 <h3>购买须知</h3>
-                <ul>
+                <div>
+                    {{GoodsDetail.buy_things}}
+                </div>
+                <!--                 <ul>
                     <li>
                         <div>
                             <i><img src="../assets/icon_yuan.png" alt=""></i>
@@ -63,16 +68,16 @@
                         </div>
                         <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
                     </li>
-                </ul>
+                </ul> -->
             </div>
             <div class="shop">
                 <h3>使用门店</h3>
                 <ul>
-                    <li>
+                    <li v-for="(item,index) in storeList" :key="index">
                         <div class="del">
-                            <router-link :to="{name:'ShopDetails'}">
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                 <div class="tle">
-                                    <h4>悠游堂南坪店</h4>
+                                    <h4>{{item.business_name}}</h4>
                                     <div>
                                         <span><img src="../assets/icon_enshrineA.png" alt=""></span>
                                         <span><img src="../assets/icon_enshrineA.png" alt=""></span>
@@ -81,38 +86,21 @@
                                         <span><img src="../assets/icon_enshrineB.png" alt=""></span>
                                     </div>
                                 </div>
-                            </router-link>
-                            <div class="timer">营业时间：10:00-12:00</div>
-                            <div class="site">
-                                <i><img src="../assets/icon_site.png" alt=""></i>
-                                <p>地点：重庆南岸区南坪经纬大道</p>
-                            </div>
-                            <div class="tel"><span><img src="../assets/icon_tel.png" alt=""></span></div>
-                        </div>
-                        <div class="advance"><span><img src="../assets/icon_advance.png" alt=""></span></div>
-                    </li>
-                    <li>
-                        <div class="del">
-                            <router-link :to="{name:'ShopDetails'}">
-                                <div class="tle">
-                                    <h4>悠游堂南坪店</h4>
-                                    <div>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                                    </div>
+                                <div class="timer">营业时间：{{item.sale_time}}:{{item.sale_time2}}</div>
+                                <div class="site">
+                                    <i><img src="../assets/icon_site.png" alt=""></i>
+                                    <p>地点：{{item.address}}</p>
                                 </div>
+                                <div class="tel"><span><img src="../assets/icon_tel.png" alt=""></span></div>
                             </router-link>
-                            <div class="timer">营业时间：10:00-12:00</div>
-                            <div class="site">
-                                <i><img src="../assets/icon_site.png" alt=""></i>
-                                <p>地点：重庆南岸区南坪经纬大道</p>
-                            </div>
-                            <div class="tel"><span><img src="../assets/icon_tel.png" alt=""></span></div>
                         </div>
-                        <div class="advance"><span><img src="../assets/icon_advance.png" alt=""></span></div>
+                        <div class="advance">
+                            <span>
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                    <img src="../assets/icon_advance.png" alt="">
+                            </router-link>
+                                </span>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -176,7 +164,9 @@
             </div>
             <div class="shop_del">
                 <h3>商品详情</h3>
-                <div></div>
+                <div>
+                    {{GoodsDetail.goods_info}}
+                </div>
             </div>
         </div>
         <footer>
@@ -206,7 +196,11 @@ import Share from '../components/Share'
 export default {
     name: 'CommodityDetails',
     data() {
-        return {}
+        return {
+            GoodsDetailsState: 1,
+            GoodsDetail: {},
+            storeList: [],
+        }
     },
     components: {
         Share
@@ -215,6 +209,7 @@ export default {
         shareShowFn() {
             this.$refs.myShare.shareShowFn();
         },
+        //确认下单
         ConfirmAnOrderPage() {
             const that = this;
             that.$router.push({
@@ -222,10 +217,37 @@ export default {
                 query: {
                     id: this.$route.query.id,
                     order_type: 1,
-                    arrival: "CardDetails",
+                    arrival: "GoodsDetails",
                 }
             });
-        }
+        },
+        //获取详情
+        async getDetail() {
+            let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.$route.query.id })
+            if (res.data.code == 1) {
+                const resData = res.data.data;
+                this.GoodsDetail = resData;
+                if (resData.store == 0) {
+                    this.GoodsDetailsState = 2
+                } else if (resData.is_online == 0) {
+                    this.GoodsDetailsState = 3
+                }
+                // else if(resData.is_vip== 1)
+                // {
+                //   this.GoodsDetailsState = 4
+                // }
+                else {
+                    this.GoodsDetailsState = 1
+                }
+            }
+        },
+        //获取门店
+        async getStore() {
+            let res = await this.$getRequest('/home/GetGoodsStore', { goods_id: this.$route.query.id })
+            this.storeList = res.data.data;
+
+        },
+
     },
 
     // 创建前状态
@@ -233,7 +255,8 @@ export default {
 
     // 创建完毕状态 
     created() {
-
+        this.getDetail()
+        this.getStore()
     },
 
     // 挂载前状态
@@ -401,6 +424,7 @@ export default {
                     }
 
                     a {
+                        color: #fff;
                         font-size: .4rem;
                     }
                 }

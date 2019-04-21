@@ -35,11 +35,22 @@
                             <span>合计 ￥{{item.total_amount}}</span>
                         </div>
                         <div>
+                            <template v-if="active == 1">
+
+                            </template>
+                            <template v-else-if="active == 2">
+                            </template>
+                            <template v-else-if="active == 3">
+                            </template>
+                            <template v-else-if="active == 4">
+                            </template>
+                            <template v-else-if="active == 5">
+                            </template>
                             <!-- <van-button type="danger" size="mini">取消订单</van-button> -->
                             <!-- <van-button type="danger" size="mini">申请退款</van-button> -->
                             <!-- <van-button type="primary" size="mini">还想买</van-button> -->
                             <!-- <van-button type="info" size="mini">去使用</van-button> -->
-                            <van-button type="info" size="mini" @click="handleComment(item.order_id)">去评价</van-button>
+                            <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             <van-button type="info" size="mini">激活使用</van-button>
                         </div>
                     </div>
@@ -69,9 +80,6 @@ export default {
         async getOrderList(index) {
             this.orderList = []
             index--
-            console.log(index);
-
-
             switch (index) {
                 case 1:
                     this.order_status = 1
@@ -92,9 +100,10 @@ export default {
             let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             this.orderList = res.data.data.list
             this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
         },
 
-        //获取更多商品
+        //获取更多订单
         async getOrderListMore(cid) {
             let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             let data = res.data.data.list
@@ -103,11 +112,15 @@ export default {
         },
 
         //评价订单
-        async handleComment() {
-            let data = {}
-            let res = await this.$postRequest('order/Comment', data)
-
-
+        async handleComment(id, type,goods_id) {
+            this.$router.push({
+                name: "Comment",
+                query: {
+                    id: id,
+                    type: type,
+                    goods_id: goods_id,
+                }
+            });
         }
     },
 

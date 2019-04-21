@@ -40,9 +40,9 @@
         <div class="activity_img"><img src="../assets/activity_img1.png" alt=""></div>
             <div class="play_freely">
                 <h3>
-        <span><img src="../assets/icon_play_freely.png" alt=""></span>
-        <a>畅玩卡</a>
-      </h3>
+                <span><img src="../assets/icon_play_freely.png" alt=""></span>
+                <a>畅玩卡</a>
+              </h3>
                 <div class="play_freely_box">
                     <ul>
                         <li v-for="(item , index) in Cardlist">
@@ -93,6 +93,15 @@
                     </li>
                 </ul>
             </div>
+            <!-- 手机号绑定 -->
+            <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
+                <van-cell-group>
+                    <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
+                    <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
+                        <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+                    </van-field>
+                </van-cell-group>
+            </van-dialog>
             <MyFooter></MyFooter>
         </div>
 </template>
@@ -104,9 +113,12 @@ export default {
     name: 'Index',
     data() {
         return {
+            phone: '',
+            sms: '',
+            show: false,
             apiUrl: this.$common.ApiUrl(),
-            Cardlist: "",
-            NavList: "",
+            Cardlist: [],
+            NavList: [],
             pages: 1,
             GoodsList: [],
             goodsListSum: 0,
@@ -115,6 +127,21 @@ export default {
     },
     components: {},
     methods: {
+        //关闭填写手机号
+        async beforeCloseModel(action, done) {
+            let userInfo = this.$localstore.get('userInfo')
+            userInfo.tel_phone = this.phone
+            let res = await this.$postRequest('/user/saveMobile', { user_id: userInfo.user_id, phone: this.phone, sms: this.sms })
+            if (res.data.code == 1) {
+
+                this.$localstore.set('userInfo', userInfo)
+                this.show = false
+                done()
+            } else {
+                this.$notify(res.data.msg);
+                done(false)
+            }
+        },
         skipPages(str) {
             this.$router.push({
                 name: str,
@@ -143,6 +170,10 @@ export default {
 
     // 创建完毕状态 
     created() {
+        let userInfo = this.$localstore.get('userInfo')
+        if (!userInfo.tel_phone) {
+            this.show = true
+        }
         document.body.style.background = "#F6F6F6";
         const that = this;
         that.$http.get(that.apiUrl + 'home/getcardlist')
@@ -316,7 +347,8 @@ export default {
                 align-items: center;
                 width: 20%;
                 text-align: center;
-                a{
+
+                a {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -403,7 +435,7 @@ export default {
                             }
 
                             a {
-                                color:#fff;
+                                color: #fff;
                                 font-size: .4rem;
                             }
                         }
@@ -598,7 +630,7 @@ export default {
                             }
 
                             a {
-                                color:#fff;
+                                color: #fff;
                                 font-size: .4rem;
                             }
                         }

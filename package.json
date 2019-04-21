@@ -20,6 +20,7 @@
     "vue": "^2.6.6",
     "vue-clipboard2": "^0.3.0",
     "vue-router": "^3.0.1",
+    "vue-ydui": "^1.2.6",
     "vuex": "^3.0.1",
     "weixin-js-sdk": "^1.4.0-test",
     "wenlist": "^1.0.3"
