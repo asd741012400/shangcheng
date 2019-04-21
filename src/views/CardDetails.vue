@@ -19,7 +19,7 @@
             <span><img src="../assets/img2.png" alt=""></span>
             <!-- <span><img :src="CardDetail.def_pic[0]" alt=""></span> -->
             <div class="text">
-                <yd-countdown slot="right" :time="CardDetail.sale_etime">
+                <yd-countdown slot="right" :time="changeTime(CardDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
             </div>
@@ -39,37 +39,13 @@
             </div>
             <div class="attention">
                 <h3>购买须知</h3>
-                <div>
-                    {{CardDetail.buy_things}}
+                <div class="detail" v-html="CardDetail.buy_things">
                 </div>
-                <!--              <ul>
-                    <li>
-                        <div>
-                            <i><img src="../assets/icon_yuan.png" alt=""></i>
-                            <span>须知一</span>
-                        </div>
-                        <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                    </li>
-                    <li>
-                        <div>
-                            <i><img src="../assets/icon_yuan.png" alt=""></i>
-                            <span>须知一</span>
-                        </div>
-                        <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                    </li>
-                    <li>
-                        <div>
-                            <i><img src="../assets/icon_yuan.png" alt=""></i>
-                            <span>须知一</span>
-                        </div>
-                        <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                    </li>
-                </ul> -->
             </div>
             <div class="comment">
                 <h3>
             <p>用户评价</p>
-                 <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:1}}">
+                 <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:3}}">
             查看全部 &gt;
         </router-link>
           </h3>
@@ -77,11 +53,18 @@
                     <div class="user">
                         <div class="user_message">
                             <i>
+                               <template v-if="item.anonymous == 0">                          
                                 <img :src="item.wechat_img" alt="" />
+                                </template>
                             </i>
                             <div class="user_name">
-                                <p>{{item.username}}</p>
-                                <time>2019-07-02 12:00</time>
+                                <template v-if="item.anonymous == 1">
+                                    <p>匿名</p>
+                                </template>
+                                <template v-else>
+                                    <p>{{item.username}}</p>
+                                </template>
+                                <time>{{item.add_time}}</time>
                             </div>
                         </div>
                         <div class="grade">
@@ -148,7 +131,8 @@
                     </ul>
                 </div>
                 <div v-if="table == 2" class="shop_del_div">
-                    {{CardDetail.goods_info}}
+                    <div v-html="CardDetail.goods_info">
+                    </div>
                 </div>
             </div>
         </div>
@@ -238,7 +222,9 @@ export default {
     },
     components: {},
     methods: {
-
+        changeTime(date) {
+            return this.$dayjs(date).format('YYYY/MM/DD HH:mm:ss')
+        },
         tabkeChage(num) {
             const that = this;
             that.table = num;
@@ -260,6 +246,7 @@ export default {
             let res = await this.$getRequest('/home/GetCardDetail', { id: this.$route.query.id })
             if (res.data.code == 1) {
                 const resData = res.data.data;
+
                 this.CardDetail = resData;
                 if (resData.store == 0) {
                     this.cardDetailsState = 2
@@ -277,7 +264,7 @@ export default {
         },
         //获取评论
         async getComment() {
-            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1 })
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 3 })
             this.comments = res.data.data.list;
         }
 
@@ -290,6 +277,7 @@ export default {
     created() {
         this.getDetail()
         this.getComment()
+        this.id = this.$route.query.id
         document.body.style.background = "#fff";
 
     },
@@ -492,6 +480,16 @@ export default {
         .attention {
             border-top: 10px solid #f6f6f6;
 
+            .detail {
+                padding: 0.2rem .6rem;
+                background: #fff;
+                display: flex;
+
+                img {
+                    margin: 5px 0;
+                }
+            }
+
             h3 {
                 line-height: .8rem;
                 font-size: .28rem;
@@ -665,8 +663,8 @@ export default {
             }
 
             .shop_del_div {
-                height: 5rem;
-                background: #ccc;
+                padding: 0.2rem .6rem;
+                background: #fff;
             }
 
             div {

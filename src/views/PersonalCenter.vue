@@ -20,11 +20,13 @@
                     <a>历史收益</a>
                 </li>
                 <li>
-                    <p>￥{{userInfo.freeze_money ||　0.00}}</p>
-                    <a>可提现</a>
+                    <router-link :to="{name:'CheckWithdrawDeposit'}">
+                        <p>￥{{userInfo.getmoney ||　0.00}}</p>
+                        <a>可提现</a>
+                    </router-link>
                 </li>
                 <li>
-                    <p>￥{{userInfo.getmoney ||　0.00}}</p>
+                    <p>￥{{userInfo.freeze_money ||　0.00}}</p>
                     <a>待生效</a>
                 </li>
             </ul>
@@ -90,8 +92,10 @@
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
             <li>
-                <span><img src="../assets/icon_collect.png" alt=""></span>
-                <p>我的收藏</p>
+                <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                    <span><img src="../assets/icon_collect.png" alt=""></span>
+                    <p>我的收藏</p>
+                <!-- </router-link> -->
             </li>
             <li>
                 <router-link :to="{name:'MyCardBag'}">
@@ -100,15 +104,19 @@
                 </router-link>
             </li>
             <li>
-                <span><img src="../assets/icon_record.png" alt=""></span>
-                <p>核销记录</p>
+                <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                    <span><img src="../assets/icon_record.png" alt=""></span>
+                    <p>核销记录</p>
+                <!-- </router-link> -->
             </li>
             <li>
-                <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
-                <p>优惠券</p>
+                <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                    <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
+                    <p>优惠券</p>
+                <!-- </router-link> -->
             </li>
             <li v-if="userInfo.status == 1">
-                <router-link :to="{name:'DistributionTow'}">
+                <router-link :to="{name:'Generalize'}">
                     <span><img src="../assets/icon_generalize.png" alt=""></span>
                     <p>我的推广</p>
                 </router-link>
@@ -116,7 +124,20 @@
         </ul>
         <MyFooter></MyFooter>
         <div class="service"><a href="tel:110"><img src="../assets/icon_service.png" alt=""></a></div>
-        <div class="pop_bg" v-if="popShow">
+        <div class="card_add_pop" v-if="popShow">
+            <div class="card_add">
+                <div>
+                    <span class="close" @click="popHideFn"><em><img src="../assets/icon_close.png" alt=""></em></span>
+                    <h3>兑换码</h3>
+                    <p>
+                        <input type="text">
+                        <i><img src="../assets/icon_close2.png" alt=""></i>
+                    </p>
+                    <a>提 交</a>
+                </div>
+            </div>
+        </div>
+        <!--         <div class="pop_bg" v-if="popShow">
             <div class="pop" v-if="popState == 1">
                 <p>恭喜成功兑换XX商品</p>
                 <time>到期时间：2018-5-6</time>
@@ -137,7 +158,7 @@
                 <span>立即激活</span>
                 <i @click="popHideFn"><img src="../assets/icon_close.png" alt=""></i>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -451,11 +472,18 @@ body {
             align-items: center;
             flex-direction: column;
             padding-right: .6rem;
-            flex: 0.20;
+            text-align: center;
+
             a {
-                display: block;
-                // width: .72rem;
-                overflow: hidden;
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+                justify-content: center;
+
+                img {
+                    display: block;
+                    width: .72rem;
+                }
             }
 
             p {
@@ -463,7 +491,7 @@ body {
             }
 
             span {
-                // width: .72rem;
+                display: block;
                 overflow: hidden;
             }
         }
@@ -575,6 +603,93 @@ body {
                 margin: .26rem auto 0;
             }
 
+        }
+    }
+
+    .card_add_pop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha: .5);
+
+        .card_add {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            div {
+                background: #fff;
+                border-radius: 10px;
+                width: 6.32rem;
+                position: relative;
+                padding-bottom: .74rem;
+
+                span {
+                    width: 1rem;
+                    height: 1rem;
+                    display: flex;
+                    justify-content: flex-end;
+                    position: absolute;
+                    top: .24rem;
+                    right: .24rem;
+
+                    em {
+                        width: .49rem;
+                        height: .49rem;
+                        overflow: hidden;
+                        border-radius: 50%;
+                    }
+                }
+
+                h3 {
+                    font-size: .32rem;
+                    color: #515C6F;
+                    text-align: center;
+                    padding-top: 1rem;
+                }
+
+                p {
+                    width: 5.26rem;
+                    height: .82rem;
+                    display: flex;
+                    align-items: center;
+                    margin: .28rem auto .46rem;
+                    background: #EEEEEF;
+                    border-radius: 5px;
+
+                    input {
+                        flex: 1;
+                        outline: medium;
+                        height: 100%;
+                        background: none;
+                        padding-left: .3rem;
+                    }
+
+                    i {
+                        width: .36rem;
+                        height: .36rem;
+                        overflow: hidden;
+                        margin-right: .26rem;
+                    }
+                }
+
+                a {
+                    width: 3.7rem;
+                    height: .8rem;
+                    line-height: .8rem;
+                    text-align: center;
+                    font-weight: bold;
+                    color: #fff;
+                    border-radius: 50px;
+                    background: #FF6666;
+                    display: block;
+                    margin: 0 auto;
+                }
+            }
         }
     }
 

@@ -18,7 +18,7 @@
         <div class="banner">
             <span><img src="../assets/img2.png" alt=""></span>
             <div class="text">
-                <yd-countdown slot="right" :time="GoodsDetail.sale_etime">
+                <yd-countdown slot="right" :time="changeTime(GoodsDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
             </div>
@@ -36,39 +36,15 @@
                     <p>市场价<span>￥200</span></p>
                 </div>
                 <div class="purchase_limitation">限购一份</div>
-<!--                 <div class="option">
+                <!--                 <div class="option">
                     <span class="active">一大一小</span>
                     <span>两大一小</span>
                 </div> -->
             </div>
             <div class="attention">
                 <h3>购买须知</h3>
-                <div>
-                    {{GoodsDetail.buy_things}}
+                <div class="detail" v-html="GoodsDetail.buy_things">
                 </div>
-                <!--                 <ul>
-                    <li>
-                        <div>
-                            <i><img src="../assets/icon_yuan.png" alt=""></i>
-                            <span>须知一</span>
-                        </div>
-                        <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                    </li>
-                    <li>
-                        <div>
-                            <i><img src="../assets/icon_yuan.png" alt=""></i>
-                            <span>须知一</span>
-                        </div>
-                        <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                    </li>
-                    <li>
-                        <div>
-                            <i><img src="../assets/icon_yuan.png" alt=""></i>
-                            <span>须知一</span>
-                        </div>
-                        <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                    </li>
-                </ul> -->
             </div>
             <div class="shop">
                 <h3>使用门店</h3>
@@ -86,7 +62,7 @@
                                         <span><img src="../assets/icon_enshrineB.png" alt=""></span>
                                     </div>
                                 </div>
-                                <div class="timer">营业时间：{{item.sale_time}}:{{item.sale_time2}}</div>
+                                <div class="timer">营业时间：{{item.sale_time}}、{{item.sale_time2}}</div>
                                 <div class="site">
                                     <i><img src="../assets/icon_site.png" alt=""></i>
                                     <p>地点：{{item.address}}</p>
@@ -107,65 +83,43 @@
             <div class="comment">
                 <h3>
             <p>用户评价</p>
-            <a>查看全部 ></a>
+                          <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:1}}">
+            查看全部 &gt;
+        </router-link>
           </h3>
-                <div class="user_comment">
+                <div class="user_comment" v-for="item in comments">
                     <div class="user">
                         <div class="user_message">
-                            <i></i>
+                            <i>
+                               <template v-if="item.anonymous == 0">                          
+                                <img :src="item.wechat_img" alt="" />
+                                </template>
+                            </i>
                             <div class="user_name">
-                                <p>用户名称</p>
-                                <time>2019-07-02 12:00</time>
+                                <template v-if="item.anonymous == 1">
+                                    <p>匿名</p>
+                                </template>
+                                <template v-else>
+                                    <p>{{item.username}}</p>
+                                </template>
+                                <time>{{item.add_time}}</time>
                             </div>
                         </div>
                         <div class="grade">
-                            <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineB.png" alt=""></span>
+                            <van-rate v-model="item.star_level" readonly />
                         </div>
                     </div>
-                    <div class="text">想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</div>
+                    <div class="text">{{item.content}}</div>
                     <ul>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                    </ul>
-                </div>
-                <div class="user_comment">
-                    <div class="user">
-                        <div class="user_message">
-                            <i></i>
-                            <div class="user_name">
-                                <p>用户名称</p>
-                                <time>2019-07-02 12:00</time>
-                            </div>
-                        </div>
-                        <div class="grade">
-                            <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                            <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                        </div>
-                    </div>
-                    <div class="text">想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</div>
-                    <ul>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
+                        <li v-for="img in item.thumb">
+                            <span><img :src="img" alt=""></span>
+                        </li>
                     </ul>
                 </div>
             </div>
             <div class="shop_del">
                 <h3>商品详情</h3>
-                <div>
-                    {{GoodsDetail.goods_info}}
+                <div class="detail" v-html="GoodsDetail.goods_info">
                 </div>
             </div>
         </div>
@@ -199,6 +153,7 @@ export default {
         return {
             GoodsDetailsState: 1,
             GoodsDetail: {},
+            comments: [],
             storeList: [],
         }
     },
@@ -206,6 +161,9 @@ export default {
         Share
     },
     methods: {
+        changeTime(date) {
+            return this.$dayjs(date).format('YYYY/MM/DD HH:mm:ss')
+        },
         shareShowFn() {
             this.$refs.myShare.shareShowFn();
         },
@@ -241,11 +199,15 @@ export default {
                 }
             }
         },
+        //获取评论
+        async getComment() {
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1 })
+            this.comments = res.data.data.list;
+        },
         //获取门店
         async getStore() {
             let res = await this.$getRequest('/home/GetGoodsStore', { goods_id: this.$route.query.id })
             this.storeList = res.data.data;
-
         },
 
     },
@@ -256,7 +218,9 @@ export default {
     // 创建完毕状态 
     created() {
         this.getDetail()
+        this.getComment()
         this.getStore()
+
     },
 
     // 挂载前状态
@@ -494,6 +458,16 @@ export default {
                 border-bottom: 1px solid #f6f6f6;
             }
 
+            .detail {
+                padding: 0.2rem .6rem;
+                background: #fff;
+                display: flex;
+
+                img {
+                    margin: 5px 0;
+                }
+            }
+
             ul {
                 padding: 0 .44rem .4rem .64rem;
 
@@ -661,6 +635,7 @@ export default {
                 .user {
                     display: flex;
 
+
                     .user_message {
                         display: flex;
                         align-items: center;
@@ -704,6 +679,12 @@ export default {
                     font-size: .24rem;
                     color: #515C6F;
                     padding: .3rem 0 .2rem;
+                    display: -webkit-box;
+                    word-break: break-all;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 3;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
 
                 ul {
@@ -735,6 +716,16 @@ export default {
         .shop_del {
             border-top: 10px solid #f6f6f6;
             background: #fff;
+
+            .detail {
+                padding: 0.2rem .6rem;
+                background: #fff;
+                display: flex;
+
+                img {
+                    margin: 5px 0;
+                }
+            }
 
             h3 {
                 line-height: .8rem;

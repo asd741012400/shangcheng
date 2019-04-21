@@ -60,12 +60,13 @@
 </template>
 <script>
 import wx from 'weixin-js-sdk' //微信sdk依赖
+import wxapi from '@/lib/wx.js'
 
 export default {
     name: 'VipOrderBuy',
     data() {
         return {
-          order:{}
+            order: {}
         }
     },
     components: {},
@@ -79,6 +80,7 @@ export default {
         //支付
         async payOrder() {
             let that = this
+                that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
             if (res.data.code == 1) {
@@ -91,11 +93,7 @@ export default {
                     // 支付成功后的操作
                     options.success = async function() {
                         let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
-                            that.$router.push({ name: 'PersonalCenter', query: { id: that.order.order_id } })
-                        // } else {
-                        //     that.$message('订单状态修改失败')
-                        // }
+                        that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
                     };
 
                     //  取消支付的操作
@@ -122,6 +120,7 @@ export default {
     created() {
         document.body.style.background = "#f6f6f6";
         this.getOrder()
+        wxapi.wxRegister() //微信config注册
     },
 
     // 挂载前状态

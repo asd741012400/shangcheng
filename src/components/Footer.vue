@@ -3,7 +3,12 @@
         <div class="footer">
             <div class="shop">
                 <router-link :to="{name:'Index'}">
-                    <span><a><img src="@/assets/icon_shopA.png" alt=""></a></span>
+                    <template v-if="$route.name == 'Index'">
+                        <span><a><img src="@/assets/icon_shopB.png" alt=""></a></span>
+                    </template>
+                    <template v-else>
+                        <span><a><img src="@/assets/icon_shopA.png" alt=""></a></span>
+                    </template>
                     <p>商城</p>
                 </router-link>
             </div>
@@ -16,7 +21,12 @@
             </div>
             <div class="personal_center">
                 <router-link :to="{name:'PersonalCenter'}">
-                    <span><a><img src="@/assets/icon_myB.png" alt=""></a></span>
+                    <template v-if="$route.name == 'Index'">
+                        <span><a><img src="@/assets/icon_myA.png" alt=""></a></span>
+                    </template>
+                    <template v-else>
+                        <span><a><img src="@/assets/icon_myB.png" alt=""></a></span>
+                    </template>
                     <p>个人中心</p>
                 </router-link>
             </div>
@@ -117,7 +127,8 @@ footer {
                 border-radius: 50%;
                 box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
             }
-            p{
+
+            p {
                 position: absolute;
                 top: .3rem;
                 left: -.4rem;

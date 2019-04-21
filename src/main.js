@@ -26,7 +26,7 @@ Vue.component(CountDown.name, CountDown);
 
 
 //移动端调试
-import Vconsole from 'vconsole';
+// import Vconsole from 'vconsole';
 // const vConsole = new Vconsole();
 // Vue.use(vConsole)
 

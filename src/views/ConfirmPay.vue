@@ -61,6 +61,7 @@
 </template>
 <script>
 import wx from 'weixin-js-sdk' //微信sdk依赖
+import wxapi from '@/lib/wx.js'
 
 export default {
     name: 'ConfirmPay',
@@ -82,6 +83,7 @@ export default {
         //支付
         async payOrder() {
             let that = this
+                that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
             if (res.data.code == 1) {
@@ -93,12 +95,9 @@ export default {
 
                     // 支付成功后的操作
                     options.success = async function() {
-                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
-                            that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id } })
-                        // } else {
-                        //     that.$message('订单状态修改失败')
-                        // }
+                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })            
+                        that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id,type:that.order.order_type } })                           
+                        
                     };
 
                     //  取消支付的操作
@@ -126,6 +125,7 @@ export default {
     // 创建完毕状态 
     created() {
         this.getOrder()
+        wxapi.wxRegister() //微信config注册
         document.body.style.background = "#F6F6F6";
     },
 

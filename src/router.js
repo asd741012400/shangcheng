@@ -6,34 +6,34 @@ import Router from 'vue-router'
 import Index from './views/Index.vue'
 import PersonalCenter from './views/PersonalCenter.vue' //个人中心
 import MyShop from './views/MyShop.vue' //我的店铺
+import MyShopUser from './views/MyShopUser.vue' //我的店铺-用户看
 import CardProjectDetails from './views/CardProjectDetails.vue' //卡片项目详情
 import MyCardBag from './views/MyCardBag.vue' //我的卡包
 import UseCard from './views/UseCard.vue'  //使用卡片
 import CardActivate from './views/Cardactivate.vue'  // 卡片激活
 import PaySucceed from './views/PaySucceed.vue' //付款成功
 import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
-import MyShopUser from './views/MyShopUser.vue'
 import CardDetails from './views/CardDetails.vue' //卡片详情
 import CommodityDetails from './views/CommodityDetails.vue' //商品详情
-import CommentMore from './views/CommentMore.vue'
-import Comment from './views/Comment.vue'
-import CommentSucceed from './views/CommentSucceed.vue'
-import CommodityList from './views/CommodityList.vue'
+import CommentMore from './views/CommentMore.vue' //更多评论
+import Comment from './views/Comment.vue' //提交评论
+import CommentSucceed from './views/CommentSucceed.vue' //评论成功
+import CommodityList from './views/CommodityList.vue' //评论列表
 import ConfirmAnOrder from './views/ConfirmAnOrder.vue'
 import ConfirmPay from './views/ConfirmPay.vue'
-import DistributionTow from './views/DistributionTow.vue'
-import DistributionThree from './views/DistributionThree.vue'
-import CardEquity from './views/CardEquity.vue'
-import CardDetailsTow from './views/CardDetailsTow.vue'
+import DistributionTow from './views/DistributionTow.vue' //我的推广（二级）
+import DistributionThree from './views/DistributionThree.vue' //我的推广（三级）
+import CardEquity from './views/CardEquity.vue' //卡包权益中心
+import CardDetailsTow from './views/CardDetailsTow.vue' //卡片详情
 import Bargain from './views/Bargain.vue'
-import ClassifyList from './views/ClassifyList.vue'
-import ShopDetails from './views/ShopDetails.vue'
+import ClassifyList from './views/ClassifyList.vue' // 商品分类
+import ShopDetails from './views/ShopDetails.vue' //门店详情
 import City from './views/City.vue'
 import SharePoster from './views/SharePoster.vue'
 import VipOrder from './views/VipOrder.vue'
 import VipOrderBuy from './views/VipOrderBuy.vue'
 import VipEquity from './views/VipEquity.vue'
-import Order from './views/Order.vue'
+import Order from './views/Order.vue'  //订单列表
 import error403 from './views/403.vue'
 import error404 from './views/404.vue'
 
@@ -42,15 +42,15 @@ import error404 from './views/404.vue'
 //分销商城
 import Login from './views/merchant/Login.vue'
 import MerchantShop from './views/merchant/MerchantShop.vue' //主页
+import ChageShop from './views/merchant/ChageShop.vue' //切换门店
 import WithdrawList from './views/merchant/WithdrawList.vue'//提现列表
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
+import MyTeam from './views/merchant/MyTeam.vue' //我的团队
 import TeamDel from './views/merchant/TeamDel.vue'  //团队详情
+import MemberDel from './views/merchant/MemberDel.vue' //成员详情
+import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
 import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
 import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
-import MyTeam from './views/merchant/MyTeam.vue' //我的团队
-import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
-import ChageShop from './views/merchant/ChageShop.vue' //切换门店
-import MemberDel from './views/merchant/MemberDel.vue' //成员详情
 import Generalize from './views/merchant/Generalize.vue'  //我的推广
 import PersonalStores from './views/merchant/PersonalStores.vue' //我的店铺
 
@@ -84,7 +84,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Dome',
-            component: Administrator
+            component: Index
         },
         {
             path: '/Index',
@@ -392,7 +392,9 @@ router.beforeEach((to, from, next) => {
     let openid2 = localstore.get('openid1')
 
     if (!openid2 && !openid) {
-        let url = window.location.href
+        // let url = window.location.href
+        let url = encodeURIComponent(window.location.href.split('#')[0]);
+        //微信授权
         getRequest('/wechat/check', { url: url }).then(res => {
             window.location.href = res.data
         })
@@ -407,18 +409,6 @@ router.beforeEach((to, from, next) => {
         })
     }
 
-    //获取微信jssdk
-    getRequest('/wechat/GetWxJSSDK').then(res => {
-        let config = res.data.data
-        wx.config({
-            debug: config.debug, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: config.appId, // 必填，公众号的唯一标识
-            timestamp: config.timestamp, // 必填，生成签名的时间戳
-            nonceStr: config.nonceStr, // 必填，生成签名的随机串
-            signature: config.signature, // 必填，签名
-            jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
-        })
-    })
 
     next()
 })

@@ -9,8 +9,8 @@
             <div>
                 <a>营业时间：</a>
                 <p>
-                    <span>周一到周五 ：{{shop.sale_time}}:{{shop.sale_time2}}</span>
-                    <span>周末：{{shop.sale_time}}:{{shop.sale_time2}}</span>
+                    <span>{{shop.sale_time}}</span>
+                    <span>{{shop.sale_time2}}</span>
                 </p>
             </div>
             <div>
@@ -29,36 +29,16 @@
         <div class="nav_list">
             <p>门店图片</p>
             <ul>
-                <li>
+                <li v-for="img in shop.business_img">
                     <div>
-                        <span><img src="../assets/img1.png" alt=""></span>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <span><img src="../assets/img1.png" alt=""></span>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <span><img src="../assets/img1.png" alt=""></span>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <span><img src="../assets/img1.png" alt=""></span>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <span><img src="../assets/img1.png" alt=""></span>
+                        <span><img :src="img" alt=""></span>
                     </div>
                 </li>
             </ul>
         </div>
         <div class="introduce">
             <h3>介绍</h3>
-            <div>{{shop.shop_des}}</div>
+            <div class="detail" v-html="shop.shop_des"></div>
         </div>
         <footer>
             <div>
@@ -164,7 +144,7 @@ export default {
             color: #535D70;
 
             a {
-                width: 1.4rem;
+                width: 1.6rem;
                 text-align: right;
             }
 
@@ -217,6 +197,15 @@ export default {
     .introduce {
         background: #fff;
         padding: .26rem .16rem;
+
+        .detail {
+            padding: 0.2rem .6rem;
+            background: #fff;
+
+            img {
+                margin: 5px 0;
+            }
+        }
 
         h3 {
             font-size: .28rem;

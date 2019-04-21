@@ -8,11 +8,18 @@
                     <div class="user">
                         <div class="user_message">
                             <i>
+                               <template v-if="item.anonymous == 0">                          
                                 <img :src="item.wechat_img" alt="" />
+                                </template>
                             </i>
                             <div class="user_name">
-                                <p>{{item.username}}</p>
-                                <time>2019-07-02 12:00</time>
+                                <template v-if="item.anonymous == 1">
+                                    <p>匿名</p>
+                                </template>
+                                <template v-else>
+                                    <p>{{item.username}}</p>
+                                </template>
+                                     <time>{{item.add_time}}</time>
                             </div>
                         </div>
                         <div class="grade">
@@ -40,6 +47,8 @@ export default {
             table: 1,
             CardDetail: {},
             comments: [],
+            currSize: 0,
+            pageSize: 10,
             countDownNum: 0,
             countDownArr: "",
             id: '',
@@ -54,8 +63,15 @@ export default {
         async getComment() {
             let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1 })
             this.comments = res.data.data.list;
-        }
-
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
+        },
+        //获取更多评论
+        async getCommentMore() {
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1 })
+            this.comments = this.comments.concat(res.data.data.list);
+            this.currSize = res.data.data.list.length
+        },
     },
 
     // 创建前状态
@@ -65,6 +81,22 @@ export default {
     created() {
         this.getComment()
         document.body.style.background = "#fff";
+
+        window.onscroll = () => {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (this.currSize >= this.pageSize) {
+                    this.page++;
+                    this.getCommentMore(this.cid)
+                }
+            }
+        }
 
     },
 
@@ -88,10 +120,7 @@ export default {
 
 }
 </script>
-
-
 <style lang="scss" scoped>
-
 .van-rate__icon {
     font-size: 0.4rem !important;
 }
@@ -100,7 +129,7 @@ export default {
 
     .main {
         padding-bottom: 1.16rem;
-        margin-top:40px;
+        margin-top: 40px;
 
         .project_title {
             border-top: 10px solid #f6f6f6;
@@ -318,5 +347,4 @@ export default {
     }
 
 }
-
 </style>

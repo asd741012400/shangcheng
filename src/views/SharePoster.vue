@@ -6,11 +6,11 @@
                 <Poster ref="myPoster"></Poster>
             </div>
             <ul class="share_type">
-                <li @click="shareBtn()">
+                <li @click="wxShare()">
                     <span><img src="../assets/share_wx.png" alt=""></span>
                     <p>微信</p>
                 </li>
-                <li>
+                <li @click="wxFriendShare()">
                     <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
                     <p>朋友圈</p>
                 </li>
@@ -23,7 +23,7 @@
     </div>
 </template>
 <script>
-import wx from 'weixin-js-sdk' //微信sdk依赖
+import wxapi from '@/lib/wx.js'
 
 import Poster from '../components/Poster'
 
@@ -39,40 +39,49 @@ export default {
         downloadImg() {
             this.$refs.myPoster.clickGeneratePicture();
         },
-        async shareBtn() {
-            let url = window.location.href
-            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: url })
-            let config = res.data.data
-            wx.config({
-                debug: config.debug, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: config.appId, // 必填，公众号的唯一标识
-                timestamp: config.timestamp, // 必填，生成签名的时间戳
-                nonceStr: config.nonceStr, // 必填，生成签名的随机串
-                signature: config.signature, // 必填，签名
-                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
-            })
-            //获取微信jssdk
-            wx.ready(function() {
-                wx.onMenuShareAppMessage({
-                    title: '2222222222',
-                    desc: '3333333333',
-                    link: url,
-                    imgUrl: 'http://xjz.cqjlp.com.cn/public/thumb/article/article_sub_thumb_191988_550_550.jpeg',
-                    trigger: function trigger(res) {
-                        console.log(res);
-                    },
-                    success: function success(res) {
-                        console.log('已分享');
-                    },
-                    cancel: function cancel(res) {
-                        console.log('已取消');
-                    },
-                    fail: function fail(res) {
-                        alert(JSON.stringify(res));
-                    }
-                })
-            });
+        wxShare() {
+            // 用于微信JS-SDK回调            
+            wxapi.wxRegister(this.wxShareTimeline)
+            // this.wxShareAppMessage()
+        },
 
+        wxFriendShare() {
+            // 用于微信JS-SDK回调            
+            wxapi.wxRegister(this.wxShareAppMessage)
+            // this.wxShareAppMessage()
+        },
+        wxShareTimeline() {
+            // 微信自定义分享到朋友圈
+            let option = {
+                title: '限时团购周 挑战最低价', // 分享标题, 请自行替换
+                link: window.location.href.split('#')[0], // 分享链接，根据自身项目决定是否需要split
+                imgUrl: 'http://yuouimg.shizuyx.com/201904/21/1555823185712683.jpg', // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    alert('分享成功')
+                },
+                error: () => {
+                    alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareTimeline(option)
+        },
+        wxShareAppMessage() {
+            // 微信自定义分享给朋友
+            let option = {
+                title: '限时团购周 挑战最低价', // 分享标题, 请自行替换
+                desc: '限时团购周 挑战最低价', // 分享描述, 请自行替换
+                link: window.location.href.split('#')[0], // 分享链接，根据自身项目决定是否需要split
+                imgUrl: 'http://yuouimg.shizuyx.com/201904/21/1555823185712683.jpg', // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    alert('分享成功')
+                },
+                error: () => {
+                    alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareAppMessage(option)
         }
     },
 
@@ -88,7 +97,9 @@ export default {
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {},
+    mounted() {
+        // wxapi.wxRegister(this.wxRegCallback)
+    },
 
     // 更新前状态
     beforeUpdate() {},

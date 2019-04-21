@@ -5,97 +5,73 @@
             <div class="tel">我的卡包</div>
             <div class="add" @click="cardAddPopShow">添加</div>
         </header>
-
-
-
-
-            <template v-for="(item,index) in cardList">
-
-                        <div class="to_be_used">
-            <i><img src="../assets/img3.png" alt=""></i>
-            <div class="user">
-                <span><img src="../assets/img1.png" alt=""></span>
-                <p>小宝</p>
-            </div>
-            <div class="content">
-                <div class="text">
-                    <p>幺儿陪伴卡幺儿陪伴卡幺儿陪伴卡</p>
-                    <span>剩余20天</span>
-                </div>
-                <div class="btn">
-                    <router-link :to="{name:'UseCard'}">
-                        <span>去使用</span>
-                    </router-link>
-                </div>
-            </div>
-        </div>
-
-                            </template>
-<!--                             <template v-else-if="active == 2">
-                            </template>
-                            <template v-else-if="active == 3">
-                            </template>
-                            <template v-else-if="active == 4">
-                            </template>
-                            <template v-else-if="active == 5">
-                            </template>
- -->
-
-        <div class="to_be_used">
-            <i><img src="../assets/img3.png" alt=""></i>
-            <div class="user">
-                <span><img src="../assets/img1.png" alt=""></span>
-                <p>小宝</p>
-            </div>
-            <div class="content">
-                <div class="text">
-                    <p>幺儿陪伴卡幺儿陪伴卡幺儿陪伴卡</p>
-                    <span>剩余20天</span>
-                </div>
-                <div class="btn">
-                    <router-link :to="{name:'UseCard'}">
-                        <span>去使用</span>
-                    </router-link>
-                </div>
-            </div>
-        </div>
-        <div class="to_activate card_commonality">
-            <div class="image">
-                <i><img src="../assets/img3.png" alt=""></i>
-                <router-link :to="{name:'CardActivate'}">
-                    <div>
-                        <p>卡号：00000000</p>
-                        <span>去激活</span>
+        <template v-for="(item,index) in cardList">
+            <!--  'ac_status 0 未激活 1已激活 2作废 -->
+            <template v-if="item.ac_status == 0">
+                <div class="to_activate card_commonality">
+                    <div class="image">
+                        <i><img src="../assets/img3.png" alt=""></i>
+                        <router-link :to="{name:'CardActivate',query:{id:item.card_id}}">
+                            <div>
+                                <p>卡号：{{item.card_sn}}</p>
+                                <span>去激活</span>
+                            </div>
+                        </router-link>
                     </div>
-                </router-link>
-            </div>
-            <div class="content">
-                <div class="text">
-                    <p>幺儿陪伴卡幺儿陪伴卡幺儿陪伴卡</p>
-                    <span>剩余20天</span>
+                    <div class="content">
+                        <div class="text">
+                            <p>{{item.card_name}}</p>
+                            <!-- <span>剩余20天</span> -->
+                        </div>
+                        <div class="btn">
+                            <router-link :to="{name:'UseCard'}">
+                                <span>转赠</span>
+                            </router-link>
+                        </div>
+                    </div>
                 </div>
-                <div class="btn">
-                    <router-link :to="{name:'UseCard'}">
-                        <span>转赠</span>
-                    </router-link>
+            </template>
+            <!-- 正常 -->
+            <template v-else-if="item.ac_status == 1">
+                <div class="to_be_used">
+                    <i><img src="../assets/img3.png" alt=""></i>
+                    <div class="user">
+                        <span><img src="../assets/img1.png" alt=""></span>
+                        <p>小宝</p>
+                    </div>
+                    <div class="content">
+                        <div class="text">
+                            <p>{{item.card_name}}</p>
+                            <span>剩余20天</span>
+                        </div>
+                        <div class="btn">
+                            <router-link :to="{name:'UseCard'}">
+                                <span>去使用</span>
+                            </router-link>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="expired card_commonality">
-            <div class="image">
-                <i><img src="../assets/img3.png" alt=""></i>
-                <div>
-                    <p>卡号：00000000</p>
-                    <span class="color_hei">已过期</span>
-                    <em><img src="../assets/icon_close.png" alt=""></em>
+            </template>
+            <!-- 过期 -->
+            <template v-else>
+                <div class="expired card_commonality">
+                    <div class="image">
+                        <i><img src="../assets/img3.png" alt=""></i>
+                        <div>
+                            <p>卡号：00000000</p>
+                            <span class="color_hei">已过期</span>
+                            <em><img src="../assets/icon_close.png" alt=""></em>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="text">
+                            <p>{{item.card_name}}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="content">
-                <div class="text">
-                    <p>幺儿陪伴卡幺儿陪伴卡幺儿陪伴卡</p>
-                </div>
-            </div>
-        </div>
+            </template>
+        </template>
+        <!--  -->
         <div class="card_add_pop" v-if="cardAddPop">
             <div class="card_add">
                 <div>
@@ -109,6 +85,47 @@
                 </div>
             </div>
         </div>
+
+                <!-- 转赠须知 -->
+        <div class="confirm_pop_bg" v-if="confirmPop">
+            <div class="confirm_pop">
+                <div class="boxs">
+                    <h3>转赠须知</h3>
+                    <ul>
+                        <li>
+                            <h4>
+                                    <i><img src="../assets/icon_yuan.png" alt=""></i>
+                                    <span>须知一</span>
+                                  </h4>
+                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
+                        </li>
+                        <li>
+                            <h4>
+                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
+                                        <span>须知二</span>
+                                      </h4>
+                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
+                        </li>
+                        <li>
+                            <h4>
+                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
+                                        <span>须知三</span>
+                                      </h4>
+                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
+                        </li>
+                    </ul>
+                    <div class="agreement">
+                        <input class="song" type="password" v-model="value" placeholder="请输入转赠密码" />
+                    </div>
+                    <div class="btn">
+                        <a @click="confirmPopHide">取 消</a>
+                        <b @click="submit">确 定</b>
+                    </div>
+                    <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
+                </div>
+            </div>
+        </div>
+        <!-- 转赠须知 -->
     </div>
 </template>
 <script>
