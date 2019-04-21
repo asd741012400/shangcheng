@@ -92,10 +92,10 @@
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
             <li>
-                <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_collect.png" alt=""></span>
                     <p>我的收藏</p>
-                <!-- </router-link> -->
+                </router-link>
             </li>
             <li>
                 <router-link :to="{name:'MyCardBag'}">
@@ -104,16 +104,16 @@
                 </router-link>
             </li>
             <li>
-                <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_record.png" alt=""></span>
-                    <p>核销记录</p>
-                <!-- </router-link> -->
+                    <p>我的评价</p>
+                </router-link>
             </li>
             <li>
-                <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
                     <p>优惠券</p>
-                <!-- </router-link> -->
+                </router-link>
             </li>
             <li v-if="userInfo.status == 1">
                 <router-link :to="{name:'Generalize'}">
@@ -166,7 +166,7 @@ export default {
     name: 'PersonalCenter',
     data() {
         return {
-            vip: 0,
+            vip: 1,
             userInfo: {},
             popState: 3,
             popShow: false
@@ -247,11 +247,10 @@ body {
                 border: .08rem solid #83CDFB;
                 margin-left: .8rem;
                 margin-right: .28rem;
+                overflow: hidden;
             }
 
-            img {
-                border-radius: 50%;
-            }
+           
 
             div {
                 color: #fff;

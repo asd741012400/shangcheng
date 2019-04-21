@@ -34,6 +34,7 @@ import VipOrder from './views/VipOrder.vue'
 import VipOrderBuy from './views/VipOrderBuy.vue'
 import VipEquity from './views/VipEquity.vue'
 import Order from './views/Order.vue'  //订单列表
+import OrderDetail from './views/OrderDetail.vue'  //订单列表
 import error403 from './views/403.vue'
 import error404 from './views/404.vue'
 
@@ -280,6 +281,11 @@ let router = new Router({
             path: '/Order',
             name: 'Order',
             component: Order
+        },
+        {
+            path: '/OrderDetail',
+            name: 'OrderDetail',
+            component: OrderDetail
         },
         {
             path: '/SharePoster',

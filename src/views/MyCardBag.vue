@@ -138,7 +138,8 @@ export default {
             page: 1,
             currSize: 0,
             pageSize: 10,
-            cardAddPop: false
+            cardAddPop: false,
+            confirmPop: false,
         }
     },
     components: {},
