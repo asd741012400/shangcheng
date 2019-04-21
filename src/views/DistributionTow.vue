@@ -81,6 +81,7 @@ export default {
     created() {
         let user = this.$localstore.get('userInfo')
         this.userInfo = user
+        document.body.style.background = "#fff";
     },
 
     // 挂载前状态

@@ -182,6 +182,7 @@ export default {
     // 创建完毕状态 
     created() {
         this.getCard()
+        document.body.style.background = "#fff";
 
     },
 

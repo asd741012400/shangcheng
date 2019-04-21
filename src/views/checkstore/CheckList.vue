@@ -126,6 +126,7 @@ export default {
     // 创建完毕状态 
     created() {
         document.title = "核销记录"
+        document.body.style.background = "#fff";
     },
 
     // 挂载前状态

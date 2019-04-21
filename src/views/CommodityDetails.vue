@@ -220,6 +220,7 @@ export default {
         this.getDetail()
         this.getComment()
         this.getStore()
+        document.body.style.background = "#fff";
 
     },
 

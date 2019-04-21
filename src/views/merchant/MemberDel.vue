@@ -61,6 +61,7 @@ export default {
   // 创建完毕状态 
   created(){
     document.title = "成员详情"
+    document.body.style.background = "#fff";
   },
 
   // 挂载前状态
@@ -111,6 +112,7 @@ export default {
         display: flex;
         font-size: .36rem;
         align-items: flex-end;
+        a{color: #fff;}
         i{
           margin-left: .24rem;
           font-size: .28rem;
@@ -123,6 +125,7 @@ export default {
         display: flex;
         align-items: center;
         font-size: .28rem;
+        a{color: #fff;}
         b{
           font-weight: normal;
           padding-left: .36rem;
@@ -151,6 +154,7 @@ export default {
           font-size: .28rem;
           color: #666666;
           display: flex;
+          a{color: #fff;}
           b{
             font-size: .32rem;
             color: #222222;

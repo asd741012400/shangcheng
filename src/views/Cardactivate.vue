@@ -212,7 +212,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-
+        document.body.style.background = "#FFCD5E";
     },
 
     // 挂载前状态

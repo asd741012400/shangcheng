@@ -202,6 +202,7 @@ export default {
     // 创建完毕状态 
     created() {
         this.getUserInfo()
+        document.body.style.background = "#fff";
     },
 
     // 挂载前状态
@@ -226,7 +227,7 @@ export default {
 </script>
 <style lang="scss">
 body {
-    background: #fff !important;
+    background: #fff ;
 }
 
 .PersonalCenter {
