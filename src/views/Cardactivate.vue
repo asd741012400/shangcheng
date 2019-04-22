@@ -9,7 +9,7 @@
             <div class="image"><img src="../assets/head_portrait2.png" alt=""></div>
                 <div class="text">
                     <i><img src="../assets/icon_warning_b.png" alt=""></i>
-                    <p>请上传宝贝正面肖像照（确保照片清晰）</p>
+                    <p>请按照左边范例上传激活照片</p>
                 </div>
             </div>
             <div class="add_image">
@@ -111,7 +111,7 @@
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
-import moment from 'moment'
+
 import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
@@ -125,7 +125,7 @@ export default {
             birthday: '',
             tel_phone: '',
             tall: '1m以下',
-            startDate: new Date('2015-01-01'),
+            startDate: new Date('2019-01-01'),
             datePicker: false,
             closeOnClickModalS: true,
             agreementStuats: false,
@@ -166,7 +166,7 @@ export default {
 
         //点击确定按钮
         handleConfirm(data) {
-            let date = moment(data).format('YYYY.MM.DD')
+            let date = this.$dayjs().format('YYYY-MM-DD')            
             this.dateTime = date;
             this.$refs.picker.close()
             event.stopPropagation()
@@ -354,7 +354,7 @@ export default {
             display: flex;
             align-items: center;
             padding: 0 .29rem;
-            height: .9rem;
+            height: .7rem;
 
             label {
                 width: 1.2rem;
@@ -367,15 +367,12 @@ export default {
                 flex: 1;
                 margin-right: .4rem;
                 border-radius: 5px;
-                height: .9rem;
+                height: .7rem;
                 padding: 0 .16rem;
 
                 input {
                     height: 100%;
                     width: 100%;
-                }
-                span{
-                    font-size: .28rem;
                 }
             }
         }

@@ -84,7 +84,7 @@
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
-import moment from 'moment'
+
 import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
@@ -108,7 +108,7 @@ export default {
         },
         //点击确定按钮
         handleConfirm(data) {
-            let date = moment(data).format('YYYY.MM.DD')
+            let date = this.$dayjs().format('YYYY-MM-DD')
             this.dateTime = date;
             this.$refs.picker.close()
             event.stopPropagation()

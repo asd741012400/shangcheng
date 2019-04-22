@@ -83,21 +83,13 @@
                 </li>
             </ul>
         </div>
- 
-        <mt-datetime-picker
-            type="date"
-            ref="picker"
-            year-format="{value} 年"
-            month-format="{value} 月"
-            date-format="{value} 日"
-            @confirm="handleConfirm"
-            :startDate="startDate">
+        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate">
         </mt-datetime-picker>
     </div>
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
-import moment from 'moment'
+
 import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
@@ -105,25 +97,25 @@ export default {
     name: 'Appointment',
     data() {
         return {
-            startDate: new Date('1968-01-01'),
-            dateTime:'请选择时间',
-            tab:1
+            startDate: new Date('2019-01-01'),
+            dateTime: '请选择时间',
+            tab: 1
         }
     },
     components: {},
     methods: {
         //开启时间选择器
-        openPicker () {
+        openPicker() {
             this.$refs.picker.open()
         },
         //点击确定按钮
-        handleConfirm (data) {
-            let date = moment(data).format('YYYY.MM.DD')
+        handleConfirm(data) {
+            let date = this.$dayjs().format('YYYY-MM-DD')
             this.dateTime = date;
             this.$refs.picker.close()
             event.stopPropagation()
         },
-        tabFn(num){
+        tabFn(num) {
             this.tab = num;
         }
 
@@ -158,111 +150,128 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.Appointment{
-    header{
+.Appointment {
+    header {
         height: 2.4rem;
         background: #FF6C5F;
         display: flex;
         align-items: center;
         justify-content: center;
-        div{
-        width: 2.6rem;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        font-size: .28rem;
-            p{
+
+        div {
+            width: 2.6rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-size: .28rem;
+
+            p {
                 font-size: .48rem;
                 padding-bottom: .1rem;
             }
-        
+
         }
     }
-    .titles{
+
+    .titles {
         height: 1.15rem;
         display: flex;
         align-items: center;
         padding-right: .5rem;
-        p{
+
+        p {
             flex: 1;
             font-size: 0.3rem;
             padding-left: .43rem;
         }
-        div{
+
+        div {
             position: relative;
             display: flex;
             align-items: center;
             height: 100%;
             width: 2rem;
-            time{
+
+            time {
                 flex: 1;
                 font-size: 0.3rem;
             }
-            span{
+
+            span {
                 width: .3rem;
                 overflow: hidden;
             }
-            em{
+
+            em {
                 position: absolute;
                 width: 100%;
                 height: 100%;
             }
         }
     }
-    .tab{
+
+    .tab {
         height: 1rem;
         align-items: center;
         justify-content: space-around;
         display: flex;
         background: #f6f6f6;
-        p{
+
+        p {
             width: 2.24rem;
             height: 0.58rem;
             line-height: .58rem;
             background-color: #ffffff;
             border-radius: 0.12rem;
-            border:1px solid #fff;
+            border: 1px solid #fff;
             text-align: center;
         }
-        .active{
-            border:1px solid #ff6c60;
+
+        .active {
+            border: 1px solid #ff6c60;
             color: #ff6c60;
         }
     }
-    .product{
-        ul{
-            li{
+
+    .product {
+        ul {
+            li {
                 padding: 0.27rem .3rem .38rem;
                 border-top: 2px solid #f6f6f6;
                 display: flex;
                 align-items: center;
-                i{
+
+                i {
                     width: 1.26rem;
                     height: 1.26rem;
                     background-color: #f75835;
                     border-radius: 0.12rem;
                     overflow: hidden;
                 }
-                div{
+
+                div {
                     height: 1.26rem;
                     flex: 1;
                     padding-left: .36rem;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    h3{
+
+                    h3 {
                         font-weight: bold;
                         font-size: 0.3rem;
                         width: 5.1rem;
                         overflow: hidden;
-                        text-overflow:ellipsis;
+                        text-overflow: ellipsis;
                         white-space: nowrap;
                     }
-                    p{
+
+                    p {
                         font-size: 0.24rem;
                         display: flex;
-                        a{
+
+                        a {
                             padding-left: .53rem;
                         }
                     }
@@ -273,7 +282,7 @@ export default {
 }
 </style>
 <style>
-.el-message-box{
+.el-message-box {
     width: 80%;
 }
 </style>
