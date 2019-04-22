@@ -7,13 +7,13 @@
         </header>
         <div class="nav_list">
             <van-tabs @change="getGoodsList" v-model="active">
-                <van-tab v-for="(item,index) in AllCate" :title="item.c_name">
+                <van-tab v-for="(item,index) in AllCate" :title="item.c_name" :key="index">
                 </van-tab>
             </van-tabs>
         </div>
         <div class="activity_list">
             <ul>
-                <li v-for="(item,index) in goodsList">
+                <li v-for="(item,index) in goodsList" :key="index">
                     <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
                         <div class="img">
                             <span><img :src="item.thumb_img" alt=""></span>

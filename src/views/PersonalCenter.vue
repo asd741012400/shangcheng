@@ -139,6 +139,30 @@
                 </div>
             </div>
         </div>
+        <!-- 兑换券 -->
+        <div class="pop_bg" v-if="popShow1">
+            <div class="pop" v-if="popState == 1">
+                <p>恭喜成功兑换XX商品</p>
+                <time>到期时间：2018-5-6</time>
+                <span>立即使用</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+            </div>
+            <div class="pop" v-else-if="popState == 2">
+                <p>恭喜你成为PLUS</p>
+                <em>你可以邀请好友获得奖励</em>
+                <time>到期时间：2018-5-6</time>
+                <span>邀请好友</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+            </div>
+            <div class="pop" v-else-if="popState == 3">
+                <p>恭喜你获得卡券一张</p>
+                <em>前往激活即可使用</em>
+                <time>到期时间：2018-5-6</time>
+                <span>立即激活</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+            </div>
+        </div>
+        <!-- 兑换券 -->
         <Share ref="myShare"></Share>
     </div>
 </template>
@@ -151,7 +175,8 @@ export default {
             vip: 1,
             userInfo: {},
             popState: 3,
-            popShow: false
+            popShow: false,
+            popShow1: true,
         }
     },
     components: { Share },
@@ -166,6 +191,14 @@ export default {
         popHideFn() {
             const that = this;
             that.popShow = false;
+        },
+        popShowFn1() {
+            const that = this;
+            that.popShow1 = true;
+        },
+        popHideFn1() {
+            const that = this;
+            that.popShow1 = false;
         },
         async getUserInfo() {
             let openid = this.$localstore.get('openid1')
@@ -612,6 +645,71 @@ body {
             }
         }
     }
+        .pop_bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba($color: #000000, $alpha: 0.3);
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    
+            .pop {
+                background: #fff;
+                border-radius: 10px;
+                width: 5.72rem;
+                position: relative;
+                padding: .94rem .3rem .54rem;
+    
+                i {
+                    position: absolute;
+                    width: .48rem;
+                    height: .48rem;
+                    overflow: hidden;
+                    display: block;
+                    right: .24rem;
+                    top: .24rem;
+                }
+    
+                p {
+                    font-size: .4rem;
+                    color: #FF6666;
+                    text-align: center;
+                }
+    
+                em {
+                    font-size: .4rem;
+                    color: #FF6666;
+                    text-align: center;
+                    display: block;
+                    font-style: normal;
+                }
+    
+                time {
+                    font-size: .32rem;
+                    color: #515C6F;
+                    text-align: center;
+                    display: block;
+                }
+    
+                span {
+                    display: block;
+                    width: 3.7rem;
+                    background: #FF6666;
+                    border-radius: 50px;
+                    text-align: center;
+                    line-height: .8rem;
+                    height: .8rem;
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: .32rem;
+                    margin: .26rem auto 0;
+                }
+    
+            }
+        }
 
 }
 </style>
