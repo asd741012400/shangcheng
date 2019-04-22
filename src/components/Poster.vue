@@ -1,24 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div class="Poster" ref="imageDom">
-    <div class="name">
-      <span><img src="../assets/head_portrait.png" alt=""></span>
-      <b>小皮孩儿</b>
-    </div>
-    <div class="img"><img src="../assets/img2.png" alt=""></div>
-    <div class="code">
-      <div class="code_text">
-        <h3>加勒比儿童票一大一小加勒比</h3>
-        <a>限购一份</a>
-        <p><i>￥</i><span>100</span></p>
-      </div>
-      <div class="code_img">
-        <span><img src="../assets/code2.png" alt=""></span>
-        <p>扫码立享限时优惠</p>
-      </div>
-    </div>
-  </div>
-=======
     <div class="Poster" ref="imageDom">
         <div class="name">
             <span><img src="../assets/head_portrait.png" alt=""></span>
@@ -38,7 +18,6 @@
                 </div>
             </div>
         </div>
->>>>>>> a4883becbb6dfbee27585eb1d55aa3a040dd7a08
 </template>
 <script>
 import QRCode from 'qrcodejs2'
@@ -99,9 +78,7 @@ export default {
             let contentType = parts[0].split(':')[1];
             let raw = window.atob(parts[1]);
             let rawLength = raw.length;
-
             let uInt8Array = new Uint8Array(rawLength);
-
             for (let i = 0; i < rawLength; ++i) {
                 uInt8Array[i] = raw.charCodeAt(i);
             }

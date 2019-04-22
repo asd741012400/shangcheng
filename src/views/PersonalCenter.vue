@@ -142,14 +142,14 @@
         <!-- 兑换券 -->
         <div class="pop_bg" v-if="popShow1">
             <div class="pop" v-if="popState == 1">
-                <p>恭喜成功兑换XX商品</p>
+                <p>XX商品兑换成功</p>
                 <time>到期时间：2018-5-6</time>
                 <span>立即使用</span>
                 <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
             <div class="pop" v-else-if="popState == 2">
-                <p>恭喜你成为PLUS</p>
-                <em>你可以邀请好友获得奖励</em>
+                <p>会员激活成功</p>
+                <em>邀请好友可获得奖励</em>
                 <time>到期时间：2018-5-6</time>
                 <span>邀请好友</span>
                 <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>

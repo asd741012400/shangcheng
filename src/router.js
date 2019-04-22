@@ -39,6 +39,7 @@ import OrderDetail from './views/OrderDetail.vue' //订单详情
 import Collect from './views/Collect.vue' //收藏
 import error403 from './views/403.vue'
 import error404 from './views/404.vue'
+import VipPlus from './views/VipPlus.vue'
 
 
 
@@ -383,6 +384,11 @@ let router = new Router({
             path: '/error404',
             name: 'error404',
             component: error404
+        },
+        {
+            path: '/VipPlus',
+            name: 'VipPlus',
+            component: VipPlus
         },
         {
             path: '*', //404页面跳转
