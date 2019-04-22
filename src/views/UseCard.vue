@@ -21,7 +21,7 @@
     <div class="code">
       <div class="code_img">
         <i><img src="../assets/code.png" alt=""></i>
-        <p>将二维码展示给商家核销</p>
+        <p>消费时请出示二维码进行核销</p>
       </div>
       <div class="code_text">
         <h3>核销码</h3>

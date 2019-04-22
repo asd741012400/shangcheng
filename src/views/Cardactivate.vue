@@ -9,7 +9,7 @@
             <div class="image"><img src="../assets/head_portrait2.png" alt=""></div>
                 <div class="text">
                     <i><img src="../assets/icon_warning_b.png" alt=""></i>
-                    <p>请按照左边范例上传激活照片</p>
+                    <p>请上传宝贝正面肖像照（确保照片清晰）</p>
                 </div>
             </div>
             <div class="add_image">
@@ -354,7 +354,7 @@ export default {
             display: flex;
             align-items: center;
             padding: 0 .29rem;
-            height: .7rem;
+            height: .9rem;
 
             label {
                 width: 1.2rem;
@@ -367,12 +367,15 @@ export default {
                 flex: 1;
                 margin-right: .4rem;
                 border-radius: 5px;
-                height: .7rem;
+                height: .9rem;
                 padding: 0 .16rem;
 
                 input {
                     height: 100%;
                     width: 100%;
+                }
+                span{
+                    font-size: .28rem;
                 }
             }
         }

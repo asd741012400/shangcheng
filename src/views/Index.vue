@@ -41,7 +41,7 @@
             <div class="play_freely">
                 <h3>
                 <span><img src="../assets/icon_play_freely.png" alt=""></span>
-                <a>畅玩卡</a>
+                <a>宝贝计划</a>
               </h3>
                 <div class="play_freely_box">
                     <ul>

@@ -48,7 +48,7 @@
                 <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
                 <span v-else><img src="../assets/icon_unselected.png" alt=""></span>
                 <p>同意</p>
-                <a href="#">PLUS协议</a>
+                <a href="#">会员协议</a>
             </div>
             <div class="total">
                 <p>合计:￥{{plus.sale_price}}</p>
@@ -58,7 +58,6 @@
             <p>合计:￥{{plus.sale_price}}</p>
             <b @click="addOrder">
                 提交订单
-
             </b>
         </footer>
     </div>

@@ -86,7 +86,7 @@
           </div>
           <div class="btns">
             <span>查看订单</span>
-            <a>评 价</a>
+            <a>进行评价</a>
           </div>
         </li>
         <li class="not_comment_list">
@@ -106,7 +106,7 @@
           </div>
           <div class="btns">
             <span>查看订单</span>
-            <a>评 价</a>
+            <a>进行评价</a>
           </div>
         </li>
         <li class="not_comment_list">
@@ -126,7 +126,7 @@
           </div>
           <div class="btns">
             <span>查看订单</span>
-            <a>评 价</a>
+            <a>进行评价</a>
           </div>
         </li>
 

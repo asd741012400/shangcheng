@@ -32,7 +32,7 @@
             <div class="vip_succeed_text">恭喜你获得属于自己的专属海报邀请好友成为会员再赚￥100</div>
             <div class="btn">
                 <div class="continue" @click="goHome">继续逛逛</div>
-                <div class="employ" @click="shareShowFn">分享赚￥100</div>
+                <div class="employ" @click="shareShowFn">领取海报分享赚￥100</div>
             </div>
         </div>
         <div class="card" v-else-if="PaySucceedState == 3">
@@ -48,9 +48,9 @@
             </div>
             <div class="btns">
                 <div class="continue" @click="goHome">继续逛逛</div>
-                <div class="turn" @click="confirmPopShow">转 赠</div>
+                <div class="turn" @click="confirmPopShow">转赠好友</div>
                 <router-link :to="{name:'CardActivate',query:{id:$route.query.id}}">
-                    <div class="activate">去激活</div>
+                    <div class="activate">前去激活</div>
                 </router-link>
             </div>
         </div>

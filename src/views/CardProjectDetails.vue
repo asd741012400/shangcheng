@@ -3,7 +3,7 @@
     <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
     <header> 
       <p class="active">
-        <span>宝贝</span>
+        <span>产品</span>
         <em></em>
       </p>
       <p>

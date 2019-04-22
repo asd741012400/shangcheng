@@ -13,7 +13,7 @@
       </div>
       <div class="code_img">
         <span><img src="../assets/code2.png" alt=""></span>
-        <p>扫码立享批发价</p>
+        <p>扫码立享限时优惠</p>
       </div>
     </div>
   </div>

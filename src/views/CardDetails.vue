@@ -4,7 +4,7 @@
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <header>
                 <p :class="active == 1 ? 'active' : ''" @click="handleActive(1)">
-                    <span>宝贝</span>
+                    <span>产品</span>
                     <em></em>
                 </p>
                 <p :class="active == 2 ? 'active' : ''" @click="handleActive(2)">
@@ -35,7 +35,7 @@
                         <i>￥</i>
                         <a>{{CardDetail.cost_price}}</a>
                     </div>
-                    <b>现价￥{{CardDetail.card_price}}</b>
+                    <b>非会员价￥{{CardDetail.card_price}}</b>
                     <p>市场价<span>￥{{CardDetail.mkt_price}}</span></p>
                 </div>
             </div>
@@ -142,7 +142,7 @@
             <ul>
                 <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城</p>
+                    <p>商城首页</p>
                 </li>
                 <li @click="collectGoods()">
                     <template v-if="isCollect">
@@ -151,7 +151,7 @@
                     <template v-else>
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
-                    <p>收藏</p>
+                    <p>我要收藏</p>
                 </li>
             </ul>
             <div class="btn">
@@ -166,7 +166,7 @@
             <ul>
                 <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城</p>
+                    <p>商城首页</p>
                 </li>
                 <li @click="collectGoods()">
                     <template v-if="isCollect">
@@ -175,7 +175,7 @@
                     <template v-else>
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
-                    <p>收藏</p>
+                    <p>我要收藏</p>
                 </li>
             </ul>
             <div class="btn">
@@ -186,7 +186,7 @@
             <ul>
                 <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城</p>
+                    <p>商城首页</p>
                 </li>
                 <li @click="collectGoods()">
                     <template v-if="isCollect">
@@ -195,7 +195,7 @@
                     <template v-else>
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
-                    <p>收藏</p>
+                    <p>我要收藏</p>
                 </li>
             </ul>
             <div class="btn">
@@ -206,7 +206,7 @@
             <ul>
                 <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城</p>
+                    <p>商城首页</p>
                 </li>
                 <li @click="collectGoods()">
                     <template v-if="isCollect">
@@ -215,7 +215,7 @@
                     <template v-else>
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
-                    <p>收藏</p>
+                    <p>我要收藏</p>
                 </li>
             </ul>
             <div class="btn">

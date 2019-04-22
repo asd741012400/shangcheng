@@ -2,7 +2,7 @@
   <div class="CardDetailsTow">
     <header>
         <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
-        <h3>权益中心</h3>
+        <h3>卡内权益详情</h3>
         <div class="to_be_used">
           <div class="image">
             <i><img src="../assets/img3.png" alt=""></i>
@@ -24,13 +24,13 @@
     </header>
 
     <div class="hint">
-      <p>尊贵的PLUS会员某某，价值X元的游乐门票，您可免费领取。</p>
+      <p>尊敬的圈豆会员xxx，价值X元的游乐权益，您可免费领取</p>
     </div>
 
 
 
     <div class="card_project">
-      <h3>卡片项目</h3>
+      <h3>权益项目</h3>
       <ul>
         <li>
           <div class="image">

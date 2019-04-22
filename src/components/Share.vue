@@ -2,12 +2,12 @@
     <div class="Share">
         <div class="share_bg" v-if="shareShow" @click="shareHideFn">
             <div class="share_div" @click.stop>
-                <h3><span>分享赚</span><a>4.99</a></h3>
-                <p>好友通过你的购买链接购买此商品后，你就能赚至少<span>12</span>元~</p>
+                <h3><span>分享赚</span><a>4.99</a>元</h3>
+                <p>好友通过你的购买链接进行购买，你将获得至少<span>12</span>元的分享收益</p>
                 <ul>
                     <li>
                         <span><img src="../assets/share_wx.png" alt=""></span>
-                        <a>微信</a>
+                        <a>发送好友</a>
                     </li>
                     <li>
                         <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
@@ -16,12 +16,12 @@
                     <template v-if="$route.name !== 'MyShop'">
                         <li @click="showPoster()">
                             <span><img src="../assets/share_code.png" alt=""></span>
-                            <a>二维码海报</a>
+                            <a>生成海报</a>
                         </li>
                     </template>
                     <li v-clipboard:copy="message">
                         <span><img src="../assets/share_copy.png" alt=""></span>
-                        <a>复制</a>
+                        <a>复制链接</a>
                     </li>
                 </ul>
                 <b @click="shareHideFn">取 消</b>

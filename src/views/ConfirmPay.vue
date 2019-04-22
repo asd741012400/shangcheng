@@ -23,19 +23,22 @@
                     </li>
                 </ul>
             </div>
+
+
+
             <div class="message">
-                <h3>你的信息</h3>
+                <h3>订单信息</h3>
                 <ul>
                     <li>
-                        <label>姓名</label>
+                        <label>宝贝姓名：</label>
                         <p>{{order.real_name}}</p>
                     </li>
                     <li>
-                        <label>手机号</label>
+                        <label>监护人手机号</label>
                         <p>{{order.tel_phone}}</p>
                     </li>
                     <li>
-                        <label>身份证</label>
+                        <label>监护人身份证</label>
                         <p>{{order.id_code}}</p>
                     </li>
                     <li>

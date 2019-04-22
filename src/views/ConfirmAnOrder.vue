@@ -42,11 +42,11 @@
                         <p><input type="text" v-model="real_name" placeholder="请输入姓名"></p>
                     </li>
                     <li>
-                        <label>手机号</label>
+                        <label>监护人手机号</label>
                         <p><input type="text" v-model="tel" placeholder="请输入正确的手机号码"></p>
                     </li>
                     <li>
-                        <label>身份证</label>
+                        <label>监护人身份证</label>
                         <p><input type="text" v-model="card_ID" placeholder="请输入正确的身份证号码"></p>
                     </li>
                     <li>
@@ -182,7 +182,7 @@ export default {
     // 创建完毕状态 
     created() {
         this.getCard()
-
+        document.body.style.background = "#F6F6F6";
     },
 
     computed: {
@@ -251,7 +251,6 @@ export default {
 
     .mian {
         padding-bottom: 1.2rem;
-
         .commodity {
             display: flex;
             padding: .28rem .6rem .32rem .46rem;
@@ -269,7 +268,7 @@ export default {
 
                 li {
                     strong {
-                        font-size: .28rem;
+                        font-size: .3rem;
                         color: #535D70;
                         font-weight: normal;
                     }
@@ -376,23 +375,24 @@ export default {
         .message {
             margin-top: 10px;
             background: #fff;
-
+            
             ul {
-                padding: .28rem .89rem .66rem;
+                padding: .28rem .5rem .66rem;
 
                 li {
                     display: flex;
                     align-items: center;
-                    margin-bottom: .08rem;
+                    margin-bottom: .2rem;
 
                     label {
-                        width: 1rem;
+                        width: 1.8rem;
                         text-align: right;
                         padding-right: .24rem;
+                        font-size: .3rem;
                     }
 
                     p {
-                        height: .6rem;
+                        height: .8rem;
                         border: 1px solid #C8C8C8;
                         border-radius: 5px;
                         flex: 1;
