@@ -111,7 +111,7 @@
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
-import moment from 'moment'
+// import moment from 'moment'
 import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
@@ -125,7 +125,7 @@ export default {
             birthday: '',
             tel_phone: '',
             tall: '1m以下',
-            startDate: new Date('2015-01-01'),
+            startDate: new Date('2019-01-01'),
             datePicker: false,
             closeOnClickModalS: true,
             agreementStuats: false,
@@ -166,7 +166,7 @@ export default {
 
         //点击确定按钮
         handleConfirm(data) {
-            let date = moment(data).format('YYYY.MM.DD')
+            let date = moment(data).format('YYYY.MM.DD')            
             this.dateTime = date;
             this.$refs.picker.close()
             event.stopPropagation()

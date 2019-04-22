@@ -3,20 +3,21 @@
         <div class="share_poster">
             <i @click="$router.go(-1)"><img src="../assets/icon_close3.png" alt=""></i>
             <div class="share_poster_content">
+                <img class="poster-img" ref="image" :src="imgUrl">
                 <div class="Poster" ref="imageDom">
                     <div class="name">
-                        <span><img src="../assets/head_portrait.png" alt=""></span>
-                        <b>小皮孩儿</b>
+                        <span><img :src="user.wechat_img"></span>
+                        <b>{{user.username}}</b>
                     </div>
                     <div class="img"><img src="../assets/img2.png" alt=""></div>
                         <div class="code">
                             <div class="code_text">
-                                <h3>加勒比儿童票一大一小加勒比</h3>
-                                <a>限购一份</a>
-                                <p><i>￥</i><span>100</span></p>
+                                <h3>{{title}}</h3>
+                                <!-- <a>限购一份</a> -->
+                                <p><span>￥{{price}}</span></p>
                             </div>
                             <div class="code_img">
-                                <span><img src="../assets/code2.png" alt=""></span>
+                                <span id="qrcode"></span>
                                 <p>扫码立享批发价</p>
                             </div>
                         </div>
@@ -41,32 +42,53 @@
 </template>
 <script>
 import wxapi from '@/lib/wx.js'
+import QRCode from 'qrcodejs2'
 import html2canvas from "html2canvas"
 // import Poster from '../components/Poster'
 
 export default {
     name: 'SharePoster',
     data() {
-        return {}
+        return {
+            user: {},
+            imgUrl: '',
+            type: "",
+            goods_id: "",
+            title: "",
+            price: "",
+            poster_img: "",
+        }
     },
     components: {
         // Poster
     },
     methods: {
-                //导出图片
+        //base64转blob
+        base64ToBlob(code) {
+            let parts = code.split(';base64,');
+            let contentType = parts[0].split(':')[1];
+            let raw = window.atob(parts[1]);
+            let rawLength = raw.length;
+
+            let uInt8Array = new Uint8Array(rawLength);
+
+            for (let i = 0; i < rawLength; ++i) {
+                uInt8Array[i] = raw.charCodeAt(i);
+            }
+            return new Blob([uInt8Array], { type: contentType });
+        },
+        //导出图片
         handleJpeg() {
-            let vm = this;
-            // let table = this.$refs.crud.$el;
-            let table = this.$refs.imageDom1;
-            html2canvas(table).then(canvas => {
-                var url = canvas.toDataURL();
-                let a = document.createElement("a");
-                a.href = url;
-                a.download = "未命名";
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-            });
+            // let table = this.$refs.imageDom;
+            // html2canvas(table).then(canvas => {
+            //     var url = canvas.toDataURL();
+            //     let a = document.createElement("a");
+            //     a.href = url;
+            //     a.download = "未命名";
+            //     document.body.appendChild(a);
+            //     a.click();
+            //     document.body.removeChild(a);
+            // });
         },
         clickGeneratePicture() {
             html2canvas(this.$refs.imageDom).then(canvas => {
@@ -80,6 +102,7 @@ export default {
                 eleLink.click();
                 // 然后移除
                 document.body.removeChild(eleLink);
+
 
             });
         },
@@ -129,6 +152,47 @@ export default {
             // }
             // // 将配置注入通用方法
             // wxapi.ShareAppMessage(option)
+        },
+        //获取商品
+        async getGoods() {
+            let that = this;
+            if (this.type == 1) {
+                let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.goods_id })
+                this.title = res.data.data.goods_name
+                this.price = res.data.data.goods_price
+                this.poster_img = res.data.data.dist_poster
+            } else {
+                let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
+                this.title = res.data.data.card_name
+                this.price = res.data.data.card_price
+                this.poster_img = res.data.data.dist_poster
+            }
+
+            //生成二维码
+            let qrcode = new QRCode('qrcode', {
+                width: 60,
+                height: 60, // 高度  
+                text: '56663159' // 二维码内容  
+                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                // background: '#f0f'  
+                // foreground: '#ff0'  
+            })
+
+            setTimeout(() => {
+                // that.$nextTick(function() {
+
+
+                //合成分享图
+                html2canvas(that.$refs.imageDom).then(function(canvas) {
+                    // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+                    let dataURL = canvas.toDataURL("image/jpeg");
+                    that.imgUrl = dataURL;
+                });
+                // })
+            }, 1000)
+
+
+
         }
     },
 
@@ -137,7 +201,19 @@ export default {
 
     // 创建完毕状态 
     created() {
+        this.user = this.$localstore.get('userInfo')
+        this.goods_id = this.$route.query.id
+        this.type = this.$route.query.type
+        this.getGoods()
 
+    },
+
+    watch: {
+        imgUrl(val, oldval) {
+            //监听到imgUrl有变化以后 说明新图片已经生成 隐藏DOM
+            this.$refs.imageDom.style.display = "none";
+            this.$refs.image.style.display = "block";
+        }
     },
 
     // 挂载前状态
@@ -193,6 +269,12 @@ export default {
             width: 5.36rem;
             margin: 1.36rem auto 0;
             height: 9.54rem;
+
+            .poster-img {
+                width: 100%;
+                height: 100%;
+                display: none;
+            }
         }
 
         .share_type {
@@ -238,6 +320,12 @@ export default {
             border: 4px solid #FF947B;
             border-radius: 50%;
             margin-left: .26rem;
+            display: block;
+        }
+
+        img {
+            display: block;
+            width: 100%;
         }
 
         b {

@@ -37,15 +37,23 @@ export default {
     name: 'Share',
     data() {
         return {
-            message: "123",
+            message: "123",  
             shareShow: false,
         }
     },
+    props: [
+        'goodsId',
+        'type',
+    ],
     components: {},
     methods: {
         showPoster() {
             this.$router.push({
                 name: "SharePoster",
+                query:{
+                    id:this.goodsId,
+                    type:this.type,
+                }
             });
         },
         shareShowFn(ev) {
@@ -61,7 +69,9 @@ export default {
     beforeCreate() {},
 
     // 创建完毕状态 
-    created() {},
+    created() {
+        this.getGoods()
+    },
 
     // 挂载前状态
     beforeMount() {},
