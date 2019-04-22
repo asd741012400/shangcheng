@@ -40,7 +40,7 @@
             </div>
             <b><img src="../assets/PersonalCenter_headerBg.png" alt="" srcset=""></b>
         </header>
-        <div class="share" v-if="userInfo.status == 1">
+        <div class="share" v-if="userInfo.status == 1" @click="shareShowFn">
             <p><img src="../assets/invitation.png" alt=""></p>
                 <router-link :to="{name:'MyShop'}">
                     <p><img src="../assets/my_shop.png" alt=""></p>
@@ -52,31 +52,31 @@
                     <span><img src="../assets/icon_order.png" alt=""></span>
                     <p>我的订单</p>
                 </div>
-                <router-link :to="{name:'Order'}">
+                <router-link :to="{name:'Order',query:{index:1}}">
                     全部订单&gt;
                 </router-link>
             </div>
             <ul>
                 <li>
-                    <router-link :to="{name:'Order'}">
+                    <router-link :to="{name:'Order',query:{index:2}}">
                         <span><img src="../assets/icon_payment.png" alt=""></span>
                         <p>待付款</p>
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{name:'Order'}">
+                    <router-link :to="{name:'Order',query:{index:3}}">
                         <span><img src="../assets/icon_employ.png" alt=""></span>
                         <p>待使用</p>
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{name:'Order'}">
+                    <router-link :to="{name:'Order',query:{index:4}}">
                         <span><img src="../assets/icon_evaluate.png" alt=""></span>
                         <p>待评价</p>
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{name:'Order'}">
+                    <router-link :to="{name:'Order',query:{index:5}}">
                         <span><img src="../assets/icon_refund.png" alt=""></span>
                         <p>退款</p>
                     </router-link>
@@ -92,7 +92,7 @@
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
             <li>
-                <router-link :to="{name:'MyCardBag'}">
+                <router-link :to="{name:'Collect'}">
                     <span><img src="../assets/icon_collect.png" alt=""></span>
                     <p>我的收藏</p>
                 </router-link>
@@ -104,16 +104,18 @@
                 </router-link>
             </li>
             <li>
-                <router-link :to="{name:'MyCardBag'}">
+                <router-link :to="{name:'CommodityList'}">
                     <span><img src="../assets/icon_record.png" alt=""></span>
                     <p>我的评价</p>
                 </router-link>
             </li>
             <li>
-                <router-link :to="{name:'MyCardBag'}">
-                    <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
-                    <p>优惠券</p>
-                </router-link>
+                <a href="javascript:;">
+                    <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                        <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
+                        <p>优惠券</p>
+                    <!-- </router-link> -->
+                </a>
             </li>
             <li v-if="userInfo.status == 1">
                 <router-link :to="{name:'Generalize'}">
@@ -123,7 +125,7 @@
             </li>
         </ul>
         <MyFooter></MyFooter>
-        <div class="service"><a href="tel:110"><img src="../assets/icon_service.png" alt=""></a></div>
+        <div class="service"><a href="javascript:;"><img src="../assets/icon_service.png" alt=""></a></div>
         <div class="card_add_pop" v-if="popShow">
             <div class="card_add">
                 <div>
@@ -137,31 +139,11 @@
                 </div>
             </div>
         </div>
-        <!--         <div class="pop_bg" v-if="popShow">
-            <div class="pop" v-if="popState == 1">
-                <p>恭喜成功兑换XX商品</p>
-                <time>到期时间：2018-5-6</time>
-                <span>立即使用</span>
-                <i @click="popHideFn"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
-            <div class="pop" v-else-if="popState == 2">
-                <p>恭喜你成为PLUS</p>
-                <em>你可以邀请好友获得奖励</em>
-                <time>到期时间：2018-5-6</time>
-                <span>邀请好友</span>
-                <i @click="popHideFn"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
-            <div class="pop" v-else-if="popState == 3">
-                <p>恭喜你获得卡券一张</p>
-                <em>前往激活即可使用</em>
-                <time>到期时间：2018-5-6</time>
-                <span>立即激活</span>
-                <i @click="popHideFn"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
-        </div> -->
+        <Share ref="myShare"></Share>
     </div>
 </template>
 <script>
+import Share from '../components/Share'
 export default {
     name: 'PersonalCenter',
     data() {
@@ -172,8 +154,11 @@ export default {
             popShow: false
         }
     },
-    components: {},
+    components: { Share },
     methods: {
+        shareShowFn() {
+            this.$refs.myShare.shareShowFn();
+        },
         popShowFn() {
             const that = this;
             that.popShow = true;
@@ -227,7 +212,7 @@ export default {
 </script>
 <style lang="scss">
 body {
-    background: #fff ;
+    background: #fff;
 }
 
 .PersonalCenter {
@@ -251,7 +236,7 @@ body {
                 overflow: hidden;
             }
 
-           
+
 
             div {
                 color: #fff;
@@ -540,71 +525,6 @@ body {
         border-radius: 50%;
     }
 
-    .pop_bg {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: rgba($color: #000000, $alpha: 0.3);
-        top: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .pop {
-            background: #fff;
-            border-radius: 10px;
-            width: 5.72rem;
-            position: relative;
-            padding: .94rem .3rem .54rem;
-
-            i {
-                position: absolute;
-                width: .48rem;
-                height: .48rem;
-                overflow: hidden;
-                display: block;
-                right: .24rem;
-                top: .24rem;
-            }
-
-            p {
-                font-size: .4rem;
-                color: #FF6666;
-                text-align: center;
-            }
-
-            em {
-                font-size: .4rem;
-                color: #FF6666;
-                text-align: center;
-                display: block;
-                font-style: normal;
-            }
-
-            time {
-                font-size: .32rem;
-                color: #515C6F;
-                text-align: center;
-                display: block;
-            }
-
-            span {
-                display: block;
-                width: 3.7rem;
-                background: #FF6666;
-                border-radius: 50px;
-                text-align: center;
-                line-height: .8rem;
-                height: .8rem;
-                color: #fff;
-                font-weight: bold;
-                font-size: .32rem;
-                margin: .26rem auto 0;
-            }
-
-        }
-    }
 
     .card_add_pop {
         position: fixed;

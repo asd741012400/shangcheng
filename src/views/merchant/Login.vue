@@ -11,7 +11,7 @@
 				<span>获取验证码</span>
 			</div>
 		</div>
-		<a class="sub_btn">确定</a>
+		<a class="sub_btn" @click="submit">确定</a>
     </div>
 </template>
 <script>
@@ -21,7 +21,11 @@ export default {
         return {}
     },
     components: {},
-    methods: {},
+    methods: {
+    	submit(){
+    		this.$router.push({name:'MerchantShop'})
+    	}
+    },
 
     // 创建前状态
     beforeCreate() {},

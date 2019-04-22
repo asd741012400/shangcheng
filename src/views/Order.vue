@@ -131,6 +131,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        this.active = this.$route.query.index -1
         let user = this.$localstore.get('userInfo')
         this.user_id = user.user_id
         this.getOrderList()

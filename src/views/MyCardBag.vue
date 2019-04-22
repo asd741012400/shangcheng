@@ -23,10 +23,8 @@
                             <p>{{item.card_name}}</p>
                             <!-- <span>剩余20天</span> -->
                         </div>
-                        <div class="btn">
-                            <router-link :to="{name:'UseCard'}">
-                                <span>转赠</span>
-                            </router-link>
+                        <div class="btn">          
+                            <span @click="confirmPopShow">转赠</span>
                         </div>
                     </div>
                 </div>
@@ -85,8 +83,7 @@
                 </div>
             </div>
         </div>
-
-                <!-- 转赠须知 -->
+        <!-- 转赠须知 -->
         <div class="confirm_pop_bg" v-if="confirmPop">
             <div class="confirm_pop">
                 <div class="boxs">
@@ -119,7 +116,7 @@
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
-                        <b @click="submit">确 定</b>
+                        <b>确 定</b>
                     </div>
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
@@ -134,16 +131,23 @@ export default {
     data() {
         return {
             user_id: '',
+            value: '',
             cardList: [],
             page: 1,
             currSize: 0,
             pageSize: 10,
-            cardAddPop: false,
             confirmPop: false,
+            cardAddPop: false
         }
     },
     components: {},
     methods: {
+        confirmPopShow() {
+            this.confirmPop = true
+        },
+        confirmPopHide() {
+            this.confirmPop = false
+        },
         cardAddPopShow() {
             this.cardAddPop = true;
         },
@@ -519,6 +523,130 @@ export default {
             }
         }
     }
+
+        .confirm_pop_bg {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha:0.24);
+        top: 0;
+        left: 0;
+
+        .confirm_pop {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.02rem;
+
+            .boxs {
+                background: #fff;
+                border-radius: 10px;
+                position: relative;
+                overflow: hidden;
+
+                h3 {
+                    font-size: .32rem;
+                    color: #515C6F;
+                    padding: .74rem 0 .2rem;
+                    text-align: center;
+                }
+
+                ul {
+                    padding: 0 .5rem 0 .4rem;
+
+                    li {
+                        padding-bottom: .2rem;
+
+                        h4 {
+                            display: flex;
+                            align-items: center;
+                            font-size: .24rem;
+                            color: #FF6666;
+                            padding-bottom: .1rem;
+
+                            i {
+                                width: .1rem;
+                                margin-right: .18rem;
+                            }
+                        }
+
+                        p {
+                            font-size: .24rem;
+                            color: #515C6F;
+                            text-indent: 2em;
+                        }
+
+                    }
+                }
+
+                .agreement {
+                    display: flex;
+                    align-items: center;
+                    padding: .16rem .5rem 0 .4rem;
+
+                    .song {
+                        // text-align: center;
+                        width: 100%;
+                        border: 1px solid #ccc;
+                        padding: 0.14rem 0.1rem;
+                        border-radius: 0.4rem;
+                    }
+
+                    span {
+                        width: .3rem;
+                        margin-right: .18rem;
+                    }
+
+                    b {
+                        font-size: .24rem;
+                        color: #515C6F;
+                    }
+                }
+
+                .btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding-top: .6rem;
+
+                    a {
+                        text-align: center;
+                        flex: 1;
+                        color: #fff;
+                        background: #8A8A8A;
+                        font-weight: bold;
+                        line-height: 1.06rem;
+                    }
+
+                    b {
+                        flex: 1;
+                        text-align: center;
+                        color: #fff;
+                        background: #FF6666;
+                        line-height: 1.06rem;
+                    }
+                }
+
+                .colse {
+                    position: absolute;
+                    right: .16rem;
+                    top: .16rem;
+                    width: 1rem;
+                    height: 1rem;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: flex-end;
+
+                    span {
+                        width: .48rem;
+                        height: .48rem;
+                    }
+                }
+            }
+        }
+    }
+
 
 }
 </style>

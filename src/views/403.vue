@@ -1,15 +1,14 @@
 <template>
   <div class="error403">
     <div class="error403-body-con">
-      <el-card class="box-card">
-        <div class="error403-body-con-title">4
-          <span>0</span>3</div>
+        <div class="error403-body-con-title">
+          <!-- 4<span>0</span>3 -->
+        </div>
         <p class="error403-body-con-message">你无权访问该页面！</p>
 <!--         <div class="error403-btn-con">
           <el-button @click="goHome" size="large" style="width: 200px;" type="text">返回首页</el-button>
           <el-button @click="backPage" size="large" style="width: 200px;margin-left: 40px;" type="primary">返回上一页</el-button>
         </div> -->
-      </el-card>
     </div>
   </div>
 </template>
@@ -64,7 +63,7 @@ export default {
       color: red;
       height: 260px;
       line-height: 260px;
-      margin-top: 40px;
+      // margin-top: 40px;
       span {
         display: inline-block;
         color: red;
@@ -75,7 +74,7 @@ export default {
     &-message {
       display: block;
       text-align: center;
-      font-size: 30px;
+      font-size: 14px;
       font-weight: 500;
       letter-spacing: 12px;
       color: #ccc;

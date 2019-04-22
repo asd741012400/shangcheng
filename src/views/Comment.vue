@@ -107,7 +107,7 @@ export default {
             let res = await this.$postRequest('/comment/AddComments', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-                that.$router.push({ name: 'CommentSucceed' })
+                this.$router.push({ name: 'CommentSucceed' })
             }
 
         }

@@ -1,8 +1,8 @@
 <template>
     <div class="CheckCode">
         <div>
-            <p><input type="number" placeholder="请输入"></p>
-            <a class="sub_btn">确定</a>
+            <p><input type="number" v-model="code" placeholder="请输入"></p>
+            <a class="sub_btn" @click="submit">确定</a>
         </div>
     </div>
 </template>
@@ -11,16 +11,42 @@ export default {
     name: 'CheckCode',
     data() {
         return {
-       
+            code: ''
         }
     },
     components: {},
     methods: {
-    
+        //核销提交
+        async submit() {
+            if (this.code == '') {
+                  this.$message('请输入核销码！');
+                return false
+            }
+            this.$localstore.set('cehckGoods', '')
+            let userInfo = this.$localstore.get('business_user')
+            let data = {
+                code: this.code,
+                admin_id: userInfo.user_id,
+                shop_id: userInfo.business_id,
+            }
+            let res = await this.$postRequest('/cancle/CancleOne', data)
+            if (res.data.code == 1) {
+                this.$localstore.set('cehckGoods', res.data.data)
+                if (res.data.data.card_info.type == 1) {
+                    this.$router.push({ name: 'Commodity' })
+                } else {
+                    this.$router.push({ name: 'CardCheck' })
+                }
+            } else {
+                this.$message(res.data.msg);
+            }
+        }
     },
 
     // 创建前状态
-    beforeCreate() {},
+    beforeCreate() {
+
+    },
 
     // 创建完毕状态 
     created() {
@@ -49,31 +75,32 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.CheckCode{
-    div{
+.CheckCode {
+    div {
         margin: 0 .4rem;
         overflow: hidden;
-        p{
+
+        p {
             margin-top: .42rem;
             display: flex;
-			height: 0.7rem;
-			padding-left: .4rem;
-			background-image: linear-gradient(
-				#fefefe, 
-				#fefefe), 
-			linear-gradient(
-				#f75835, 
-				#f75835);
-			background-blend-mode: normal, 
-				normal;
-			border-radius: 0.12rem;
-			border: solid 0.02rem #f0f0f0;
-			input{
-				width: 100%;
-				height: 100%;
-			}
+            height: 0.7rem;
+            padding-left: .4rem;
+            background-image: linear-gradient(#fefefe,
+                #fefefe),
+                linear-gradient(#f75835,
+                #f75835);
+            background-blend-mode: normal,
+                normal;
+            border-radius: 0.12rem;
+            border: solid 0.02rem #f0f0f0;
+
+            input {
+                width: 100%;
+                height: 100%;
+            }
         }
-        .sub_btn{
+
+        .sub_btn {
             margin-top: .37rem;
             height: 0.8rem;
             line-height: 0.8rem;

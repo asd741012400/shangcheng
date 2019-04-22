@@ -76,5 +76,7 @@ const wxApi = {
             }
         })
     }
+
+
 }
 export default wxApi

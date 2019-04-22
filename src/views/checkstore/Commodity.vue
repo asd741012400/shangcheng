@@ -1,8 +1,8 @@
 <template>
     <div class="Commodity">
-        <i>img</i>
-        <p>悠游堂南坪店</p>
-        <a class="sub_btn">确定</a>
+        <i><img :src="productInfo.thumb_img"></i>
+        <p>{{productInfo.goods_name}}</p>
+        <a class="sub_btn" @click="submit">确定</a>
     </div>
 </template>
 <script>
@@ -10,12 +10,28 @@ export default {
     name: 'Commodity',
     data() {
         return {
-       
+            checkInfo: {},
+            productInfo: {}
         }
     },
     components: {},
     methods: {
-    
+        async submit() {
+            let userInfo = this.$localstore.get('business_user')
+            let data = {
+                code: this.checkInfo.cancle_code,
+                admin_id: userInfo.user_id,
+                shop_id: userInfo.business_id
+            }
+            let res = await this.$postRequest('/cancle/CancleCode', data)
+            if (res.data.code == 1) {
+                setTimeout(() => {
+                    this.$router.go(-1)
+                }, 2000)
+            }
+            this.$message(res.data.msg);
+
+        }
     },
 
     // 创建前状态
@@ -24,7 +40,9 @@ export default {
     // 创建完毕状态 
     created() {
         document.title = "商品核销"
-        document.body.style.background = "#fff";
+        let cehckGoods = this.$localstore.get('cehckGoods')
+        this.checkInfo = cehckGoods.card_info
+        this.productInfo = cehckGoods.product_info
     },
 
     // 挂载前状态
@@ -48,14 +66,15 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.Commodity{
+.Commodity {
     background: #f0f0f0;
     position: absolute;
     width: 100%;
     height: 100%;
     left: 0;
-    top:0;
-    i{
+    top: 0;
+
+    i {
         display: block;
         margin: .5rem .69rem 0;
         height: 6.12rem;
@@ -63,12 +82,14 @@ export default {
         border-radius: 0.34rem;
         overflow: hidden;
     }
-    p{
+
+    p {
         font-size: 0.36rem;
         text-align: center;
         margin-top: .36rem;
     }
-    .sub_btn{
+
+    .sub_btn {
         margin: 1rem .69rem 0;
         height: 0.8rem;
         line-height: 0.8rem;

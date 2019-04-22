@@ -18,7 +18,7 @@
                 <h3>21806</h3>
                 <p>历史收益(元)</p>
             </li>
-            <li>
+            <li @click="goWidthdrew">
                 <h3>21806</h3>
                 <p>可提现(元)</p>
             </li>
@@ -64,7 +64,11 @@ export default {
         }
     },
     components: {},
-    methods: {},
+    methods: {
+        goWidthdrew(){
+            this.$router.push({name:'WithdrawDeposit'})
+        }
+    },
 
     // 创建前状态
     beforeCreate() {},

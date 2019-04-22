@@ -1,20 +1,22 @@
 <template>
-    <div class="CardDetails">
-        <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
-        <header>
-            <p class="active">
-                <span>宝贝</span>
-                <em></em>
-            </p>
-            <p>
-                <span>评价</span>
-                <em></em>
-            </p>
-            <p>
-                <span>详情</span>
-                <em></em>
-            </p>
-        </header>
+    <div class="CardDetails" id="goods">
+        <div class="top">
+            <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+            <header>
+                <p :class="active == 1 ? 'active' : ''" @click="handleActive(1)">
+                    <span>宝贝</span>
+                    <em></em>
+                </p>
+                <p :class="active == 2 ? 'active' : ''" @click="handleActive(2)">
+                    <span>评价</span>
+                    <em></em>
+                </p>
+                <p :class="active == 3 ? 'active' : ''" @click="handleActive(3)">
+                    <span>详情</span>
+                    <em></em>
+                </p>
+            </header>
+        </div>
         <div class="banner">
             <span><img src="../assets/img2.png" alt=""></span>
             <!-- <span><img :src="CardDetail.def_pic[0]" alt=""></span> -->
@@ -42,7 +44,7 @@
                 <div class="detail" v-html="CardDetail.buy_things">
                 </div>
             </div>
-            <div class="comment">
+            <div class="comment" id="comments">
                 <h3>
             <p>用户评价</p>
                  <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:3}}">
@@ -79,7 +81,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="shop_del">
+            <div class="shop_del" id="details">
                 <h3>
             <p :class="table == 1 ? 'active' : ''" @click="tabkeChage(1)">卡内商家</p>
             <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">卡片详情</p>
@@ -138,17 +140,22 @@
         </div>
         <footer v-if="cardDetailsState == 1">
             <ul>
-                <li>
+                <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城</p>
                 </li>
-                <li>
-                    <span><img src="../assets/icon_collectA.png" alt=""></span>
+                <li @click="collectGoods()">
+                    <template v-if="isCollect">
+                        <span><img src="../assets/icon_collectB.png" alt=""></span>
+                    </template>
+                    <template v-else>
+                        <span><img src="../assets/icon_collectA.png" alt=""></span>
+                    </template>
                     <p>收藏</p>
                 </li>
             </ul>
             <div class="btn">
-                <div class="share">
+                <div class="share" @click="shareShowFn">
                     <span>￥10</span>
                     <p>分享赚</p>
                 </div>
@@ -157,12 +164,17 @@
         </footer>
         <footer v-else-if="cardDetailsState == 2">
             <ul>
-                <li>
+                <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城</p>
                 </li>
-                <li>
-                    <span><img src="../assets/icon_collectA.png" alt=""></span>
+                <li @click="collectGoods()">
+                    <template v-if="isCollect">
+                        <span><img src="../assets/icon_collectB.png" alt=""></span>
+                    </template>
+                    <template v-else>
+                        <span><img src="../assets/icon_collectA.png" alt=""></span>
+                    </template>
                     <p>收藏</p>
                 </li>
             </ul>
@@ -172,12 +184,17 @@
         </footer>
         <footer v-else-if="cardDetailsState == 3">
             <ul>
-                <li>
+                <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城</p>
                 </li>
-                <li>
-                    <span><img src="../assets/icon_collectA.png" alt=""></span>
+                <li @click="collectGoods()">
+                    <template v-if="isCollect">
+                        <span><img src="../assets/icon_collectB.png" alt=""></span>
+                    </template>
+                    <template v-else>
+                        <span><img src="../assets/icon_collectA.png" alt=""></span>
+                    </template>
                     <p>收藏</p>
                 </li>
             </ul>
@@ -187,12 +204,17 @@
         </footer>
         <footer v-if="cardDetailsState == 4">
             <ul>
-                <li>
+                <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城</p>
                 </li>
-                <li>
-                    <span><img src="../assets/icon_collectA.png" alt=""></span>
+                <li @click="collectGoods()">
+                    <template v-if="isCollect">
+                        <span><img src="../assets/icon_collectB.png" alt=""></span>
+                    </template>
+                    <template v-else>
+                        <span><img src="../assets/icon_collectA.png" alt=""></span>
+                    </template>
                     <p>收藏</p>
                 </li>
             </ul>
@@ -203,16 +225,20 @@
                 </div>
             </div>
         </footer>
+        <Share ref="myShare"></Share>
     </div>
 </template>
 <script>
+import Share from '../components/Share'
 export default {
     name: 'CardDetails',
     data() {
         return {
             apiUrl: this.$common.ApiUrl(),
             cardDetailsState: 4,
+            active: 1,
             table: 1,
+            isCollect: false,
             CardDetail: {},
             comments: [],
             countDownNum: 0,
@@ -220,8 +246,28 @@ export default {
             id: '',
         }
     },
-    components: {},
+    components: { Share },
     methods: {
+        collectGoods() {
+            this.isCollect = !this.isCollect
+        },
+        goHome() {
+            this.$router.push({ name: 'Index' })
+        },
+        handleActive(index) {
+            this.active = index
+            if (index == 1) {
+                document.getElementById("goods").scrollIntoView();
+            } else if (index == 2) {
+                document.getElementById("comments").scrollIntoView();
+            } else {
+                this.table = 2
+                document.getElementById("details").scrollIntoView();
+            }
+        },
+        shareShowFn() {
+            this.$refs.myShare.shareShowFn();
+        },
         changeTime(date) {
             return this.$dayjs(date).format('YYYY/MM/DD HH:mm:ss')
         },
@@ -308,6 +354,8 @@ export default {
 }
 
 .CardDetails {
+    padding-top: 1.3rem;
+
     .icon_return {
         position: absolute;
         width: 1rem;
@@ -324,7 +372,17 @@ export default {
         }
     }
 
+    .top {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 999;
+    }
+
     header {
+        // position:fixed;
+        // top:0;
         height: 1rem;
         display: flex;
         align-items: center;

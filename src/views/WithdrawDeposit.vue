@@ -11,12 +11,11 @@
       <div class="header">
         <div class="use_card_message">
           <i><img src="../assets/money_img1.png" alt=""></i>
-          <p>支付成功</p>
+          <p>可提现</p>
           <h3>￥200</h3>
         </div>
         <b><img src="../assets/PersonalCenter_headerBg4.png" alt="" srcset=""></b>
-      </div>
-      
+      </div>    
       
 
     </div>

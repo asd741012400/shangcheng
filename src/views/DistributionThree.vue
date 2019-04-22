@@ -81,7 +81,7 @@
 
       // 创建完毕状态 
       created(){
-        document.body.style.background = "#fff";
+        
       },
 
       // 挂载前状态

@@ -108,7 +108,7 @@ export default {
   name:'OrderDetail',
   data(){
     return{
-      state:4,//1待使用 2代付款 3付款成功 4退款
+      state:1,//1待使用 2代付款 3付款成功 4退款
       groupPurchaseState:true,//团购
     }
   },

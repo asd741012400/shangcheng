@@ -36,6 +36,7 @@ export default {
             let openid = this.$localstore.get('openid1', openid)
             let res = await this.$getRequest('/business/checkUser', { business_id: business_id, openid: openid })
             if (res.data.code == 1) {
+                this.$localstore.set('business_user', res.data.data)
                 this.$router.push({ name: 'CheckHome' })
             } else {
                 if (!business_id) {

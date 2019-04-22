@@ -78,15 +78,7 @@
                 </li>
             </ul>
         </div>
- 
-        <mt-datetime-picker
-            type="date"
-            ref="picker"
-            year-format="{value} 年"
-            month-format="{value} 月"
-            date-format="{value} 日"
-            @confirm="handleConfirm"
-            :startDate="startDate">
+        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate">
         </mt-datetime-picker>
     </div>
 </template>
@@ -101,21 +93,52 @@ export default {
     data() {
         return {
             startDate: new Date('1968-01-01'),
-            dateTime:'请选择时间'
+            dateTime: '请选择时间',
+            checklist: [],
+            page: 1,
+            currSize: 0,
+            pageSize: 10,
         }
     },
     components: {},
     methods: {
         //开启时间选择器
-        openPicker () {
+        openPicker() {
             this.$refs.picker.open()
         },
         //点击确定按钮
-        handleConfirm (data) {
+        handleConfirm(data) {
             let date = moment(data).format('YYYY.MM.DD')
             this.dateTime = date;
             this.$refs.picker.close()
             event.stopPropagation()
+        },
+        //获取核销记录
+        async getCheckList() {
+            let userInfo = this.$localstore.get('business_user')
+            let data = {
+                page: this.page,
+                date: this.dateTime,
+                admin_id: userInfo.user_id,
+                shop_id: userInfo.business_id,
+            }
+            let res = await this.$getRequest('/cancle/CancleList', data)
+            this.checklist = res.data.data.list;
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
+        },
+        //获取更多核销记录
+        async getCheckListMore() {
+            let userInfo = this.$localstore.get('business_user')
+            let data = {
+                page: this.page,
+                date: this.dateTime,
+                admin_id: userInfo.user_id,
+                shop_id: userInfo.business_id,
+            }
+            let res = await this.$getRequest('/cancle/CancleList', data)
+            this.checklist = this.checklist.concat(res.data.data.list);
+            this.currSize = res.data.data.list.length
         },
 
     },
@@ -126,7 +149,23 @@ export default {
     // 创建完毕状态 
     created() {
         document.title = "核销记录"
-        document.body.style.background = "#fff";
+        this.getCheckList()
+
+        window.onscroll = () => {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (this.currSize >= this.pageSize) {
+                    this.page++;
+                    this.getCheckListMore(this.cid)
+                }
+            }
+        }
     },
 
     // 挂载前状态
@@ -150,90 +189,104 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.CheckList{
-    header{
+.CheckList {
+    header {
         height: 2.4rem;
         background: #FF6C5F;
         display: flex;
         align-items: center;
         justify-content: center;
-        div{
-        width: 2.6rem;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        font-size: .28rem;
-        p{
-            font-size: .48rem;
-            padding-bottom: .1rem;
-        }
+
+        div {
+            width: 2.6rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-size: .28rem;
+
+            p {
+                font-size: .48rem;
+                padding-bottom: .1rem;
+            }
         }
     }
-    .titles{
+
+    .titles {
         height: 1.15rem;
         display: flex;
         align-items: center;
         padding-right: .5rem;
-        p{
+
+        p {
             flex: 1;
             font-size: 0.3rem;
             padding-left: .43rem;
         }
-        div{
+
+        div {
             position: relative;
             display: flex;
             align-items: center;
             height: 100%;
             width: 2rem;
-            time{
+
+            time {
                 flex: 1;
                 font-size: 0.3rem;
             }
-            span{
+
+            span {
                 width: .3rem;
                 overflow: hidden;
             }
-            em{
+
+            em {
                 position: absolute;
                 width: 100%;
                 height: 100%;
             }
         }
     }
-    .product{
-        ul{
-            li{
+
+    .product {
+        ul {
+            li {
                 padding: 0.27rem .3rem .38rem;
                 border-top: 2px solid #f6f6f6;
                 display: flex;
                 align-items: center;
-                i{
+
+                i {
                     width: 1.26rem;
                     height: 1.26rem;
                     background-color: #f75835;
                     border-radius: 0.12rem;
                     overflow: hidden;
                 }
-                div{
+
+                div {
                     height: 1.26rem;
                     flex: 1;
                     padding-left: .36rem;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    h3{
+
+                    h3 {
                         font-weight: bold;
                         font-size: 0.3rem;
                         width: 5.1rem;
                         overflow: hidden;
-                        text-overflow:ellipsis;
+                        text-overflow: ellipsis;
                         white-space: nowrap;
                     }
-                    p{
+
+                    p {
                         font-size: 0.24rem;
                         display: flex;
-                        a{
+
+                        a {
                             padding-left: .53rem;
                         }
                     }
@@ -244,7 +297,7 @@ export default {
 }
 </style>
 <style>
-.el-message-box{
+.el-message-box {
     width: 80%;
 }
 </style>

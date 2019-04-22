@@ -5,7 +5,7 @@
                 <span>img</span>
             </div>
             <h3>万达广场LUCA店</h3>
-            <router-link :to="{name:'PersonalStores'}">
+            <router-link :to="{name:'ChageShop'}">
                 切换门店
             </router-link>
         </div>
@@ -24,50 +24,87 @@
             </li>
         </ul>
         <div class="menu">
-            <router-link :to="{name:'TeamDel'}">
+            <a href="javascript:;" @click="sacnCode">
                 <p>
                     <span><img src="../../assets/merchant/icon_img1.png" alt=""></span>
-                    <em>我的成员</em>
+                    <em>扫码核销</em>
                 </p>
-            </router-link>
-            <router-link :to="{name:'Generalize'}">
+            </a>
+            <router-link :to="{name:'CheckCode'}">
                 <p>
                     <span><img src="../../assets/merchant/icon_img2.png" alt=""></span>
-                    <em>我的推广</em>
+                    <em>核销码核销</em>
                 </p>
             </router-link>
-            <router-link :to="{name:'WithdrawDeposit'}">
+            <router-link :to="{name:'CheckList'}">
                 <p>
                     <span><img src="../../assets/merchant/icon_img3.png" alt=""></span>
-                    <em>申请提现</em>
+                    <em>核销记录</em>
                 </p>
             </router-link>
-            <router-link :to="{name:'WithdrawList'}">
+            <router-link :to="{name:'Appointment'}">
                 <p>
                     <span><img src="../../assets/merchant/icon_img4.png" alt=""></span>
-                    <em>提现记录</em>
+                    <em>预约记录</em>
                 </p>
             </router-link>
         </div>
     </div>
 </template>
 <script>
+import wx from 'weixin-js-sdk'
+import wxapi from '@/lib/wx.js'
+
 export default {
     name: 'Home',
     data() {
-        return {
-        }
+        return {}
     },
     components: {},
-    methods: {},
+    methods: {
+        sacnCode() {
+            wx.ready(() => {
+                wx.scanQRCode({ // 微信扫一扫接口
+                    desc: 'scanQRCode desc',
+                    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                    scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
+                    success: async (code) => {
+                        console.log(code);
+                        this.$localstore.set('cehckGoods', '')
+                        let userInfo = this.$localstore.get('business_user')
+                        let data = {
+                            code: code,
+                            admin_id: userInfo.user_id,
+                            shop_id: userInfo.business_id,
+                        }
+                        let res = await this.$postRequest('/cancle/CancleOne', data)
+                        if (res.data.code == 1) {
+                            this.$localstore.set('cehckGoods', res.data.data)
+                            if (res.data.data.card_info.type == 1) {
+                                this.$router.push({ name: 'Commodity' })
+                            } else {
+                                this.$router.push({ name: 'CardCheck' })
+                            }
+                        } else {
+                            this.$message(res.data.msg);
+                        }
+                    }
+                })
+            })
+        }
+    },
 
     // 创建前状态
-    beforeCreate() {},
+    beforeCreate() {
+
+    },
 
     // 创建完毕状态 
     created() {
         document.title = "主页"
-        document.body.style.background = "#fff";
+        document.body.style.background = "#fff"
+        // 用于微信JS-SDK回调            
+        wxapi.wxRegister()
     },
 
     // 挂载前状态
@@ -91,6 +128,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+body {
+    background: #fff !important;
+}
+
 .Home {
     .shop_message {
         .shop_img {
@@ -169,7 +210,8 @@ export default {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        a{
+
+        a {
             p {
                 width: 1.9rem;
                 height: 1.9rem;
@@ -179,6 +221,7 @@ export default {
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
+
                 span {
                     width: .6rem;
                     overflow: hidden;
@@ -192,21 +235,22 @@ export default {
                 }
             }
 
-           
+
         }
-        a:nth-of-type(1) p{
+
+        a:nth-of-type(1) p {
             background: #FF6C60;
         }
 
-        a:nth-of-type(2) p{
+        a:nth-of-type(2) p {
             background: #806CF6;
         }
 
-        a:nth-of-type(3) p{
+        a:nth-of-type(3) p {
             background: #F6AE42;
         }
 
-        a:nth-of-type(4) p{
+        a:nth-of-type(4) p {
             background: #3498F7;
         }
     }

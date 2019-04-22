@@ -200,6 +200,7 @@ export default {
             let res = await this.$postRequest('/card/ActivityCard', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
+                this.$router.go(-1)
                 // that.$router.push({ name: 'CommentSucceed' })
             }
 
@@ -212,7 +213,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-        document.body.style.background = "#FFCD5E";
+
     },
 
     // 挂载前状态

@@ -37,7 +37,7 @@
                 </li>
             </ul>
         </div>
-        <div class="activity_img"><img src="../assets/activity_img1.png" alt=""></div>
+        <!-- <div class="activity_img"><img src="../assets/activity_img1.png" alt=""></div> -->
             <div class="play_freely">
                 <h3>
                 <span><img src="../assets/icon_play_freely.png" alt=""></span>
@@ -64,10 +64,10 @@
                 </div>
             </div>
             <div class="activity_list">
-                <h3>
+<!--                 <h3>
         <span><img src="../assets/icon_recommend.png" alt=""></span>
         <a>爆款推荐</a>
-      </h3>
+      </h3> -->
                 <ul>
                     <li class="vip_price" v-for="(item,index) in GoodsList">
                         <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
@@ -85,8 +85,8 @@
                             </div>
                             <div class="price">
                                 <span>现价</span>
-                                <b>￥{{item.mkt_price}}</b>
-                                <a>￥{{item.goods_price}}</a>
+                                <b>￥{{item.goods_price}}</b>
+                                <a>￥{{item.mkt_price}}</a>
                             </div>
                             <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                         </router-link>

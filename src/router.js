@@ -9,8 +9,8 @@ import MyShop from './views/MyShop.vue' //我的店铺
 import MyShopUser from './views/MyShopUser.vue' //我的店铺-用户看
 import CardProjectDetails from './views/CardProjectDetails.vue' //卡片项目详情
 import MyCardBag from './views/MyCardBag.vue' //我的卡包
-import UseCard from './views/UseCard.vue'  //使用卡片
-import CardActivate from './views/Cardactivate.vue'  // 卡片激活
+import UseCard from './views/UseCard.vue' //使用卡片
+import CardActivate from './views/Cardactivate.vue' // 卡片激活
 import PaySucceed from './views/PaySucceed.vue' //付款成功
 import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
 import CardDetails from './views/CardDetails.vue' //卡片详情
@@ -30,12 +30,13 @@ import ClassifyList from './views/ClassifyList.vue' // 商品分类
 import ShopDetails from './views/ShopDetails.vue' //门店详情
 import City from './views/City.vue'
 import SharePoster from './views/SharePoster.vue'
+import SharePlus from './views/SharePlus.vue'
 import VipOrder from './views/VipOrder.vue'
 import VipOrderBuy from './views/VipOrderBuy.vue'
 import VipEquity from './views/VipEquity.vue'
-import Order from './views/Order.vue'  //订单列表
-import OrderDetail from './views/OrderDetail.vue'  //订单详情
-import Collect from './views/Collect.vue'  //收藏
+import Order from './views/Order.vue' //订单列表
+import OrderDetail from './views/OrderDetail.vue' //订单详情
+import Collect from './views/Collect.vue' //收藏
 import error403 from './views/403.vue'
 import error404 from './views/404.vue'
 
@@ -45,15 +46,15 @@ import error404 from './views/404.vue'
 import Login from './views/merchant/Login.vue'
 import MerchantShop from './views/merchant/MerchantShop.vue' //主页
 import ChageShop from './views/merchant/ChageShop.vue' //切换门店
-import WithdrawList from './views/merchant/WithdrawList.vue'//提现列表
+import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
 import MyTeam from './views/merchant/MyTeam.vue' //我的团队
-import TeamDel from './views/merchant/TeamDel.vue'  //团队详情
+import TeamDel from './views/merchant/TeamDel.vue' //团队详情
 import MemberDel from './views/merchant/MemberDel.vue' //成员详情
 import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
 import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
 import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
-import Generalize from './views/merchant/Generalize.vue'  //我的推广
+import Generalize from './views/merchant/Generalize.vue' //我的推广
 import PersonalStores from './views/merchant/PersonalStores.vue' //我的店铺
 
 
@@ -85,8 +86,8 @@ let router = new Router({
     // base: process.env.BASE_URL,
     routes: [{
             path: '/',
-            name: 'Dome',
-            component: Index
+            name: 'Home',
+            component: Administrator
         },
         {
             path: '/Index',
@@ -297,6 +298,11 @@ let router = new Router({
             path: '/SharePoster',
             name: 'SharePoster',
             component: SharePoster
+        },
+        {
+            path: '/SharePlus',
+            name: 'SharePlus',
+            component: SharePlus
         },
         {
             path: '/VipOrder',

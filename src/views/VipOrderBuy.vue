@@ -80,7 +80,7 @@ export default {
         //支付
         async payOrder() {
             let that = this
-                that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
+                // that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
             if (res.data.code == 1) {
