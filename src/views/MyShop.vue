@@ -185,37 +185,37 @@ export default {
     }
   }
   .vip_card {
-        height: 4.66rem;
-        background: url('../assets/VipEquity_card.png') center/100% no-repeat;
-        border-radius: 10px;
-        margin: 0 auto;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
+      height: 4.66rem;
+      background: url('../assets/VipEquity_card.png') center/100% no-repeat;
+      border-radius: 10px;
+      margin: 0 auto;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
 
-        p {
-            margin-top: 2.9rem;
-            width: 3.84rem;
-            height: .8rem;
-            border-radius: 21px;
-            text-align: center;
-            color: #fff;
-            font-size: .26rem;
-            display: flex;
-            background: #C1A06B;
-            align-items: center;
-            justify-content: center;
+      p {
+          margin-top: 2.9rem;
+          width: 3.84rem;
+          height: .8rem;
+          border-radius: 21px;
+          text-align: center;
+          color: #fff;
+          font-size: .26rem;
+          display: flex;
+          background: #C1A06B;
+          align-items: center;
+          justify-content: center;
+          font-weight: bold;
+          span{
             font-weight: bold;
-            span{
-              font-weight: bold;
-            }
-            a {
-              font-weight: bold;
-              color: #fff;
-              font-size: .36rem;
-            }
-        }
-    }
+          }
+          a {
+            font-weight: bold;
+            color: #fff;
+            font-size: .36rem;
+          }
+      }
+  }
   .activity_list{
     h3{
       display: flex;
