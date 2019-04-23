@@ -320,6 +320,10 @@ export default {
                         background: none;
                         border: none;
                     }
+
+                    input::-webkit-input-placeholder {
+                        color: #eee;
+                    }
                 }
 
                 .more {

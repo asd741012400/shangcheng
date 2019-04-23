@@ -21,6 +21,14 @@
             <span><img src="../assets/img2.png" alt=""></span>
             <!-- <span><img :src="CardDetail.def_pic[0]" alt=""></span> -->
             <div class="text">
+
+                             <template v-if="cardDetailsState == 5">
+                    <div class="buy_null"><span>已售罄</span></div>
+                </template>
+                <template v-else-if="cardDetailsState == 3">
+                    <div class="buy_null"><span>已下架</span></div>
+                </template>
+
                 <yd-countdown slot="right" :time="changeTime(CardDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
@@ -138,7 +146,7 @@
                 </div>
             </div>
         </div>
-        <footer v-if="cardDetailsState == 1">
+        <footer>
             <ul>
                 <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
@@ -155,74 +163,32 @@
                 </li>
             </ul>
             <div class="btn">
-                <div class="share" @click="shareShowFn">
-                    <span>￥10</span>
-                    <p>分享赚</p>
-                </div>
-                <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
-            </div>
-        </footer>
-        <footer v-else-if="cardDetailsState == 2">
-            <ul>
-                <li @click="goHome">
-                    <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城首页</p>
-                </li>
-                <li @click="collectGoods()">
-                    <template v-if="isCollect">
-                        <span><img src="../assets/icon_collectB.png" alt=""></span>
-                    </template>
-                    <template v-else>
-                        <span><img src="../assets/icon_collectA.png" alt=""></span>
-                    </template>
-                    <p>我要收藏</p>
-                </li>
-            </ul>
-            <div class="btn">
-                <div class="buy_null"><span>已售罄</span></div>
-            </div>
-        </footer>
-        <footer v-else-if="cardDetailsState == 3">
-            <ul>
-                <li @click="goHome">
-                    <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城首页</p>
-                </li>
-                <li @click="collectGoods()">
-                    <template v-if="isCollect">
-                        <span><img src="../assets/icon_collectB.png" alt=""></span>
-                    </template>
-                    <template v-else>
-                        <span><img src="../assets/icon_collectA.png" alt=""></span>
-                    </template>
-                    <p>我要收藏</p>
-                </li>
-            </ul>
-            <div class="btn">
-                <div class="buy_null"><span>已下架</span></div>
-            </div>
-        </footer>
-        <footer v-if="cardDetailsState == 4">
-            <ul>
-                <li @click="goHome">
-                    <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城首页</p>
-                </li>
-                <li @click="collectGoods()">
-                    <template v-if="isCollect">
-                        <span><img src="../assets/icon_collectB.png" alt=""></span>
-                    </template>
-                    <template v-else>
-                        <span><img src="../assets/icon_collectA.png" alt=""></span>
-                    </template>
-                    <p>我要收藏</p>
-                </li>
-            </ul>
-            <div class="btn">
-                <div class="vip_share">分享</div>
-                <div class="vip_buy"><span>了解会员</span>
-                    <p>（限会员购买）</p>
-                </div>
+                <!-- 可购买状态 -->
+                <template v-if="cardDetailsState == 1">
+                    <div class="share" @click="shareShowFn">
+                        <span>￥10</span>
+                        <p>分享赚</p>
+                    </div>
+                    <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
+                </template>
+                <template v-else-if="cardDetailsState == 2">
+                    <div class="buy_null"><span>已售罄</span></div>
+                </template>
+                <template v-else-if="cardDetailsState == 3">
+                    <div class="buy_null"><span>已下架</span></div>
+                </template>
+                <template v-else-if="cardDetailsState == 4">
+                    <div class="vip_share" @click="shareShowFn">分享</div>
+                    <div class="vip_buy" @click="goPlus"><span>了解会员</span>
+                        <p>（限会员购买）</p>
+                    </div>
+                </template>
+                <template v-else-if="cardDetailsState == 5">
+                    <div class="buy_null"><span>还未开售</span></div>
+                </template>
+                <template v-else-if="cardDetailsState == 6">
+                    <div class="buy_null"><span>售卖截止</span></div>
+                </template>
             </div>
         </footer>
         <Share :goods-id="CardDetail.card_id" type="3" ref="myShare"></Share>
@@ -235,7 +201,10 @@ export default {
     data() {
         return {
             apiUrl: this.$common.ApiUrl(),
-            cardDetailsState: 4,
+            cardDetailsState: 4, //状态 1正常 2已售罄 3已下架 4会员购买
+            user: {
+                status: 0
+            },
             active: 1,
             table: 1,
             isCollect: false,
@@ -253,6 +222,9 @@ export default {
         },
         goHome() {
             this.$router.push({ name: 'Index' })
+        },
+        goPlus() {
+            this.$router.push({ name: 'VipEquity' })
         },
         handleActive(index) {
             this.active = index
@@ -287,25 +259,35 @@ export default {
                 }
             });
         },
+        //定时器判断 商品是否截止销售
+        timer() {
+            setInterval(() => {
+                let start_time = this.$dayjs().isBefore(this.$dayjs(this.CardDetail.sale_stime).format('YYYY/MM/DD HH:mm:ss'));
+                if (start_time) {
+                    this.cardDetailsState = 5 
+                }
+                let end_time = this.$dayjs().isAfter(this.$dayjs(this.CardDetail.sale_etime).format('YYYY/MM/DD HH:mm:ss'));
+                if (end_time) {
+                    this.cardDetailsState = 6
+                }
+            }, 1000)
+        },
         //获取详情
         async getDetail() {
             let res = await this.$getRequest('/home/GetCardDetail', { id: this.$route.query.id })
             if (res.data.code == 1) {
                 const resData = res.data.data;
-
                 this.CardDetail = resData;
                 if (resData.store == 0) {
                     this.cardDetailsState = 2
                 } else if (resData.is_online == 0) {
                     this.cardDetailsState = 3
-                }
-                // else if(resData.is_vip== 1)
-                // {
-                //   this.cardDetailsState = 4
-                // }
-                else {
+                } else if (resData.is_vip == 1 && this.user.status == 0) {
+                    this.cardDetailsState = 4
+                } else {
                     this.cardDetailsState = 1
                 }
+                this.timer()
             }
         },
         //获取评论
@@ -323,6 +305,7 @@ export default {
     created() {
         this.getDetail()
         this.getComment()
+        this.user = this.$localstore.get('userInfo')
         this.id = this.$route.query.id
         document.body.style.background = "#fff";
 
