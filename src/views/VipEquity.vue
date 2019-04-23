@@ -1,7 +1,7 @@
 <template>
     <div class="VipEquity">
         <header>
-            <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+            <div class="icon_return" @click="goBack"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">会员权益</div>
             <div class="add"></div>
         </header>
@@ -147,9 +147,21 @@
                 </ul>
             </div>
             <div class="buyVip">
-                <router-link :to="{name:'VipOrder',query:{type:2}}">
-                    <van-button round block type="info">立即开通</van-button>
-                </router-link>
+                <template v-if="share_id !== '' &&　user.status < 1">
+                    <router-link :to="{name:'VipOrder',query:{type:2}}">
+                        <van-button round block type="info">立即购买</van-button>
+                    </router-link>
+                </template>
+                <template v-else-if="share_id !== '' &&　!user.user_id">
+                    <router-link :to="{name:'VipOrder',query:{type:2}}">
+                        <van-button round block type="info">立即购买</van-button>
+                    </router-link>
+                </template>
+                <template v-else-if="user.status >= 1">
+                    <router-link :to="{name:'VipPlus',query:{user:user.user_id}}">
+                        <van-button round block type="info">立即分享</van-button>
+                    </router-link>
+                </template>
             </div>
         </div>
 </template>
@@ -158,11 +170,29 @@ export default {
     name: 'VipEquity',
     data() {
         return {
+            firstEnter: false,
+            user: '',
+            share_id: '',
             plus: {}
         }
     },
+    // beforeRouteEnter(to, from, next) {
+    //     if (from.name == null) {
+    //         next(vm => {
+    //             vm.firstEnter = true
+    //         })
+    //     }
+    // },
     components: {},
     methods: {
+        goBack(){
+            let from_url = this.$localstore.get('from_url')
+            if (!from_url) {
+                this.$router.push({name:'Index'})
+            }else{
+                this.$router.go(-1)
+            }
+        },
         //获取PlUS
         async getOrder() {
             let id = this.$route.query.id

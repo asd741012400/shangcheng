@@ -31,46 +31,22 @@
             <ul>
                 <li v-for="(item ,index) in NavList">
                     <router-link :to="{name:'ClassifyList',query:{id:item.c_id}}">
-                        <span><img src="../assets/icon_theme.png" alt=""></span>
+                        <span><img :src="item.thumb_img" alt=""></span>
                         <p>{{item.c_name}}</p>
                     </router-link>
                 </li>
             </ul>
         </div>
         <!-- <div class="activity_img"><img src="../assets/activity_img1.png" alt=""></div> -->
-            <div class="play_freely">
-                <h3>
+        <div class="play_freely">
+            <h3>
                 <span><img src="../assets/icon_play_freely.png" alt=""></span>
                 <a>宝贝计划</a>
               </h3>
-                <div class="play_freely_box">
-                    <ul>
-                        <li v-for="(item , index) in Cardlist">
-                            <router-link :to="{name:'CardDetails',query:{id:item.card_id,type:3}}">
-                                <div class="img">
-                                    <span><img :src="item.thumb_img" alt=""></span>
-                                    <div>
-                                        <p>会员价</p>
-                                        <i>￥</i>
-                                        <a>{{item.cost_price}}</a>
-                                    </div>
-                                </div>
-                                <div class="project">
-                                    <p>{{item.card_name}}</p>
-                                </div>
-                            </router-link>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="activity_list">
-<!--                 <h3>
-        <span><img src="../assets/icon_recommend.png" alt=""></span>
-        <a>爆款推荐</a>
-      </h3> -->
+            <div class="play_freely_box">
                 <ul>
-                    <li class="vip_price" v-for="(item,index) in GoodsList">
-                        <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
+                    <li v-for="(item , index) in Cardlist">
+                        <router-link :to="{name:'CardDetails',query:{id:item.card_id,type:3}}">
                             <div class="img">
                                 <span><img :src="item.thumb_img" alt=""></span>
                                 <div>
@@ -80,30 +56,54 @@
                                 </div>
                             </div>
                             <div class="project">
-                                <p>{{item.goods_name}}</p>
-                                <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span>
+                                <p>{{item.card_name}}</p>
                             </div>
-                            <div class="price">
-                                <span>现价</span>
-                                <b>￥{{item.goods_price}}</b>
-                                <a>￥{{item.mkt_price}}</a>
-                            </div>
-                            <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                         </router-link>
                     </li>
                 </ul>
             </div>
-            <!-- 手机号绑定 -->
-            <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
-                <van-cell-group>
-                    <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
-                    <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
-                        <van-button slot="button" size="small" type="primary">发送验证码</van-button>
-                    </van-field>
-                </van-cell-group>
-            </van-dialog>
-            <MyFooter></MyFooter>
         </div>
+        <div class="activity_list">
+            <!--                 <h3>
+        <span><img src="../assets/icon_recommend.png" alt=""></span>
+        <a>爆款推荐</a>
+      </h3> -->
+            <ul>
+                <li class="vip_price" v-for="(item,index) in GoodsList">
+                    <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
+                        <div class="img">
+                            <span><img :src="item.thumb_img" alt=""></span>
+                            <div>
+                                <p>会员价</p>
+                                <i>￥</i>
+                                <a>{{item.cost_price}}</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <p>{{item.goods_name}}</p>
+                            <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span>
+                        </div>
+                        <div class="price">
+                            <span>现价</span>
+                            <b>￥{{item.goods_price}}</b>
+                            <a>￥{{item.mkt_price}}</a>
+                        </div>
+                        <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
+                    </router-link>
+                </li>
+            </ul>
+        </div>
+        <!-- 手机号绑定 -->
+        <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
+            <van-cell-group>
+                <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
+                <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
+                    <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+                </van-field>
+            </van-cell-group>
+        </van-dialog>
+        <MyFooter></MyFooter>
+    </div>
 </template>
 <script>
 import Swiper from 'swiper';
@@ -129,12 +129,10 @@ export default {
     methods: {
         //关闭填写手机号
         async beforeCloseModel(action, done) {
-            let userInfo = this.$localstore.get('userInfo')
-            userInfo.tel_phone = this.phone
-            let res = await this.$postRequest('/user/saveMobile', { user_id: userInfo.user_id, phone: this.phone, sms: this.sms })
+            let openid = this.$localstore.get('openid5')
+            let res = await this.$postRequest('/user/saveMobile', { openid: openid, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
-
-                this.$localstore.set('userInfo', userInfo)
+                this.$localstore.set('userInfo', res.data.data)
                 this.show = false
                 done()
             } else {
@@ -171,7 +169,7 @@ export default {
     // 创建完毕状态 
     created() {
         let userInfo = this.$localstore.get('userInfo')
-        if (!userInfo.tel_phone) {
+        if (!userInfo) {
             this.show = true
         }
         document.body.style.background = "#F6F6F6";

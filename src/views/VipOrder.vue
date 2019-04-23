@@ -85,7 +85,7 @@ export default {
                 order_type: 2,
                 goods_id: this.plus.setting_id,
                 goods_title: this.plus.name,
-                openid: this.$localstore.get('openid1'),
+                openid: this.$localstore.get('openid5'),
                 order_num: 1,
                 amount: this.plus.sale_price,
                 total_amount: this.plus.sale_price
@@ -101,7 +101,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#f6f6f6";
         this.getOrder()

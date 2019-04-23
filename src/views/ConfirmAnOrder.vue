@@ -132,7 +132,7 @@ export default {
                 play_time: this.play_time,
                 attr_id: this.$route.query.attr_id,
                 tel: this.tel,
-                openid: this.$localstore.get('openid1'),
+                openid: this.$localstore.get('openid5'),
                 order_num: this.num,
                 amount: this.price,
                 total_amount: this.total,
@@ -179,7 +179,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         this.getCard()
         document.body.style.background = "#F6F6F6";
@@ -375,7 +375,7 @@ export default {
         .message {
             margin-top: 10px;
             background: #fff;
-            
+
             ul {
                 padding: .28rem .5rem .66rem;
 

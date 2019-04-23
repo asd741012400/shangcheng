@@ -3,43 +3,43 @@ import Router from 'vue-router'
 
 
 //前台商城
-// import Index from './views/Index.vue'
-// import PersonalCenter from './views/PersonalCenter.vue' //个人中心
-// import MyShop from './views/MyShop.vue' //我的店铺
-// import MyShopUser from './views/MyShopUser.vue' //我的店铺-用户看
-// import CardProjectDetails from './views/CardProjectDetails.vue' //卡片项目详情
-// import MyCardBag from './views/MyCardBag.vue' //我的卡包
-// import UseCard from './views/UseCard.vue' //使用卡片
-// import CardActivate from './views/Cardactivate.vue' // 卡片激活
-// import PaySucceed from './views/PaySucceed.vue' //付款成功
-// import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
-// import CardDetails from './views/CardDetails.vue' //卡片详情
-// import CommodityDetails from './views/CommodityDetails.vue' //商品详情
-// import CommentMore from './views/CommentMore.vue' //更多评论
-// import Comment from './views/Comment.vue' //提交评论
-// import CommentSucceed from './views/CommentSucceed.vue' //评论成功
-// import CommodityList from './views/CommodityList.vue' //评论列表
-// import ConfirmAnOrder from './views/ConfirmAnOrder.vue'
-// import ConfirmPay from './views/ConfirmPay.vue'
-// import DistributionTow from './views/DistributionTow.vue' //我的推广（二级）
-// import DistributionThree from './views/DistributionThree.vue' //我的推广（三级）
-// import CardEquity from './views/CardEquity.vue' //卡包权益中心
-// import CardDetailsTow from './views/CardDetailsTow.vue' //卡片详情
-// import Bargain from './views/Bargain.vue'
-// import ClassifyList from './views/ClassifyList.vue' // 商品分类
-// import ShopDetails from './views/ShopDetails.vue' //门店详情
-// import City from './views/City.vue'
-// import SharePoster from './views/SharePoster.vue'
-// import SharePlus from './views/SharePlus.vue'
-// import VipOrder from './views/VipOrder.vue'
-// import VipOrderBuy from './views/VipOrderBuy.vue'
-// import VipEquity from './views/VipEquity.vue'
-// import Order from './views/Order.vue' //订单列表
-// import OrderDetail from './views/OrderDetail.vue' //订单详情
-// import Collect from './views/Collect.vue' //收藏
-// import error403 from './views/403.vue'
-// import error404 from './views/404.vue'
-// import VipPlus from './views/VipPlus.vue'
+import Index from './views/Index.vue'
+import PersonalCenter from './views/PersonalCenter.vue' //个人中心
+import MyShop from './views/MyShop.vue' //我的店铺
+import MyShopUser from './views/MyShopUser.vue' //我的店铺-用户看
+import CardProjectDetails from './views/CardProjectDetails.vue' //卡片项目详情
+import MyCardBag from './views/MyCardBag.vue' //我的卡包
+import UseCard from './views/UseCard.vue' //使用卡片
+import CardActivate from './views/Cardactivate.vue' // 卡片激活
+import PaySucceed from './views/PaySucceed.vue' //付款成功
+import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
+import CardDetails from './views/CardDetails.vue' //卡片详情
+import CommodityDetails from './views/CommodityDetails.vue' //商品详情
+import CommentMore from './views/CommentMore.vue' //更多评论
+import Comment from './views/Comment.vue' //提交评论
+import CommentSucceed from './views/CommentSucceed.vue' //评论成功
+import CommodityList from './views/CommodityList.vue' //评论列表
+import ConfirmAnOrder from './views/ConfirmAnOrder.vue'
+import ConfirmPay from './views/ConfirmPay.vue'
+import DistributionTow from './views/DistributionTow.vue' //我的推广（二级）
+import DistributionThree from './views/DistributionThree.vue' //我的推广（三级）
+import CardEquity from './views/CardEquity.vue' //卡包权益中心
+import CardDetailsTow from './views/CardDetailsTow.vue' //卡片详情
+import Bargain from './views/Bargain.vue'
+import ClassifyList from './views/ClassifyList.vue' // 商品分类
+import ShopDetails from './views/ShopDetails.vue' //门店详情
+import City from './views/City.vue'
+import SharePoster from './views/SharePoster.vue'
+import SharePlus from './views/SharePlus.vue'
+import VipOrder from './views/VipOrder.vue'
+import VipOrderBuy from './views/VipOrderBuy.vue'
+import VipEquity from './views/VipEquity.vue'
+import Order from './views/Order.vue' //订单列表
+import OrderDetail from './views/OrderDetail.vue' //订单详情
+import Collect from './views/Collect.vue' //收藏
+import error403 from './views/403.vue'
+import error404 from './views/404.vue'
+import VipPlus from './views/VipPlus.vue'
 
 
 
@@ -88,69 +88,69 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/Index.vue')
+            component: Index
         },
         /*前台*/
         {
             path: '/Index',
             name: 'Index',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/Index.vue')
+            component: Index
         },
         {
             path: '/PersonalCenter',
             name: 'PersonalCenter',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/PersonalCenter.vue')
+            component: PersonalCenter
         },
         {
             path: '/MyShop',
             name: 'MyShop',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/MyShop.vue')
+            component: MyShop
         },
         {
             path: '/MyShopUser',
             name: 'MyShopUser',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/MyShopUser.vue')
+            component: MyShopUser
         },
         {
             path: '/CardProjectDetails',
             name: 'CardProjectDetails',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/CardProjectDetails.vue')
+            component: CardProjectDetails
         },
         {
             path: '/MyCardBag',
             name: 'MyCardBag',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/MyCardBag.vue')
+            component: MyCardBag
         },
         {
             path: '/UseCard',
             name: 'UseCard',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/UseCard.vue')
+            component: UseCard
         },
         {
             path: '/CardActivate',
             name: 'CardActivate',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/Cardactivate.vue')
+            component: CardActivate
         },
 
         {
             path: '/PaySucceed',
             name: 'PaySucceed',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/PaySucceed.vue')
+            component: PaySucceed
         },
         {
             path: '/WithdrawDeposit',
             name: 'WithdrawDeposit',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/WithdrawDeposit.vue')
+            component: WithdrawDeposit
         },
         {
             path: '/CardDetails',
             name: 'CardDetails',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/CardDetails.vue')
+            component: CardDetails
         },
         {
             path: '/CommodityDetails',
             name: 'CommodityDetails',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/CommodityDetails.vue')
+            component: CommodityDetails
         },
         {
             path: '/CommentMore',
@@ -246,7 +246,7 @@ let router = new Router({
         {
             path: '/VipEquity',
             name: 'VipEquity',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/VipEquity.vue')
+            component: VipEquity
         },
         {
             path: '/Order',
@@ -414,6 +414,12 @@ import wx from 'weixin-js-sdk' //微信sdk依赖
 //Router
 router.beforeEach((to, from, next) => {
 
+    //存储来源地址 用于分享返回主页
+    localstore.set('from_url', business_id)
+
+    //分享来源处理
+    shareFrom(to);
+
     let openid = getParamString('openid1');
 
     //门店id存储
@@ -422,7 +428,7 @@ router.beforeEach((to, from, next) => {
         localstore.set('business_id', business_id)
     }
 
-    let openid2 = localstore.get('openid1')
+    let openid2 = localstore.get('openid5')
 
     if (!openid2 && !openid) {
         // let url = window.location.href
@@ -436,9 +442,11 @@ router.beforeEach((to, from, next) => {
     //使用 openid 获取用户资料 缓存本地
     if (openid) {
         //保存openid
-        localstore.set('openid1', openid)
+        localstore.set('openid5', openid)
         getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
-            localstore.set('userInfo', res.data.data)
+            if (res.data.data && res.data.data.user_id) {
+                localstore.set('userInfo', res.data.data)
+            }
         })
     }
 
@@ -448,13 +456,33 @@ router.beforeEach((to, from, next) => {
 
 export default router
 
+/**
+ * [shareFrom 分享来源处理]
+ */
+function shareFrom(to) {
+    if (!isEmptyObject(to.query) && to.query.share_type) {
+        //分享存储
+        localstore.set('has_share', to)
+    }
+}
 
-/** 
- * 获取指定的URL参数值 
- * URL:http://www.quwan.com/index?name=tyler 
- * 参数：paramName URL参数 
- * 调用方法:getParam("name") 
- * 返回值:tyler 
+/**
+ * [isEmptyObject 对象是否为空]
+ * @return {Boolean}
+ */
+function isEmptyObject(val) {
+    let res = (JSON.stringify(val) == "{}");
+    return res
+}
+
+
+
+/**
+ * 获取指定的URL参数值
+ * URL:http://www.quwan.com/index?name=tyler
+ * 参数：paramName URL参数
+ * 调用方法:getParam("name")
+ * 返回值:tyler
  */
 function getParamString(name) {
     var url = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

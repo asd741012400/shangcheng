@@ -201,7 +201,7 @@ export default {
             that.popShow1 = false;
         },
         async getUserInfo() {
-            let openid = this.$localstore.get('openid1')
+            let openid = this.$localstore.get('openid5')
             let res = await this.$getRequest('/wechat/GetUserInfo', { openid: openid })
             if (res.data.code == 1) {
                 this.$localstore.set('userInfo', res.data.data)
@@ -217,7 +217,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         this.getUserInfo()
         document.body.style.background = "#fff";
@@ -655,14 +655,14 @@ body {
             display: flex;
             align-items: center;
             justify-content: center;
-    
+
             .pop {
                 background: #fff;
                 border-radius: 10px;
                 width: 5.72rem;
                 position: relative;
                 padding: .94rem .3rem .54rem;
-    
+
                 i {
                     position: absolute;
                     width: .48rem;
@@ -672,13 +672,13 @@ body {
                     right: .24rem;
                     top: .24rem;
                 }
-    
+
                 p {
                     font-size: .4rem;
                     color: #FF6666;
                     text-align: center;
                 }
-    
+
                 em {
                     font-size: .4rem;
                     color: #FF6666;
@@ -686,14 +686,14 @@ body {
                     display: block;
                     font-style: normal;
                 }
-    
+
                 time {
                     font-size: .32rem;
                     color: #515C6F;
                     text-align: center;
                     display: block;
                 }
-    
+
                 span {
                     display: block;
                     width: 3.7rem;
@@ -707,7 +707,7 @@ body {
                     font-size: .32rem;
                     margin: .26rem auto 0;
                 }
-    
+
             }
         }
 
