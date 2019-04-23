@@ -149,6 +149,7 @@ export default {
     // 创建完毕状态 
     created() {
         document.title = "核销记录"
+        document.body.style.background = "#fff";
         this.getCheckList()
 
         window.onscroll = () => {
