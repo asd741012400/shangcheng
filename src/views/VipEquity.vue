@@ -229,13 +229,14 @@ export default {
 <style lang="scss" scoped>
 .buyVip {
     position: fixed;
-    bottom: 150px;
+    bottom: 100px;
     padding: 0 0.8rem;
     width: 100%;
     box-sizing: border-box;
 
     .van-button--info {
-        background: #ffe29f;
+        background: #C1A06B;
+        border: 1px solid #C1A06B;
     }
 
     .van-button--block {

@@ -400,6 +400,7 @@ export default {
                         display: flex;
                         align-items: center;
                         position: relative;
+                        overflow: hidden;
 
                         span {
                             width: .14rem;
@@ -410,6 +411,7 @@ export default {
                         input {
                             height: 100%;
                             width: 100%;
+                            font-size: .32rem;
                         }
 
                         b {

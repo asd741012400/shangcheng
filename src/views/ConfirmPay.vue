@@ -266,8 +266,9 @@ export default {
                     height: .55rem;
 
                     label {
-                        width: 1.2rem;
-                        text-align: left;
+                        width: 1.8rem;
+                        text-align: right;
+                        font-size: .3rem;
                     }
                 }
             }

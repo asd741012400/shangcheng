@@ -5,11 +5,11 @@
                 <h3><span>分享赚</span><a>4.99</a>元</h3>
                 <p>好友通过你的购买链接进行购买，你将获得至少<span>12</span>元的分享收益</p>
                 <ul>
-                    <li>
+                    <li @click="maskingShowFn">
                         <span><img src="../assets/share_wx.png" alt=""></span>
                         <a>发送好友</a>
                     </li>
-                    <li>
+                    <li @click="maskingShowFn">
                         <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
                         <a>朋友圈</a>
                     </li>
@@ -27,6 +27,14 @@
                 <b @click="shareHideFn">取 消</b>
             </div>
         </div>
+
+        <div class="masking" v-if="maskingShow">
+            <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
+            <div>
+                <i><img src="../assets/share_img1.png" alt=""></i>
+                <p>微信分享移到这里啦~</p>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -39,6 +47,7 @@ export default {
         return {
             message: "123",  
             shareShow: false,
+            maskingShow:false
         }
     },
     props: [
@@ -62,7 +71,12 @@ export default {
         shareHideFn() {
             this.shareShow = false;
         },
-
+        maskingShowFn(ev) {
+            this.maskingShow = true;
+        },
+        maskingHideFn() {
+            this.maskingShow = false;
+        },
     },
 
     // 创建前状态
@@ -108,6 +122,7 @@ export default {
         background: rgba($color: #000000, $alpha: 0.5);
         display: flex;
         align-items: flex-end;
+        z-index: 999;
 
         .share_div {
             background: #fff;
@@ -170,6 +185,41 @@ export default {
                 font-size: .32rem;
                 color: #525D70;
                 display: block;
+            }
+        }
+    }
+    .masking{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha: 0.5);
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span{
+            width: 3.48rem;
+            overflow: hidden;
+        }
+        div{
+            position: absolute;
+            right: .5rem;
+            top: 0;
+            p{
+                width: 2rem;
+                font-size: .36rem;
+                margin: 1.5rem .6rem 0 0;
+                color: #fff;
+                text-align: center;
+            }
+            i{
+                width: 1.2rem;
+                overflow: hidden;
+                position: absolute;
+                right: 0;
+                top: 0;
             }
         }
     }
