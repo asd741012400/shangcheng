@@ -149,20 +149,21 @@
             <div class="buyVip">
                 <template v-if="share_id !== '' &&　user.status < 1">
                     <router-link :to="{name:'VipOrder',query:{type:2}}">
-                        <van-button round block type="info">立即购买</van-button>
+                        <van-button round block type="info">立即开通 ￥599</van-button>
                     </router-link>
                 </template>
                 <template v-else-if="share_id !== '' &&　!user.user_id">
                     <router-link :to="{name:'VipOrder',query:{type:2}}">
-                        <van-button round block type="info">立即购买</van-button>
+                        <van-button round block type="info">立即开通 ￥599</van-button>
                     </router-link>
                 </template>
                 <template v-else-if="user.status >= 1">
-                    <router-link :to="{name:'VipPlus',query:{user:user.user_id}}">
-                        <van-button round block type="info">立即分享</van-button>
+                    <router-link :to="{name:'VipPlus'}">
+                        <van-button round block type="info">邀请好友赚 ￥100</van-button>
                     </router-link>
                 </template>
             </div>
+            <MyFooter></MyFooter>
         </div>
 </template>
 <script>
@@ -176,20 +177,13 @@ export default {
             plus: {}
         }
     },
-    // beforeRouteEnter(to, from, next) {
-    //     if (from.name == null) {
-    //         next(vm => {
-    //             vm.firstEnter = true
-    //         })
-    //     }
-    // },
     components: {},
     methods: {
-        goBack(){
+        goBack() {
             let from_url = this.$localstore.get('from_url')
             if (!from_url) {
-                this.$router.push({name:'Index'})
-            }else{
+                this.$router.push({ name: 'Index' })
+            } else {
                 this.$router.go(-1)
             }
         },
@@ -207,6 +201,8 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#000";
+        this.user = this.$localstore.get('userInfo')
+        console.log(this.user);
         this.getOrder()
     },
 
@@ -233,10 +229,14 @@ export default {
 <style lang="scss" scoped>
 .buyVip {
     position: fixed;
-    bottom: 15px;
-    padding: 0 0.2rem;
+    bottom: 150px;
+    padding: 0 0.8rem;
     width: 100%;
     box-sizing: border-box;
+
+    .van-button--info {
+        background: #ffe29f;
+    }
 
     .van-button--block {
         width: 100%;
@@ -312,6 +312,7 @@ header {
             justify-content: center;
 
             a {
+                color: #ffe29f;
                 font-size: .36rem;
             }
         }

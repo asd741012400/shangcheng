@@ -127,16 +127,14 @@ export default {
             }
         }
 
-
-
         //合成分享图
         that.$nextTick(function() {
             //生成二维码
             let qrcode = new QRCode('qrcode', {
                 width: 80,
                 height: 80, // 高度  
-                text: 'http://' + window.location.host + '/#/VipEquity?user_id='+this.user.user_id+
-                '&share_type=2', // 二维码内容  
+                text: 'http://' + window.location.host + '/#/VipEquity?share_id='+this.user.user_id+
+                '&type=2', // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                 // background: '#f0f',  
                 // foreground: '#ff0'  

@@ -182,7 +182,7 @@ export default {
     components: { Share },
     methods: {
         shareShowFn() {
-            this.$refs.myShare.shareShowFn();
+            this.$router.push({name:'VipPlus'})
         },
         popShowFn() {
             const that = this;

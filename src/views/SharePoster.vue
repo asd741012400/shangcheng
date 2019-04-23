@@ -6,7 +6,7 @@
                 <img class="poster-img" ref="image" :src="imgUrl">
                 <div class="Poster" ref="imageDom">
                     <div class="name">
-                        <span><img :src="user.wechat_img"></span>
+                        <span><img :src="wechat_img"></span>
                         <b>{{user.username}}</b>
                     </div>
                     <div class="img"><img src="../assets/img2.png" alt=""></div>
@@ -56,6 +56,7 @@ export default {
             goods_id: "",
             title: "",
             price: "",
+            wechat_img: "",
             poster_img: "",
         }
     },
@@ -76,38 +77,6 @@ export default {
                 uInt8Array[i] = raw.charCodeAt(i);
             }
             return new Blob([uInt8Array], { type: contentType });
-        },
-        //导出图片
-        handleJpeg() {
-            // let table = this.$refs.imageDom;
-            // html2canvas(table).then(canvas => {
-            //     var url = canvas.toDataURL();
-            //     let a = document.createElement("a");
-            //     a.href = url;
-            //     a.download = "未命名";
-            //     document.body.appendChild(a);
-            //     a.click();
-            //     document.body.removeChild(a);
-            // });
-        },
-        clickGeneratePicture() {
-            html2canvas(this.$refs.imageDom).then(canvas => {
-                // 转成图片，生成图片地址
-                this.imgUrl = canvas.toDataURL("image/png");
-                var eleLink = document.createElement("a");
-                eleLink.href = this.imgUrl; // 转换后的图片地址
-                eleLink.download = "pictureName";
-                // 触发点击
-                document.body.appendChild(eleLink);
-                eleLink.click();
-                // 然后移除
-                document.body.removeChild(eleLink);
-
-
-            });
-        },
-        downloadImg() {
-            this.$refs.myPoster.clickGeneratePicture();
         },
         wxShare() {
             // 用于微信JS-SDK回调            
@@ -168,19 +137,28 @@ export default {
                 this.poster_img = res.data.data.dist_poster
             }
 
-            //生成二维码
+            let url = '';
+            if (this.type == 1) {
+                url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
+                    '&type=1&id=' + this.goods_id
+            } else {
+                url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+                    '&type=3&id=' + this.goods_id
+            }
+
             let qrcode = new QRCode('qrcode', {
                 width: 60,
                 height: 60, // 高度  
-                text: '56663159' // 二维码内容  
+                text: url, // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                // background: '#f0f'  
+                // background: '#f0f',  
                 // foreground: '#ff0'  
             })
 
             //合成分享图
             that.$nextTick(function() {
-                html2canvas(that.$refs.imageDom,{useCORS: true}).then(function(canvas) {
+                //海报生成
+                html2canvas(that.$refs.imageDom).then((canvas) => {
                     that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
                     // let dataURL = canvas.toDataURL("image/png");
                     // that.imgUrl = dataURL;
@@ -208,16 +186,21 @@ export default {
         this.user = this.$localstore.get('userInfo')
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type
-        this.getGoods()
-
         //头像转换base64
-        // var image = new Image();
-        // image.src = this.user.wechat_img;
-        // image.crossOrigin = "Anonymous";
-        // image.onload = () => {
-        //     var base64 = this.getBase64Image(image);
-        //     this.user.wechat_img = base64
-        // }
+        var image = new Image();
+        image.src = this.user.wechat_img;
+        this.wechat_img = this.user.wechat_img;
+        image.onload = async () => {
+            var base64 = this.getBase64Image(image);
+            this.wechat_img = base64
+            // let res = await this.$postRequest('/upload/UpBase64Image', { img: base64 })
+            // if (res.data.code == 1) {
+            //     this.wechat_img = res.data.data
+            // }
+        }
+        this.$nextTick(() => {
+            this.getGoods()
+        })
 
     },
 

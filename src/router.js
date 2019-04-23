@@ -450,6 +450,26 @@ router.beforeEach((to, from, next) => {
         })
     }
 
+    if (openid2) {
+        getRequest('/wechat/GetUserInfo', { openid: openid2 }).then(res => {
+            if (res.data.data && res.data.data.user_id) {
+                localstore.set('userInfo', res.data.data)
+            }
+        })
+    }
+
+
+    //判断是否会员分享
+    if (to.name == 'VipEquity' || to.name == 'CardDetails' || to.name == 'CommodityDetails') {
+        next()
+    } else {
+        let share = localstore.get('to_share')
+        if (share && share.name) {
+            localstore.set('to_share', '')
+            localstore.set('has_share', share)
+            next({ name: share.name, query: share.query })
+        }
+    }
 
     next()
 })
@@ -462,7 +482,7 @@ export default router
 function shareFrom(to) {
     if (!isEmptyObject(to.query) && to.query.share_type) {
         //分享存储
-        localstore.set('has_share', to)
+        localstore.set('to_share', to)
     }
 }
 

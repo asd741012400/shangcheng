@@ -172,6 +172,10 @@ export default {
         if (!userInfo) {
             this.show = true
         }
+        if (userInfo && !userInfo.tel_phone) {
+            this.show = true
+        }
+
         document.body.style.background = "#F6F6F6";
         const that = this;
         that.$http.get(that.apiUrl + 'home/getcardlist')

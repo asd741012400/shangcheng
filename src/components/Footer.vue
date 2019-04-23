@@ -3,7 +3,7 @@
         <div class="footer">
             <div class="shop">
                 <router-link :to="{name:'Index'}">
-                    <template v-if="$route.name == 'Index' || $route.name == 'Home'">
+                    <template v-if="$route.name == 'Index'">
                         <span><a><img src="@/assets/icon_shopB.png" alt=""></a></span>
                     </template>
                     <template v-else>
@@ -15,17 +15,23 @@
             <div class="member">
                 <router-link :to="{name:'VipEquity'}">
                     <b><img src="@/assets/icon_vip_imgA.png" alt=""></b>
+                    <template v-if="$route.name == 'VipEquity'">
+                        <b><img src="@/assets/icon_vip_imgB.png" alt=""></b>
+                    </template>
+                    <template v-else>
+                        <b><img src="@/assets/icon_vip_imgA.png" alt=""></b>
+                    </template>
                     <span></span>
                     <p>会员</p>
                 </router-link>
             </div>
             <div class="personal_center">
                 <router-link :to="{name:'PersonalCenter'}">
-                    <template v-if="$route.name == 'Index' || $route.name == 'Home'">
-                        <span><a><img src="@/assets/icon_myA.png" alt=""></a></span>
+                    <template v-if="$route.name == 'PersonalCenter'">
+                        <span><a><img src="@/assets/icon_myB.png" alt=""></a></span>
                     </template>
                     <template v-else>
-                        <span><a><img src="@/assets/icon_myB.png" alt=""></a></span>
+                        <span><a><img src="@/assets/icon_myA.png" alt=""></a></span>
                     </template>
                     <p>个人中心</p>
                 </router-link>
