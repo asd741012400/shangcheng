@@ -3,75 +3,75 @@ import Router from 'vue-router'
 
 
 //前台商城
-import Index from './views/Index.vue'
-import PersonalCenter from './views/PersonalCenter.vue' //个人中心
-import MyShop from './views/MyShop.vue' //我的店铺
-import MyShopUser from './views/MyShopUser.vue' //我的店铺-用户看
-import CardProjectDetails from './views/CardProjectDetails.vue' //卡片项目详情
-import MyCardBag from './views/MyCardBag.vue' //我的卡包
-import UseCard from './views/UseCard.vue' //使用卡片
-import CardActivate from './views/Cardactivate.vue' // 卡片激活
-import PaySucceed from './views/PaySucceed.vue' //付款成功
-import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
-import CardDetails from './views/CardDetails.vue' //卡片详情
-import CommodityDetails from './views/CommodityDetails.vue' //商品详情
-import CommentMore from './views/CommentMore.vue' //更多评论
-import Comment from './views/Comment.vue' //提交评论
-import CommentSucceed from './views/CommentSucceed.vue' //评论成功
-import CommodityList from './views/CommodityList.vue' //评论列表
-import ConfirmAnOrder from './views/ConfirmAnOrder.vue'
-import ConfirmPay from './views/ConfirmPay.vue'
-import DistributionTow from './views/DistributionTow.vue' //我的推广（二级）
-import DistributionThree from './views/DistributionThree.vue' //我的推广（三级）
-import CardEquity from './views/CardEquity.vue' //卡包权益中心
-import CardDetailsTow from './views/CardDetailsTow.vue' //卡片详情
-import Bargain from './views/Bargain.vue'
-import ClassifyList from './views/ClassifyList.vue' // 商品分类
-import ShopDetails from './views/ShopDetails.vue' //门店详情
-import City from './views/City.vue'
-import SharePoster from './views/SharePoster.vue'
-import SharePlus from './views/SharePlus.vue'
-import VipOrder from './views/VipOrder.vue'
-import VipOrderBuy from './views/VipOrderBuy.vue'
-import VipEquity from './views/VipEquity.vue'
-import Order from './views/Order.vue' //订单列表
-import OrderDetail from './views/OrderDetail.vue' //订单详情
-import Collect from './views/Collect.vue' //收藏
-import error403 from './views/403.vue'
-import error404 from './views/404.vue'
-import VipPlus from './views/VipPlus.vue'
+// import Index from './views/Index.vue'
+// import PersonalCenter from './views/PersonalCenter.vue' //个人中心
+// import MyShop from './views/MyShop.vue' //我的店铺
+// import MyShopUser from './views/MyShopUser.vue' //我的店铺-用户看
+// import CardProjectDetails from './views/CardProjectDetails.vue' //卡片项目详情
+// import MyCardBag from './views/MyCardBag.vue' //我的卡包
+// import UseCard from './views/UseCard.vue' //使用卡片
+// import CardActivate from './views/Cardactivate.vue' // 卡片激活
+// import PaySucceed from './views/PaySucceed.vue' //付款成功
+// import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
+// import CardDetails from './views/CardDetails.vue' //卡片详情
+// import CommodityDetails from './views/CommodityDetails.vue' //商品详情
+// import CommentMore from './views/CommentMore.vue' //更多评论
+// import Comment from './views/Comment.vue' //提交评论
+// import CommentSucceed from './views/CommentSucceed.vue' //评论成功
+// import CommodityList from './views/CommodityList.vue' //评论列表
+// import ConfirmAnOrder from './views/ConfirmAnOrder.vue'
+// import ConfirmPay from './views/ConfirmPay.vue'
+// import DistributionTow from './views/DistributionTow.vue' //我的推广（二级）
+// import DistributionThree from './views/DistributionThree.vue' //我的推广（三级）
+// import CardEquity from './views/CardEquity.vue' //卡包权益中心
+// import CardDetailsTow from './views/CardDetailsTow.vue' //卡片详情
+// import Bargain from './views/Bargain.vue'
+// import ClassifyList from './views/ClassifyList.vue' // 商品分类
+// import ShopDetails from './views/ShopDetails.vue' //门店详情
+// import City from './views/City.vue'
+// import SharePoster from './views/SharePoster.vue'
+// import SharePlus from './views/SharePlus.vue'
+// import VipOrder from './views/VipOrder.vue'
+// import VipOrderBuy from './views/VipOrderBuy.vue'
+// import VipEquity from './views/VipEquity.vue'
+// import Order from './views/Order.vue' //订单列表
+// import OrderDetail from './views/OrderDetail.vue' //订单详情
+// import Collect from './views/Collect.vue' //收藏
+// import error403 from './views/403.vue'
+// import error404 from './views/404.vue'
+// import VipPlus from './views/VipPlus.vue'
 
 
 
 //分销商城
-import Login from './views/merchant/Login.vue'
-import MerchantShop from './views/merchant/MerchantShop.vue' //主页
-import ChageShop from './views/merchant/ChageShop.vue' //切换门店
-import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
-import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
-import MyTeam from './views/merchant/MyTeam.vue' //我的团队
-import TeamDel from './views/merchant/TeamDel.vue' //团队详情
-import MemberDel from './views/merchant/MemberDel.vue' //成员详情
-import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
-import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
-import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
-import Generalize from './views/merchant/Generalize.vue' //我的推广
-import PersonalStores from './views/merchant/PersonalStores.vue' //我的店铺
+// import Login from './views/merchant/Login.vue'
+// import MerchantShop from './views/merchant/MerchantShop.vue' //主页
+// import ChageShop from './views/merchant/ChageShop.vue' //切换门店
+// import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
+// import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
+// import MyTeam from './views/merchant/MyTeam.vue' //我的团队
+// import TeamDel from './views/merchant/TeamDel.vue' //团队详情
+// import MemberDel from './views/merchant/MemberDel.vue' //成员详情
+// import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
+// import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
+// import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
+// import Generalize from './views/merchant/Generalize.vue' //我的推广
+// import PersonalStores from './views/merchant/PersonalStores.vue' //我的店铺
 
 
 //核销
-import Login2 from './views/checkstore/Login.vue'
-import Administrator from './views/checkstore/Administrator.vue' //绑定管理员
-import CheckHome from './views/checkstore/Home.vue' //主页
-import CheckList from './views/checkstore/CheckList.vue' //核销记录
-import StoreList from './views/checkstore/StoreList.vue' //提现记录
-import CheckCode from './views/checkstore/CheckCode.vue' //核销码核销
-import CheckWithdrawDeposit from './views/checkstore/WithdrawDeposit.vue' //申请提现
-import Commodity from './views/checkstore/Commodity.vue' //商品核销
-import CardCheck from './views/checkstore/CardCheck.vue' //卡片核销
-import CheckGoods from './views/checkstore/CheckGoods.vue'
-import CheckCard from './views/checkstore/CheckCard.vue'
-import Appointment from './views/checkstore/Appointment.vue' //预约记录
+// import Login2 from './views/checkstore/Login.vue'
+// import Administrator from './views/checkstore/Administrator.vue' //绑定管理员
+// import CheckHome from './views/checkstore/Home.vue' //主页
+// import CheckList from './views/checkstore/CheckList.vue' //核销记录
+// import StoreList from './views/checkstore/StoreList.vue' //提现记录
+// import CheckCode from './views/checkstore/CheckCode.vue' //核销码核销
+// import CheckWithdrawDeposit from './views/checkstore/WithdrawDeposit.vue' //申请提现
+// import Commodity from './views/checkstore/Commodity.vue' //商品核销
+// import CardCheck from './views/checkstore/CardCheck.vue' //卡片核销
+// import CheckGoods from './views/checkstore/CheckGoods.vue'
+// import CheckCard from './views/checkstore/CheckCard.vue'
+// import Appointment from './views/checkstore/Appointment.vue' //预约记录
 
 
 import localstore from 'store2' //本地存储
@@ -88,307 +88,316 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Administrator
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Index.vue')
         },
+        /*前台*/
         {
             path: '/Index',
             name: 'Index',
-            component: Index
-        },
-        {
-            path: '/Login',
-            name: 'Login',
-            component: Login
-        },
-        {
-            path: '/Login2',
-            name: 'Login2',
-            component: Login2
-        },
-        {
-            path: '/Administrator',
-            name: 'Administrator',
-            component: Administrator
-        },
-        {
-            path: '/CheckHome',
-            name: 'CheckHome',
-            component: CheckHome
-        },
-        {
-            path: '/CheckCode',
-            name: 'CheckCode',
-            component: CheckCode
-        },
-        {
-            path: '/CardCheck',
-            name: 'CardCheck',
-            component: CardCheck
-        },
-        {
-            path: '/CheckWithdrawDeposit',
-            name: 'CheckWithdrawDeposit',
-            component: CheckWithdrawDeposit
-        },
-        {
-            path: '/Commodity',
-            name: 'Commodity',
-            component: Commodity
-        },
-        {
-            path: '/CheckList',
-            name: 'CheckList',
-            component: CheckList
-        },
-        {
-            path: '/StoreList',
-            name: 'StoreList',
-            component: StoreList
-        },
-        {
-            path: '/Appointment',
-            name: 'Appointment',
-            component: Appointment
-        },
-        {
-            path: '/WithdrawList',
-            name: 'WithdrawList',
-            component: WithdrawList
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Index.vue')
         },
         {
             path: '/PersonalCenter',
             name: 'PersonalCenter',
-            component: PersonalCenter
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/PersonalCenter.vue')
         },
         {
             path: '/MyShop',
             name: 'MyShop',
-            component: MyShop
-        },
-        {
-            path: '/CommodityDetails',
-            name: 'CommodityDetails',
-            component: CommodityDetails
-        },
-        {
-            path: '/CardProjectDetails',
-            name: 'CardProjectDetails',
-            component: CardProjectDetails
-        },
-        {
-            path: '/MyCardBag',
-            name: 'MyCardBag',
-            component: MyCardBag
-        },
-        {
-            path: '/CardActivate',
-            name: 'CardActivate',
-            component: CardActivate
-        },
-        {
-            path: '/UseCard',
-            name: 'UseCard',
-            component: UseCard
-        },
-        {
-            path: '/PaySucceed',
-            name: 'PaySucceed',
-            component: PaySucceed
-        },
-        {
-            path: '/WithdrawDeposit',
-            name: 'WithdrawDeposit',
-            component: WithdrawDeposit
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/MyShop.vue')
         },
         {
             path: '/MyShopUser',
             name: 'MyShopUser',
-            component: MyShopUser
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/MyShopUser.vue')
+        },
+        {
+            path: '/CardProjectDetails',
+            name: 'CardProjectDetails',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CardProjectDetails.vue')
+        },
+        {
+            path: '/MyCardBag',
+            name: 'MyCardBag',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/MyCardBag.vue')
+        },
+        {
+            path: '/UseCard',
+            name: 'UseCard',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/UseCard.vue')
+        },
+        {
+            path: '/CardActivate',
+            name: 'CardActivate',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Cardactivate.vue')
+        },
+
+        {
+            path: '/PaySucceed',
+            name: 'PaySucceed',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/PaySucceed.vue')
+        },
+        {
+            path: '/WithdrawDeposit',
+            name: 'WithdrawDeposit',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/WithdrawDeposit.vue')
         },
         {
             path: '/CardDetails',
             name: 'CardDetails',
-            component: CardDetails
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CardDetails.vue')
         },
         {
-            path: '/Comment',
-            name: 'Comment',
-            component: Comment
+            path: '/CommodityDetails',
+            name: 'CommodityDetails',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CommodityDetails.vue')
         },
         {
             path: '/CommentMore',
             name: 'CommentMore',
-            component: CommentMore
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CommentMore.vue')
+        },
+
+        {
+            path: '/Comment',
+            name: 'Comment',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Comment.vue')
         },
         {
             path: '/CommentSucceed',
             name: 'CommentSucceed',
-            component: CommentSucceed
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CommentSucceed.vue')
         },
         {
             path: '/CommodityList',
             name: 'CommodityList',
-            component: CommodityList
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CommodityList.vue')
         },
         {
             path: '/ConfirmAnOrder',
             name: 'ConfirmAnOrder',
-            component: ConfirmAnOrder
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/ConfirmAnOrder.vue')
         },
         {
             path: '/ConfirmPay',
             name: 'ConfirmPay',
-            component: ConfirmPay
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/ConfirmPay.vue')
         },
         {
             path: '/DistributionTow',
             name: 'DistributionTow',
-            component: DistributionTow
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/DistributionTow.vue')
         },
         {
             path: '/DistributionThree',
             name: 'DistributionThree',
-            component: DistributionThree
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/DistributionThree.vue')
         },
         {
             path: '/CardEquity',
             name: 'CardEquity',
-            component: CardEquity
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CardEquity.vue')
         },
         {
             path: '/CardDetailsTow',
             name: 'CardDetailsTow',
-            component: CardDetailsTow
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/CardDetailsTow.vue')
         },
         {
             path: '/Bargain',
             name: 'Bargain',
-            component: Bargain
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Bargain.vue')
         },
         {
             path: '/ClassifyList',
             name: 'ClassifyList',
-            component: ClassifyList
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/ClassifyList.vue')
         },
         {
             path: '/ShopDetails',
             name: 'ShopDetails',
-            component: ShopDetails
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/ShopDetails.vue')
         },
         {
             path: '/City',
             name: 'City',
-            component: City
-        },
-        {
-            path: '/Order',
-            name: 'Order',
-            component: Order
-        },
-        {
-            path: '/OrderDetail',
-            name: 'OrderDetail',
-            component: OrderDetail
-        },
-        {
-            path: '/Collect',
-            name: 'Collect',
-            component: Collect
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/City.vue')
         },
         {
             path: '/SharePoster',
             name: 'SharePoster',
-            component: SharePoster
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/SharePoster.vue')
         },
         {
             path: '/SharePlus',
             name: 'SharePlus',
-            component: SharePlus
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/SharePlus.vue')
         },
         {
             path: '/VipOrder',
             name: 'VipOrder',
-            component: VipOrder
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/VipOrder.vue')
         },
         {
             path: '/VipOrderBuy',
             name: 'VipOrderBuy',
-            component: VipOrderBuy
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/VipOrderBuy.vue')
         },
         {
             path: '/VipEquity',
             name: 'VipEquity',
-            component: VipEquity
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/VipEquity.vue')
         },
         {
-            path: '/MerchantShop',
-            name: 'MerchantShop',
-            component: MerchantShop
+            path: '/Order',
+            name: 'Order',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Order.vue')
         },
         {
-            path: '/WithdrawDepositDel',
-            name: 'WithdrawDepositDel',
-            component: WithdrawDepositDel
+            path: '/OrderDetail',
+            name: 'OrderDetail',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/OrderDetail.vue')
         },
         {
-            path: '/TeamDel',
-            name: 'TeamDel',
-            component: TeamDel
-        },
-        {
-            path: '/MyTeam',
-            name: 'MyTeam',
-            component: MyTeam
-        },
-        {
-            path: '/MyTeamTow',
-            name: 'MyTeamTow',
-            component: MyTeamTow
-        },
-        {
-            path: '/ChageShop',
-            name: 'ChageShop',
-            component: ChageShop
-        },
-        {
-            path: '/TeamDelTow',
-            name: 'TeamDelTow',
-            component: TeamDelTow
-        },
-        {
-            path: '/MemberDel',
-            name: 'MemberDel',
-            component: MemberDel
-        },
-        {
-            path: '/Generalize',
-            name: 'Generalize',
-            component: Generalize
-        },
-        {
-            path: '/MyGeneralize',
-            name: 'MyGeneralize',
-            component: MyGeneralize
-        },
-        {
-            path: '/PersonalStores',
-            name: 'PersonalStores',
-            component: PersonalStores
+            path: '/Collect',
+            name: 'Collect',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Collect.vue')
         },
         {
             path: '/error403',
             name: 'error403',
-            component: error403
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/403.vue')
         },
         {
             path: '/error404',
             name: 'error404',
-            component: error404
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/404.vue')
         },
         {
             path: '/VipPlus',
             name: 'VipPlus',
-            component: VipPlus
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/VipPlus.vue')
+        },
+
+
+        /*核销端*/
+        {
+            path: '/Login2',
+            name: 'Login2',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Login.vue')
+        },
+        {
+            path: '/Administrator',
+            name: 'Administrator',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Administrator.vue')
+        },
+        {
+            path: '/CheckHome',
+            name: 'CheckHome',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Home.vue')
+        },
+        {
+            path: '/CheckCode',
+            name: 'CheckCode',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CheckCode.vue')
+        },
+        {
+            path: '/CardCheck',
+            name: 'CardCheck',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CardCheck.vue')
+        },
+
+        {
+            path: '/Commodity',
+            name: 'Commodity',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Commodity.vue')
+        },
+        {
+            path: '/CheckList',
+            name: 'CheckList',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CheckList.vue')
+        },
+        {
+            path: '/StoreList',
+            name: 'StoreList',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/StoreList.vue')
+        },
+        {
+            path: '/Appointment',
+            name: 'Appointment',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Appointment.vue')
+        },
+        {
+            path: '/CheckWithdrawDeposit',
+            name: 'CheckWithdrawDeposit',
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/WithdrawDeposit.vue')
+        },
+
+        /*商家端*/
+        {
+            path: '/Login',
+            name: 'Login',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/Login.vue')
+        },
+        {
+            path: '/MerchantShop',
+            name: 'MerchantShop',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MerchantShop.vue')
+        },
+        {
+            path: '/WithdrawList',
+            name: 'WithdrawList',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawList.vue')
+        },
+        {
+            path: '/WithdrawDepositDel',
+            name: 'WithdrawDepositDel',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawDepositDel.vue')
+        },
+        {
+            path: '/TeamDel',
+            name: 'TeamDel',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/TeamDel.vue')
+        },
+        {
+            path: '/MyTeam',
+            name: 'MyTeam',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyTeam.vue')
+        },
+        {
+            path: '/MyTeamTow',
+            name: 'MyTeamTow',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyTeamTow.vue')
+        },
+        {
+            path: '/ChageShop',
+            name: 'ChageShop',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/ChageShop.vue')
+        },
+        {
+            path: '/TeamDelTow',
+            name: 'TeamDelTow',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/TeamDelTow.vue')
+        },
+        {
+            path: '/MemberDel',
+            name: 'MemberDel',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MemberDel.vue')
+        },
+        {
+            path: '/Generalize',
+            name: 'Generalize',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/Generalize.vue')
+        },
+        {
+            path: '/MyGeneralize',
+            name: 'MyGeneralize',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyGeneralize.vue')
+        },
+        {
+            path: '/PersonalStores',
+            name: 'PersonalStores',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/PersonalStores.vue')
         },
         {
             path: '*', //404页面跳转

@@ -92,7 +92,7 @@ export default {
     name: 'CheckList',
     data() {
         return {
-            startDate: new Date('1968-01-01'),
+            startDate: new Date('2019-01-01'),
             dateTime: '请选择时间',
             checklist: [],
             page: 1,
@@ -108,7 +108,7 @@ export default {
         },
         //点击确定按钮
         handleConfirm(data) {
-            let date = this.$dayjs().format('YYYY-MM-DD')
+            let date = this.$dayjs(data).format('YYYY-MM-DD')
             this.dateTime = date;
             this.$refs.picker.close()
             event.stopPropagation()

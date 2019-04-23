@@ -176,7 +176,7 @@ export default {
             userInfo: {},
             popState: 3,
             popShow: false,
-            popShow1: true,
+            popShow1: false,
         }
     },
     components: { Share },

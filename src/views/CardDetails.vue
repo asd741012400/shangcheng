@@ -225,7 +225,7 @@
                 </div>
             </div>
         </footer>
-        <Share ref="myShare"></Share>
+        <Share :goods-id="CardDetail.card_id" type="2" ref="myShare"></Share>
     </div>
 </template>
 <script>
