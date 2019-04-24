@@ -207,9 +207,7 @@ export default {
         return {
             apiUrl: this.$common.ApiUrl(),
             cardDetailsState: 4, //状态 1正常 2已售罄 3已下架 4会员购买 5还未开售 6售卖截止
-            user: {
-                status: 0
-            },
+            user: '',
             active: 1,
             table: 1,
             show: false,
@@ -225,13 +223,11 @@ export default {
     methods: {
         async collectGoods() {
             let data = {
-                user_id:this.user.user_id,
-                product_id:this.id,
-                product_type:2,
+                user_id: this.user.user_id,
+                product_id: this.id,
+                product_type: 2,
             }
-            let res = await this.$postRequest('/user/AddCollect',data)
-            console.log(res);
-
+            let res = await this.$postRequest('/user/AddCollect', data)
             this.isCollect = !this.isCollect
         },
         goHome() {
@@ -308,7 +304,8 @@ export default {
         },
         //获取详情
         async getDetail() {
-            let res = await this.$getRequest('/home/GetCardDetail', { id: this.$route.query.id,user_id:this.user.user_id })
+            let data = { id: this.$route.query.id, user_id: this.user.user_id }
+            let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
                 this.isCollect = Boolean(res.data.data.is_coolect);
@@ -370,10 +367,13 @@ export default {
 
     // 创建完毕状态 
     created() {
-        this.getDetail()
-        this.getComment()
-        this.user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('userInfo')
+        if (user) {
+            this.user = user
+        }
         this.id = this.$route.query.id
+        this.getComment()
+        this.getDetail()
         document.body.style.background = "#fff";
     },
 

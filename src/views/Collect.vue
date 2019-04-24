@@ -60,6 +60,7 @@ export default {
     return{
       sortOne:true,
       sortTow:true,
+      status:0,
       empty:true
     }
   },
@@ -71,6 +72,15 @@ export default {
     },
     sortTowFn(){
       this.sortTow = !this.sortTow
+    },
+    async getList(){
+      let data = {
+          user_id:this.user.user_id,
+          status:this.status,
+      }
+      let res = await this.$getRequest('/user/GetMyCollect',data)
+      console.log(res);
+      this.lsit = res.data.data
     }
   },
 
@@ -80,6 +90,11 @@ export default {
 
   // 创建完毕状态 
   created(){
+        let user = this.$localstore.get('userInfo')
+        if (user) {
+            this.user = user
+        }
+        this.getList()
     document.body.style.background = "#f0f0f0";
   },
 

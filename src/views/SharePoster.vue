@@ -163,15 +163,39 @@ export default {
                 // foreground: '#ff0'  
             })
 
+
             //合成分享图
             that.$nextTick(function() {
                 //海报生成
-                html2canvas(that.$refs.imageDom).then((canvas) => {
-                    that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-                    // let dataURL = canvas.toDataURL("image/png");
-                    // that.imgUrl = dataURL;
+                // html2canvas(that.$refs.imageDom).then((canvas) => {
+                //     that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+                //     // let dataURL = canvas.toDataURL("image/png");
+                //     // that.imgUrl = dataURL;
+                // });
+                html2canvas(that.$refs.imageDom).then(canvas => {
+                    // 转成图片，生成图片地址
+                    that.imgUrl = canvas.toDataURL("image/png");
+                    var eleLink = document.createElement("a");
+                    eleLink.href = that.imgUrl; // 转换后的图片地址
+                    eleLink.download = "pictureName";
+                    // 触发点击
+                    document.body.appendChild(eleLink);
+                    eleLink.click();
+                    // 然后移除
+                    document.body.removeChild(eleLink);
+                    // console.log("that.imgUrl----",that.imgUrl);
                 });
             })
+
+            //合成分享图
+            // that.$nextTick(function() {
+            //     //海报生成
+            //     html2canvas(that.$refs.imageDom).then((canvas) => {
+            //         that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+            //         // let dataURL = canvas.toDataURL("image/png");
+            //         // that.imgUrl = dataURL;
+            //     });
+            // })
 
         },
         getBase64Image(img) {

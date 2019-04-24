@@ -227,7 +227,13 @@ export default {
             this.mkt_price = this.GoodsDetail.goods_attr[index].attr_dist_money
             this.limit_num = this.GoodsDetail.goods_attr[index].attr_limit_num
         },
-        collectGoods() {
+        async collectGoods() {
+            let data = {
+                user_id: this.user.user_id,
+                product_id: this.id,
+                product_type: 1,
+            }
+            let res = await this.$postRequest('/user/AddCollect', data)
             this.isCollect = !this.isCollect
         },
         goHome() {
@@ -309,13 +315,15 @@ export default {
         },
         //获取详情
         async getDetail() {
-            let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.$route.query.id })
+            let data = { id: this.$route.query.id, user_id: this.user.user_id }
+            let res = await this.$getRequest('/home/GetGoodsDetail', data)
             if (res.data.code == 1) {
                 this.GoodsDetail = res.data.data;
                 this.cost_price = this.GoodsDetail.cost_price
                 this.goods_price = this.GoodsDetail.goods_price
                 this.mkt_price = this.GoodsDetail.mkt_price
                 this.limit_num = this.GoodsDetail.limit_num
+                this.isCollect = Boolean(res.data.data.is_coolect);
                 this.timer();
             }
         },
@@ -379,7 +387,10 @@ export default {
 
     // 创建完毕状态 
     created() {
-        this.user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('userInfo')
+        if (user) {
+            this.user = user
+        }
         this.id = this.$route.query.id
         this.getDetail()
         this.getComment()
