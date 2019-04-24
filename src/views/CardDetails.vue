@@ -223,7 +223,15 @@ export default {
     },
     components: { Share },
     methods: {
-        collectGoods() {
+        async collectGoods() {
+            let data = {
+                user_id:this.user.user_id,
+                product_id:this.id,
+                product_type:2,
+            }
+            let res = await this.$postRequest('/user/AddCollect',data)
+            console.log(res);
+
             this.isCollect = !this.isCollect
         },
         goHome() {
@@ -300,9 +308,10 @@ export default {
         },
         //获取详情
         async getDetail() {
-            let res = await this.$getRequest('/home/GetCardDetail', { id: this.$route.query.id })
+            let res = await this.$getRequest('/home/GetCardDetail', { id: this.$route.query.id,user_id:this.user.user_id })
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
+                this.isCollect = Boolean(res.data.data.is_coolect);
                 this.timer()
             }
         },

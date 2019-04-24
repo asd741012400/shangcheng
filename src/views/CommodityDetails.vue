@@ -321,7 +321,7 @@ export default {
         },
         //获取评论
         async getComment() {
-            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1 })
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1,user_id:this.user.user_id })
             this.comments = res.data.data.list;
         },
         //获取门店
