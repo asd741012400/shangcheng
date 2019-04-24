@@ -85,7 +85,7 @@ export default {
                 order_type: 2,
                 goods_id: this.plus.setting_id,
                 goods_title: this.plus.name,
-                openid: this.$localstore.get('openid5'),
+                openid: this.$localstore.get('openid6'),
                 order_num: 1,
                 amount: this.plus.sale_price,
                 total_amount: this.plus.sale_price

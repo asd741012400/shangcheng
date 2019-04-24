@@ -40,11 +40,13 @@
             </div>
             <b><img src="../assets/PersonalCenter_headerBg.png" alt="" srcset=""></b>
         </header>
-        <div class="share" v-if="userInfo.status == 1" @click="shareShowFn">
-            <p><img src="../assets/invitation.png" alt=""></p>
-                <router-link :to="{name:'MyShop'}">
-                    <p><img src="../assets/my_shop.png" alt=""></p>
-                </router-link>
+        <div class="share" v-if="userInfo.status == 1">
+            <router-link :to="{name:'VipPlus'}">
+                <p><img src="../assets/invitation.png" alt=""></p>
+            </router-link>
+            <router-link :to="{name:'MyShop'}">
+                <p><img src="../assets/my_shop.png" alt=""></p>
+            </router-link>
         </div>
         <div class="order">
             <div class="order_tel">
@@ -164,6 +166,7 @@
         </div>
         <!-- 兑换券 -->
         <Share ref="myShare"></Share>
+        <BindPhone :show="show"></BindPhone>
     </div>
 </template>
 <script>
@@ -173,7 +176,12 @@ export default {
     data() {
         return {
             vip: 1,
-            userInfo: {},
+            show: false,
+            userInfo: {
+                user_id: '',
+                tel_phone: '',
+                status: 0
+            },
             popState: 3,
             popShow: false,
             popShow1: false,
@@ -182,7 +190,7 @@ export default {
     components: { Share },
     methods: {
         shareShowFn() {
-            this.$router.push({name:'VipPlus'})
+            this.$router.push({ name: 'VipPlus' })
         },
         popShowFn() {
             const that = this;
@@ -200,18 +208,6 @@ export default {
             const that = this;
             that.popShow1 = false;
         },
-        async getUserInfo() {
-            let openid = this.$localstore.get('openid5')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { openid: openid })
-            if (res.data.code == 1) {
-                this.$localstore.set('userInfo', res.data.data)
-                this.userInfo = res.data.data
-                this.vip = this.userInfo.status
-            } else {
-                this.$message('获取用户资料失败！')
-            }
-        }
-
     },
 
     // 创建前状态
@@ -219,7 +215,15 @@ export default {
 
     // 创建完毕状态
     created() {
-        this.getUserInfo()
+        let userInfo = this.$localstore.get('userInfo')
+        if (userInfo) {
+            this.userInfo = userInfo
+        }
+        this.$nextTick(() => {
+            if (!userInfo) {
+                this.show = true
+            }
+        })
         document.body.style.background = "#fff";
     },
 
@@ -645,71 +649,72 @@ body {
             }
         }
     }
-        .pop_bg {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background: rgba($color: #000000, $alpha: 0.3);
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
 
-            .pop {
-                background: #fff;
-                border-radius: 10px;
-                width: 5.72rem;
-                position: relative;
-                padding: .94rem .3rem .54rem;
+    .pop_bg {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha: 0.3);
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-                i {
-                    position: absolute;
-                    width: .48rem;
-                    height: .48rem;
-                    overflow: hidden;
-                    display: block;
-                    right: .24rem;
-                    top: .24rem;
-                }
+        .pop {
+            background: #fff;
+            border-radius: 10px;
+            width: 5.72rem;
+            position: relative;
+            padding: .94rem .3rem .54rem;
 
-                p {
-                    font-size: .4rem;
-                    color: #FF6666;
-                    text-align: center;
-                }
-
-                em {
-                    font-size: .4rem;
-                    color: #FF6666;
-                    text-align: center;
-                    display: block;
-                    font-style: normal;
-                }
-
-                time {
-                    font-size: .32rem;
-                    color: #515C6F;
-                    text-align: center;
-                    display: block;
-                }
-
-                span {
-                    display: block;
-                    width: 3.7rem;
-                    background: #FF6666;
-                    border-radius: 50px;
-                    text-align: center;
-                    line-height: .8rem;
-                    height: .8rem;
-                    color: #fff;
-                    font-weight: bold;
-                    font-size: .32rem;
-                    margin: .26rem auto 0;
-                }
-
+            i {
+                position: absolute;
+                width: .48rem;
+                height: .48rem;
+                overflow: hidden;
+                display: block;
+                right: .24rem;
+                top: .24rem;
             }
+
+            p {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+            }
+
+            em {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+                display: block;
+                font-style: normal;
+            }
+
+            time {
+                font-size: .32rem;
+                color: #515C6F;
+                text-align: center;
+                display: block;
+            }
+
+            span {
+                display: block;
+                width: 3.7rem;
+                background: #FF6666;
+                border-radius: 50px;
+                text-align: center;
+                line-height: .8rem;
+                height: .8rem;
+                color: #fff;
+                font-weight: bold;
+                font-size: .32rem;
+                margin: .26rem auto 0;
+            }
+
         }
+    }
 
 }
 </style>

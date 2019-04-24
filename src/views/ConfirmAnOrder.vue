@@ -132,7 +132,7 @@ export default {
                 play_time: this.play_time,
                 attr_id: this.$route.query.attr_id,
                 tel: this.tel,
-                openid: this.$localstore.get('openid5'),
+                openid: this.$localstore.get('openid6'),
                 order_num: this.num,
                 amount: this.price,
                 total_amount: this.total,

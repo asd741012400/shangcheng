@@ -18,10 +18,20 @@
             </header>
         </div>
         <div class="banner">
-            <span><img :src="GoodsDetail.def_pic" alt=""></span>
-            <div class="text">
+            <van-swipe :autoplay="3000" indicator-color="white">
+                  <van-swipe-item v-for="item in GoodsDetail.def_pic">
+                      <img :src="item" alt="">
+                  </van-swipe-item>
+            </van-swipe>
+            <!-- <span></span> -->
+            <div class="text" v-show="GoodsDetailsState == 1">
                 <yd-countdown slot="right" :time="changeTime(GoodsDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
+                </yd-countdown>
+            </div>
+            <div class="text" v-show="GoodsDetailsState == 5">
+                <yd-countdown slot="right" :time="changeTime(GoodsDetail.sale_stime)">
+                    <p>距离活动开始还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
             </div>
         </div>
@@ -30,11 +40,11 @@
                 <h3>加勒比儿童票一大一小加勒比</h3>
                 <div class="price">
                     <div class="vip_price">
-                    <em>会员价</em>
+                        <em>会员价</em>
                         <i>￥</i>
                         <a>{{GoodsDetail.cost_price}}</a>
-                     </div>                  
-                    <b>非会员价￥{{GoodsDetail.goods_price}}</b>                 
+                    </div>
+                    <b>非会员价￥{{GoodsDetail.goods_price}}</b>
                     <p>市场价<span>￥{{GoodsDetail.mkt_price}}</span></p>
                 </div>
                 <div class="purchase_limitation">限购一份</div>
@@ -125,7 +135,8 @@
                 </div>
             </div>
         </div>
-        <footer v-if="GoodsDetailsState == 1">
+
+        <footer>
             <ul>
                 <li @click="goHome">
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
@@ -141,76 +152,34 @@
                     <p>我要收藏</p>
                 </li>
             </ul>
-            <div class="btn">
+            <!-- <div class="btn"> -->
+            <!-- 可购买状态 -->
+            <div class="btn" v-show="GoodsDetailsState == 1">
                 <div class="share" @click="shareShowFn">
                     <span>￥10</span>
                     <p>分享赚</p>
                 </div>
                 <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
             </div>
-        </footer>
-        <footer v-else-if="GoodsDetailsState == 2">
-            <ul>
-                <li @click="goHome">
-                    <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城首页</p>
-                </li>
-                <li @click="collectGoods()">
-                    <template v-if="isCollect">
-                        <span><img src="../assets/icon_collectB.png" alt=""></span>
-                    </template>
-                    <template v-else>
-                        <span><img src="../assets/icon_collectA.png" alt=""></span>
-                    </template>
-                    <p>我要收藏</p>
-                </li>
-            </ul>
-            <div class="btn">
+            <div class="btn" v-show="GoodsDetailsState == 2">
                 <div class="buy_null"><span>已售罄</span></div>
             </div>
-        </footer>
-        <footer v-else-if="GoodsDetailsState == 3">
-            <ul>
-                <li @click="goHome">
-                    <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城首页</p>
-                </li>
-                <li @click="collectGoods()">
-                    <template v-if="isCollect">
-                        <span><img src="../assets/icon_collectB.png" alt=""></span>
-                    </template>
-                    <template v-else>
-                        <span><img src="../assets/icon_collectA.png" alt=""></span>
-                    </template>
-                    <p>我要收藏</p>
-                </li>
-            </ul>
-            <div class="btn">
+            <div class="btn" v-show="GoodsDetailsState == 3">
                 <div class="buy_null"><span>已下架</span></div>
             </div>
-        </footer>
-        <footer v-if="GoodsDetailsState == 4">
-            <ul>
-                <li @click="goHome">
-                    <span><img src="../assets/icon_shopA.png" alt=""></span>
-                    <p>商城首页</p>
-                </li>
-                <li @click="collectGoods()">
-                    <template v-if="isCollect">
-                        <span><img src="../assets/icon_collectB.png" alt=""></span>
-                    </template>
-                    <template v-else>
-                        <span><img src="../assets/icon_collectA.png" alt=""></span>
-                    </template>
-                    <p>我要收藏</p>
-                </li>
-            </ul>
-            <div class="btn">
-                <div class="vip_share">分享</div>
-                <div class="vip_buy"><span>了解会员</span>
+            <div class="btn" v-show="GoodsDetailsState == 4">
+                <div class="vip_share" @click="shareShowFn">分享</div>
+                <div class="vip_buy" @click="goPlus"><span>了解会员</span>
                     <p>（限会员购买）</p>
                 </div>
             </div>
+            <div class="btn" v-show="GoodsDetailsState == 5">
+                <div class="buy_null"><span>等待开售</span></div>
+            </div>
+            <div class="btn" v-show="GoodsDetailsState == 6">
+                <div class="buy_null"><span>售卖截止</span></div>
+            </div>
+            <!-- </div> -->
         </footer>
         <Share :goods-id="GoodsDetail.goods_id" type="1" ref="myShare"></Share>
     </div>
@@ -223,6 +192,9 @@ export default {
         return {
             GoodsDetailsState: 1,
             GoodsDetail: {},
+            user: {
+                status: 0
+            },
             active: 1,
             table: 1,
             isCollect: false,
@@ -252,6 +224,9 @@ export default {
                 document.getElementById("details").scrollIntoView();
             }
         },
+        goPlus() {
+            this.$router.push({ name: 'VipEquity' })
+        },
         changeTime(date) {
             return this.$dayjs(date).format('YYYY/MM/DD HH:mm:ss')
         },
@@ -270,24 +245,39 @@ export default {
                 }
             });
         },
+        //定时器判断 商品是否截止销售
+        timer() {
+            let that = this
+            setInterval(() => {
+                let start_time = this.$dayjs().isBefore(this.$dayjs(this.GoodsDetail.sale_stime).format('YYYY/MM/DD HH:mm:ss'));
+                if (start_time) {
+                    that.GoodsDetailsState = 5
+                }
+                let end_time = this.$dayjs().isAfter(this.$dayjs(this.GoodsDetail.sale_etime).format('YYYY/MM/DD HH:mm:ss'));
+                if (end_time) {
+                    that.GoodsDetailsState = 6
+                }
+
+                if (!start_time && !end_time) {
+                    if (that.GoodsDetail.store == 0) {
+                        that.GoodsDetailsState = 2
+                    } else if (that.GoodsDetail.is_online == 0) {
+                        that.GoodsDetailsState = 3
+                    } else if (that.GoodsDetail.is_vip == 1 && that.user.status == 0) {
+                        that.GoodsDetailsState = 4
+                    } else {
+                        that.GoodsDetailsState = 1
+                    }
+                }
+
+            }, 1000)
+        },
         //获取详情
         async getDetail() {
             let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.$route.query.id })
             if (res.data.code == 1) {
-                const resData = res.data.data;
-                this.GoodsDetail = resData;
-                // if (resData.store == 0) {
-                //     this.GoodsDetailsState = 2
-                // } else if (resData.is_online == 0) {
-                //     this.GoodsDetailsState = 3
-                // }
-                // else if(resData.is_vip== 1)
-                // {
-                //   this.GoodsDetailsState = 4
-                // }
-                // else {
-                    this.GoodsDetailsState = 1
-                // }
+                this.GoodsDetail = res.data.data;
+                this.timer();
             }
         },
         //获取评论
@@ -308,6 +298,8 @@ export default {
 
     // 创建完毕状态 
     created() {
+        this.user = this.$localstore.get('userInfo')
+        this.id = this.$route.query.id
         this.getDetail()
         this.getComment()
         this.getStore()
@@ -423,6 +415,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index:10;
 
             p {
                 font-size: .28rem;
@@ -889,6 +882,24 @@ export default {
 
             .buy {
                 background: #FF6666;
+            }
+
+            .vip_share {
+                background: #FFB389;
+                font-size: .32rem;
+                font-weight: bold;
+            }
+
+            .vip_buy {
+                background: #FF6666;
+
+                p {
+                    font-size: .24rem;
+                }
+            }
+
+            .buy_null {
+                background: #999999;
             }
 
             div {

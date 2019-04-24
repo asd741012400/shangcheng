@@ -10,6 +10,7 @@
                         <b>{{user.username}}</b>
                     </div>
                     <div class="img"><img src="../assets/img2.png" alt=""></div>
+                             <!-- <div class="img"><img :src="$imgUrl +goods.share_img" alt=""></div> -->
                         <div class="code">
                             <div class="code_text">
                                 <h3>{{title}}</h3>
@@ -51,10 +52,12 @@ export default {
     data() {
         return {
             user: {},
+            url: '',//分享url
             imgUrl: '',
             type: "",
             goods_id: "",
-            title: "",
+            goods: "",
+            // title: "",
             price: "",
             wechat_img: "",
             poster_img: "",
@@ -78,78 +81,62 @@ export default {
             }
             return new Blob([uInt8Array], { type: contentType });
         },
-        wxShare() {
-            // 用于微信JS-SDK回调            
-            wxapi.wxRegister(this.wxShareTimeline)
-            // this.wxShareAppMessage()
+        // 用于微信JS-SDK回调   
+        wxRegCallback() {
+            this.wxShareTimeline()
+            this.wxShareAppMessage()
         },
-
-        wxFriendShare() {
-            // 用于微信JS-SDK回调            
-            wxapi.wxRegister(this.wxShareAppMessage)
-            // this.wxShareAppMessage()
-        },
+        // 微信自定义分享到朋友圈
         wxShareTimeline() {
-            // 微信自定义分享到朋友圈
-            // let option = {
-            //     title: '限时团购周 挑战最低价', // 分享标题, 请自行替换
-            //     link: window.location.href.split('#')[0], // 分享链接，根据自身项目决定是否需要split
-            //     imgUrl: 'http://yuouimg.shizuyx.com/201904/21/1555823185712683.jpg', // 分享图标, 请自行替换，需要绝对路径
-            //     success: () => {
-            //         alert('分享成功')
-            //     },
-            //     error: () => {
-            //         alert('已取消分享')
-            //     }
-            // }
-            // // 将配置注入通用方法
-            // wxapi.ShareTimeline(option)
+            let option = {
+                title: this.goods.share_title, // 分享标题, 请自行替换
+                link: this.url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.goods.share_img, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    alert('分享成功')
+                },
+                error: () => {
+                    alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareTimeline(option)
         },
+        // 微信自定义分享给朋友
         wxShareAppMessage() {
-            // 微信自定义分享给朋友
-            // let option = {
-            //     title: '限时团购周 挑战最低价', // 分享标题, 请自行替换
-            //     desc: '限时团购周 挑战最低价', // 分享描述, 请自行替换
-            //     link: window.location.href.split('#')[0], // 分享链接，根据自身项目决定是否需要split
-            //     imgUrl: 'http://yuouimg.shizuyx.com/201904/21/1555823185712683.jpg', // 分享图标, 请自行替换，需要绝对路径
-            //     success: () => {
-            //         alert('分享成功')
-            //     },
-            //     error: () => {
-            //         alert('已取消分享')
-            //     }
-            // }
-            // // 将配置注入通用方法
-            // wxapi.ShareAppMessage(option)
+            let option = {
+                title: this.goods.share_title, // 分享标题, 请自行替换
+                desc: '限时团购周 挑战最低价', // 分享描述, 请自行替换
+                link: this.url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.goods.share_img, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    alert('分享成功')
+                },
+                error: () => {
+                    alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareAppMessage(option)
         },
         //获取商品
         async getGoods() {
             let that = this;
             if (this.type == 1) {
                 let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.goods_id })
-                this.title = res.data.data.goods_name
-                this.price = res.data.data.goods_price
-                this.poster_img = res.data.data.dist_poster
+                this.goods = res.data.data
+                this.price = res.data.data.goods_piice
             } else {
                 let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
-                this.title = res.data.data.card_name
-                this.price = res.data.data.card_price
-                this.poster_img = res.data.data.dist_poster
+                this.goods = res.data.data
+                this.price = res.data.data.card_piice
             }
 
-            let url = '';
-            if (this.type == 1) {
-                url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
-                    '&type=1&id=' + this.goods_id
-            } else {
-                url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
-                    '&type=3&id=' + this.goods_id
-            }
 
             let qrcode = new QRCode('qrcode', {
                 width: 60,
                 height: 60, // 高度  
-                text: url, // 二维码内容  
+                text: this.url, // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                 // background: '#f0f',  
                 // foreground: '#ff0'  
@@ -186,6 +173,15 @@ export default {
         this.user = this.$localstore.get('userInfo')
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type
+
+        if (this.type == 1) {
+            this.url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
+                '&type=1&id=' + this.goods_id
+        } else {
+            this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+                '&type=3&id=' + this.goods_id
+        }
+
         //头像转换base64
         var image = new Image();
         image.src = this.user.wechat_img;
@@ -217,7 +213,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        // wxapi.wxRegister(this.wxRegCallback)
+        wxapi.wxRegister(this.wxRegCallback)
     },
 
     // 更新前状态

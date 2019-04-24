@@ -94,14 +94,15 @@
             </ul>
         </div>
         <!-- 手机号绑定 -->
-        <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
+        <!--         <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
             <van-cell-group>
                 <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
                 <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
                     <van-button slot="button" size="small" type="primary">发送验证码</van-button>
                 </van-field>
             </van-cell-group>
-        </van-dialog>
+        </van-dialog> -->
+        <BindPhone :show="show" ref="bindPhone"></BindPhone>
         <MyFooter></MyFooter>
     </div>
 </template>
@@ -113,8 +114,6 @@ export default {
     name: 'Index',
     data() {
         return {
-            phone: '',
-            sms: '',
             show: false,
             apiUrl: this.$common.ApiUrl(),
             Cardlist: [],
@@ -127,19 +126,6 @@ export default {
     },
     components: {},
     methods: {
-        //关闭填写手机号
-        async beforeCloseModel(action, done) {
-            let openid = this.$localstore.get('openid5')
-            let res = await this.$postRequest('/user/saveMobile', { openid: openid, phone: this.phone, sms: this.sms })
-            if (res.data.code == 1) {
-                this.$localstore.set('userInfo', res.data.data)
-                this.show = false
-                done()
-            } else {
-                this.$notify(res.data.msg);
-                done(false)
-            }
-        },
         skipPages(str) {
             this.$router.push({
                 name: str,
@@ -169,12 +155,15 @@ export default {
     // 创建完毕状态 
     created() {
         let userInfo = this.$localstore.get('userInfo')
-        if (!userInfo) {
-            this.show = true
-        }
-        if (userInfo && !userInfo.tel_phone) {
-            this.show = true
-        }
+        this.$nextTick(() => {
+            if (!userInfo) {
+                this.show = true
+            }
+            if (userInfo && !userInfo.tel_phone) {
+                this.show = true
+            }
+        })
+
 
         document.body.style.background = "#F6F6F6";
         const that = this;

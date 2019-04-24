@@ -166,7 +166,7 @@ export default {
 
         //点击确定按钮
         handleConfirm(data) {
-            let date = this.$dayjs(data).format('YYYY-MM-DD')            
+            let date = this.$dayjs(data).format('YYYY-MM-DD')
 
             this.dateTime = date;
             this.$refs.picker.close()
@@ -201,7 +201,9 @@ export default {
             let res = await this.$postRequest('/card/ActivityCard', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-                this.$router.go(-1)
+                setTimeout(() => {
+                    this.$router.go(-1)
+                }, 2000);
                 // that.$router.push({ name: 'CommentSucceed' })
             }
 

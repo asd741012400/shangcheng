@@ -22,6 +22,7 @@ export default {
             imgUrl: '',
             type: "",
             goods_id: "",
+            plus: "",
             title: "",
             price: "",
             wechat_img: "",
@@ -32,6 +33,12 @@ export default {
         // Poster
     },
     methods: {
+        //获取PlUS
+        async getPlUS() {
+            let id = this.$route.query.id
+            let res = await this.$getRequest('/home/GetPlus')
+            this.plus = res.data.data
+        },
         //base64转blob
         base64ToBlob(code) {
             let parts = code.split(';base64,');
@@ -49,49 +56,45 @@ export default {
         downloadImg() {
             this.$refs.myPoster.clickGeneratePicture();
         },
-        wxShare() {
-            // 用于微信JS-SDK回调            
-            wxapi.wxRegister(this.wxShareTimeline)
-            // this.wxShareAppMessage()
+        // 用于微信JS-SDK回调   
+        wxRegCallback() {
+            this.wxShareTimeline()
+            this.wxShareAppMessage()
         },
-
-        wxFriendShare() {
-            // 用于微信JS-SDK回调            
-            wxapi.wxRegister(this.wxShareAppMessage)
-            // this.wxShareAppMessage()
-        },
+        // 微信自定义分享到朋友圈
         wxShareTimeline() {
-            // 微信自定义分享到朋友圈
-            // let option = {
-            //     title: '限时团购周 挑战最低价', // 分享标题, 请自行替换
-            //     link: window.location.href.split('#')[0], // 分享链接，根据自身项目决定是否需要split
-            //     imgUrl: 'http://yuouimg.shizuyx.com/201904/21/1555823185712683.jpg', // 分享图标, 请自行替换，需要绝对路径
-            //     success: () => {
-            //         alert('分享成功')
-            //     },
-            //     error: () => {
-            //         alert('已取消分享')
-            //     }
-            // }
-            // // 将配置注入通用方法
-            // wxapi.ShareTimeline(option)
+            let option = {
+                title: this.plus.title, // 分享标题, 请自行替换
+                link: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2', // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareTimeline(option)
         },
+        // 微信自定义分享给朋友
         wxShareAppMessage() {
-            // 微信自定义分享给朋友
-            // let option = {
-            //     title: '限时团购周 挑战最低价', // 分享标题, 请自行替换
-            //     desc: '限时团购周 挑战最低价', // 分享描述, 请自行替换
-            //     link: window.location.href.split('#')[0], // 分享链接，根据自身项目决定是否需要split
-            //     imgUrl: 'http://yuouimg.shizuyx.com/201904/21/1555823185712683.jpg', // 分享图标, 请自行替换，需要绝对路径
-            //     success: () => {
-            //         alert('分享成功')
-            //     },
-            //     error: () => {
-            //         alert('已取消分享')
-            //     }
-            // }
-            // // 将配置注入通用方法
-            // wxapi.ShareAppMessage(option)
+            let option = {
+                title: this.plus.title, // 分享标题, 请自行替换
+                desc: this.plus.desc, // 分享描述, 请自行替换
+                link: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2', // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareAppMessage(option)
         },
         getBase64Image(img) {
             var canvas = document.createElement("canvas");
@@ -110,6 +113,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        this.getPlUS()
         let that = this
         document.title = "PLUS会员"
         this.user = this.$localstore.get('userInfo')
@@ -121,10 +125,11 @@ export default {
         this.wechat_img = this.user.wechat_img;
         image.onload = async () => {
             var base64 = this.getBase64Image(image);
-            let res = await this.$postRequest('/upload/UpBase64Image', { img: base64 })
-            if (res.data.code == 1) {
-                this.wechat_img = res.data.data
-            }
+            this.wechat_img = base64
+            // let res = await this.$postRequest('/upload/UpBase64Image', { img: base64 })
+            // if (res.data.code == 1) {
+            //     this.wechat_img = res.data.data
+            // }
         }
 
         //合成分享图
@@ -133,8 +138,8 @@ export default {
             let qrcode = new QRCode('qrcode', {
                 width: 80,
                 height: 80, // 高度  
-                text: 'http://' + window.location.host + '/#/VipEquity?share_id='+this.user.user_id+
-                '&type=2', // 二维码内容  
+                text: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2', // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                 // background: '#f0f',  
                 // foreground: '#ff0'  
@@ -162,7 +167,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        // wxapi.wxRegister(this.wxRegCallback)
+        wxapi.wxRegister(this.wxRegCallback)
     },
 
     // 更新前状态

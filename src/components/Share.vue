@@ -27,7 +27,6 @@
                 <b @click="shareHideFn">取 消</b>
             </div>
         </div>
-
         <div class="masking" v-if="maskingShow">
             <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
             <div>
@@ -45,9 +44,9 @@ export default {
     name: 'Share',
     data() {
         return {
-            message: "123",  
+            message: "123",
             shareShow: false,
-            maskingShow:false
+            maskingShow: false
         }
     },
     props: [
@@ -59,9 +58,9 @@ export default {
         showPoster() {
             this.$router.push({
                 name: "SharePoster",
-                query:{
-                    id:this.goodsId,
-                    type:this.type,
+                query: {
+                    id: this.goodsId,
+                    type: this.type,
                 }
             });
         },
@@ -188,7 +187,8 @@ export default {
             }
         }
     }
-    .masking{
+
+    .masking {
         position: fixed;
         width: 100%;
         height: 100%;
@@ -199,22 +199,26 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        span{
+
+        span {
             width: 3.48rem;
             overflow: hidden;
         }
-        div{
+
+        div {
             position: absolute;
             right: .5rem;
             top: 0;
-            p{
+
+            p {
                 width: 2rem;
                 font-size: .36rem;
                 margin: 1.5rem .6rem 0 0;
                 color: #fff;
                 text-align: center;
             }
-            i{
+
+            i {
                 width: 1.2rem;
                 overflow: hidden;
                 position: absolute;

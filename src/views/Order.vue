@@ -35,23 +35,41 @@
                             <span>合计 ￥{{item.total_amount}}</span>
                         </div>
                         <div>
+                            <!-- 全部 -->
                             <template v-if="active == 1">
-
+                                <template v-if="item.order_status == 0">
+                                    <van-button type="danger" size="mini">去付款</van-button>
+                                </template>
+                                <template v-else-if="item.order_status == 1">
+                                </template>
+                                <template v-else-if="item.order_status == 2">
+                                </template>
+                                <template v-else-if="item.order_status == 3">
+                                </template>
+                                <template v-else-if="item.order_status == 4">
+                                </template>
                             </template>
+                            <!-- 待付款 -->
                             <template v-else-if="active == 2">
+                                <van-button type="danger" size="mini">去付款</van-button>
                             </template>
+                            <!-- 待使用 -->
                             <template v-else-if="active == 3">
+                                <van-button type="info" size="mini">去使用</van-button>
                             </template>
+                            <!-- 待评价 -->
                             <template v-else-if="active == 4">
+                                <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             </template>
+                            <!-- 退款 -->
                             <template v-else-if="active == 5">
                             </template>
                             <!-- <van-button type="danger" size="mini">取消订单</van-button> -->
                             <!-- <van-button type="danger" size="mini">申请退款</van-button> -->
                             <!-- <van-button type="primary" size="mini">还想买</van-button> -->
                             <!-- <van-button type="info" size="mini">去使用</van-button> -->
-                            <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
-                            <van-button type="info" size="mini">激活使用</van-button>
+                            <!--                     <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                            <van-button type="info" size="mini">激活使用</van-button> -->
                         </div>
                     </div>
             </li>
@@ -65,7 +83,7 @@ export default {
         return {
             page: 1,
             user_id: '',
-            order_status: '',
+            // order_status: '',
             orderList: [],
             currSize: 0,
             pageSize: 10,
@@ -75,28 +93,34 @@ export default {
     components: {
 
     },
+    computed: {
+        order_status(){
+            switch (this.active) {
+                case 1:
+                    return status = 0
+                    break;
+                case 2:
+                    return status = 1
+                    break;
+                case 3:
+                    return status = 1
+                    break;
+                case 4:
+                    return status = 4
+                    break;
+                case 5:
+                    return status = 4
+                    break;
+                default:
+                    return status = ''
+            }
+        }
+    },
     methods: {
         //获取订单
         async getOrderList(index) {
             this.orderList = []
-            index--
-            switch (index) {
-                case 1:
-                    this.order_status = 1
-                    break;
-                case 2:
-                    this.order_status = 2
-                    break;
-                case 3:
-                    this.order_status = 1
-                    break;
-                case 4:
-                    this.order_status = 4
-                    break;
-                default:
-                    this.order_status = ''
-            }
-
+            console.log(this.order_status);
             let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             this.orderList = res.data.data.list
             this.currSize = res.data.data.list.length
@@ -112,7 +136,7 @@ export default {
         },
 
         //评价订单
-        async handleComment(id, type,goods_id) {
+        async handleComment(id, type, goods_id) {
             this.$router.push({
                 name: "Comment",
                 query: {
@@ -131,7 +155,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-        this.active = this.$route.query.index -1
+        this.active = this.$route.query.index - 1
         let user = this.$localstore.get('userInfo')
         this.user_id = user.user_id
         this.getOrderList()

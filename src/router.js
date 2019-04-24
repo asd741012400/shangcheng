@@ -428,7 +428,7 @@ router.beforeEach((to, from, next) => {
         localstore.set('business_id', business_id)
     }
 
-    let openid2 = localstore.get('openid5')
+    let openid2 = localstore.get('openid6')
 
     if (!openid2 && !openid) {
         // let url = window.location.href
@@ -442,10 +442,12 @@ router.beforeEach((to, from, next) => {
     //使用 openid 获取用户资料 缓存本地
     if (openid) {
         //保存openid
-        localstore.set('openid5', openid)
+        localstore.set('openid6', openid)
         getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
             if (res.data.data && res.data.data.user_id) {
                 localstore.set('userInfo', res.data.data)
+            } else {
+                localstore.set('userInfo', '')
             }
         })
     }
@@ -454,6 +456,8 @@ router.beforeEach((to, from, next) => {
         getRequest('/wechat/GetUserInfo', { openid: openid2 }).then(res => {
             if (res.data.data && res.data.data.user_id) {
                 localstore.set('userInfo', res.data.data)
+            } else {
+                localstore.set('userInfo', '')
             }
         })
     }
@@ -480,7 +484,7 @@ export default router
  * [shareFrom 分享来源处理]
  */
 function shareFrom(to) {
-    if (!isEmptyObject(to.query) && to.query.share_type) {
+    if (!isEmptyObject(to.query) && to.query.share_id) {
         //分享存储
         localstore.set('to_share', to)
     }

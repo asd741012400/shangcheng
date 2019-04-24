@@ -11,6 +11,7 @@ import localstore from 'store2' //本地存储
 // 引入全局组件
 //注册全局组件
 Vue.component('MyFooter', resolve => { require(['@/components/Footer'], resolve) }) //footer
+Vue.component('BindPhone', resolve => { require(['@/components/BindPhone'], resolve) }) //footer
 
 //ui库
 import Mint from 'mint-ui';
@@ -33,6 +34,7 @@ Vue.component(CountDown.name, CountDown);
 import { Toast } from 'mint-ui';
 
 Vue.config.productionTip = false
+Vue.prototype.$imgUrl = 'http://yuouimg.shizuyx.com';
 Vue.prototype.$message = Toast;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;

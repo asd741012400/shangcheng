@@ -18,19 +18,21 @@
             </header>
         </div>
         <div class="banner">
-            <span><img src="../assets/img2.png" alt=""></span>
+             <van-swipe :autoplay="3000" indicator-color="white">
+                  <van-swipe-item v-for="item in CardDetail.def_pic">
+                      <img :src="item" alt="">
+                  </van-swipe-item>
+            </van-swipe>
+            <!-- <span><img src="../assets/img2.png" alt=""></span> -->
             <!-- <span><img :src="CardDetail.def_pic[0]" alt=""></span> -->
-            <div class="text">
-
-                             <template v-if="cardDetailsState == 5">
-                    <div class="buy_null"><span>已售罄</span></div>
-                </template>
-                <template v-else-if="cardDetailsState == 3">
-                    <div class="buy_null"><span>已下架</span></div>
-                </template>
-
+            <div class="text" v-show="cardDetailsState == 1">
                 <yd-countdown slot="right" :time="changeTime(CardDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
+                </yd-countdown>
+            </div>
+            <div class="text" v-show="cardDetailsState == 5">
+                <yd-countdown slot="right" :time="changeTime(CardDetail.sale_stime)">
+                    <p>距离活动开始还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
             </div>
         </div>
@@ -162,34 +164,34 @@
                     <p>我要收藏</p>
                 </li>
             </ul>
-            <div class="btn">
-                <!-- 可购买状态 -->
-                <template v-if="cardDetailsState == 1">
-                    <div class="share" @click="shareShowFn">
-                        <span>￥10</span>
-                        <p>分享赚</p>
-                    </div>
-                    <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
-                </template>
-                <template v-else-if="cardDetailsState == 2">
-                    <div class="buy_null"><span>已售罄</span></div>
-                </template>
-                <template v-else-if="cardDetailsState == 3">
-                    <div class="buy_null"><span>已下架</span></div>
-                </template>
-                <template v-else-if="cardDetailsState == 4">
-                    <div class="vip_share" @click="shareShowFn">分享</div>
-                    <div class="vip_buy" @click="goPlus"><span>了解会员</span>
-                        <p>（限会员购买）</p>
-                    </div>
-                </template>
-                <template v-else-if="cardDetailsState == 5">
-                    <div class="buy_null"><span>还未开售</span></div>
-                </template>
-                <template v-else-if="cardDetailsState == 6">
-                    <div class="buy_null"><span>售卖截止</span></div>
-                </template>
+            <!-- <div class="btn"> -->
+            <!-- 可购买状态 -->
+            <div class="btn" v-show="cardDetailsState == 1">
+                <div class="share" @click="shareShowFn">
+                    <span>￥10</span>
+                    <p>分享赚</p>
+                </div>
+                <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
             </div>
+            <div class="btn" v-show="cardDetailsState == 2">
+                <div class="buy_null"><span>已售罄</span></div>
+            </div>
+            <div class="btn" v-show="cardDetailsState == 3">
+                <div class="buy_null"><span>已下架</span></div>
+            </div>
+            <div class="btn" v-show="cardDetailsState == 4">
+                <div class="vip_share" @click="shareShowFn">分享</div>
+                <div class="vip_buy" @click="goPlus"><span>了解会员</span>
+                    <p>（限会员购买）</p>
+                </div>
+            </div>
+            <div class="btn" v-show="cardDetailsState == 5">
+                <div class="buy_null"><span>等待开售</span></div>
+            </div>
+            <div class="btn" v-show="cardDetailsState == 6">
+                <div class="buy_null"><span>售卖截止</span></div>
+            </div>
+            <!-- </div> -->
         </footer>
         <Share :goods-id="CardDetail.card_id" type="3" ref="myShare"></Share>
     </div>
@@ -201,7 +203,7 @@ export default {
     data() {
         return {
             apiUrl: this.$common.ApiUrl(),
-            cardDetailsState: 4, //状态 1正常 2已售罄 3已下架 4会员购买
+            cardDetailsState: 4, //状态 1正常 2已售罄 3已下架 4会员购买 5还未开售 6售卖截止
             user: {
                 status: 0
             },
@@ -261,32 +263,36 @@ export default {
         },
         //定时器判断 商品是否截止销售
         timer() {
+            let that = this
             setInterval(() => {
                 let start_time = this.$dayjs().isBefore(this.$dayjs(this.CardDetail.sale_stime).format('YYYY/MM/DD HH:mm:ss'));
                 if (start_time) {
-                    this.cardDetailsState = 5 
+                    that.cardDetailsState = 5
                 }
                 let end_time = this.$dayjs().isAfter(this.$dayjs(this.CardDetail.sale_etime).format('YYYY/MM/DD HH:mm:ss'));
                 if (end_time) {
-                    this.cardDetailsState = 6
+                    that.cardDetailsState = 6
                 }
+
+                if (!start_time && !end_time) {
+                    if (that.CardDetail.store == 0) {
+                        that.cardDetailsState = 2
+                    } else if (that.CardDetail.is_online == 0) {
+                        that.cardDetailsState = 3
+                    } else if (that.CardDetail.is_vip == 1 && that.user.status == 0) {
+                        that.cardDetailsState = 4
+                    } else {
+                        that.cardDetailsState = 1
+                    }
+                }
+
             }, 1000)
         },
         //获取详情
         async getDetail() {
             let res = await this.$getRequest('/home/GetCardDetail', { id: this.$route.query.id })
             if (res.data.code == 1) {
-                const resData = res.data.data;
-                this.CardDetail = resData;
-                if (resData.store == 0) {
-                    this.cardDetailsState = 2
-                } else if (resData.is_online == 0) {
-                    this.cardDetailsState = 3
-                } else if (resData.is_vip == 1 && this.user.status == 0) {
-                    this.cardDetailsState = 4
-                } else {
-                    this.cardDetailsState = 1
-                }
+                this.CardDetail = res.data.data;
                 this.timer()
             }
         },

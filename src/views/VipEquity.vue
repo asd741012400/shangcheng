@@ -148,14 +148,14 @@
             </div>
             <div class="buyVip">
                 <template v-if="share_id !== '' &&　user.status < 1">
-                    <router-link :to="{name:'VipOrder',query:{type:2}}">
-                        <van-button round block type="info">立即开通 ￥599</van-button>
-                    </router-link>
+                    <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
+                    <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
+                    <!-- </router-link> -->
                 </template>
                 <template v-else-if="share_id !== '' &&　!user.user_id">
-                    <router-link :to="{name:'VipOrder',query:{type:2}}">
-                        <van-button round block type="info">立即开通 ￥599</van-button>
-                    </router-link>
+                    <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
+                    <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
+                    <!-- </router-link> -->
                 </template>
                 <template v-else-if="user.status >= 1">
                     <router-link :to="{name:'VipPlus'}">
@@ -163,6 +163,7 @@
                     </router-link>
                 </template>
             </div>
+            <BindPhone :show="show"></BindPhone>
             <MyFooter></MyFooter>
         </div>
 </template>
@@ -171,14 +172,34 @@ export default {
     name: 'VipEquity',
     data() {
         return {
+            show: false,
             firstEnter: false,
-            user: '',
+            user: {
+                user_id: '',
+                tel_phone: '',
+                status: 0
+            },
             share_id: '',
             plus: {}
         }
     },
     components: {},
     methods: {
+        //购买Plus
+        BuyPlus() {
+            let user = this.$localstore.get('userInfo')
+            if (user) {
+                this.user = user
+            }
+            if (!user) {
+                this.show = true
+                return false
+            } else {
+                this.postUser()
+                this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+            }
+
+        },
         goBack() {
             let from_url = this.$localstore.get('from_url')
             if (!from_url) {
@@ -188,22 +209,40 @@ export default {
             }
         },
         //获取PlUS
-        async getOrder() {
+        async getPlUS() {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
+        },
+        //关系绑定
+        async postUser() {
+            let openid = this.$localstore.get('openid6')
+            let data = {
+                share_id: this.share_id,
+                openid: openid
+            }
+            if (openid && !this.user.user_id && this.share_id) {
+                let res = await this.$postRequest('/user/Recommend', data)
+            }
         }
     },
 
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#000";
-        this.user = this.$localstore.get('userInfo')
-        console.log(this.user);
-        this.getOrder()
+        let user = this.$localstore.get('userInfo')
+        if (user) {
+            this.user = user
+        }
+        let has_share = this.$localstore.get('has_share')
+        if (has_share && has_share.query.share_id) {
+            this.share_id = has_share.query.share_id
+        }
+        this.getPlUS()
+        // this.postUser()
     },
 
     // 挂载前状态
@@ -257,7 +296,7 @@ header {
     // position: fixed;
     // top: 0;
     // left: 0;
-    // width: 100%;    
+    // width: 100%;
     .icon_return {
         width: 1rem;
         height: 1rem;

@@ -47,7 +47,7 @@ export default {
         //注册
         async register() {
             let business_id = this.$localstore.get('business_id')
-            let openid = this.$localstore.get('openid5')
+            let openid = this.$localstore.get('openid6')
             let userInfo = this.$localstore.get('userInfo')
             let data = {
                 business_id: business_id,
