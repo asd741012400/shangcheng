@@ -6,108 +6,115 @@
             <div class="add"></div>
         </header>
         <div class="header">
-            <div class="image"><img src="../assets/head_portrait2.png" alt=""></div>
-                <div class="text">
-                    <i><img src="../assets/icon_warning_b.png" alt=""></i>
-                    <p>请按照左边范例上传激活照片</p>
+            <div class="image">
+                <template v-if="imgUrl == ''">
+                    <img src="../assets/head_portrait2.png" alt="">
+                        </template>
+                    <template v-else>
+                        <img :src="imgUrl" alt="">
+                    </template>
+            </div>
+            <div class="text">
+                <i> <img src="../assets/icon_warning_b.png" alt=""></i>
+                <p>请按照左边范例上传激活照片</p>
+            </div>
+        </div>
+        <div class="add_image">
+            <input type="file" id="upload-ele" name="image" accept=“image/*” @change='handleInputChange'>
+            <div class="default_img">
+                <i><img src="../assets/icon_add.png" alt=""></i>
+                <p>点击上传图片</p>
+            </div>
+            <!-- <div class="images" v-else><img :src="imgUrl" alt=""></div> -->
+        </div>
+        <div class="user_message">
+            <div class="user_name box">
+                <label>孩子姓名</label>
+                <div class="boxs">
+                    <input type="text" v-model="child_name">
                 </div>
             </div>
-            <div class="add_image">
-                <input type="file" id="upload-ele" name="image" accept=“image/*” @change='handleInputChange'>
-                <div class="default_img" v-if="imgUrl == ''">
-                    <i><img src="../assets/icon_add.png" alt=""></i>
-                    <p>点击上传图片</p>
+            <div class="user_sex box">
+                <label>性别</label>
+                <div class="boxs">
+                    <p>
+                        <i v-if="sex != 1"><img src="../assets/icon_unselected.png" alt=""></i>
+                        <i v-else><img src="../assets/icon_pitch_on.png" alt=""></i>
+                        <span>王子</span>
+                    </p>
+                    <p>
+                        <i v-if="sex != 2"><img src="../assets/icon_unselected.png" alt=""></i>
+                        <i v-else><img src="../assets/icon_pitch_on.png" alt=""></i>
+                        <span>公主</span>
+                    </p>
                 </div>
-                <div class="images" v-else><img :src="imgUrl" alt=""></div>
+            </div>
+            <div class="user_date box">
+                <label>出生日期</label>
+                <div class="datePicker boxs">
+                    <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate" v-model="birthday">
+                    </mt-datetime-picker>
+                    <span>{{birthday}}</span>
+                    <p @click="openPicker"></p>
+                    <i><img src="../assets/icon_pull_down.png" alt=""></i>
                 </div>
-                <div class="user_message">
-                    <div class="user_name box">
-                        <label>孩子姓名</label>
-                        <div class="boxs">
-                            <input type="text" v-model="child_name">
-                        </div>
-                    </div>
-                    <div class="user_sex box">
-                        <label>性别</label>
-                        <div class="boxs">
-                            <p>
-                                <i v-if="sex != 1"><img src="../assets/icon_unselected.png" alt=""></i>
-                                <i v-else><img src="../assets/icon_pitch_on.png" alt=""></i>
-                                <span>王子</span>
-                            </p>
-                            <p>
-                                <i v-if="sex != 2"><img src="../assets/icon_unselected.png" alt=""></i>
-                                <i v-else><img src="../assets/icon_pitch_on.png" alt=""></i>
-                                <span>公主</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="user_date box">
-                        <label>出生日期</label>
-                        <div class="datePicker boxs">
-                            <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate" v-model="birthday">
-                            </mt-datetime-picker>
-                            <!-- <span>{{birthday}}</span> -->
-                            <p @click="openPicker"></p>
-                            <i><img src="../assets/icon_pull_down.png" alt=""></i>
-                        </div>
-                    </div>
-                    <div class="user_phone box">
-                        <label>手机号</label>
-                        <div class="boxs">
-                            <input type="text" v-model="tel_phone">
-                        </div>
-                    </div>
-                    <div class="user_stature box">
-                        <label>身高</label>
-                        <div class="boxs">
-                            <span :class="tall == '1m以下' ? 'active' : ''" @click="getTall('1m以下')">1m以下</span>
-                            <span :class="tall == '1.0-1.2m' ? 'active' : ''" @click="getTall('1.0-1.2m')">1.0-1.2m</span>
-                            <span :class="tall == '1.2-1.4m' ? 'active' : ''" @click="getTall('1.2-1.4m')">1.2-1.4m</span>
-                            <span :class="tall == '1.4m以上' ? 'active' : ''" @click="getTall('1.4m以上')">1.4m以上</span>
-                        </div>
-                    </div>
+            </div>
+            <div class="user_phone box">
+                <label>手机号</label>
+                <div class="boxs">
+                    <input type="text" v-model="tel_phone">
                 </div>
-                <div class="sub_btn" @click="confirmPopShow"><span>提交激活</span></div>
-                <div class="confirm_pop_bg" v-if="confirmPop">
-                    <div class="confirm_pop">
-                        <div class="boxs">
-                            <h3>激活须知</h3>
-                            <ul>
-                                <li>
-                                    <h4>
+            </div>
+            <div class="user_stature box">
+                <label>身高</label>
+                <div class="boxs">
+                    <span :class="tall == '1m以下' ? 'active' : ''" @click="getTall('1m以下')">1m以下</span>
+                    <span :class="tall == '1.0-1.2m' ? 'active' : ''" @click="getTall('1.0-1.2m')">1.0-1.2m</span>
+                    <span :class="tall == '1.2-1.4m' ? 'active' : ''" @click="getTall('1.2-1.4m')">1.2-1.4m</span>
+                    <span :class="tall == '1.4m以上' ? 'active' : ''" @click="getTall('1.4m以上')">1.4m以上</span>
+                </div>
+            </div>
+        </div>
+        <div class="sub_btn" @click="confirmPopShow"><span>提交激活</span></div>
+        <div class="confirm_pop_bg" v-if="confirmPop">
+            <div class="confirm_pop">
+                <div class="boxs">
+                    <h3>激活须知</h3>
+                    <ul>
+                        <li>
+                            <h4>
                                     <i><img src="../assets/icon_yuan.png" alt=""></i>
                                     <span>须知一</span>
                                   </h4>
-                                    <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                                </li>
-                                <li>
-                                    <h4>
+                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
+                        </li>
+                        <li>
+                            <h4>
                                         <i><img src="../assets/icon_yuan.png" alt=""></i>
                                         <span>须知二</span>
                                       </h4>
-                                    <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                                </li>
-                                <li>
-                                    <h4>
+                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
+                        </li>
+                        <li>
+                            <h4>
                                         <i><img src="../assets/icon_yuan.png" alt=""></i>
                                         <span>须知三</span>
                                       </h4>
-                                    <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                                </li>
-                            </ul>
-                            <div class="agreement">
-                                <van-checkbox v-model="agreementStuats">同意激活协议</van-checkbox>
-                            </div>
-                            <div class="btn">
-                                <a @click="confirmPopHide">取 消</a>
-                                <b @click="submit">确 定</b>
-                            </div>
-                            <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
-                        </div>
+                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
+                        </li>
+                    </ul>
+                    <div class="agreement">
+                        <van-checkbox v-model="agreementStuats">同意激活协议</van-checkbox>
                     </div>
+                    <div class="btn">
+                        <a @click="confirmPopHide">取 消</a>
+                        <b @click="submit">确 定</b>
+                    </div>
+                    <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
             </div>
+        </div>
+    </div>
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
@@ -123,10 +130,10 @@ export default {
             imgUrl: '',
             child_name: '',
             sex: 1,
-            birthday: date,
+            birthday: '2000-01-01',
             tel_phone: '',
             tall: '1m以下',
-            startDate: new Date('2019-01-01'),
+            startDate: new Date('2000-01-01'),
             datePicker: false,
             closeOnClickModalS: true,
             agreementStuats: false,
