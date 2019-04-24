@@ -26,6 +26,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.body.style.background = "rgb(246, 246, 246)";
         document.title = "申请提现"
     },
 

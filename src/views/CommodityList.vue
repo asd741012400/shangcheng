@@ -158,6 +158,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.body.style.background = "#fff";
         this.getList()
     },
 

@@ -23,6 +23,8 @@
             };
         },
         created() {
+            document.body.style.background = '#fff'
+            
         },
         mounted() {
             this.$nextTick(() => {

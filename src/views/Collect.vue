@@ -7,12 +7,12 @@
     </header>
 
     <div class="sort">
-      <p>
+      <p @click="sortOneFn">
         <span>全部</span>
         <i v-if="sortOne"><img src="../assets/icon_up.png" alt=""></i>
         <i v-else><img src="../assets/icon_pull_down.png" alt=""></i>
       </p>
-      <p>
+      <p @click="sortTowFn">
         <span>失效</span>
         <i v-if="sortTow"><img src="../assets/icon_up.png" alt=""></i>
         <i v-else><img src="../assets/icon_pull_down.png" alt=""></i>
@@ -66,6 +66,12 @@ export default {
   components:{
   },
   methods:{
+    sortOneFn(){
+      this.sortOne = !this.sortOne
+    },
+    sortTowFn(){
+      this.sortTow = !this.sortTow
+    }
   },
 
   // 创建前状态

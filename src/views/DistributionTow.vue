@@ -79,6 +79,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.body.style.background = "#fff";
         let user = this.$localstore.get('userInfo')
         this.userInfo = user
     },

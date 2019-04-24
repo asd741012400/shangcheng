@@ -15,6 +15,10 @@
 
 <script>
 export default {
+  // 创建完毕状态 
+  created(){
+    document.body.style.background = "#f0f0f0";
+  },
   methods: {
     backPage() {
       this.$router.go(-1);
