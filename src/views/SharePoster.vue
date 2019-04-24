@@ -191,6 +191,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.body.style.background = "#fff";
         this.user = this.$localstore.get('userInfo')
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type

@@ -385,6 +385,7 @@ export default {
         this.getComment()
         this.getStore()
         wxapi.wxRegister(this.wxRegCallback)
+        document.body.style.background = '#fff'
 
     },
 

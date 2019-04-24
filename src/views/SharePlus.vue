@@ -1,5 +1,5 @@
 <template>
-    <div class="SharePoster">
+    <div class="SharePlus">
         <div class="share_poster">
             <i @click="$router.go(-1)"><img src="../assets/icon_close3.png" alt=""></i>
             <div class="share_poster_content">
@@ -28,7 +28,7 @@ import wxapi from '@/lib/wx.js'
 import Poster from '../components/Poster'
 
 export default {
-    name: 'SharePoster',
+    name: 'SharePlus',
     data() {
         return {}
     },
@@ -90,7 +90,7 @@ export default {
 
     // 创建完毕状态 
     created() {
-
+        document.body.style.background = "#fff";
     },
 
     // 挂载前状态
@@ -116,7 +116,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.SharePoster {
+.SharePlus {
     width: 100%;
     height: 100%;
     background: linear-gradient(180deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);

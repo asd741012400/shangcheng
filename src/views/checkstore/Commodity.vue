@@ -39,6 +39,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.body.style.background = "#fff";
         document.title = "商品核销"
         let cehckGoods = this.$localstore.get('cehckGoods')
         this.checkInfo = cehckGoods.card_info
