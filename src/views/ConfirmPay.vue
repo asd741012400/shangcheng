@@ -13,19 +13,16 @@
                         <strong>{{order.goods_title}}</strong>
                     </li>
                     <li>
-                        <span>一大一小</span>
+                       <span v-if="attr_name">{{attr_name}}</span>
                     </li>
                     <li>
                         <p>
-                            <b>￥99</b>
+                            <b>￥{{order.amount}}</b>
                             <em>×{{order.order_num}}</em>
                         </p>
                     </li>
                 </ul>
             </div>
-
-
-
             <div class="message">
                 <h3>订单信息</h3>
                 <ul>
@@ -70,7 +67,8 @@ export default {
     name: 'ConfirmPay',
     data() {
         return {
-            order: ''
+            order: '',
+            attr_name: ''
         }
     },
     components: {
@@ -82,11 +80,25 @@ export default {
             let id = this.$route.query.id
             let res = await this.$getRequest('/order/getOrder', { id: id })
             this.order = res.data.data
+
+            if (this.order.order_type == 1) {
+                let res1 = await this.$getRequest('home/GetGoodsDetail', { id: this.order.goods_id })
+                this.goods = res1.data.data   
+
+                if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
+                    this.goods.goods_attr.map(item => {
+                        if (item.attr_id == this.order.attr_id) {
+                            this.attr_name = item.attr_name           
+                        }
+                    })
+                }
+            }
+
         },
         //支付
         async payOrder() {
             let that = this
-                // that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
+            // that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
             if (res.data.code == 1) {
@@ -98,9 +110,9 @@ export default {
 
                     // 支付成功后的操作
                     options.success = async function() {
-                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })            
-                        that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id,type:that.order.order_type } })                           
-                        
+                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
+
                     };
 
                     //  取消支付的操作

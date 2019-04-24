@@ -47,7 +47,7 @@
                         <div class="datePicker boxs">
                             <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate" v-model="birthday">
                             </mt-datetime-picker>
-                            <span>{{dateTime}}</span>
+                            <!-- <span>{{birthday}}</span> -->
                             <p @click="openPicker"></p>
                             <i><img src="../assets/icon_pull_down.png" alt=""></i>
                         </div>
@@ -118,11 +118,12 @@ Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
     name: 'CardActivate',
     data() {
+        let date = this.$dayjs().format('YYYY-MM-DD');
         return {
             imgUrl: '',
             child_name: '',
             sex: 1,
-            birthday: '',
+            birthday: date,
             tel_phone: '',
             tall: '1m以下',
             startDate: new Date('2019-01-01'),
@@ -167,8 +168,7 @@ export default {
         //点击确定按钮
         handleConfirm(data) {
             let date = this.$dayjs(data).format('YYYY-MM-DD')
-
-            this.dateTime = date;
+            this.birthday = date;
             this.$refs.picker.close()
             event.stopPropagation()
         },
@@ -202,7 +202,7 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 setTimeout(() => {
-                    this.$router.go(-1)
+                    // this.$router.go(-1)
                 }, 2000);
                 // that.$router.push({ name: 'CommentSucceed' })
             }

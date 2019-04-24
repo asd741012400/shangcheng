@@ -13,7 +13,7 @@
                         <strong>{{title}}</strong>
                     </li>
                     <li>
-                        <!-- <span>一大一小</span> -->
+                        <span v-if="attr_name">{{attr_name}}</span>
                     </li>
                     <li>
                         <p>
@@ -98,6 +98,9 @@ export default {
             price: '',
             tel: '',
             goods: '',
+            attr_name: '',
+            attr_id: '',
+            share_id: '',
             card_ID: '',
             num: 1,
             play_time: date,
@@ -123,12 +126,16 @@ export default {
 
         //添加订单
         async addOrder() {
+            if (!this.goods) {
+                return false;
+            }
             let postData = {
                 order_type: this.$route.query.order_type,
                 goods_id: this.$route.query.id,
                 goods_title: this.title,
                 goods_img: this.goods.thumb_img,
                 real_name: this.real_name,
+                share_id: this.share_id,
                 play_time: this.play_time,
                 attr_id: this.$route.query.attr_id,
                 tel: this.tel,
@@ -166,6 +173,15 @@ export default {
                 this.goods = res.data.data
                 this.title = this.goods.goods_name
                 this.price = this.goods.goods_price
+
+                if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
+                    this.goods.goods_attr.map(item => {
+                        if (item.attr_id == this.attr_id) {
+                            this.attr_name = item.attr_name
+                            this.price = item.attr_price
+                        }
+                    })
+                }
             } else if (type == 3) {
                 let res = await this.$getRequest('home/GetCardDetail', { id: id })
                 this.goods = res.data.data
@@ -182,7 +198,17 @@ export default {
     // 创建完毕状态
     created() {
         this.getCard()
+        const id = this.$route.query.id;
+        let type = this.$route.query.order_type
+        this.attr_id = this.$route.query.attr_id
+        this.share_id = this.$route.query.share_id
         document.body.style.background = "#F6F6F6";
+        let has_share = this.$localstore.get('has_share')
+        if (has_share && has_share.query.share_id) {
+            if (has_share.query.id == id && has_share.query.type == type) {
+                this.share_id = has_share.query.share_id
+            }
+        }
     },
 
     computed: {
@@ -251,6 +277,7 @@ export default {
 
     .mian {
         padding-bottom: 1.2rem;
+
         .commodity {
             display: flex;
             padding: .28rem .6rem .32rem .46rem;

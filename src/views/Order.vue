@@ -38,7 +38,7 @@
                             <!-- 全部 -->
                             <template v-if="active == 1">
                                 <template v-if="item.order_status == 0">
-                                    <van-button type="danger" size="mini">去付款</van-button>
+                                    <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
                                 </template>
                                 <template v-else-if="item.order_status == 1">
                                 </template>
@@ -51,7 +51,7 @@
                             </template>
                             <!-- 待付款 -->
                             <template v-else-if="active == 2">
-                                <van-button type="danger" size="mini">去付款</van-button>
+                                <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
                             </template>
                             <!-- 待使用 -->
                             <template v-else-if="active == 3">
@@ -94,7 +94,7 @@ export default {
 
     },
     computed: {
-        order_status(){
+        order_status() {
             switch (this.active) {
                 case 1:
                     return status = 0
@@ -117,6 +117,10 @@ export default {
         }
     },
     methods: {
+        //支付
+        payOrder(id) {
+            this.$router.push({ name: 'ConfirmPay', query: { id: id } })
+        },
         //获取订单
         async getOrderList(index) {
             this.orderList = []

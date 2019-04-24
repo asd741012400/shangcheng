@@ -45,8 +45,9 @@
                 </ul>
             </div>
             <div class="agreement">
-                <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
-                <span v-else><img src="../assets/icon_unselected.png" alt=""></span>
+    <!--             <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
+                <span v-else><img src="../assets/icon_unselected.png" alt=""></span> -->
+                 <van-checkbox v-model="agreementStuats">同意激活协议</van-checkbox>
                 <p>同意</p>
                 <a href="#">会员协议</a>
             </div>

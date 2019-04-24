@@ -57,8 +57,9 @@ export default {
             type: "",
             goods_id: "",
             goods: "",
-            // title: "",
+            title: "",
             price: "",
+            desc: "",
             wechat_img: "",
             poster_img: "",
         }
@@ -89,9 +90,9 @@ export default {
         // 微信自定义分享到朋友圈
         wxShareTimeline() {
             let option = {
-                title: this.goods.share_title, // 分享标题, 请自行替换
+                title: this.title, // 分享标题, 请自行替换
                 link: this.url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.goods.share_img, // 分享图标, 请自行替换，需要绝对路径
+                imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
                 success: () => {
                     alert('分享成功')
                 },
@@ -105,10 +106,10 @@ export default {
         // 微信自定义分享给朋友
         wxShareAppMessage() {
             let option = {
-                title: this.goods.share_title, // 分享标题, 请自行替换
-                desc: '限时团购周 挑战最低价', // 分享描述, 请自行替换
+                title: this.title, // 分享标题, 请自行替换
+                desc: this.desc, // 分享描述, 请自行替换
                 link: this.url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.goods.share_img, // 分享图标, 请自行替换，需要绝对路径
+                imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
                 success: () => {
                     alert('分享成功')
                 },
@@ -125,11 +126,17 @@ export default {
             if (this.type == 1) {
                 let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.goods_id })
                 this.goods = res.data.data
-                this.price = res.data.data.goods_piice
+                this.price = res.data.data.goods_price
+                this.title = res.data.data.goods_name
+                this.desc = res.data.data.goods_info
+                this.poster_img = res.data.data.dist_poster
             } else {
                 let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
                 this.goods = res.data.data
-                this.price = res.data.data.card_piice
+                this.price = res.data.data.card_price
+                this.title = res.data.data.share_title
+                this.desc = res.data.data.share_desc
+                this.poster_img = res.data.data.share_desc
             }
 
 
@@ -177,7 +184,7 @@ export default {
         if (this.type == 1) {
             this.url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
                 '&type=1&id=' + this.goods_id
-        } else {
+        } else if (this.type == 3) {
             this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
                 '&type=3&id=' + this.goods_id
         }

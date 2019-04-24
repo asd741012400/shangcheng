@@ -221,7 +221,7 @@ export default {
                 share_id: this.share_id,
                 openid: openid
             }
-            if (openid && !this.user.user_id && this.share_id) {
+            if (this.share_id) {
                 let res = await this.$postRequest('/user/Recommend', data)
             }
         }
@@ -242,7 +242,7 @@ export default {
             this.share_id = has_share.query.share_id
         }
         this.getPlUS()
-        // this.postUser()
+        this.postUser()
     },
 
     // 挂载前状态

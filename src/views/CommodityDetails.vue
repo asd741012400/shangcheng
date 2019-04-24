@@ -19,8 +19,8 @@
         </div>
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
-                  <van-swipe-item v-for="item in GoodsDetail.def_pic">
-                      <img :src="item" alt="">
+                <van-swipe-item v-for="item in GoodsDetail.def_pic">
+                    <img :src="item" alt="">
                   </van-swipe-item>
             </van-swipe>
             <!-- <span></span> -->
@@ -37,7 +37,7 @@
         </div>
         <div class="main">
             <div class="project_title">
-                <h3>加勒比儿童票一大一小加勒比</h3>
+                <h3>{{GoodsDetail.goods_name}}</h3>
                 <div class="price">
                     <div class="vip_price">
                         <em>会员价</em>
@@ -47,11 +47,12 @@
                     <b>非会员价￥{{GoodsDetail.goods_price}}</b>
                     <p>市场价<span>￥{{GoodsDetail.mkt_price}}</span></p>
                 </div>
-                <div class="purchase_limitation">限购一份</div>
-                <!--                 <div class="option">
-                    <span class="active">一大一小</span>
-                    <span>两大一小</span>
-                </div> -->
+                <template v-if="GoodsDetail.limit_num > 0">
+                    <div class="purchase_limitation">限购{{GoodsDetail.limit_num}}份</div>
+                </template>
+                <div class="option">
+                    <span @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii" :class="attrActive == ii ? 'active' : ''">{{vv.attr_name}}</span>
+                </div>
             </div>
             <div class="attention">
                 <h3>购买须知</h3>
@@ -135,7 +136,6 @@
                 </div>
             </div>
         </div>
-
         <footer>
             <ul>
                 <li @click="goHome">
@@ -182,6 +182,7 @@
             <!-- </div> -->
         </footer>
         <Share :goods-id="GoodsDetail.goods_id" type="1" ref="myShare"></Share>
+        <BindPhone :show="show" ref="bindPhone"></BindPhone>
     </div>
 </template>
 <script>
@@ -195,8 +196,11 @@ export default {
             user: {
                 status: 0
             },
+            attrActive: 0,
+            attr_id: '',
             active: 1,
             table: 1,
+            show: false,
             isCollect: false,
             comments: [],
             storeList: [],
@@ -207,6 +211,10 @@ export default {
         Share
     },
     methods: {
+        changeAttr(index){
+            this.attrActive = index
+            this.attr_id = this.GoodsDetail.goods_attr[index]
+        },
         collectGoods() {
             this.isCollect = !this.isCollect
         },
@@ -234,13 +242,25 @@ export default {
             this.$refs.myShare.shareShowFn();
         },
         //确认下单
-        ConfirmAnOrderPage() {
+        ConfirmAnOrderPage() {  
+            if (!this.attr_id) {
+              this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
+            }
+
+            let userInfo = this.$localstore.get('userInfo')
+            if (!userInfo) {
+                this.show = true
+                return false
+            }
+
             const that = this;
             that.$router.push({
                 name: "ConfirmAnOrder",
                 query: {
                     id: this.$route.query.id,
+                    share_id: this.$route.query.share_id,
                     order_type: 1,
+                    attr_id: this.attr_id,
                     arrival: "GoodsDetails",
                 }
             });
@@ -269,6 +289,7 @@ export default {
                         that.GoodsDetailsState = 1
                     }
                 }
+
 
             }, 1000)
         },
@@ -415,7 +436,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index:10;
+            z-index: 10;
 
             p {
                 font-size: .28rem;
@@ -523,7 +544,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: flex-start;
-                background: #f6f6f6;
+                background: #FFF;
 
                 span {
                     width: 2.12rem;

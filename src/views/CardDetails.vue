@@ -18,9 +18,9 @@
             </header>
         </div>
         <div class="banner">
-             <van-swipe :autoplay="3000" indicator-color="white">
-                  <van-swipe-item v-for="item in CardDetail.def_pic">
-                      <img :src="item" alt="">
+            <van-swipe :autoplay="3000" indicator-color="white">
+                <van-swipe-item v-for="item in CardDetail.def_pic">
+                    <img :src="item" alt="">
                   </van-swipe-item>
             </van-swipe>
             <!-- <span><img src="../assets/img2.png" alt=""></span> -->
@@ -194,6 +194,7 @@
             <!-- </div> -->
         </footer>
         <Share :goods-id="CardDetail.card_id" type="3" ref="myShare"></Share>
+        <BindPhone :show="show" ref="bindPhone"></BindPhone>
     </div>
 </template>
 <script>
@@ -209,6 +210,7 @@ export default {
             },
             active: 1,
             table: 1,
+            show: false,
             isCollect: false,
             CardDetail: {},
             comments: [],
@@ -251,11 +253,18 @@ export default {
         },
         //确认下单
         ConfirmAnOrderPage() {
+            let userInfo = this.$localstore.get('userInfo')
+            if (!userInfo) {
+                this.show = true
+                return false
+            }
+
             const that = this;
             that.$router.push({
                 name: "ConfirmAnOrder",
                 query: {
                     id: that.id,
+                    share_id: this.$route.query.share_id,
                     order_type: 3,
                     arrival: "CardDetails",
                 }

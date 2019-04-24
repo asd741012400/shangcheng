@@ -120,7 +120,7 @@ export default {
             NavList: [],
             pages: 1,
             GoodsList: [],
-            goodsListSum: 0,
+            goodsListSum: 0, 
             goodsListLength: 0,
         }
     },
@@ -163,7 +163,6 @@ export default {
                 this.show = true
             }
         })
-
 
         document.body.style.background = "#F6F6F6";
         const that = this;

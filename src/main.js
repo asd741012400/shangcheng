@@ -27,11 +27,11 @@ Vue.component(CountDown.name, CountDown);
 
 
 //移动端调试
-// import Vconsole from 'vconsole';
-// const vConsole = new Vconsole();
-// Vue.use(vConsole)
+import Vconsole from 'vconsole';
+const vConsole = new Vconsole();
+Vue.use(vConsole)
 
-import { Toast } from 'mint-ui';
+import { Toast } from 'mint-ui'; 
 
 Vue.config.productionTip = false
 Vue.prototype.$imgUrl = 'http://yuouimg.shizuyx.com';

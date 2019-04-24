@@ -157,7 +157,6 @@ export default {
         //获取卡包
         async getCardList(index) {
             this.cardList = []
-
             let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
             this.cardList = res.data.data.list
             this.currSize = res.data.data.list.length
