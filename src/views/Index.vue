@@ -64,10 +64,10 @@
             </div>
         </div>
         <div class="activity_list">
-            <!--                 <h3>
+            <h3>
         <span><img src="../assets/icon_recommend.png" alt=""></span>
         <a>爆款推荐</a>
-      </h3> -->
+      </h3>
             <ul>
                 <li class="vip_price" v-for="(item,index) in GoodsList">
                     <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
@@ -81,7 +81,8 @@
                         </div>
                         <div class="project">
                             <p>{{item.goods_name}}</p>
-                            <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span>
+                            <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
+                            <!-- <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span> -->
                         </div>
                         <div class="price">
                             <span>现价</span>
@@ -120,7 +121,7 @@ export default {
             NavList: [],
             pages: 1,
             GoodsList: [],
-            goodsListSum: 0, 
+            goodsListSum: 0,
             goodsListLength: 0,
         }
     },
@@ -157,9 +158,6 @@ export default {
         let userInfo = this.$localstore.get('userInfo')
         this.$nextTick(() => {
             if (!userInfo) {
-                this.show = true
-            }
-            if (userInfo && !userInfo.tel_phone) {
                 this.show = true
             }
         })

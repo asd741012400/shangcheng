@@ -19,7 +19,7 @@
         </div>
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
-                <van-swipe-item v-for="item in CardDetail.def_pic">
+                <van-swipe-item v-for="(item,index) in CardDetail.def_pic" :key="index">
                     <img :src="item" alt="">
                   </van-swipe-item>
             </van-swipe>
@@ -199,6 +199,8 @@
 </template>
 <script>
 import Share from '../components/Share'
+import wxapi from '@/lib/wx.js'
+
 export default {
     name: 'CardDetails',
     data() {
@@ -264,7 +266,6 @@ export default {
                 name: "ConfirmAnOrder",
                 query: {
                     id: that.id,
-                    share_id: this.$route.query.share_id,
                     order_type: 3,
                     arrival: "CardDetails",
                 }
@@ -309,7 +310,49 @@ export default {
         async getComment() {
             let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 3 })
             this.comments = res.data.data.list;
-        }
+        },
+        // 用于微信JS-SDK回调   
+        wxRegCallback() {
+            this.wxShareTimeline()
+            this.wxShareAppMessage()
+        },
+        // 微信自定义分享到朋友圈
+        wxShareTimeline() {
+            let url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+                '&type=3&id=' + this.$route.query.id
+            let option = {
+                title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
+                link: url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareTimeline(option)
+        },
+        // 微信自定义分享给朋友
+        wxShareAppMessage() {
+            let url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+                '&type=3&id=' + this.$route.query.id
+            let option = {
+                title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
+                desc: this.cardDetailsState.share_desc, // 分享描述, 请自行替换
+                link: url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareAppMessage(option)
+        },
 
     },
 
@@ -323,14 +366,15 @@ export default {
         this.user = this.$localstore.get('userInfo')
         this.id = this.$route.query.id
         document.body.style.background = "#fff";
-
     },
 
     // 挂载前状态
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {},
+    mounted() {
+        wxapi.wxRegister(this.wxRegCallback)
+    },
 
     // 更新前状态
     beforeUpdate() {},

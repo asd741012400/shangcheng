@@ -119,6 +119,7 @@
   </div>
 </template>
 <script>
+
     export default {
       name:'CardDetailsTow',
       data(){

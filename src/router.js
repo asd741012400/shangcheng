@@ -12,7 +12,7 @@ import MyCardBag from './views/MyCardBag.vue' //我的卡包
 import UseCard from './views/UseCard.vue' //使用卡片
 import CardActivate from './views/Cardactivate.vue' // 卡片激活
 import PaySucceed from './views/PaySucceed.vue' //付款成功
-import WithdrawDeposit from './views/WithdrawDeposit.vue' //提现详情
+import WithdrawDeposit from './views/WithdrawDeposit.vue' //申请提现
 import CardDetails from './views/CardDetails.vue' //卡片详情
 import CommodityDetails from './views/CommodityDetails.vue' //商品详情
 import CommentMore from './views/CommentMore.vue' //更多评论
@@ -48,7 +48,7 @@ import VipPlus from './views/VipPlus.vue'
 // import MerchantShop from './views/merchant/MerchantShop.vue' //主页
 // import ChageShop from './views/merchant/ChageShop.vue' //切换门店
 // import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
-// import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
+import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
 // import MyTeam from './views/merchant/MyTeam.vue' //我的团队
 // import TeamDel from './views/merchant/TeamDel.vue' //团队详情
 // import MemberDel from './views/merchant/MemberDel.vue' //成员详情
@@ -61,10 +61,10 @@ import VipPlus from './views/VipPlus.vue'
 
 //核销
 // import Login2 from './views/checkstore/Login.vue'
-// import Administrator from './views/checkstore/Administrator.vue' //绑定管理员
+import Administrator from './views/checkstore/Administrator.vue' //绑定管理员
 // import CheckHome from './views/checkstore/Home.vue' //主页
 // import CheckList from './views/checkstore/CheckList.vue' //核销记录
-// import StoreList from './views/checkstore/StoreList.vue' //提现记录
+import StoreList from './views/checkstore/StoreList.vue' //提现记录
 // import CheckCode from './views/checkstore/CheckCode.vue' //核销码核销
 // import CheckWithdrawDeposit from './views/checkstore/WithdrawDeposit.vue' //申请提现
 // import Commodity from './views/checkstore/Commodity.vue' //商品核销
@@ -88,7 +88,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index
+            component: Administrator
         },
         /*前台*/
         {
@@ -462,21 +462,33 @@ router.beforeEach((to, from, next) => {
         })
     }
 
+    //用户来自分享  但未注册
+    let user = localstore.get('userInfo')
+    if (!user && to.query.share_id) {
+        let data = {
+            share_id: to.query.share_id,
+            openid: openid2
+        }
+        getRequest('/user/Recommend', data)
+    }
+
 
     //判断是否会员分享
     if (to.name == 'VipEquity' || to.name == 'CardDetails' || to.name == 'CommodityDetails') {
         next()
     } else {
-        let share = localstore.get('to_share')
-        if (share && share.name) {
-            localstore.set('to_share', '')
-            localstore.set('has_share', share)
-            next({ name: share.name, query: share.query })
-        }
+        // let share = localstore.get('to_share')
+        // if (share && share.name) {
+        //     localstore.set('to_share', '')
+        //     localstore.set('has_share', share)
+        //     next({ name: share.name, query: share.query })
+        // }
     }
 
     next()
 })
+
+
 
 export default router
 

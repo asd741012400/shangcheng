@@ -13,7 +13,7 @@
                         <strong>{{order.goods_title}}</strong>
                     </li>
                     <li>
-                       <span v-if="attr_name">{{attr_name}}</span>
+                        <span v-if="attr_name">{{attr_name}}</span>
                     </li>
                     <li>
                         <p>
@@ -83,12 +83,12 @@ export default {
 
             if (this.order.order_type == 1) {
                 let res1 = await this.$getRequest('home/GetGoodsDetail', { id: this.order.goods_id })
-                this.goods = res1.data.data   
+                this.goods = res1.data.data
 
                 if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
                     this.goods.goods_attr.map(item => {
                         if (item.attr_id == this.order.attr_id) {
-                            this.attr_name = item.attr_name           
+                            this.attr_name = item.attr_name
                         }
                     })
                 }
@@ -110,6 +110,13 @@ export default {
 
                     // 支付成功后的操作
                     options.success = async function() {
+                        let has_share = that.$localstore.get('has_share')
+                        if (has_share && has_share.query.share_id) {
+                            if (has_share.query.id == that.order.order_id && has_share.query.type == that.order.order_type) {
+                                that.$localstore.set('has_share', '')
+                            }
+                        }
+
                         let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
                         that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
 

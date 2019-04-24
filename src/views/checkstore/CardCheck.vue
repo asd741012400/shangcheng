@@ -4,7 +4,7 @@
             <span><img src="../../assets/head_portrait2.png" alt=""></span>
             <div>
                 <h3>
-          <a>小皮孩儿【3岁】</a>
+          <a>{{cardInfo.child_name}}【3岁】</a>
         </h3>
                 <p>
                     <a>1362541254125</a>
@@ -12,7 +12,7 @@
             </div>
         </header>
         <ul class="team_member">
-            <li v-for="(item , index) in cardInfo" @click="cardCheckFn(index)">
+            <li v-for="(item , index) in cardInfo.pro_list" @click="cardCheckFn(index)">
                 <i><img :src="item.thumb_img" alt=""></i>
                 <div>
                     <p class="name">
@@ -20,7 +20,7 @@
                     </p>
                     <p>剩余 {{item.limit_num}} 次</p>
                 </div>
-                <span><img v-if="item.state" src="../../assets/icon_schedule.png" alt=""></span>
+                <span><img  src="../../assets/icon_schedule.png" alt=""></span>
             </li>
         </ul>
         <a class="sub_btn">确定</a>
@@ -31,8 +31,7 @@ export default {
     name: 'MyTeam',
     data() {
         return {
-            cardInfo:{},
-            list: []
+            cardInfo: {}
         }
     },
     components: {},
@@ -49,9 +48,13 @@ export default {
     created() {
         document.body.style.background = "#F0F0F0";
         document.title = "卡片核销"
-        let list = this.$localstore.get('cehckGoods')   
+        let list = this.$localstore.get('cehckGoods')
         this.cardInfo = list.product_info
-        this.info = list.card_info
+        console.log(this.cardInfo);
+        // const date1 = this.$dayjs().format('YYYY-MM-DD')
+        // const date2 = this.$dayjs(this.cardInfo.birthday)
+        // date1.diff(date2, 'year')
+        // console.log(date1.diff(date2, 'year'));
     },
 
     // 挂载前状态

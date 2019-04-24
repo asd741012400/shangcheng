@@ -2,11 +2,11 @@
     <div class="StoreList">
         <header>
             <div>
-                <p>￥999</p>
+                <p>￥{{data.month_money || 0.00}}</p>
                 <span>当月提现</span>
             </div>
             <div>
-                <p>￥999</p>
+                <p>￥{{data.total_money || 0.00}}</p>
                 <span>累计提现</span>
             </div>
         </header>
@@ -20,69 +20,30 @@
         </div>
         <div class="list">
             <ul>
-                <li>
+                <li v-for="item in data.list">
                     <div>
                         <h3>
-                            <span>金额：￥500</span>
-                            <a>已提现</a>
+                            <span>金额：￥{{item.profit_money || 0.00}}</span>
+                              <template v-if="item.status == 1">
+                              <a>申请中</a>
+                            </template>
+                            <template v-else-if="item.status == 2">
+                              <a>已提现</a>
+                            </template>
+                            <template v-else-if="item.status == 3">
+                                  <a>已拒绝</a>
+                            </template>                      
                         </h3>
-                        <em>商户流水号：000000</em>
+                        <em>商户流水号：{{item.transaction_no}}</em>
                         <p>
-                            <span>2018-5-6 10:00</span>
-                            <a>明细></a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <h3>
-                            <span>金额：￥500</span>
-                            <a>已提现</a>
-                        </h3>
-                        <em>商户流水号：000000</em>
-                        <p>
-                            <span>2018-5-6 10:00</span>
-                            <a>明细></a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <h3>
-                            <span>金额：￥500</span>
-                            <a>已提现</a>
-                        </h3>
-                        <em>商户流水号：000000</em>
-                        <p>
-                            <span>2018-5-6 10:00</span>
-                            <a>明细></a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <div>
-                        <h3>
-                            <span>金额：￥500</span>
-                            <a>已提现</a>
-                        </h3>
-                        <em>商户流水号：000000</em>
-                        <p>
-                            <span>2018-5-6 10:00</span>
-                            <a>明细></a>
+                            <span>{{item.account_time}}</span>
+                            <a @click="getDetail(item.s_id)">明细></a>
                         </p>
                     </div>
                 </li>
             </ul>
         </div>
- 
-        <mt-datetime-picker
-            type="date"
-            ref="picker"
-            year-format="{value} 年"
-            month-format="{value} 月"
-            date-format="{value} 日"
-            @confirm="handleConfirm"
-            :startDate="startDate">
+        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate">
         </mt-datetime-picker>
     </div>
 </template>
@@ -96,22 +57,38 @@ export default {
     data() {
         return {
             startDate: new Date('2019-01-01'),
-            dateTime:'请选择时间'
+            dateTime: '',
+            page: 1,
+            data: {}
         }
     },
     components: {},
     methods: {
         //开启时间选择器
-        openPicker () {
+        openPicker() {
             this.$refs.picker.open()
         },
         //点击确定按钮
-        handleConfirm (data) {
+        handleConfirm(data) {
             let date = this.$dayjs(data).format('YYYY-MM-DD')
             this.dateTime = date;
             this.$refs.picker.close()
             event.stopPropagation()
         },
+        //获取提现记录
+        async getList() {
+            let data = {
+                user_id: this.user.user_id,
+                page: this.page,
+                date: this.dateTime
+            }
+            let res = await this.$getRequest('/store/WidthdrewList', data)
+            this.data = res.data.data
+
+        },
+        async getDetail(id) {
+            this.$router.push({ name: "WithdrawDepositDel", query: { id: id } })
+        }
 
     },
 
@@ -122,6 +99,11 @@ export default {
     created() {
         document.title = "提现记录"
         document.body.style.background = "#fff";
+        let user = this.$localstore.get('userInfo')
+        if (user) {
+            this.user = user
+        }
+        this.getList()
     },
 
     // 挂载前状态
@@ -145,94 +127,111 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.StoreList{
-    header{
+.StoreList {
+    header {
         height: 2.4rem;
         background: #FF6C5F;
         display: flex;
         align-items: center;
         justify-content: center;
-        div{
-        width: 2.6rem;
-        color: #fff;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        font-size: .28rem;
-        p{
-            font-size: .48rem;
-            padding-bottom: .1rem;
-        }
+
+        div {
+            width: 2.6rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-size: .28rem;
+
+            p {
+                font-size: .48rem;
+                padding-bottom: .1rem;
+            }
         }
     }
-    .titles{
+
+    .titles {
         height: 1.15rem;
         display: flex;
         align-items: center;
         padding-right: .5rem;
-        p{
+
+        p {
             flex: 1;
             font-size: 0.3rem;
             padding-left: .43rem;
         }
-        div{
+
+        div {
             position: relative;
             display: flex;
             align-items: center;
             height: 100%;
             width: 2rem;
-            time{
+
+            time {
                 flex: 1;
                 font-size: 0.3rem;
             }
-            span{
+
+            span {
                 width: .3rem;
                 overflow: hidden;
             }
-            em{
+
+            em {
                 position: absolute;
                 width: 100%;
                 height: 100%;
             }
         }
     }
-    .list{
-        ul{
-            li{
+
+    .list {
+        ul {
+            li {
                 padding: 0.33rem .43rem .42rem .51rem;
                 border-top: 2px solid #f6f6f6;
                 display: flex;
                 align-items: center;
-                div{
+
+                div {
                     display: flex;
                     flex: 1;
                     height: 1.4rem;
                     flex-direction: column;
                     justify-content: space-between;
-                    h3{
+
+                    h3 {
                         font-size: 0.3rem;
                         display: flex;
-                        span{
+
+                        span {
                             flex: 1;
                             font-weight: bold;
                         }
-                        a{
+
+                        a {
                             font-weight: bold;
                         }
                     }
-                    em{
+
+                    em {
                         font-size: 0.24rem;
                         color: #666666;
                         font-style: normal;
                     }
-                    p{
+
+                    p {
                         font-size: 0.24rem;
                         display: flex;
-                        span{
+
+                        span {
                             flex: 1;
                             color: #666666;
                         }
-                        a{
+
+                        a {
                             text-decoration: underline;
                             font-size: 0.3rem;
                         }
@@ -244,7 +243,7 @@ export default {
 }
 </style>
 <style>
-.el-message-box{
+.el-message-box {
     width: 80%;
 }
 </style>

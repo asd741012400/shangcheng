@@ -168,6 +168,7 @@
         </div>
 </template>
 <script>
+import wxapi from '@/lib/wx.js'
 export default {
     name: 'VipEquity',
     data() {
@@ -215,16 +216,56 @@ export default {
             this.plus = res.data.data
         },
         //关系绑定
-        async postUser() {
-            let openid = this.$localstore.get('openid6')
-            let data = {
-                share_id: this.share_id,
-                openid: openid
+        // async postUser() {
+        //     let openid = this.$localstore.get('openid6')
+        //     let data = {
+        //         share_id: this.share_id,
+        //         openid: openid
+        //     }
+        //     if (this.share_id) {
+        //         let res = await this.$postRequest('/user/Recommend', data)
+        //     }
+        // },
+        // 用于微信JS-SDK回调   
+        wxRegCallback() {
+            this.wxShareTimeline()
+            this.wxShareAppMessage()
+        },
+        // 微信自定义分享到朋友圈
+        wxShareTimeline() {
+            let option = {
+                title: this.plus.title, // 分享标题, 请自行替换
+                link: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2', // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
             }
-            if (this.share_id) {
-                let res = await this.$postRequest('/user/Recommend', data)
+            // 将配置注入通用方法
+            wxapi.ShareTimeline(option)
+        },
+        // 微信自定义分享给朋友
+        wxShareAppMessage() {
+            let option = {
+                title: this.plus.title, // 分享标题, 请自行替换
+                desc: this.plus.desc, // 分享描述, 请自行替换
+                link: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2', // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
             }
-        }
+            // 将配置注入通用方法
+            wxapi.ShareAppMessage(option)
+        },
     },
 
     // 创建前状态
@@ -242,14 +283,17 @@ export default {
             this.share_id = has_share.query.share_id
         }
         this.getPlUS()
-        this.postUser()
+        // this.postUser()
+
     },
 
     // 挂载前状态
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {},
+    mounted() {
+        wxapi.wxRegister(this.wxRegCallback)
+    },
 
     // 更新前状态
     beforeUpdate() {},

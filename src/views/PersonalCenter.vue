@@ -20,7 +20,7 @@
                     <a>历史收益</a>
                 </li>
                 <li>
-                    <router-link :to="{name:'CheckWithdrawDeposit'}">
+                    <router-link :to="{name:'WithdrawDeposit'}">
                         <p>￥{{userInfo.getmoney ||　0.00}}</p>
                         <a>可提现</a>
                     </router-link>

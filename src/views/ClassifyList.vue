@@ -25,7 +25,7 @@
                         </div>
                         <div class="project">
                             <p>{{item.goods_name}}</p>
-                            <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span>
+                            <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
                         </div>
                         <div class="share">
                             <div class="price">
@@ -81,7 +81,9 @@ export default {
             this.cid = id
             let res = await this.$getRequest('home/GetGoodsListByCid', { cid: id, page: this.page })
             this.goodsList = res.data.data.list
-            this.currSize = res.data.data.list.length
+            if (res.data.data.list) {                
+                this.currSize = res.data.data.list.length
+            }
         },
 
         //获取更多商品
@@ -282,7 +284,7 @@ export default {
                         }
 
                         a {
-                            color:#fff;
+                            color: #fff;
                             font-size: .4rem;
                         }
                     }

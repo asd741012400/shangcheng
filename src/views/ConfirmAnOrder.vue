@@ -31,10 +31,10 @@
                     <a @click="numChage('+')">+</a>
                 </div>
             </div>
-            <div class="discounts">
+            <!--             <div class="discounts">
                 <b>使用优惠</b>
                 <span>国庆卷</span>
-            </div>
+            </div> -->
             <div class="message">
                 <ul>
                     <li>
@@ -96,9 +96,13 @@ export default {
             real_name: '',
             title: '',
             price: '',
+            limit_num: 0,
+            store: 0,
             tel: '',
             goods: '',
             attr_name: '',
+            id: '',
+            type: '',
             attr_id: '',
             share_id: '',
             card_ID: '',
@@ -154,6 +158,17 @@ export default {
 
         numChage(str) {
             const that = this;
+
+            if (that.num > this.limit_num) {
+                this.$message('已到最大限购数量')
+                return false
+            }
+
+            if (that.num > this.store) {
+                this.$message('库存不足')
+                return false
+            }
+
             if (str == "-") {
                 if (that.num <= 1) {
                     that.num = 1
@@ -172,13 +187,26 @@ export default {
                 let res = await this.$getRequest('home/GetGoodsDetail', { id: id })
                 this.goods = res.data.data
                 this.title = this.goods.goods_name
-                this.price = this.goods.goods_price
+                this.limit_num = this.goods.limit_num
+                this.store = this.goods.store
+                if (this.userInfo.status == 0) {
+                    this.price = this.goods.goods_price
+                } else {
+                    this.price = this.goods.cost_price
+                }
 
                 if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
                     this.goods.goods_attr.map(item => {
                         if (item.attr_id == this.attr_id) {
                             this.attr_name = item.attr_name
-                            this.price = item.attr_price
+                            this.limit_num = item.attr_limit_num
+                            this.store = item.attr_store
+                            if (this.userInfo.status == 0) {
+                                this.price = item.attr_price
+                            } else {
+                                this.price = item.attr_vip_price
+                            }
+
                         }
                     })
                 }
@@ -186,7 +214,11 @@ export default {
                 let res = await this.$getRequest('home/GetCardDetail', { id: id })
                 this.goods = res.data.data
                 this.title = this.goods.card_name
-                this.price = this.goods.card_price
+                if (this.userInfo.status == 0) {
+                    this.price = this.goods.card_price
+                } else {
+                    this.price = this.goods.cost_price
+                }
             }
         }
 
@@ -197,18 +229,21 @@ export default {
 
     // 创建完毕状态
     created() {
-        this.getCard()
-        const id = this.$route.query.id;
-        let type = this.$route.query.order_type
+        let userInfo = this.$localstore.get('userInfo')
+        if (userInfo) {
+            this.userInfo = userInfo
+        }
+        this.id = this.$route.query.id;
+        this.type = this.$route.query.order_type
         this.attr_id = this.$route.query.attr_id
-        this.share_id = this.$route.query.share_id
         document.body.style.background = "#F6F6F6";
         let has_share = this.$localstore.get('has_share')
         if (has_share && has_share.query.share_id) {
-            if (has_share.query.id == id && has_share.query.type == type) {
+            if (has_share.query.id == this.id && has_share.query.type == this.type) {
                 this.share_id = has_share.query.share_id
             }
         }
+        this.getCard()
     },
 
     computed: {

@@ -19,7 +19,7 @@
         </div>
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
-                <van-swipe-item v-for="item in GoodsDetail.def_pic">
+                <van-swipe-item v-for="(item,index) in GoodsDetail.def_pic" :key="index">
                     <img :src="item" alt="">
                   </van-swipe-item>
             </van-swipe>
@@ -39,16 +39,17 @@
             <div class="project_title">
                 <h3>{{GoodsDetail.goods_name}}</h3>
                 <div class="price">
+
                     <div class="vip_price">
                         <em>会员价</em>
                         <i>￥</i>
-                        <a>{{GoodsDetail.cost_price}}</a>
+                        <a>{{cost_price}}</a>
                     </div>
-                    <b>非会员价￥{{GoodsDetail.goods_price}}</b>
-                    <p>市场价<span>￥{{GoodsDetail.mkt_price}}</span></p>
+                    <b>非会员价￥{{goods_price}}</b>
+                    <p>市场价<span>￥{{mkt_price}}</span></p>
                 </div>
-                <template v-if="GoodsDetail.limit_num > 0">
-                    <div class="purchase_limitation">限购{{GoodsDetail.limit_num}}份</div>
+                <template v-show="limit_num > 0">
+                    <div class="purchase_limitation">限购{{limit_num}}份</div>
                 </template>
                 <div class="option">
                     <span @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii" :class="attrActive == ii ? 'active' : ''">{{vv.attr_name}}</span>
@@ -187,6 +188,8 @@
 </template>
 <script>
 import Share from '../components/Share'
+import wxapi from '@/lib/wx.js'
+
 export default {
     name: 'CommodityDetails',
     data() {
@@ -196,8 +199,13 @@ export default {
             user: {
                 status: 0
             },
+            goods_price: 0,
+            cost_price: 0,
+            mkt_price: 0,
+            limit_num: 0,
             attrActive: 0,
             attr_id: '',
+            share_id: '',
             active: 1,
             table: 1,
             show: false,
@@ -211,9 +219,13 @@ export default {
         Share
     },
     methods: {
-        changeAttr(index){
+        changeAttr(index) {
             this.attrActive = index
-            this.attr_id = this.GoodsDetail.goods_attr[index]
+            this.attr_id = this.GoodsDetail.goods_attr[index].attr_id
+            this.cost_price = this.GoodsDetail.goods_attr[index].attr_vip_price
+            this.goods_price = this.GoodsDetail.goods_attr[index].attr_price
+            this.mkt_price = this.GoodsDetail.goods_attr[index].attr_dist_money
+            this.limit_num = this.GoodsDetail.goods_attr[index].attr_limit_num
         },
         collectGoods() {
             this.isCollect = !this.isCollect
@@ -242,9 +254,14 @@ export default {
             this.$refs.myShare.shareShowFn();
         },
         //确认下单
-        ConfirmAnOrderPage() {  
+        ConfirmAnOrderPage() {
+            if (this.limit_num == 0) {
+                 this.$message('当前限购0件!');
+                 return false;
+            }
+
             if (!this.attr_id) {
-              this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
+                this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
             }
 
             let userInfo = this.$localstore.get('userInfo')
@@ -253,17 +270,15 @@ export default {
                 return false
             }
 
-            const that = this;
-            that.$router.push({
-                name: "ConfirmAnOrder",
+            this.$router.push({
+                path: 'ConfirmAnOrder',
                 query: {
                     id: this.$route.query.id,
-                    share_id: this.$route.query.share_id,
                     order_type: 1,
-                    attr_id: this.attr_id,
-                    arrival: "GoodsDetails",
+                    attr_id: this.attr_id
                 }
-            });
+            })
+
         },
         //定时器判断 商品是否截止销售
         timer() {
@@ -290,7 +305,6 @@ export default {
                     }
                 }
 
-
             }, 1000)
         },
         //获取详情
@@ -298,6 +312,10 @@ export default {
             let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.$route.query.id })
             if (res.data.code == 1) {
                 this.GoodsDetail = res.data.data;
+                this.cost_price = this.GoodsDetail.cost_price
+                this.goods_price = this.GoodsDetail.goods_price
+                this.mkt_price = this.GoodsDetail.mkt_price
+                this.limit_num = this.GoodsDetail.limit_num
                 this.timer();
             }
         },
@@ -310,6 +328,48 @@ export default {
         async getStore() {
             let res = await this.$getRequest('/home/GetGoodsStore', { goods_id: this.$route.query.id })
             this.storeList = res.data.data;
+        },
+        // 用于微信JS-SDK回调   
+        wxRegCallback() {
+            this.wxShareTimeline()
+            this.wxShareAppMessage()
+        },
+        // 微信自定义分享到朋友圈
+        wxShareTimeline() {
+            let url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
+                '&type=1&id=' + this.GoodsDetail.goods_id
+            let option = {
+                title: this.GoodsDetail.goods_name, // 分享标题, 请自行替换
+                link: url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.GoodsDetail.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareTimeline(option)
+        },
+        // 微信自定义分享给朋友
+        wxShareAppMessage() {
+            let url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
+                '&type=1&id=' + this.GoodsDetail.goods_id
+            let option = {
+                title: this.GoodsDetail.goods_name, // 分享标题, 请自行替换
+                desc: this.GoodsDetail.goods_info, // 分享描述, 请自行替换
+                link: url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.GoodsDetail.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    // alert('分享成功')
+                },
+                error: () => {
+                    // alert('已取消分享')
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareAppMessage(option)
         },
 
     },
@@ -324,6 +384,7 @@ export default {
         this.getDetail()
         this.getComment()
         this.getStore()
+        wxapi.wxRegister(this.wxRegCallback)
 
     },
 

@@ -10,7 +10,7 @@
                         <b>{{user.username}}</b>
                     </div>
                     <div class="img"><img src="../assets/img2.png" alt=""></div>
-                             <!-- <div class="img"><img :src="$imgUrl +goods.share_img" alt=""></div> -->
+                        <!-- <div class="img"><img :src="$imgUrl +goods.share_img" alt=""></div> -->
                         <div class="code">
                             <div class="code_text">
                                 <h3>{{title}}</h3>
@@ -25,11 +25,11 @@
                     </div>
                 </div>
                 <ul class="share_type">
-                    <li @click="wxShare()">
+                    <li @click="maskingShowFn">
                         <span><img src="../assets/share_wx.png" alt=""></span>
                         <p>微信</p>
                     </li>
-                    <li @click="wxFriendShare()">
+                    <li @click="maskingShowFn">
                         <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
                         <p>朋友圈</p>
                     </li>
@@ -38,6 +38,13 @@
                         <p>保存图片</p>
                     </li>
                 </ul>
+            </div>
+            <div class="masking" v-if="maskingShow">
+                <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
+                <div>
+                    <i><img src="../assets/share_img1.png" alt=""></i>
+                    <p>微信分享移到这里啦~</p>
+                </div>
             </div>
         </div>
 </template>
@@ -52,7 +59,7 @@ export default {
     data() {
         return {
             user: {},
-            url: '',//分享url
+            url: '', //分享url
             imgUrl: '',
             type: "",
             goods_id: "",
@@ -62,12 +69,19 @@ export default {
             desc: "",
             wechat_img: "",
             poster_img: "",
+            maskingShow: false,
         }
     },
     components: {
         // Poster
     },
     methods: {
+        maskingShowFn(ev) {
+            this.maskingShow = true;
+        },
+        maskingHideFn() {
+            this.maskingShow = false;
+        },
         //base64转blob
         base64ToBlob(code) {
             let parts = code.split(';base64,');
@@ -94,10 +108,10 @@ export default {
                 link: this.url, // 分享链接，根据自身项目决定是否需要split
                 imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
                 success: () => {
-                    alert('分享成功')
+                    // alert('分享成功')
                 },
                 error: () => {
-                    alert('已取消分享')
+                    // alert('已取消分享')
                 }
             }
             // 将配置注入通用方法
@@ -111,10 +125,10 @@ export default {
                 link: this.url, // 分享链接，根据自身项目决定是否需要split
                 imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
                 success: () => {
-                    alert('分享成功')
+                    // alert('分享成功')
                 },
                 error: () => {
-                    alert('已取消分享')
+                    // alert('已取消分享')
                 }
             }
             // 将配置注入通用方法
@@ -405,6 +419,47 @@ export default {
                 color: #515C6F;
                 font-size: .2rem;
             }
+        }
+    }
+
+}
+
+.masking {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: #000000, $alpha: 0.5);
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+        width: 3.48rem;
+        overflow: hidden;
+    }
+
+    div {
+        position: absolute;
+        right: .5rem;
+        top: 0;
+
+        p {
+            width: 2rem;
+            font-size: .36rem;
+            margin: 1.5rem .6rem 0 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        i {
+            width: 1.2rem;
+            overflow: hidden;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
     }
 }

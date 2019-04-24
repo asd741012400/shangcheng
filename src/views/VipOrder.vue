@@ -68,6 +68,7 @@ export default {
     name: 'VipOrder',
     data() {
         return {
+            share_id: '',
             plus: {},
             agreementState: false
         }
@@ -84,6 +85,7 @@ export default {
         async addOrder() {
             let postData = {
                 order_type: 2,
+                share_id: this.share_id,
                 goods_id: this.plus.setting_id,
                 goods_title: this.plus.name,
                 openid: this.$localstore.get('openid6'),
@@ -105,6 +107,12 @@ export default {
     // 创建完毕状态
     created() {
         document.body.style.background = "#f6f6f6";
+        let has_share = this.$localstore.get('has_share')
+        if (has_share && has_share.query.share_id) {
+            if (has_share.query.id == this.id && has_share.query.type == this.type) {
+                this.share_id = has_share.query.share_id
+            }
+        }
         this.getOrder()
     },
 

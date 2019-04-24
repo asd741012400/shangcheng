@@ -56,11 +56,17 @@ export default {
     components: {},
     methods: {
         showPoster() {
+            let userInfo = this.$localstore.get('userInfo')
+            if (!userInfo) {
+                this.$router.push({name:'Index'})
+                return false
+            }
             this.$router.push({
                 name: "SharePoster",
                 query: {
                     id: this.goodsId,
                     type: this.type,
+                    share_id: this.user_id,
                 }
             });
         },

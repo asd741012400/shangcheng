@@ -127,7 +127,9 @@ export default {
             console.log(this.order_status);
             let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             this.orderList = res.data.data.list
-            this.currSize = res.data.data.list.length
+            if (res.data.data.list) {
+                this.currSize = res.data.data.list.length
+            }
             this.pageSize = res.data.data.count
         },
 
@@ -136,7 +138,9 @@ export default {
             let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             let data = res.data.data.list
             this.orderList = this.orderList.concat(data);
-            this.currSize = res.data.data.list.length
+            if (res.data.data.list) {
+                this.currSize = res.data.data.list.length
+            }
         },
 
         //评价订单

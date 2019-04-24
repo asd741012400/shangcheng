@@ -59,6 +59,7 @@ export default {
             let res = await this.$postRequest('/business/register', data)
             this.$message(res.data.msg)
             if (res.data.code == 1 || res.data.code == 2) {
+                this.$localstore.set('business_user', res.data.data)
                 setTimeout(() => {
                     this.$router.push({ name: 'CheckHome' })
                 }, 2000)

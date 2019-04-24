@@ -27,7 +27,7 @@ export default {
             let data = {
                 code: this.code,
                 admin_id: userInfo.user_id,
-                shop_id: userInfo.business_id,
+                shop_id: userInfo.business_id
             }
             let res = await this.$postRequest('/cancle/CancleOne', data)
             if (res.data.code == 1) {

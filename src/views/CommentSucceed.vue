@@ -163,6 +163,9 @@ export default {
           overflow: hidden;
           margin-right: 4px;
         }
+        a{
+          color: #fff
+        }
       }
     }
     b{
