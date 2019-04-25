@@ -55,7 +55,7 @@ import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提�
 // import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
 // import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
 // import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
-// import Generalize from './views/merchant/Generalize.vue' //我的推广
+import Generalize from './views/merchant/Generalize.vue' //我的推广
 // import PersonalStores from './views/merchant/PersonalStores.vue' //我的店铺
 
 

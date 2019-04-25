@@ -19,7 +19,7 @@
                                 <template v-else>
                                     <p>{{item.username}}</p>
                                 </template>
-                                     <time>{{item.add_time}}</time>
+                                <time>{{item.add_time}}</time>
                             </div>
                         </div>
                         <div class="grade">
@@ -47,6 +47,7 @@ export default {
             table: 1,
             CardDetail: {},
             comments: [],
+            page: 1,
             currSize: 0,
             pageSize: 10,
             countDownNum: 0,
@@ -61,16 +62,23 @@ export default {
         },
         //获取评论
         async getComment() {
-            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1 })
-            this.comments = res.data.data.list;
-            this.currSize = res.data.data.list.length
-            this.pageSize = res.data.data.count
+            this.comments = []
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1, page: this.page })
+            if (res.data.data.list) {
+                this.comments = res.data.data.list;
+                this.currSize = res.data.data.list.length
+                this.pageSize = res.data.data.count
+            }
+
         },
         //获取更多评论
         async getCommentMore() {
-            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1 })
-            this.comments = this.comments.concat(res.data.data.list);
-            this.currSize = res.data.data.list.length
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1, page: this.page })
+            if (res.data.data.list) {
+                this.comments = this.comments.concat(res.data.data.list);
+                this.currSize = res.data.data.list.length
+            }
+
         },
     },
 

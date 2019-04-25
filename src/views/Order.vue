@@ -36,6 +36,7 @@
                         </div>
                         <div>
                             <!-- 全部 -->
+                            <!-- order_status`'订单状态 0:未支付;1:订单完成;2:订单超时 3分单退款 4:已退款 5已使用 6 退款中 200:用户取消订单 201:后台取消订单;', -->
                             <template v-if="active == 1">
                                 <template v-if="item.order_status == 0">
                                     <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>

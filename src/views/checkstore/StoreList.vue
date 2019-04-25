@@ -43,7 +43,7 @@
                 </li>
             </ul>
         </div>
-        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate">
+        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" @confirm="handleConfirm" :startDate="startDate">
         </mt-datetime-picker>
     </div>
 </template>
@@ -55,11 +55,14 @@ Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
     name: 'StoreList',
     data() {
+        let date = this.$dayjs().format('YYYY-MM')
         return {
-            startDate: new Date('2019-01-01'),
-            dateTime: '',
+            startDate: new Date(date),
+            dateTime: date,
+            data: {},
             page: 1,
-            data: {}
+            currSize: 0,
+            pageSize: 10,
         }
     },
     components: {},
@@ -70,9 +73,10 @@ export default {
         },
         //点击确定按钮
         handleConfirm(data) {
-            let date = this.$dayjs(data).format('YYYY-MM-DD')
+            let date = this.$dayjs(data).format('YYYY-MM')
             this.dateTime = date;
             this.$refs.picker.close()
+            this.getList()
             event.stopPropagation()
         },
         //获取提现记录
@@ -84,8 +88,21 @@ export default {
             }
             let res = await this.$getRequest('/store/WidthdrewList', data)
             this.data = res.data.data
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
 
         },
+        async getListMore() {
+            let data = {
+                user_id: this.user.user_id,
+                page: this.page,
+                date: this.dateTime
+            }
+            let res = await this.$getRequest('/store/WidthdrewList', data)
+            this.data.list = this.data.list.concat(res.data.data.list);
+            this.currSize = res.data.data.list.length
+        },
+
         async getDetail(id) {
             this.$router.push({ name: "WithdrawDepositDel", query: { id: id } })
         }
@@ -104,6 +121,23 @@ export default {
             this.user = user
         }
         this.getList()
+
+        var that = this
+        window.onscroll = function() {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (that.currSize >= that.pageSize) {
+                    that.page++;
+                    that.getListMore()
+                }
+            }
+        }
     },
 
     // 挂载前状态

@@ -134,6 +134,11 @@ export default {
             // 将配置注入通用方法
             wxapi.ShareAppMessage(option)
         },
+
+        handleJpeg(){
+            // alert(this.imgUrl)
+        },
+
         //获取商品
         async getGoods() {
             let that = this;
@@ -183,7 +188,7 @@ export default {
                     eleLink.click();
                     // 然后移除
                     document.body.removeChild(eleLink);
-                    // console.log("that.imgUrl----",that.imgUrl);
+                    // alert("that.imgUrl----",that.imgUrl);
                 });
             })
 

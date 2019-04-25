@@ -187,7 +187,7 @@ export default {
         confirmPopHide() {
             this.confirmPop = false
         },
-        //发表评论
+        //提交
         async submit() {
             if (!this.agreementStuats) {
                 this.$message('你未同意激活协议！');
@@ -209,9 +209,8 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 setTimeout(() => {
-                    // this.$router.go(-1)
+                    this.$router.go(-1)
                 }, 2000);
-                // that.$router.push({ name: 'CommentSucceed' })
             }
 
         }

@@ -44,7 +44,7 @@
             <router-link :to="{name:'VipPlus'}">
                 <p><img src="../assets/invitation.png" alt=""></p>
             </router-link>
-            <router-link :to="{name:'MyShop'}">
+            <router-link :to="{name:'MyShop',query:{user_id:userInfo.user_id}}">
                 <p><img src="../assets/my_shop.png" alt=""></p>
             </router-link>
         </div>
@@ -111,14 +111,14 @@
                     <p>我的评价</p>
                 </router-link>
             </li>
-            <li>
+<!--             <li>
                 <a href="javascript:;">
-                    <!-- <router-link :to="{name:'MyCardBag'}"> -->
+                    <router-link :to="{name:'MyCardBag'}">
                         <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
                         <p>优惠券</p>
-                    <!-- </router-link> -->
+                    </router-link>
                 </a>
-            </li>
+            </li> -->
             <li v-if="userInfo.status == 1">
                 <router-link :to="{name:'Generalize'}">
                     <span><img src="../assets/icon_generalize.png" alt=""></span>

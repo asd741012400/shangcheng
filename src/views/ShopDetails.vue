@@ -29,7 +29,7 @@
         <div class="nav_list">
             <p>门店图片</p>
             <ul>
-                <li v-for="img in shop.business_img">
+                <li v-for="(img,index) in shop.business_img" :key="index" @click="previewImg(index)">
                     <div>
                         <span><img :src="img" alt=""></span>
                     </div>
@@ -43,9 +43,15 @@
         <footer>
             <div>
                 <p><span><img src="../assets/btn_navigation.png" alt=""></span></p>
-                <p><span><img src="../assets/btn_relation.png" alt=""></span></p>
+                <p>
+                    <a :href="'tel:'+shop.tel_phone">
+                        <span><img src="../assets/btn_relation.png" alt=""></span>
+                    </a>
+                </p>
             </div>
         </footer>
+        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange">
+        </van-image-preview>
     </div>
 </template>
 <script>
@@ -53,7 +59,10 @@ export default {
     name: 'ShopDetails',
     data() {
         return {
-            shop: {}
+            shop: {},
+            show: false,
+            index: 1,
+            images: []
         }
     },
     components: {},
@@ -62,8 +71,16 @@ export default {
         async getShop() {
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: this.$route.query.store_id })
             this.shop = res.data.data;
+            this.images = this.shop.business_img
 
         },
+        previewImg(index) {
+            this.index = index
+            this.show = true
+        },
+        onChange(){
+
+        }
     },
 
     // 创建前状态

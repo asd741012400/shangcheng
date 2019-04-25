@@ -41,6 +41,10 @@ export default {
   components:{
   },
   methods:{
+    async getCard(){
+      let res =this.$getRequest('',data);
+      
+    }
   },
 
   // 创建前状态
@@ -49,6 +53,7 @@ export default {
 
   // 创建完毕状态 
   created(){
+    this.getCard()
     document.body.style.background = "#F6F6F6";
   },
 

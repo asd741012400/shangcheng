@@ -23,8 +23,8 @@
                             <p>{{item.card_name}}</p>
                             <!-- <span>剩余20天</span> -->
                         </div>
-                        <div class="btn">          
-                            <span @click="confirmPopShow">转赠</span>
+                        <div class="btn">
+                            <span @click="confirmPopShow(index)">转赠</span>
                         </div>
                     </div>
                 </div>
@@ -40,10 +40,10 @@
                     <div class="content">
                         <div class="text">
                             <p>{{item.card_name}}</p>
-                            <span>剩余20天</span>
+                            <span>剩余{{getLimitDay(item.limit_etime)}}20天</span>
                         </div>
                         <div class="btn">
-                            <router-link :to="{name:'UseCard'}">
+                            <router-link :to="{name:'UseCard',query:{id:id}}">
                                 <span>去使用</span>
                             </router-link>
                         </div>
@@ -76,10 +76,10 @@
                     <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input type="text">
+                        <input type="text" v-model="getCode">
                         <i><img src="../assets/icon_close2.png" alt=""></i>
                     </p>
-                    <a>提 交</a>
+                    <a @click="getCard">提 交</a>
                 </div>
             </div>
         </div>
@@ -88,7 +88,9 @@
             <div class="confirm_pop">
                 <div class="boxs">
                     <h3>转赠须知</h3>
-                    <ul>
+                    <div class="detail" v-html="desc">
+                    </div>
+                    <!--                    <ul>
                         <li>
                             <h4>
                                     <i><img src="../assets/icon_yuan.png" alt=""></i>
@@ -110,13 +112,13 @@
                                       </h4>
                             <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
                         </li>
-                    </ul>
+                    </ul> -->
                     <div class="agreement">
                         <input class="song" type="password" v-model="value" placeholder="请输入转赠密码" />
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
-                        <b>确 定</b>
+                        <b @click="handleGive(item.exchange_id)">确 定</b>
                     </div>
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
@@ -132,8 +134,11 @@ export default {
         return {
             user_id: '',
             value: '',
+            getCode: '',
             cardList: [],
             page: 1,
+            desc: '',
+            user: {},
             currSize: 0,
             pageSize: 10,
             confirmPop: false,
@@ -142,7 +147,8 @@ export default {
     },
     components: {},
     methods: {
-        confirmPopShow() {
+        confirmPopShow(index) {
+            this.desc = this.cardList[index].give_other
             this.confirmPop = true
         },
         confirmPopHide() {
@@ -153,6 +159,34 @@ export default {
         },
         cardAddPopHide() {
             this.cardAddPop = false;
+        },
+        //获取卡片
+        async getCard() {
+            let res = await this.$postRequest('/card/GetGiveCard', { user_id: this.user_id, redeem_code: this.getCode })
+            this.$message(res.data.msg);
+            if (res.data.code == 1) {
+                // this.getCardList()
+            }
+        },
+        //赠送卡片
+        async handleGive(id) {
+            let res = await this.$postRequest('/card/GiveCard', { user_id: this.user_id, exchange_id: id, redeem_code: this.value })
+            this.$message(res.data.msg);
+            if (res.data.code == 1) {
+                // this.getCardList()
+            }
+        },
+        getLimitDay(day) {
+            let now = this.$dayjs().format('YYYY-MM-DD')
+            const date1 = this.$dayjs(now)
+            const date2 = this.$dayjs(day)
+            let num = date1.diff(date2, 'day')
+            if (num <= 0) {
+                return false
+            } else {
+                return num
+            }
+
         },
         //获取卡包
         async getCardList(index) {
@@ -523,7 +557,7 @@ export default {
         }
     }
 
-        .confirm_pop_bg {
+    .confirm_pop_bg {
         position: fixed;
         width: 100%;
         height: 100%;
@@ -543,6 +577,13 @@ export default {
                 border-radius: 10px;
                 position: relative;
                 overflow: hidden;
+
+                .detail {
+                    padding: 0.2rem .6rem;
+                    background: #fff;
+                    max-height: 250px;
+                    overflow-y: auto;
+                }
 
                 h3 {
                     font-size: .32rem;

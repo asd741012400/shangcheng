@@ -22,6 +22,7 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
 
+
 import {CountDown} from 'vue-ydui/dist/lib.rem/countdown';
 Vue.component(CountDown.name, CountDown);
 

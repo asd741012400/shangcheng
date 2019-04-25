@@ -3,28 +3,28 @@
         <div class="shop_message">
             <div class="shop_img">
                 <span></span>
-                <i v-if="vip == 1"><img src="../../assets/merchant/vip1.png" alt=""></i>
-                <i v-else-if="vip == 2"><img src="../../assets/merchant/vip2.png" alt=""></i>
-                <i v-else-if="vip == 3"><img src="../../assets/merchant/vip3.png" alt=""></i>
+                <i v-if="user.level == 1"><img src="../../assets/merchant/vip1.png" alt=""></i>
+                <i v-else-if="user.level == 2"><img src="../../assets/merchant/vip2.png" alt=""></i>
+                <i v-else-if="user.level == 3"><img src="../../assets/merchant/vip3.png" alt=""></i>
             </div>
             <h3>万达广场LUCA店</h3>
             <p>185 3226 6666</p>
-            <router-link :to="{name:'PersonalStores'}">
+            <router-link :to="{name:'MyShop',query:{user_id:user.user_id}}">
                 我的店铺
             </router-link>
         </div>
         <ul class="money">
             <li>
-                <h3>21806</h3>
+                <h3>{{info.history_money || 0.00}}</h3>
                 <p>历史收益(元)</p>
             </li>
             <li @click="goWidthdrew">
-                <h3>21806</h3>
+                <h3>{{info.get_money || 0.00}}</h3>
                 <p>可提现(元)</p>
             </li>
             <li>
-                <h3>21806</h3>
-                <p>历史收益(元)</p>
+                <h3>{{info.freeze_money || 0.00}}</h3>
+                <p>待生效(元)</p>
             </li>
         </ul>
         <div class="menu">
@@ -60,13 +60,18 @@ export default {
     name: 'MerchantShop',
     data() {
         return {
-            vip: 1
+            user: {},
+            info: {},
         }
     },
     components: {},
     methods: {
-        goWidthdrew(){
-            this.$router.push({name:'WithdrawDeposit'})
+        goWidthdrew() {
+            this.$router.push({ name: 'WithdrawDeposit' })
+        },
+        async getInfo() {
+            let res = await this.$getRequest('/store/StoreHome', { user_id: this.user.user_id })
+            this.info = res.data.data
         }
     },
 
@@ -75,8 +80,14 @@ export default {
 
     // 创建完毕状态 
     created() {
-        document.title = "我的店铺"
         document.body.style.background = "#fff";
+        this.user = this.$localstore.get('userInfo');
+        if (this.user.level == 2) {
+            document.title = "我的推广（二级）"
+        } else if (this.user.level == 2) {
+            document.title = "我的推广（三级）"
+        }
+        this.getInfo()
     },
 
     // 挂载前状态
@@ -183,7 +194,8 @@ export default {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        a{
+
+        a {
             p {
                 width: 1.9rem;
                 height: 1.9rem;
@@ -193,6 +205,7 @@ export default {
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
+
                 span {
                     width: .6rem;
                     overflow: hidden;
@@ -206,21 +219,22 @@ export default {
                 }
             }
 
-           
+
         }
-        a:nth-of-type(1) p{
+
+        a:nth-of-type(1) p {
             background: #FF6C60;
         }
 
-        a:nth-of-type(2) p{
+        a:nth-of-type(2) p {
             background: #806CF6;
         }
 
-        a:nth-of-type(3) p{
+        a:nth-of-type(3) p {
             background: #F6AE42;
         }
 
-        a:nth-of-type(4) p{
+        a:nth-of-type(4) p {
             background: #3498F7;
         }
     }
