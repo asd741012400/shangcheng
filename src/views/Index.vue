@@ -5,8 +5,8 @@
                 <div class="header">
                     <div class="site"><i class="iconfont icon-alldizhi"></i></div>
                     <div class="search">
-                        <span><img src="../assets/icon_search.png" alt=""></span>
-                        <input type="text" placeholder="亲子卡">
+                        <input type="text" v-model="keywords" placeholder="亲子卡">
+                        <span @click="searchGoods"><img src="../assets/icon_search.png" alt=""></span>
                     </div>
                     <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
                 </div>
@@ -103,7 +103,6 @@
                 </van-field>
             </van-cell-group>
         </van-dialog> -->
-        <BindPhone :show="show" ref="bindPhone"></BindPhone>
         <MyFooter></MyFooter>
     </div>
 </template>
@@ -115,9 +114,9 @@ export default {
     name: 'Index',
     data() {
         return {
-            show: false,
             apiUrl: this.$common.ApiUrl(),
             Cardlist: [],
+            keywords: '',
             NavList: [],
             pages: 1,
             GoodsList: [],
@@ -132,8 +131,15 @@ export default {
                 name: str,
             });
         },
+        async getGoodsList() {
+            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages,keyword:this.keywords })
+            const resData = res.data.data
+            this.GoodsList = resData.list
+            this.goodsListLength = resData.list.length;
+            this.goodsListSum = resData.count;
+        },
         async GoodsListPush() {
-            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages })
+            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages,keyword:this.keywords })
             const resData = res.data.data
             this.GoodsList = this.GoodsList.concat(resData.list);
             this.goodsListLength = resData.list.length;
@@ -147,6 +153,11 @@ export default {
                     id: id
                 }
             });
+        },
+        //商品搜索
+        searchGoods() {
+            this.pages = 1
+            this.getGoodsList()
         }
     },
 
@@ -156,11 +167,7 @@ export default {
     // 创建完毕状态 
     created() {
         let userInfo = this.$localstore.get('userInfo')
-        this.$nextTick(() => {
-            if (!userInfo) {
-                this.show = true
-            }
-        })
+
 
         document.body.style.background = "#F6F6F6";
         const that = this;
@@ -190,24 +197,7 @@ export default {
                 console.log(error);
             });
 
-        that.$http.get(that.apiUrl + 'home/GetGoodsList', {
-                params: {
-                    'page': that.pages
-                }
-            })
-            .then(response => {
-                var data = JSON.parse(JSON.stringify(response.data))
-                if (data.code == 1) {
-                    const resData = data.data;
-                    that.GoodsList = resData.list;
-                    that.goodsListLength = resData.list.length;
-                    that.goodsListSum = resData.count;
-                }
-
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
+        this.getGoodsList()
 
         window.onscroll = function() {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -288,6 +278,7 @@ export default {
                     background: rgba(86, 84, 82, .2);
                     border-radius: 18px;
                     margin-right: .2rem;
+                    padding-left: 0.3rem;
                     height: 100%;
                     display: flex;
                     align-items: center;
@@ -305,6 +296,7 @@ export default {
                         outline: medium;
                         background: none;
                         border: none;
+                        color: #fff;
                     }
 
                     input::-webkit-input-placeholder {

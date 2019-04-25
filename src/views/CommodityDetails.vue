@@ -162,6 +162,13 @@
                 </div>
                 <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
             </div>
+            <div class="btn" v-show="GoodsDetailsState == 7">
+                <div class="share" @click="shareShowFn">
+                    <span>￥10</span>
+                    <p>分享赚</p>
+                </div>
+                <div class="buy" @click="ConfirmAnOrderPage"><span>立即领取</span></div>
+            </div>
             <div class="btn" v-show="GoodsDetailsState == 2">
                 <div class="buy_null"><span>已售罄</span></div>
             </div>
@@ -302,7 +309,7 @@ export default {
                 if (!start_time && !end_time) {
                     if (that.GoodsDetail.store == 0) {
                         that.GoodsDetailsState = 2
-                    } else if (that.GoodsDetail.is_online == 0) {
+                    }  else if (that.GoodsDetail.is_online == 0) {
                         that.GoodsDetailsState = 3
                     } else if (that.GoodsDetail.is_vip == 1 && that.user.status == 0) {
                         that.GoodsDetailsState = 4

@@ -13,17 +13,19 @@
         </header>
         <ul class="team_member">
             <li v-for="(item , index) in cardInfo.pro_list" @click="cardCheckFn(index)">
-                <i><img :src="item.thumb_img" alt=""></i>
+                <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                 <div>
                     <p class="name">
-                        <b>{{item.card_name}}</b>
+                        <b>{{item.project_name}}</b>
                     </p>
-                    <p>剩余 {{item.limit_num}} 次</p>
+                    <p v-if="item.num_status != 1">剩余 {{item.project_num || 0}} 次</p>
+                    <p v-else>不限次</p>
                 </div>
-                <span><img  src="../../assets/icon_schedule.png" alt=""></span>
+                <span @click="changeSelect(index)" v-if="index !== active"><img  src="../../assets/icon_unselected.png" alt=""></span>
+                <span @click="changeSelect(index)" v-else><img  src="../../assets/icon_schedule.png" alt=""></span>
             </li>
         </ul>
-        <a class="sub_btn">确定</a>
+        <a class="sub_btn" @click="submit">确定</a>
     </div>
 </template>
 <script>
@@ -31,11 +33,29 @@ export default {
     name: 'MyTeam',
     data() {
         return {
-            cardInfo: {}
+            active: 0,
+            cardInfo: {},
+            product: {},
+            code: '',
         }
     },
     components: {},
     methods: {
+        changeSelect(index) {
+            this.active = index
+            this.product = this.cardInfo.pro_list[index]
+        },
+        async submit() {
+                        let data = {
+               code: this.cancle_code,
+                admin_id: this.userInfo.user_id,
+                shop_id: this.userInfo.business_id,
+                project_id: this.project_id,
+                cp_id: this.product.cp_id
+            }
+            let res = await this.$postRequest('/cancle/CancleCode', data)
+            console.log(res);
+        },
         cardCheckFn(index) {
             this.list[index].state = !this.list[index].state
         },
@@ -50,7 +70,8 @@ export default {
         document.title = "卡片核销"
         let list = this.$localstore.get('cehckGoods')
         this.cardInfo = list.product_info
-        console.log(this.cardInfo);
+        this.code = this.$router.query.code
+
         // const date1 = this.$dayjs().format('YYYY-MM-DD')
         // const date2 = this.$dayjs(this.cardInfo.birthday)
         // date1.diff(date2, 'year')

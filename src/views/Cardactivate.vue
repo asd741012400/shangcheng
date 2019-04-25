@@ -80,7 +80,8 @@
             <div class="confirm_pop">
                 <div class="boxs">
                     <h3>激活须知</h3>
-                    <ul>
+                    <div class="detail" v-html="card.activation_things"></div>
+                    <!--                   <ul>
                         <li>
                             <h4>
                                     <i><img src="../assets/icon_yuan.png" alt=""></i>
@@ -102,7 +103,7 @@
                                       </h4>
                             <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
                         </li>
-                    </ul>
+                    </ul> -->
                     <div class="agreement">
                         <van-checkbox v-model="agreementStuats">同意激活协议</van-checkbox>
                     </div>
@@ -127,6 +128,7 @@ export default {
     data() {
         let date = this.$dayjs().format('YYYY-MM-DD');
         return {
+            card: {},
             imgUrl: '',
             child_name: '',
             sex: 1,
@@ -196,7 +198,7 @@ export default {
             let userInfo = this.$localstore.get('userInfo')
             let data = {
                 user_id: userInfo.user_id,
-                card_id: this.$route.query.id,
+                cancle_id: this.$route.query.id,
                 child_name: this.child_name,
                 birthday: this.birthday,
                 tel_phone: this.tel_phone,
@@ -223,6 +225,11 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = '#fff'
+        let card = this.$localstore.get('usecard')
+        this.card = card
+        if (!card) {
+            this.$router.push({ name: "Index" })
+        }
     },
 
     // 挂载前状态
@@ -379,6 +386,7 @@ export default {
                 height: .7rem;
                 padding: 0 .16rem;
 
+
                 input {
                     height: 100%;
                     width: 100%;
@@ -504,6 +512,13 @@ export default {
                 border-radius: 10px;
                 position: relative;
                 overflow: hidden;
+
+                .detail {
+                    padding: 0.2rem .6rem;
+                    background: #fff;
+                    max-height: 250px;
+                    overflow-y: auto;
+                }
 
                 h3 {
                     font-size: .32rem;

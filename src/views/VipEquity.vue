@@ -8,7 +8,7 @@
         <div class="vip_card">
             <p>
                 <span>累积为您节省：￥</span>
-                <a>99999</a>
+                <a>{{plus.price}}</a>
             </p>
         </div>
         <div class="exclusive_bg">
@@ -82,28 +82,8 @@
                         <span></span>
                 </div>
                 <ul class="tab">
-                    <li class="active">
-                        <p>免 费</p>
-                        <span></span>
-                    </li>
-                    <li>
-                        <p>免 费</p>
-                        <span></span>
-                    </li>
-                    <li>
-                        <p>免 费</p>
-                        <span></span>
-                    </li>
-                    <li>
-                        <p>免 费</p>
-                        <span></span>
-                    </li>
-                    <li>
-                        <p>免 费</p>
-                        <span></span>
-                    </li>
-                    <li>
-                        <p>免 费</p>
+                    <li class="active" v-for="(item,index) in AllCate" :key="index">
+                        <p>{{item.c_name}}</p>
                         <span></span>
                     </li>
                 </ul>
@@ -180,8 +160,13 @@ export default {
                 tel_phone: '',
                 status: 0
             },
+            index: 1,
             share_id: '',
-            plus: {}
+            AllCate: [],
+            plus: {},
+            page: 1,
+            currSize: 0,
+            pageSize: 10,
         }
     },
     components: {},
@@ -192,7 +177,7 @@ export default {
             if (user) {
                 this.user = user
             }
-            if (!user) {
+            if (!user.tel_phone) {
                 this.show = true
                 return false
             } else {
@@ -209,23 +194,43 @@ export default {
                 this.$router.go(-1)
             }
         },
+
+        //获取所有分类
+        async getAllCate() {
+            let res = await this.$getRequest('home/GetAllCate')
+            this.AllCate = res.data.data
+        },
+
+        //获取分类下的商品
+        async getGoodsList(index) {
+            this.goodsList = []
+            if (index) {
+                var id = this.AllCate[index].c_id
+            } else {
+                var id = this.AllCate[0].c_id
+            }
+            this.cid = id
+            let res = await this.$getRequest('home/GetGoodsListByCid', { cid: id, page: this.page })
+            this.goodsList = res.data.data.list
+            if (res.data.data.list) {
+                this.currSize = res.data.data.list.length
+            }
+        },
+
+        //获取更多商品
+        async getGoodsListMore(cid) {
+            let res = await this.$getRequest('home/GetGoodsListByCid', { cid: cid, page: this.page })
+            let data = res.data.data.list
+            this.goodsList = this.goodsList.concat(data);
+            this.currSize = res.data.data.list.length
+        },
+
         //获取PlUS
         async getPlUS() {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
         },
-        //关系绑定
-        // async postUser() {
-        //     let openid = this.$localstore.get('openid6')
-        //     let data = {
-        //         share_id: this.share_id,
-        //         openid: openid
-        //     }
-        //     if (this.share_id) {
-        //         let res = await this.$postRequest('/user/Recommend', data)
-        //     }
-        // },
         // 用于微信JS-SDK回调   
         wxRegCallback() {
             this.wxShareTimeline()
@@ -283,7 +288,24 @@ export default {
             this.share_id = has_share.query.share_id
         }
         this.getPlUS()
-        // this.postUser()
+        this.getAllCate()
+        this.getGoodsList()
+
+        window.onscroll = () => {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (this.currSize >= this.pageSize) {
+                    this.page++;
+                    this.getGoodsListMore(this.cid)
+                }
+            }
+        }
 
     },
 

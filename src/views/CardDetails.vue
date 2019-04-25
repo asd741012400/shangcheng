@@ -292,7 +292,7 @@ export default {
                     if (that.CardDetail.store == 0) {
                         that.cardDetailsState = 2
                     } else if (that.CardDetail.is_online == 0) {
-                        that.cardDetailsState = 3
+                        // that.cardDetailsState = 3
                     } else if (that.CardDetail.is_vip == 1 && that.user.status == 0) {
                         that.cardDetailsState = 4
                     } else {

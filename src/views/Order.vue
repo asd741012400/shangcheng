@@ -15,11 +15,21 @@
         <ul class="goods_list">
             <li v-for="(item,index) in orderList">
                 <div class="top">
-                    <span>待付款</span>
+                    <template v-if="item.order_status == 0">
+                        <span>待付款</span>
+                    </template>
+                    <template v-else-if="item.order_status == 1">
+                        <template v-if="item.is_comment == 1">
+                            <span>待评价</span>
+                        </template>
+                        <template v-else>
+                            <span>待使用</span>
+                        </template>
+                    </template>
                 </div>
                 <div class="mid">
                     <div class="img-box">
-                        <img src="../assets/img1.png">
+                        <img :src="$imgUrl + item.goods_img">
                     </div>
                         <div class="center">
                             <div class="clip title">{{item.goods_title}}</div>
@@ -37,11 +47,17 @@
                         <div>
                             <!-- 全部 -->
                             <!-- order_status`'订单状态 0:未支付;1:订单完成;2:订单超时 3分单退款 4:已退款 5已使用 6 退款中 200:用户取消订单 201:后台取消订单;', -->
-                            <template v-if="active == 1">
+                            <template v-if="active == 0">
                                 <template v-if="item.order_status == 0">
                                     <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
                                 </template>
                                 <template v-else-if="item.order_status == 1">
+                                    <template v-if="item.is_comment == 1">
+                                        <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                    </template>
+                                    <template v-else>
+                                        <van-button type="info" size="mini">去使用</van-button>
+                                    </template>
                                 </template>
                                 <template v-else-if="item.order_status == 2">
                                 </template>
@@ -49,6 +65,9 @@
                                 </template>
                                 <template v-else-if="item.order_status == 4">
                                 </template>
+                            </template>
+                            <template v-if="active == 1">
+                                <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
                             </template>
                             <!-- 待付款 -->
                             <template v-else-if="active == 2">

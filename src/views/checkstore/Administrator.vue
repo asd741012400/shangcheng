@@ -52,7 +52,7 @@ export default {
             let data = {
                 business_id: business_id,
                 openid: openid,
-                user_nick: userInfo.username,
+                nickname: userInfo.username,
                 name: this.name,
                 phone: this.phone
             }

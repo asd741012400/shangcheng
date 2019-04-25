@@ -3,10 +3,10 @@
         <header>
             <div class="return" @click="$router.go(-1)"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
             <div class="shop_message">
-                <span><img src="../assets/head_portrait.png" alt="" srcset=""></span>
+                <span class="avatar"><img :src="user.wechat_img" alt="" srcset=""></span>
                 <div>
-                    <p>小皮孩儿</p>
-                    <a>ID：54335616</a>
+                    <p>{{user.username}}</p>
+                    <a>ID：{{user.user_id}}</a>
                 </div>
             </div>
         </header>
@@ -133,7 +133,12 @@ export default {
     name: 'CommodityList',
     data() {
         return {
-            commentState: 2
+            user: {},
+            commentState: 2,
+            list: [],
+            page: 1,
+            currSize: 0,
+            pageSize: 10,
         }
     },
     components: {},
@@ -141,16 +146,29 @@ export default {
         commentStateChage(num) {
             const that = this;
             that.commentState = num;
+            this.list = []
+
         },
         async getList() {
             let user = this.$localstore.get('userInfo')
             let data = {
                 user_id: user.user_id,
-                status: this.commentState
+                status: this.commentState,
+                page: this.page
             }
             let res = await this.$getRequest('/user/MyComments', data)
             console.log(res);
-        }
+        },
+        async getListMore() {
+            let data = {
+                user_id: user.user_id,
+                status: this.commentState,
+                page: this.page
+            }
+            let res = await this.$getRequest('/store/WidthdrewList', data)
+            this.data.list = this.data.list.concat(res.data.data.list);
+            this.currSize = res.data.data.list.length
+        },
     },
 
     // 创建前状态
@@ -159,7 +177,27 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#fff";
+        let user = this.$localstore.get('userInfo')
+        if (user) {
+            this.user = user
+        }
         this.getList()
+        var that = this
+        window.onscroll = function() {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (that.currSize >= that.pageSize) {
+                    that.page++;
+                    that.getListMore()
+                }
+            }
+        }
     },
 
     // 挂载前状态
@@ -222,6 +260,11 @@ export default {
                 border: .08rem solid #ff947b;
                 margin-left: .8rem;
                 margin-right: .28rem;
+                display: block;
+
+                img {
+                    border-radius: 50%;
+                }
             }
 
             div {

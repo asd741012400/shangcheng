@@ -22,6 +22,9 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 Vue.use(Vant);
 
+import { Dialog } from 'vant';
+Vue.use(Dialog);
+
 
 import {CountDown} from 'vue-ydui/dist/lib.rem/countdown';
 Vue.component(CountDown.name, CountDown);

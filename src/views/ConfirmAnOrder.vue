@@ -79,6 +79,7 @@
             <span>合计:￥{{total}}</span>
             <b @click="addOrder">提交订单</b>
         </div>
+        <BindPhone :show="show"></BindPhone>
     </div>
 </template>
 <script>
@@ -107,6 +108,8 @@ export default {
             share_id: '',
             card_ID: '',
             num: 1,
+            show: false,
+            is_wechat: 1,
             play_time: date,
             startDate: new Date(date),
         }
@@ -130,6 +133,11 @@ export default {
 
         //添加订单
         async addOrder() {
+            if (!this.userInfo.tel_phone) {
+                this.show = true
+                return false
+            }
+
             if (!this.goods) {
                 return false;
             }
@@ -141,6 +149,7 @@ export default {
                 real_name: this.real_name,
                 share_id: this.share_id,
                 play_time: this.play_time,
+                is_wechat: this.is_wechat,
                 attr_id: this.$route.query.attr_id,
                 tel: this.tel,
                 openid: this.$localstore.get('openid6'),
@@ -210,6 +219,14 @@ export default {
                         }
                     })
                 }
+
+                if (this.goods.is_free) {
+                    this.limit_num = 0
+                    this.price = 0
+                    this.is_wechat = 0
+                }
+
+
             } else if (type == 3) {
                 let res = await this.$getRequest('home/GetCardDetail', { id: id })
                 this.goods = res.data.data

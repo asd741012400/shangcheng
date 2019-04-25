@@ -24,7 +24,7 @@ import ConfirmPay from './views/ConfirmPay.vue'
 import DistributionTow from './views/DistributionTow.vue' //我的推广（二级）
 import DistributionThree from './views/DistributionThree.vue' //我的推广（三级）
 import CardEquity from './views/CardEquity.vue' //卡包权益中心
-import CardDetailsTow from './views/CardDetailsTow.vue' //卡片详情
+import CardDetailsTow from './views/CardDetailsTow.vue' //卡片权益详情
 import Bargain from './views/Bargain.vue'
 import ClassifyList from './views/ClassifyList.vue' // 商品分类
 import ShopDetails from './views/ShopDetails.vue' //门店详情
@@ -446,21 +446,14 @@ router.beforeEach((to, from, next) => {
         getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
             if (res.data.data && res.data.data.user_id) {
                 localstore.set('userInfo', res.data.data)
+                //判断用户头像链接是否存在 否则缓存
+                userAvatar()
             } else {
                 localstore.set('userInfo', '')
             }
         })
     }
 
-    if (openid2) {
-        getRequest('/wechat/GetUserInfo', { openid: openid2 }).then(res => {
-            if (res.data.data && res.data.data.user_id) {
-                localstore.set('userInfo', res.data.data)
-            } else {
-                localstore.set('userInfo', '')
-            }
-        })
-    }
 
     //用户来自分享  但未注册
     let user = localstore.get('userInfo')
@@ -511,7 +504,35 @@ function isEmptyObject(val) {
     return res
 }
 
+// 用户头像设置
+function userAvatar() {
+    let avatar = localstore.get('avatar')
+    let user = localstore.get('userInfo')
+    if (!avatar) {
+        let image = new Image();
+        image.src = user.wechat_img;
+        image.onload = async () => {
+            let base64 = getBase64Image(image);
+             localstore.set('avatar', base64)
+            // postRequest('/upload/UpBase64Image', { img: base64 }).then((res) => {
+            //     if (res.data.code == 1) {
+            //         localstore.set('avatar', res.data.data)
+            //     }
+            // })
+        }
+    }
+}
 
+function getBase64Image(img) {
+    var canvas = document.createElement("canvas");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
+    var dataURL = canvas.toDataURL("image/" + ext);
+    return dataURL;
+}
 
 /**
  * 获取指定的URL参数值

@@ -2,7 +2,7 @@
     <div class="VipPlus">
         <img class="poster-img" ref="image" :src="imgUrl">
         <div ref="imageDom" class="imageDom">
-            <div class="head_portrait"><img :src="wechat_img" alt=""></div>
+            <div class="head_portrait"><img :src="avatar" alt=""></div>
                 <div class="code" id="qrcode">
                 </div>
                 <div class="img"><img src="../assets/VipPuls.jpg" alt=""></div>
@@ -25,6 +25,7 @@ export default {
             plus: "",
             title: "",
             price: "",
+            avatar: "",
             wechat_img: "",
             poster_img: "",
         }
@@ -118,6 +119,7 @@ export default {
         let that = this
         document.title = "PLUS会员"
         this.user = this.$localstore.get('userInfo')
+        this.avatar = this.$localstore.get('avatar')
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type
         //头像转换base64
@@ -137,8 +139,8 @@ export default {
         that.$nextTick(function() {
             //生成二维码
             let qrcode = new QRCode('qrcode', {
-                width: 80,
-                height: 80, // 高度  
+                // width: 80,
+                // height: 80, // 高度  
                 text: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
                     '&type=2', // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
@@ -146,12 +148,16 @@ export default {
                 // foreground: '#ff0'  
             })
 
-            html2canvas(that.$refs.imageDom).then((canvas) => {
-                //海报生成
-                // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-                let dataURL = canvas.toDataURL("image/png");
-                that.imgUrl = dataURL;
-            });
+            setTimeout(() => {
+                html2canvas(that.$refs.imageDom).then((canvas) => {
+                    //海报生成
+                    // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+                    let dataURL = canvas.toDataURL("image/png");
+                    that.imgUrl = dataURL;
+                });
+            }, 5000)
+
+
         })
     },
 

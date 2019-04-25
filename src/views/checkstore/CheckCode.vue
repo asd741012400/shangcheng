@@ -33,9 +33,9 @@ export default {
             if (res.data.code == 1) {
                 this.$localstore.set('cehckGoods', res.data.data)
                 if (res.data.data.card_info.type == 1) {
-                    this.$router.push({ name: 'Commodity' })
+                    this.$router.push({ name: 'Commodity',query:{code:this.code} })
                 } else {
-                    this.$router.push({ name: 'CardCheck' })
+                    this.$router.push({ name: 'CardCheck',query:{code:this.code} })
                 }
             } else {
                 this.$message(res.data.msg);

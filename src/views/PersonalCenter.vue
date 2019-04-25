@@ -166,7 +166,7 @@
         </div>
         <!-- 兑换券 -->
         <Share ref="myShare"></Share>
-        <BindPhone :show="show"></BindPhone>
+        <!-- <BindPhone :show="show"></BindPhone> -->
     </div>
 </template>
 <script>
@@ -219,11 +219,11 @@ export default {
         if (userInfo) {
             this.userInfo = userInfo
         }
-        this.$nextTick(() => {
-            if (!userInfo) {
-                this.show = true
-            }
-        })
+        // this.$nextTick(() => {
+        //     if (!userInfo) {
+        //         this.show = true
+        //     }
+        // })
         document.body.style.background = "#fff";
     },
 
