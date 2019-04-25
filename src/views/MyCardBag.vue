@@ -165,11 +165,13 @@ export default {
             this.$localstore.set('usecard', card)
             this.$router.push({ name: 'UseCard' })
         },
+        //激活
         activeCard(index) {
             let card = this.cardList[index]
             this.$localstore.set('usecard', card)
             this.$router.push({name:'CardActivate',query:{id:card.cgid}})
         },
+        //转赠
         confirmPopShow(index) {
             this.desc = this.cardList[index].give_other
             this.cdid = this.cardList[index].cdid
@@ -239,7 +241,6 @@ export default {
             }
 
         },
-
         //获取更多卡包
         async getCardListMore() {
             let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
