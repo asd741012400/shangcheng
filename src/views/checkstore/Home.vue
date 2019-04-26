@@ -2,9 +2,9 @@
     <div class="Home">
         <div class="shop_message">
             <div class="shop_img">
-                <span><img :src="$imgUrl+shop.thumb_img"></span>
+                <span><img :src="$imgUrl + store.thumb_img"></span>
             </div>
-            <h3>{{shop.business_name}}</h3>
+            <h3>{{store.business_name}}</h3>
             <router-link :to="{name:'ChageShop'}">
                 切换门店
             </router-link>
@@ -42,7 +42,7 @@
                     <em>核销记录</em>
                 </p>
             </router-link>
-<!--             <router-link :to="{name:'Appointment'}">
+            <!--             <router-link :to="{name:'Appointment'}">
                 <p>
                     <span><img src="../../assets/merchant/icon_img4.png" alt=""></span>
                     <em>预约记录</em>
@@ -59,6 +59,7 @@ export default {
     name: 'Home',
     data() {
         return {
+            store: {},
             shop: {
                 thumb_img: '',
                 business_name: '',
@@ -69,6 +70,12 @@ export default {
     },
     components: {},
     methods: {
+        //获取门店信息
+        async getStore() {
+            let business_id = this.$localstore.get('business_id') || this.$route.query.business_id
+            let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
+            this.store = res.data.data
+        },
         //获取店铺信息 及核销信息
         async getShop() {
             let userInfo = this.$localstore.get('business_user')
@@ -121,6 +128,7 @@ export default {
         document.title = "主页"
         document.body.style.background = "#fff"
         this.getShop()
+        this.getStore()
     },
 
     // 挂载前状态
@@ -166,6 +174,11 @@ body {
                 overflow: hidden;
                 background: #ccc;
                 display: block;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
             }
 
             i {

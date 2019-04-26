@@ -2,9 +2,9 @@
     <div class="Administrator">
         <div class="shop_message">
             <div class="shop_img">
-                <span>img</span>
+                <span><img :src="$imgUrl + store.thumb_img"></span>
             </div>
-            <h3>万达广场LUCA店</h3>
+            <h3>{{store.business_name}}</h3>
         </div>
         <div class="input_text">
             <p>
@@ -24,16 +24,23 @@ export default {
     name: 'Administrator',
     data() {
         return {
+            store: {},
             name: '',
             phone: ''
         }
     },
     components: {},
     methods: {
+        //获取门店信息
+        async getStore() {
+            let business_id = this.$localstore.get('business_id') || this.$route.query.business_id
+            let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
+            this.store = res.data.data
+        },
         //检测是否注册过
         async checkAuth() {
-            let business_id = this.$localstore.get('business_id', business_id)
-            let openid = this.$localstore.get('openid1', openid)
+            let business_id = this.$localstore.get('business_id')
+            let openid = this.$localstore.get('openid6')
             let res = await this.$getRequest('/business/checkUser', { business_id: business_id, openid: openid })
             if (res.data.code == 1) {
                 this.$localstore.set('business_user', res.data.data)
@@ -44,6 +51,8 @@ export default {
                 }
             }
         },
+
+
         //注册
         async register() {
             let business_id = this.$localstore.get('business_id')
@@ -79,6 +88,7 @@ export default {
         if (business_id) {
             this.$localstore.set('business_id', business_id)
         }
+        this.getStore()
         this.checkAuth()
     },
 
@@ -128,6 +138,11 @@ export default {
                 overflow: hidden;
                 background: #ccc;
                 display: block;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
             }
 
             i {
