@@ -90,7 +90,6 @@ let router = new Router({
             name: 'Home',
             component: Index
         },
-        /*前台*/
         {
             path: '/Index',
             name: 'Index',
