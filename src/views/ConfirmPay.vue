@@ -297,6 +297,9 @@ export default {
                         text-align: right;
                         font-size: .3rem;
                     }
+                    p{
+                        font-size: .3rem;
+                    }
                 }
             }
         }

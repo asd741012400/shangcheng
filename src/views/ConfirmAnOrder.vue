@@ -496,6 +496,7 @@ export default {
                         b {
                             flex: 1;
                             font-weight: normal;
+                            font-size: .3rem;
                         }
 
                         a {

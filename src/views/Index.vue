@@ -396,7 +396,12 @@ export default {
                         background: #ccc;
                         border-radius: 5px;
                         position: relative;
-
+                        span{
+                            height: 2.04rem;
+                            overflow: hidden;
+                            display: block;
+                            border-radius: 5px;
+                        }
                         div {
                             width: 2.48rem;
                             background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
@@ -408,6 +413,8 @@ export default {
                             height: .62rem;
                             justify-content: center;
                             color: #fff;
+                            
+                            
 
                             p {
                                 font-size: .28rem;

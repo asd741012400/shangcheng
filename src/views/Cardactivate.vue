@@ -443,7 +443,7 @@ export default {
                     padding: 0 .12rem;
                     border: 1px solid #fff;
                     margin-bottom: .14rem;
-
+                    font-size: .3rem;
                     &.active {
                         border: 1px solid #FF6666;
                     }
