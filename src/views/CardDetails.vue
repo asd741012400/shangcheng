@@ -199,7 +199,7 @@
 </template>
 <script>
 import Share from '../components/Share'
-import wxapi from '@/lib/wx.js'
+import wx from 'weixin-js-sdk'
 
 export default {
     name: 'CardDetails',
@@ -309,6 +309,7 @@ export default {
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
                 this.isCollect = Boolean(res.data.data.is_coolect);
+                this.wxRegister()
                 this.timer()
             }
         },
@@ -318,46 +319,51 @@ export default {
             this.comments = res.data.data.list;
         },
         // 用于微信JS-SDK回调   
-        wxRegCallback() {
-            this.wxShareTimeline()
-            this.wxShareAppMessage()
-        },
-        // 微信自定义分享到朋友圈
-        wxShareTimeline() {
-            let url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
-                '&type=3&id=' + this.$route.query.id
-            let option = {
-                title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
-                link: url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareTimeline(option)
-        },
-        // 微信自定义分享给朋友
-        wxShareAppMessage() {
-            let url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
-                '&type=3&id=' + this.$route.query.id
-            let option = {
-                title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
-                desc: this.cardDetailsState.share_desc, // 分享描述, 请自行替换
-                link: url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareAppMessage(option)
+        async wxRegister() {
+            //获取微信jssdk
+            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
+            let config = res.data.data
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: config.appId, // 必填，公众号的唯一标识
+                timestamp: config.timestamp, // 必填，生成签名的时间戳
+                nonceStr: config.nonceStr, // 必填，生成签名的随机串
+                signature: config.signature, // 必填，签名
+                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
+            })
+            wx.ready(() => {
+                let url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+                    '&type=3&id=' + this.$route.query.id
+                //微信分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
+                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                });
+                wx.onMenuShareAppMessage({
+                    title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
+                    desc: this.cardDetailsState.share_desc, // 分享描述, 请自行替换
+                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                })
+            })
+
         },
 
     },
@@ -382,7 +388,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        wxapi.wxRegister(this.wxRegCallback)
+
     },
 
     // 更新前状态

@@ -5,12 +5,12 @@
             <div class="head_portrait"><img :src="avatar" alt=""></div>
                 <div class="code" id="qrcode">
                 </div>
-                <div class="img"><img src="../assets/VipPuls.jpg" alt=""></div>
+                <div class="img"><img :src="poster_img" alt=""></div>
                 </div>
             </div>
 </template>
 <script>
-import wxapi from '@/lib/wx.js'
+import wx from 'weixin-js-sdk'
 import QRCode from 'qrcodejs2'
 import html2canvas from "html2canvas"
 
@@ -39,6 +39,54 @@ export default {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
+            this.poster_img = this.getUrlBase64(this.$imgUrl + this.plus.poster)
+            this.wxRegister()
+
+
+            //生成二维码
+            let qrcode = new QRCode('qrcode', {
+                // width: 80,
+                // height: 80, // 高度  
+                text: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2', // 二维码内容  
+                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                // background: '#f0f',  
+                // foreground: '#ff0'  
+            })
+
+            //合成分享图
+            this.$nextTick(() => {
+                setTimeout(() => {
+                    html2canvas(this.$refs.imageDom, { allowTaint: false, useCORS: true }).then((canvas) => {
+                        //海报生成
+                        // this.imgUrl = URL.createObjectURL(this.base64ToBlob(canvas.toDataURL()))
+                        let dataURL = canvas.toDataURL("image/png");
+                        this.imgUrl = dataURL;
+
+                    });
+                }, 5000)
+            })
+        },
+        /**
+         *
+         * @param url 图片路径
+         * @param ext 图片格式
+         * @param callback 结果回调
+         */
+        getUrlBase64(url) {
+            var canvas = document.createElement("canvas"); //创建canvas DOM元素
+            var ctx = canvas.getContext("2d");
+            var img = new Image;
+            img.crossOrigin = 'Anonymous';
+            img.src = url+'?number='+Math.random();
+            img.onload = function() {
+                canvas.height = 60; //指定画板的高度,自定义
+                canvas.width = 85; //指定画板的宽度，自定义
+                ctx.drawImage(img, 0, 0, 60, 85); //参数可自定义
+                var dataURL = canvas.toDataURL("image/png");    
+                canvas = null;
+                return dataURL//回掉函数获取Base64编码
+            };
         },
         //base64转blob
         base64ToBlob(code) {
@@ -58,55 +106,52 @@ export default {
             this.$refs.myPoster.clickGeneratePicture();
         },
         // 用于微信JS-SDK回调   
-        wxRegCallback() {
-            this.wxShareTimeline()
-            this.wxShareAppMessage()
+        async wxRegister() {
+            //获取微信jssdk
+            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
+            let config = res.data.data
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: config.appId, // 必填，公众号的唯一标识
+                timestamp: config.timestamp, // 必填，生成签名的时间戳
+                nonceStr: config.nonceStr, // 必填，生成签名的随机串
+                signature: config.signature, // 必填，签名
+                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
+            })
+            wx.ready(() => {
+                let url = 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2'
+                //微信分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: this.plus.title, // 分享标题, 请自行替换
+                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                });
+                wx.onMenuShareAppMessage({
+                    title: this.plus.title, // 分享标题, 请自行替换
+                    desc: this.plus.desc, // 分享描述, 请自行替换
+                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                })
+            })
+
         },
-        // 微信自定义分享到朋友圈
-        wxShareTimeline() {
-            let option = {
-                title: this.plus.title, // 分享标题, 请自行替换
-                link: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
-                    '&type=2', // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareTimeline(option)
-        },
-        // 微信自定义分享给朋友
-        wxShareAppMessage() {
-            let option = {
-                title: this.plus.title, // 分享标题, 请自行替换
-                desc: this.plus.desc, // 分享描述, 请自行替换
-                link: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
-                    '&type=2', // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareAppMessage(option)
-        },
-        getBase64Image(img) {
-            var canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-            var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
-            var dataURL = canvas.toDataURL("image/" + ext);
-            return dataURL;
-        }
     },
 
     // 创建前状态
@@ -119,46 +164,10 @@ export default {
         let that = this
         document.title = "PLUS会员"
         this.user = this.$localstore.get('userInfo')
-        this.avatar = this.$localstore.get('avatar')
+        this.avatar = this.$localstore.get('avatar') || this.user.wechat_img
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type
-        //头像转换base64
-        var image = new Image();
-        image.src = this.user.wechat_img;
-        this.wechat_img = this.user.wechat_img;
-        image.onload = async () => {
-            var base64 = this.getBase64Image(image);
-            this.wechat_img = base64
-            // let res = await this.$postRequest('/upload/UpBase64Image', { img: base64 })
-            // if (res.data.code == 1) {
-            //     this.wechat_img = res.data.data
-            // }
-        }
 
-        //合成分享图
-        that.$nextTick(function() {
-            //生成二维码
-            let qrcode = new QRCode('qrcode', {
-                // width: 80,
-                // height: 80, // 高度  
-                text: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
-                    '&type=2', // 二维码内容  
-                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                // background: '#f0f',  
-                // foreground: '#ff0'  
-            })
-
-            setTimeout(() => {
-                html2canvas(that.$refs.imageDom).then((canvas) => {
-                    //海报生成
-                    // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-                    let dataURL = canvas.toDataURL("image/png");
-                    that.imgUrl = dataURL;
-                });
-            }, 5000)
-
-
-        })
     },
 
     watch: {
@@ -174,7 +183,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        wxapi.wxRegister(this.wxRegCallback)
+
     },
 
     // 更新前状态

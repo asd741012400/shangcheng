@@ -52,7 +52,7 @@ import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提�
 // import MyTeam from './views/merchant/MyTeam.vue' //我的团队
 // import TeamDel from './views/merchant/TeamDel.vue' //团队详情
 // import MemberDel from './views/merchant/MemberDel.vue' //成员详情
-// import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队(有切换的)
+// import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的推广
 // import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
 // import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
 import Generalize from './views/merchant/Generalize.vue' //我的推广
@@ -446,13 +446,14 @@ router.beforeEach((to, from, next) => {
         getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
             if (res.data.data && res.data.data.user_id) {
                 localstore.set('userInfo', res.data.data)
-                //判断用户头像链接是否存在 否则缓存
-                userAvatar()
             } else {
                 localstore.set('userInfo', '')
             }
         })
     }
+
+    //判断用户头像链接是否存在 否则缓存
+    userAvatar()
 
 
     //用户来自分享  但未注册
@@ -508,12 +509,12 @@ function isEmptyObject(val) {
 function userAvatar() {
     let avatar = localstore.get('avatar')
     let user = localstore.get('userInfo')
-    if (!avatar) {
+    if (!avatar && user) {
         let image = new Image();
         image.src = user.wechat_img;
         image.onload = async () => {
             let base64 = getBase64Image(image);
-             localstore.set('avatar', base64)
+            localstore.set('avatar', base64)
             // postRequest('/upload/UpBase64Image', { img: base64 }).then((res) => {
             //     if (res.data.code == 1) {
             //         localstore.set('avatar', res.data.data)

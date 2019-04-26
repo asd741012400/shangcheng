@@ -9,7 +9,7 @@
                         <span><img :src="wechat_img"></span>
                         <b>{{user.username}}</b>
                     </div>
-                    <div class="img"><img src="../assets/img2.png" alt=""></div>
+                    <div class="img"><img :src="$imgUrl + poster_img" alt=""></div>
                         <!-- <div class="img"><img :src="$imgUrl +goods.share_img" alt=""></div> -->
                         <div class="code">
                             <div class="code_text">
@@ -49,7 +49,7 @@
         </div>
 </template>
 <script>
-import wxapi from '@/lib/wx.js'
+import wx from 'weixin-js-sdk'
 import QRCode from 'qrcodejs2'
 import html2canvas from "html2canvas"
 // import Poster from '../components/Poster'
@@ -97,45 +97,52 @@ export default {
             return new Blob([uInt8Array], { type: contentType });
         },
         // 用于微信JS-SDK回调   
-        wxRegCallback() {
-            this.wxShareTimeline()
-            this.wxShareAppMessage()
-        },
-        // 微信自定义分享到朋友圈
-        wxShareTimeline() {
-            let option = {
-                title: this.title, // 分享标题, 请自行替换
-                link: this.url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareTimeline(option)
-        },
-        // 微信自定义分享给朋友
-        wxShareAppMessage() {
-            let option = {
-                title: this.title, // 分享标题, 请自行替换
-                desc: this.desc, // 分享描述, 请自行替换
-                link: this.url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareAppMessage(option)
+        async wxRegister() {
+            //获取微信jssdk
+            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
+            let config = res.data.data
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: config.appId, // 必填，公众号的唯一标识
+                timestamp: config.timestamp, // 必填，生成签名的时间戳
+                nonceStr: config.nonceStr, // 必填，生成签名的随机串
+                signature: config.signature, // 必填，签名
+                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
+            })
+            wx.ready(() => {
+                //微信分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: this.title, // 分享标题, 请自行替换
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.poster_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                });
+                wx.onMenuShareAppMessage({
+                    title: this.title, // 分享标题, 请自行替换
+                    desc: this.desc, // 分享描述, 请自行替换
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.poster_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                })
+            })
         },
 
-        handleJpeg(){
+
+        handleJpeg() {
             // alert(this.imgUrl)
         },
 
@@ -155,13 +162,13 @@ export default {
                 this.price = res.data.data.card_price
                 this.title = res.data.data.share_title
                 this.desc = res.data.data.share_desc
-                this.poster_img = res.data.data.share_desc
+                this.poster_img = res.data.data.share_img
             }
-
+            this.wxRegister()
 
             let qrcode = new QRCode('qrcode', {
-                width: 60,
-                height: 60, // 高度  
+                // width: 60,
+                // height: 60, // 高度  
                 text: this.url, // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                 // background: '#f0f',  
@@ -172,37 +179,16 @@ export default {
             //合成分享图
             that.$nextTick(function() {
                 //海报生成
-                // html2canvas(that.$refs.imageDom).then((canvas) => {
-                //     that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-                //     // let dataURL = canvas.toDataURL("image/png");
-                //     // that.imgUrl = dataURL;
-                // });
-                html2canvas(that.$refs.imageDom).then(canvas => {
-                    // 转成图片，生成图片地址
-                    that.imgUrl = canvas.toDataURL("image/png");
-                    var eleLink = document.createElement("a");
-                    eleLink.href = that.imgUrl; // 转换后的图片地址
-                    eleLink.download = "pictureName";
-                    // 触发点击
-                    document.body.appendChild(eleLink);
-                    eleLink.click();
-                    // 然后移除
-                    document.body.removeChild(eleLink);
-                    // alert("that.imgUrl----",that.imgUrl);
-                });
+                setTimeout(() => {
+                    html2canvas(that.$refs.imageDom).then((canvas) => {
+                        // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+                        let dataURL = canvas.toDataURL("image/png");
+                        that.imgUrl = dataURL;
+                    });
+                }, 5000)
             })
-
-            //合成分享图
-            // that.$nextTick(function() {
-            //     //海报生成
-            //     html2canvas(that.$refs.imageDom).then((canvas) => {
-            //         that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-            //         // let dataURL = canvas.toDataURL("image/png");
-            //         // that.imgUrl = dataURL;
-            //     });
-            // })
-
         },
+
         getBase64Image(img) {
             var canvas = document.createElement("canvas");
             canvas.width = img.width;
@@ -233,21 +219,9 @@ export default {
                 '&type=3&id=' + this.goods_id
         }
 
-        //头像转换base64
-        var image = new Image();
-        image.src = this.user.wechat_img;
-        this.wechat_img = this.user.wechat_img;
-        image.onload = async () => {
-            var base64 = this.getBase64Image(image);
-            this.wechat_img = base64
-            // let res = await this.$postRequest('/upload/UpBase64Image', { img: base64 })
-            // if (res.data.code == 1) {
-            //     this.wechat_img = res.data.data
-            // }
-        }
-        this.$nextTick(() => {
-            this.getGoods()
-        })
+        this.wechat_img = this.$localstore.get('avatar') || this.user.wechat_img
+        this.getGoods()
+
 
     },
 
@@ -264,7 +238,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        wxapi.wxRegister(this.wxRegCallback)
+
     },
 
     // 更新前状态
