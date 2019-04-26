@@ -6,7 +6,7 @@
             <div class="add"></div>
         </header>
         <div class="commodity">
-            <span><img src="../assets/img1.png" alt=""></span>
+            <span><img :src="$imgUrl + this.thumb_img" alt=""></span>
             <div>
                 <a>服务态度</a>
                 <van-rate v-model="star_level" />
@@ -42,6 +42,7 @@ export default {
     data() {
         return {
             star_level: 0,
+            thumb_img: '',
             content: '',
             imagesUrl: [],
             anonymityState: 0
@@ -89,6 +90,28 @@ export default {
             const that = this;
             that.anonymityState = !that.anonymityState
         },
+
+        //获取商品
+        async getGoods() {
+            var url = ''
+            let type = this.$route.query.type
+            if (type == 1) {
+                url = '/home/GetGoodsDetail'
+            } else if (type == 2) {
+                url = '/home/GetPlus'
+            } else if (type == 3) {
+                url = '/home/GetCardDetail'
+            }
+
+            //获取详情
+            let data = { id: this.$route.query.goods_id }
+            let res = await this.$getRequest(url, data)
+;
+            if (res.data.code == 1) {
+                this.thumb_img = res.data.data.thumb_img || res.data.data.thumb
+            }
+        },
+
         //发表评论
         async submit() {
             let userInfo = this.$localstore.get('userInfo')
@@ -109,8 +132,8 @@ export default {
             if (res.data.code == 1) {
                 this.$router.push({ name: 'CommentSucceed' })
             }
-
         }
+
     },
 
     // 创建前状态
@@ -119,6 +142,7 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#F6F6F6";
+        this.getGoods()
     },
 
     // 挂载前状态

@@ -98,45 +98,27 @@
           </h3>
                 <div v-if="table == 1">
                     <ul>
-                        <li class="vip_price">
+                        <li class="vip_price" v-for="item in projects">
                             <div class="img">
-                                <span></span>
-                                <div>
+                                <span><img :src="$imgUrl +item.def_pic" alt="" /></span>
+                                <!--              <div>
                                     <p>会员价</p>
                                     <i>￥</i>
-                                    <a>20</a>
-                                </div>
+                                    <a>{{item.project_price}}</a>
+                                </div> -->
                             </div>
                             <div class="project">
-                                <p>悠游堂亲子嘉年华</p>
-                                <span>报名　11/22</span>
+                                <p>{{item.project_name}}</p>
+                                <!--            <span>报名　11/22</span> -->
                             </div>
                             <div class="share">
                                 <div class="price">
-                                    <span>现价</span>
-                                    <b>￥45.0</b>
-                                    <a>￥345</a>
+                                    <span>价值</span>
+                                    <b>￥{{item.project_price}}</b>
                                 </div>
-                            </div>
-                        </li>
-                        <li class="vip_price">
-                            <div class="img">
-                                <span></span>
-                                <div>
-                                    <p>会员价</p>
-                                    <i>￥</i>
-                                    <a>20</a>
-                                </div>
-                            </div>
-                            <div class="project">
-                                <p>悠游堂亲子嘉年华</p>
-                                <span>报名　11/22</span>
-                            </div>
-                            <div class="share">
-                                <div class="price">
-                                    <span>现价</span>
-                                    <b>￥45.0</b>
-                                    <a>￥345</a>
+                                <div class="right">
+                                    <span>畅玩</span>
+                                    <b>多店通用</b>
                                 </div>
                             </div>
                         </li>
@@ -214,6 +196,7 @@ export default {
             isCollect: false,
             CardDetail: {},
             comments: [],
+            projects: [],
             countDownNum: 0,
             countDownArr: "",
             id: '',
@@ -318,6 +301,12 @@ export default {
             let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 3 })
             this.comments = res.data.data.list;
         },
+        //获取卡片项目
+        async GetCardProject() {
+            let res = await this.$getRequest('/home/GetCardProject', { card_id: this.$route.query.id })
+            this.projects = res.data.data;
+            console.log(this.projects);
+        },
         // 用于微信JS-SDK回调   
         async wxRegister() {
             //获取微信jssdk
@@ -380,6 +369,7 @@ export default {
         this.id = this.$route.query.id
         this.getComment()
         this.getDetail()
+        this.GetCardProject()
         document.body.style.background = "#fff";
     },
 
@@ -864,6 +854,21 @@ export default {
 
                                     a {
                                         text-decoration: line-through;
+                                    }
+                                }
+
+                                .right {
+                                    display: flex;
+                                    flex-direction: column;
+                                    text-align: right;
+                                    margin-right: 10px;
+
+                                    span {
+                                        color: rgb(255, 102, 102)
+                                    }
+
+                                    b {
+                                        color: #666;
                                     }
                                 }
 

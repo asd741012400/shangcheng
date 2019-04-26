@@ -118,8 +118,16 @@ export default {
                         }
 
                         let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
-
+                        if (res.data.code == 1) {
+                            that.$router.push({
+                                name: 'PaySucceed',
+                                query: {
+                                    id: that.order.order_id,
+                                    type: that.order.order_type,
+                                    cd_id: res.data.data
+                                }
+                            })
+                        }
                     };
 
                     //  取消支付的操作

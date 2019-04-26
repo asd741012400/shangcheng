@@ -5,7 +5,7 @@
             <div class="tel">收藏</div>
             <div class="add"><span><img src="../assets/icon_search2.png" alt=""></span></div>
         </header>
-        <div class="sort">
+        <!--         <div class="sort">
             <p @click="sortOneFn">
                 <span>全部</span>
                 <i v-if="sortOne"><img src="../assets/icon_up.png" alt=""></i>
@@ -16,38 +16,49 @@
                 <i v-if="sortTow"><img src="../assets/icon_up.png" alt=""></i>
                 <i v-else><img src="../assets/icon_pull_down.png" alt=""></i>
             </p>
-        </div>
-        <ul class="team_member">
-            <li class="normal">
-                <i></i>
-                <div>
-                    <p class="name">
-                        <b>游乐园亲子门票系列游乐园亲子门票系列游乐园亲子门票系列</b>
-                    </p>
-                    <p>
-                        <a>￥800.00</a>
-                        <em>￥800.00</em>
-                    </p>
-                </div>
-            </li>
-            <li class="disabled">
-                <i></i>
-                <div class="right">
-                    <div>
-                        <p class="name">
-                            <b>游乐园亲子门票系列游乐园亲子门票系列游乐园亲子门票系列</b>
-                        </p>
-                        <p>
-                            <a>失效</a>
-                        </p>
-                    </div>
-                    <span>删除</span>
-                </div>
-            </li>
-        </ul>
-        <div class="empty" v-if="empty">
-            <span>清空失效商品</span>
-        </div>
+        </div> -->
+        <van-tabs v-model="active" @change="changeTabs">
+            <van-tab title="全部">
+                <ul class="team_member">
+                    <li class="disabled" v-for="item in list">
+                        <i><img :src="$imgUrl + item.img"></i>
+                        <div class="right">
+                            <div>
+                                <p class="name">
+                                    <b>{{item.names}}</b>
+                                </p>
+                                <p>
+                                    <a>￥{{item.price || "0.00"}}</a>
+                                    <!-- <em>￥{{item.name}}</em>/ -->
+                                </p>
+                            </div>
+                            <span @click="delCollect(item.rec_id)">删除</span>
+                        </div>
+                    </li>
+                </ul>
+            </van-tab>
+            <van-tab title="已失效">
+                <ul class="team_member">
+                    <li class="disabled" v-for="item in list">
+                        <i></i>
+                        <div class="right">
+                            <div>
+                                <p class="name">
+                                    <b>{{item.names}}</b>
+                                </p>
+                                <p>
+                                    <a>失效</a>
+                                </p>
+                            </div>
+                            <span @click="delCollect(item.rec_id)">删除</span>
+                        </div>
+                    </li>
+                </ul>
+         <!--        <div class="empty" v-if="empty">
+                    <span @click="delCollectAll">清空失效商品</span>
+                </div> -->
+            </van-tab>
+        </van-tabs>
     </div>
 </template>
 <script>
@@ -56,11 +67,12 @@ export default {
     data() {
         return {
             list: [],
+            active: 1,
             sortOne: true,
             sortTow: true,
             status: 0,
-                    page: 0,
-                    currSize: 0,
+            page: 1,
+            currSize: 0,
             pageSize: 10,
             empty: true
         }
@@ -73,16 +85,37 @@ export default {
         sortTowFn() {
             this.sortTow = !this.sortTow
         },
+        changeTabs() {
+            this.getList()
+        },
+        //删除收藏        
+        async delCollect(id) {
+            let res = await this.$getRequest('/user/DelCollectById', { id: id })
+            this.$message(res.data.msg)
+            if (res.data.code == 1) {
+                this.getList()
+            }
+        },
+        //情空
+        async delCollectAll(id) {
+ 
+        },
+
         async getList() {
+            if (this.active == 1) {
+                this.status = 0
+            } else {
+                this.status = 2
+            }
             let data = {
                 user_id: this.user.user_id,
                 status: this.status,
                 page: this.page,
             }
             let res = await this.$getRequest('/user/GetMyCollect', data)
-            if (res.data.data.list) {
-                this.lsit = res.data.data.list
-                this.currSize = res.data.data.list.length
+            if (res.data.data.res) {
+                this.list = res.data.data.res
+                this.currSize = res.data.data.res.length
                 this.pageSize = res.data.data.count
             }
 
@@ -94,9 +127,9 @@ export default {
                 page: this.page,
             }
             let res = await this.$getRequest('/user/GetMyCollect', data)
-            if (res.data.data.list) {
-                this.lsit = this.lsit.concat(res.data.data.list);
-                this.currSize = res.data.data.list.length
+            if (res.data.data.res) {
+                this.list = this.list.concat(res.data.data.res);
+                this.currSize = res.data.data.res.length
             }
 
         },

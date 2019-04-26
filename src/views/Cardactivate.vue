@@ -81,29 +81,6 @@
                 <div class="boxs">
                     <h3>激活须知</h3>
                     <div class="detail" v-html="card.activation_things"></div>
-                    <!--                   <ul>
-                        <li>
-                            <h4>
-                                    <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                    <span>须知一</span>
-                                  </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                        <li>
-                            <h4>
-                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                        <span>须知二</span>
-                                      </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                        <li>
-                            <h4>
-                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                        <span>须知三</span>
-                                      </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                    </ul> -->
                     <div class="agreement">
                         <van-checkbox v-model="agreementStuats">同意激活协议</van-checkbox>
                     </div>

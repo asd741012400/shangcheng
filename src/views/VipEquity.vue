@@ -23,42 +23,17 @@
                 </div>
                 <i class="tle_en">EXCLUSIVE RIGHTS</i>
                 <ul class="tab">
-                    <li class="active">
-                        <span><img src="../assets/VipEquity_icon1.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon2.png" alt=""></span>
-                        <p>畅玩特22231权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon3.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon4.png" alt=""></span>
-                        <p>畅玩特123权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon5.png" alt=""></span>
-                        <p>畅玩特asd权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon6.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon7.png" alt=""></span>
-                        <p>畅玩特权</p>
+                    <li :class="ii == vipIndex ? 'active' : ''" v-for="(item,ii) in vip" :key="ii" @click="getVip(ii)">
+                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                        <p>{{item.name}}</p>
                     </li>
                 </ul>
                 <div class="text">
                     <h3>
-            <span></span>
-            <b>畅玩特权</b>
-          </h3>
-                    <p>会员可享时光里·BABY MALL三店全年不限次游乐区畅玩特权
-                        （龙湖时代天街店、恒大中渝广场店、茶园悦地购物中心店）</p>
+                        <span></span>
+                        <b>{{currVip.name}}</b>
+                      </h3>
+                    <p>{{currVip.desc}}</p>
                 </div>
                 <div class="privilege">
                     <div class="tle_text">
@@ -69,7 +44,7 @@
                             <span></span>
                     </div>
                     <i class="tle_en">EXCLUSIVE RIGHTS</i>
-                    <div class="privilege_img"><img src="../assets/img5.png" alt=""></div>
+                    <div class="privilege_img"><img :src="$imgUrl+plus.photo" alt=""></div>
                     </div>
                 </div>
             </div>
@@ -88,41 +63,11 @@
                     </li>
                 </ul>
                 <ul class="product">
-                    <li>
-                        <i><img src="../assets/img1.png" alt=""></i>
-                        <p>加勒比儿童</p>
+                    <li v-for="(item,ii) in goodsList" @click="goGoodsDetail(item)">
+                        <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
+                        <p>{{item.goods_name}}</p>
                         <a>免费</a>
-                        <span>市场价：￥200</span>
-                    </li>
-                    <li>
-                        <i><img src="../assets/img1.png" alt=""></i>
-                        <p>加勒比儿童</p>
-                        <a>免费</a>
-                        <span>市场价：￥200</span>
-                    </li>
-                    <li>
-                        <i><img src="../assets/img1.png" alt=""></i>
-                        <p>加勒比儿童</p>
-                        <a>免费</a>
-                        <span>市场价：￥200</span>
-                    </li>
-                    <li>
-                        <i><img src="../assets/img1.png" alt=""></i>
-                        <p>加勒比儿童</p>
-                        <a>免费</a>
-                        <span>市场价：￥200</span>
-                    </li>
-                    <li>
-                        <i><img src="../assets/img1.png" alt=""></i>
-                        <p>加勒比儿童</p>
-                        <a>免费</a>
-                        <span>市场价：￥200</span>
-                    </li>
-                    <li>
-                        <i><img src="../assets/img1.png" alt=""></i>
-                        <p>加勒比儿童</p>
-                        <a>免费</a>
-                        <span>市场价：￥200</span>
+                        <span>市场价：￥{{item.mkt_price}}</span>
                     </li>
                 </ul>
             </div>
@@ -163,7 +108,11 @@ export default {
             },
             index: 0,
             share_id: '',
+            vip: [],
+            currVip: {},
+            vipIndex: 0,
             AllCate: [],
+            goodsList: [],
             plus: {},
             page: 1,
             currSize: 0,
@@ -182,10 +131,12 @@ export default {
                 this.show = true
                 return false
             } else {
-                this.postUser()
                 this.$router.push({ name: 'VipOrder', query: { type: 2 } })
             }
 
+        },
+        goGoodsDetail(item) {
+            this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
         },
         goBack() {
             let from_url = this.$localstore.get('from_url')
@@ -198,16 +149,26 @@ export default {
 
         //获取所有分类
         async getAllCate() {
-            let res = await this.$getRequest('home/GetAllCate')
+            let res = await this.$getRequest('/home/GetAllCate')
             this.AllCate = res.data.data
             this.getGoodsList()
+        },
+        //获取所有权益
+        async getVipList() {
+            let res = await this.$getRequest('/plus/PlusEquityList')
+            this.vip = res.data.data
+            this.currVip = this.vip[0]
+        },
+        getVip(index) {
+            this.currVip = this.vip[index]
+            this.vipIndex = index
         },
 
         //获取分类下的商品
         async getGoodsList(index) {
-            if (index) {                
-                this.index = index 
-            }else{
+            if (index) {
+                this.index = index
+            } else {
                 this.index = 0
             }
             this.goodsList = []
@@ -217,7 +178,7 @@ export default {
                 var id = this.AllCate[0].c_id
             }
             this.cid = id
-            let res = await this.$getRequest('home/GetGoodsListByCid', { cid: id, page: this.page })
+            let res = await this.$getRequest('/plus/PlusGoods', { cid: id, page: this.page })
             this.goodsList = res.data.data.list
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
@@ -226,7 +187,7 @@ export default {
 
         //获取更多商品
         async getGoodsListMore(cid) {
-            let res = await this.$getRequest('home/GetGoodsListByCid', { cid: cid, page: this.page })
+            let res = await this.$getRequest('/plus/PlusGoods', { cid: cid, page: this.page })
             let data = res.data.data.list
             this.goodsList = this.goodsList.concat(data);
             this.currSize = res.data.data.list.length
@@ -299,10 +260,12 @@ export default {
             this.user = user
         }
         let has_share = this.$localstore.get('has_share')
+        this.share_id = this.$route.query.share_id
         if (has_share && has_share.query.share_id) {
             this.share_id = has_share.query.share_id
         }
         this.getPlUS()
+        this.getVipList()
         this.getAllCate()
 
 

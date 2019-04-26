@@ -2,11 +2,11 @@
     <div class="StoreList">
         <header>
             <div>
-                <p>￥{{data.month_money || 0.00}}</p>
+                <p>￥{{month_money}}</p>
                 <span>当月提现</span>
             </div>
             <div>
-                <p>￥{{data.total_money || 0.00}}</p>
+                <p>￥{{total_money}}</p>
                 <span>累计提现</span>
             </div>
         </header>
@@ -53,12 +53,14 @@ import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
-    name: 'StoreList',
+    name: 'WidthdrewList',
     data() {
         let date = this.$dayjs().format('YYYY-MM')
         return {
             startDate: new Date(date),
             dateTime: date,
+            month_money: '0.00',
+            total_money: '0.00',
             data: {},
             page: 1,
             currSize: 0,
@@ -90,6 +92,8 @@ export default {
             this.data = res.data.data
             this.currSize = res.data.data.list.length
             this.pageSize = res.data.data.count
+            this.month_money = res.data.data.month_money
+            this.total_money = res.data.data.total_money
 
         },
         async getListMore() {

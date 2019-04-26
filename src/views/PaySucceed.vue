@@ -95,7 +95,6 @@
         </div>
         <!-- 转赠须知 -->
         <!-- plus专属 -->
-        
         <!-- plus专属 -->
         <Share ref="myShare"></Share>
     </div>
@@ -113,7 +112,8 @@ export default {
     components: { Share },
     methods: {
         shareShowFn() {
-            this.$refs.myShare.shareShowFn();
+            // this.$refs.myShare.shareShowFn();
+            this.$router.push({ name: 'VipPlus' })
         },
         goHome() {
             this.$router.push({ name: 'Index' })

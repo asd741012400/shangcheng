@@ -45,17 +45,17 @@ import VipPlus from './views/VipPlus.vue'
 
 //分销商城
 // import Login from './views/merchant/Login.vue'
-// import MerchantShop from './views/merchant/MerchantShop.vue' //主页
+import MerchantShop from './views/merchant/MerchantShop.vue' //主页
 // import ChageShop from './views/merchant/ChageShop.vue' //切换门店
 // import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
 // import MyTeam from './views/merchant/MyTeam.vue' //我的团队
 // import TeamDel from './views/merchant/TeamDel.vue' //团队详情
 // import MemberDel from './views/merchant/MemberDel.vue' //成员详情
-// import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的推广
-// import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的团队（二级）
-// import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的团队（二级）
-import Generalize from './views/merchant/Generalize.vue' //我的推广
+import MyGeneralize from './views/merchant/MyGeneralize.vue' //我的推广
+import TeamDelTow from './views/merchant/TeamDelTow.vue' //我的推广
+import Generalize from './views/merchant/Generalize.vue' //我的团队(二级)
+// import MyTeamTow from './views/merchant/MyTeamTow.vue' //我的团队（三级）
 // import PersonalStores from './views/merchant/PersonalStores.vue' //我的店铺
 
 
@@ -440,7 +440,8 @@ router.beforeEach((to, from, next) => {
     }
 
     //使用 openid 获取用户资料 缓存本地
-    if (openid) {
+    if (openid || openid2) {
+        let openid = openid || openid2
         //保存openid
         localstore.set('openid6', openid)
         getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
@@ -469,7 +470,7 @@ router.beforeEach((to, from, next) => {
 
     //判断是否会员分享
     if (to.name == 'VipEquity' || to.name == 'CardDetails' || to.name == 'CommodityDetails') {
-        next()
+        // next()
     } else {
         // let share = localstore.get('to_share')
         // if (share && share.name) {

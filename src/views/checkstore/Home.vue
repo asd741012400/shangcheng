@@ -2,26 +2,26 @@
     <div class="Home">
         <div class="shop_message">
             <div class="shop_img">
-                <span>img</span>
+                <span><img :src="$imgUrl+shop.thumb_img"></span>
             </div>
-            <h3>万达广场LUCA店</h3>
+            <h3>{{shop.business_name}}</h3>
             <router-link :to="{name:'ChageShop'}">
                 切换门店
             </router-link>
         </div>
         <ul class="money">
             <li>
-                <h3>21806</h3>
+                <h3>{{today_num}}</h3>
                 <p>今日核销</p>
             </li>
             <li>
-                <h3>21806</h3>
+                <h3>{{total}}</h3>
                 <p>总核销</p>
             </li>
-            <li>
+            <!--        <li>
                 <h3>21806</h3>
                 <p>预约人数</p>
-            </li>
+            </li> -->
         </ul>
         <div class="menu">
             <a href="javascript:;" @click="sacnCode">
@@ -42,12 +42,12 @@
                     <em>核销记录</em>
                 </p>
             </router-link>
-            <router-link :to="{name:'Appointment'}">
+<!--             <router-link :to="{name:'Appointment'}">
                 <p>
                     <span><img src="../../assets/merchant/icon_img4.png" alt=""></span>
                     <em>预约记录</em>
                 </p>
-            </router-link>
+            </router-link> -->
         </div>
     </div>
 </template>
@@ -58,18 +58,35 @@ import wxapi from '@/lib/wx.js'
 export default {
     name: 'Home',
     data() {
-        return {}
+        return {
+            shop: {
+                thumb_img: '',
+                business_name: '',
+            },
+            today_num: 0,
+            total: 0,
+        }
     },
     components: {},
     methods: {
+        //获取店铺信息 及核销信息
+        async getShop() {
+            let userInfo = this.$localstore.get('business_user')
+            let res = await this.$getRequest('/cancle/CancleOne', { business_id: userInfo.user_id })
+            if (res.data.data) {
+                this.shop = res.data.data.shopinfo
+                this.today_num = res.data.data.cur_nums.nums
+                this.total = res.data.data.all_nums.nums
+            }
+        },
         sacnCode() {
             wx.ready(() => {
                 wx.scanQRCode({ // 微信扫一扫接口
                     desc: 'scanQRCode desc',
                     needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                     scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是一维码，默认二者都有
-                    success: async (code) => {
-                        console.log(code);
+                    success: async (result) => {
+                        let code = result.resultStr
                         this.$localstore.set('cehckGoods', '')
                         let userInfo = this.$localstore.get('business_user')
                         let data = {
@@ -81,9 +98,9 @@ export default {
                         if (res.data.code == 1) {
                             this.$localstore.set('cehckGoods', res.data.data)
                             if (res.data.data.card_info.type == 1) {
-                                this.$router.push({ name: 'Commodity' })
+                                this.$router.push({ name: 'Commodity', query: { code: code } })
                             } else {
-                                this.$router.push({ name: 'CardCheck' })
+                                this.$router.push({ name: 'CardCheck', query: { code: code } })
                             }
                         } else {
                             this.$message(res.data.msg);
@@ -103,15 +120,17 @@ export default {
     created() {
         document.title = "主页"
         document.body.style.background = "#fff"
-        // 用于微信JS-SDK回调            
-        wxapi.wxRegister()
+        this.getShop()
     },
 
     // 挂载前状态
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {},
+    mounted() {
+        // 用于微信JS-SDK回调    
+        wxapi.wxRegister()
+    },
 
     // 更新前状态
     beforeUpdate() {},

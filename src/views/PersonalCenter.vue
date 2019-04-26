@@ -111,7 +111,7 @@
                     <p>我的评价</p>
                 </router-link>
             </li>
-<!--             <li>
+            <!--             <li>
                 <a href="javascript:;">
                     <router-link :to="{name:'MyCardBag'}">
                         <span><img src="../assets/icon_discount_coupon.png" alt=""></span>
@@ -120,7 +120,7 @@
                 </a>
             </li> -->
             <li v-if="userInfo.status == 1">
-                <router-link :to="{name:'Generalize'}">
+                <router-link :to="{name:'TeamDelTow'}">
                     <span><img src="../assets/icon_generalize.png" alt=""></span>
                     <p>我的推广</p>
                 </router-link>
@@ -134,10 +134,10 @@
                     <span class="close" @click="popHideFn"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input type="text">
+                        <input v-model="code" type="text">
                         <i><img src="../assets/icon_close2.png" alt=""></i>
                     </p>
-                    <a>提 交</a>
+                    <a @click="getcode">提 交</a>
                 </div>
             </div>
         </div>
@@ -166,7 +166,7 @@
         </div>
         <!-- 兑换券 -->
         <Share ref="myShare"></Share>
-        <!-- <BindPhone :show="show"></BindPhone> -->
+        <BindPhone :show="show"></BindPhone>
     </div>
 </template>
 <script>
@@ -182,6 +182,7 @@ export default {
                 tel_phone: '',
                 status: 0
             },
+            code: '',
             popState: 3,
             popShow: false,
             popShow1: false,
@@ -208,6 +209,21 @@ export default {
             const that = this;
             that.popShow1 = false;
         },
+        //兑换卡片商品权益
+        async getcode() {
+            let data = { code: this.code }
+            if (this.code == '') {
+                this.$message('兑换码不能为空！')
+                return false
+            }
+            let res = await this.$postRequest('/user/GetThings', data)
+            this.$message(res.data.msg);
+            if (res.data.code == 1) {
+                this.code == ''
+            }else{
+                this.popShow = false;                
+            }
+        },
     },
 
     // 创建前状态
@@ -219,11 +235,11 @@ export default {
         if (userInfo) {
             this.userInfo = userInfo
         }
-        // this.$nextTick(() => {
-        //     if (!userInfo) {
-        //         this.show = true
-        //     }
-        // })
+        this.$nextTick(() => {
+            if (!userInfo) {
+                this.show = true
+            }
+        })
         document.body.style.background = "#fff";
     },
 

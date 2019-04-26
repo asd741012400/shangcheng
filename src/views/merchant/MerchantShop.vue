@@ -2,13 +2,13 @@
     <div class="MerchantShop">
         <div class="shop_message">
             <div class="shop_img">
-                <span></span>
+                <span><img :src="info.wechat_img"></span>
                 <i v-if="user.level == 1"><img src="../../assets/merchant/vip1.png" alt=""></i>
                 <i v-else-if="user.level == 2"><img src="../../assets/merchant/vip2.png" alt=""></i>
                 <i v-else-if="user.level == 3"><img src="../../assets/merchant/vip3.png" alt=""></i>
             </div>
-            <h3>万达广场LUCA店</h3>
-            <p>185 3226 6666</p>
+            <h3>{{info.user_name}}</h3>
+            <p>{{info.tel_phone}}</p>
             <router-link :to="{name:'MyShop',query:{user_id:user.user_id}}">
                 我的店铺
             </router-link>
@@ -28,13 +28,13 @@
             </li>
         </ul>
         <div class="menu">
-            <router-link :to="{name:'TeamDel'}">
-                <p>
-                    <span><img src="../../assets/merchant/icon_img1.png" alt=""></span>
-                    <em>我的成员</em>
-                </p>
-            </router-link>
-            <router-link :to="{name:'Generalize'}">
+            <a href="javascript:;" @click="goTeam">
+                    <p>
+                        <span><img src="../../assets/merchant/icon_img1.png" alt=""></span>
+                        <em>我的成员</em>
+                    </p>
+                 </a>
+            <router-link :to="{name:'TeamDelTow'}">
                 <p>
                     <span><img src="../../assets/merchant/icon_img2.png" alt=""></span>
                     <em>我的推广</em>
@@ -72,6 +72,15 @@ export default {
         async getInfo() {
             let res = await this.$getRequest('/store/StoreHome', { user_id: this.user.user_id })
             this.info = res.data.data
+        },
+        goTeam() {
+            // if (this.user.level == 1) {
+            //     this.$router.push({ name: 'MemberDel' })
+            // } else if (this.user.level == 2) {
+                // this.$router.push({ name: 'Generalize' })
+            // } else if (this.user.level == 3) {
+                this.$router.push({ name: 'MyTeamTow' })
+            // }
         }
     },
 
@@ -84,8 +93,10 @@ export default {
         this.user = this.$localstore.get('userInfo');
         if (this.user.level == 2) {
             document.title = "我的推广（二级）"
-        } else if (this.user.level == 2) {
+        } else if (this.user.level == 3) {
             document.title = "我的推广（三级）"
+        } else {
+            document.title = "分销商城"
         }
         this.getInfo()
     },

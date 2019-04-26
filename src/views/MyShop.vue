@@ -52,7 +52,7 @@
                 </li>
             </ul>
         </div>
-        <div class="click_share">
+        <div class="click_share" v-show="userInfo.user_id == storeInfo.user_id">
             <div @click="shareShowFn">
                 <span><img src="../assets/icon_share.png" alt=""></span>
                 <p>分享店铺</p>
@@ -62,6 +62,7 @@
     </div>
 </template>
 <script>
+import wx from 'weixin-js-sdk'
 import Share from '../components/Share'
 export default {
     name: 'MyShop',
@@ -72,6 +73,7 @@ export default {
             page: 1,
             storeInfo: {},
             list: [],
+            show: false,
             currSize: 0,
             pageSize: 10,
         }
@@ -99,6 +101,53 @@ export default {
             this.list = this.list.concat(res.data.data.goods_list);
             this.currSize = res.data.data.goods_list.length
             this.pageSize = res.data.data.count
+        },
+        // 用于微信JS-SDK回调   
+        async wxRegister() {
+            //获取微信jssdk
+            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
+            let config = res.data.data
+            wx.config({
+                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: config.appId, // 必填，公众号的唯一标识
+                timestamp: config.timestamp, // 必填，生成签名的时间戳
+                nonceStr: config.nonceStr, // 必填，生成签名的随机串
+                signature: config.signature, // 必填，签名
+                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
+            })
+            wx.ready(() => {
+                let url = 'http://' + window.location.host + '/#/MyShop?share_id=' + this.userInfo.user_id +
+                    '&uer_id=' + this.userInfo.user_id
+                //微信分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: this.userInfo.username + '的小店', // 分享标题, 请自行替换
+                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.userInfo.wechat_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                });
+                wx.onMenuShareAppMessage({
+                    title: this.userInfo.username + '的小店', // 分享标题, 请自行替换
+                    desc: this.plus.desc, // 分享描述, 请自行替换
+                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.userInfo.wechat_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                })
+            })
+
         },
     },
 
@@ -141,7 +190,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-
+        this.wxRegister()
     },
 
     // 更新前状态

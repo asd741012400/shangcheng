@@ -46,12 +46,19 @@ export default {
   name:'MemberDel',
   data(){
     return{
+      user_id:'',
+      user_id:'',
     }
   },
   components:{
   },
   methods:{
-  
+    //获取成员详情
+    async getInfo(){
+      let res = await this.$getRequest('/store/MyTeamUserSale',{user_id:this.user_id})
+      console.log(res);
+
+    }
   },
 
   // 创建前状态
@@ -62,6 +69,7 @@ export default {
   created(){
     document.title = "成员详情"
     document.body.style.background = "#fff";
+    this.getInfo()
   },
 
   // 挂载前状态

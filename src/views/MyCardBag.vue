@@ -9,12 +9,12 @@
             <!--  'ac_status 0 未激活 1已激活 2作废 -->
             <template v-if="item.ac_status == 0">
                 <div class="to_activate card_commonality">
-                    <div class="image" @click="activeCard(index)">
-                        <i><img :src="item.thumb_img" alt=""></i>            
-                            <div>
-                                <p>卡号：{{item.card_sn}}</p>
-                                <span>去激活</span>
-                            </div>
+                    <div class="image" >
+                        <i><img :src="item.thumb_img" alt=""></i>
+                        <div @click="activeCard(index)">
+                            <p>卡号：{{item.card_sn}}</p>
+                            <span>去激活</span>
+                        </div>
                     </div>
                     <div class="content">
                         <div class="text">
@@ -72,7 +72,7 @@
                     <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input type="text" v-model="getCode">
+                        <input type="number"  v-model.number="getCode">
                         <i><img src="../assets/icon_close2.png" alt=""></i>
                     </p>
                     <a @click="getCard">提 交</a>
@@ -86,31 +86,9 @@
                     <h3>转赠须知</h3>
                     <div class="detail" v-html="desc">
                     </div>
-                    <!--                    <ul>
-                        <li>
-                            <h4>
-                                    <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                    <span>须知一</span>
-                                  </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                        <li>
-                            <h4>
-                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                        <span>须知二</span>
-                                      </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                        <li>
-                            <h4>
-                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                        <span>须知三</span>
-                                      </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                    </ul> -->
+
                     <div class="agreement">
-                        <input class="song" type="password" v-model="value" placeholder="请输入转赠密码" />
+                        <input class="song" type="number" v-model.number="value" placeholder="请输入转赠密码" />
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
@@ -169,7 +147,7 @@ export default {
         activeCard(index) {
             let card = this.cardList[index]
             this.$localstore.set('usecard', card)
-            this.$router.push({name:'CardActivate',query:{id:card.cgid}})
+            this.$router.push({ name: 'CardActivate', query: { id: card.cgid } })
         },
         //转赠
         confirmPopShow(index) {
@@ -195,6 +173,10 @@ export default {
         },
         //领取卡片
         async getCard() {
+            if (this.getCode == '') {
+                this.$message('兑换码不能为空！')
+                return false
+            }
             let data = { user_id: 14, give_id: 1, password: this.getCode }
             let res = await this.$postRequest('/card/GetGiveCard', data)
             this.$message(res.data.msg);
@@ -205,6 +187,10 @@ export default {
         },
         //赠送卡片
         async handleGive() {
+            if (this.value == '') {
+                this.$message('转赠码不能为空！')
+                return false
+            }
             let data = {
                 cdid: this.cdid,
                 card_password: this.value

@@ -39,6 +39,7 @@ export default {
             if (res.data.code == 1) {
                 this.$localstore.set('userInfo', res.data.data)
                 this.show = false
+                window.location.reload()
                 done()
             } else {
                 this.$notify(res.data.msg);

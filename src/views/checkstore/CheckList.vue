@@ -2,11 +2,11 @@
     <div class="CheckList">
         <header>
             <div>
-                <p>999</p>
+                <p>{{today_num}}</p>
                 <span>今日核销</span>
             </div>
             <div>
-                <p>999</p>
+                <p>{{total}}</p>
                 <span>总核销</span>
             </div>
         </header>
@@ -20,59 +20,17 @@
         </div>
         <div class="product">
             <ul>
-                <li>
-                    <i>img</i>
+                <li v-for="item in checklist">
+                    <i><img :src="$imgUrl + item.thumb_img" alt="" /></i>
                     <div>
-                        <h3>游乐园亲子门票系列280元张</h3>
+                        <h3>{{item.project_name}}</h3>
                         <p>
-                            <span>用户：可可</span>
-                            <a>15283008371</a>
+                            <span>用户：{{item.wechat_nickname}}</span>
+                            <a>{{item.tel_phone}}</a>
                         </p>
                         <p>
-                            <span>核销人：张大宏</span>
-                            <a>2018-5-6 10:00</a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <i>img</i>
-                    <div>
-                        <h3>游乐园亲子门票系列280元张</h3>
-                        <p>
-                            <span>用户：可可</span>
-                            <a>15283008371</a>
-                        </p>
-                        <p>
-                            <span>核销人：张大宏</span>
-                            <a>2018-5-6 10:00</a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <i>img</i>
-                    <div>
-                        <h3>游乐园亲子门票系列280元张</h3>
-                        <p>
-                            <span>用户：可可</span>
-                            <a>15283008371</a>
-                        </p>
-                        <p>
-                            <span>核销人：张大宏</span>
-                            <a>2018-5-6 10:00</a>
-                        </p>
-                    </div>
-                </li>
-                <li>
-                    <i>img</i>
-                    <div>
-                        <h3>游乐园亲子门票系列280元张</h3>
-                        <p>
-                            <span>用户：可可</span>
-                            <a>15283008371</a>
-                        </p>
-                        <p>
-                            <span>核销人：张大宏</span>
-                            <a>2018-5-6 10:00</a>
+                            <span>核销人：{{item.user_name}}</span>
+                            <a>{{toTime(item.add_time)}}</a>
                         </p>
                     </div>
                 </li>
@@ -95,6 +53,9 @@ export default {
             startDate: new Date('2019-01-01'),
             dateTime: '请选择时间',
             checklist: [],
+            shop: {},
+            today_num: 0,
+            total: 0,
             page: 1,
             currSize: 0,
             pageSize: 10,
@@ -102,6 +63,9 @@ export default {
     },
     components: {},
     methods: {
+        toTime(time) {
+            return this.$dayjs.unix(time).format('YYYY-MM-DD')
+        },
         //开启时间选择器
         openPicker() {
             this.$refs.picker.open()
@@ -113,6 +77,16 @@ export default {
             this.$refs.picker.close()
             event.stopPropagation()
         },
+        //获取店铺信息 及核销信息
+        async getShop() {
+            let userInfo = this.$localstore.get('business_user')
+            let res = await this.$getRequest('/cancle/CancleOne', { business_id: userInfo.user_id })
+            if (res.data.data) {
+                this.shop = res.data.data.shopinfo
+                this.today_num = res.data.data.cur_nums.nums
+                this.total = res.data.data.all_nums.nums
+            }
+        },
         //获取核销记录
         async getCheckList() {
             let userInfo = this.$localstore.get('business_user')
@@ -123,9 +97,11 @@ export default {
                 shop_id: userInfo.business_id,
             }
             let res = await this.$getRequest('/cancle/CancleList', data)
-            this.checklist = res.data.data.list;
-            this.currSize = res.data.data.list.length
-            this.pageSize = res.data.data.count
+            if (res.data.data.list) {
+                this.checklist = res.data.data.list;
+                this.currSize = res.data.data.list.length
+                this.pageSize = res.data.data.count
+            }
         },
         //获取更多核销记录
         async getCheckListMore() {
@@ -137,8 +113,10 @@ export default {
                 shop_id: userInfo.business_id,
             }
             let res = await this.$getRequest('/cancle/CancleList', data)
-            this.checklist = this.checklist.concat(res.data.data.list);
-            this.currSize = res.data.data.list.length
+            if (res.data.data.list) {
+                this.checklist = this.checklist.concat(res.data.data.list);
+                this.currSize = res.data.data.list.length
+            }
         },
 
     },
@@ -150,6 +128,7 @@ export default {
     created() {
         document.title = "核销记录"
         document.body.style.background = "#fff";
+        this.getShop()
         this.getCheckList()
 
         window.onscroll = () => {

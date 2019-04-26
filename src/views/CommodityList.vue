@@ -22,106 +22,44 @@
         </div>
         <div class="main">
             <div class="already_comment" v-if="commentState == 1">
-                <div class="user_comment">
+                <div class="user_comment" v-for="item in list">
                     <div class="user">
                         <div class="user_message">
-                            <i></i>
+                            <i><img :src="user.wechat_img" alt=""></i>
                             <div class="user_name">
-                                <p>用户名称</p>
-                                <span>商家</span>
+                                <p>{{user.username}}</p>
+                                <!-- <span>商家</span> -->
                             </div>
                         </div>
-                        <div class="grade">2019-07-02 12:00</div>
+                        <div class="grade">{{toTime(item.add_time)}}</div>
                     </div>
-                    <div class="text">想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</div>
+                    <div class="text">{{item.content}}</div>
                     <ul>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                    </ul>
-                </div>
-                <div class="user_comment">
-                    <div class="user">
-                        <div class="user_message">
-                            <i></i>
-                            <div class="user_name">
-                                <p>用户名称</p>
-                                <span>商家</span>
-                            </div>
-                        </div>
-                        <div class="grade">2019-07-02 12:00</div>
-                    </div>
-                    <div class="text">想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</div>
-                    <ul>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
-                        <li><span><img src="../assets/img1.png" alt=""></span></li>
+                        <li v-for="img in strToArr(item.thumb)">
+                            <span><img :src="$imgUrl+img" alt=""></span>
+                        </li>
                     </ul>
                 </div>
             </div>
             <ul class="not_comment" v-else>
-                <li class="not_comment_list">
-                    <h3>商家名称</h3>
+                <li class="not_comment_list" v-for="item in list">
+                    <h3>商品名称</h3>
                     <div class="img">
-                        <span><img src="../assets/img1.png" alt=""></span>
+                        <span><img :src="$imgUrl+item.goods_img" alt=""></span>
                         <div>
                             <p class="text1">
-                                <a>龙湖时代天街悠游堂</a>
-                                <i>￥199</i>
+                                <a>{{item.goods_title}}</a>
+                                <i>￥{{item.amount}}</i>
                             </p>
                             <p class="text2">
-                                <a>两大一小</a>
-                                <i>x1</i>
+                                <!-- <a>两大一小</a> -->
+                                <i>x{{item.order_num}}</i>
                             </p>
                         </div>
                     </div>
                     <div class="btns">
-                        <span>查看订单</span>
-                        <a>进行评价</a>
-                    </div>
-                </li>
-                <li class="not_comment_list">
-                    <h3>商家名称</h3>
-                    <div class="img">
-                        <span><img src="../assets/img1.png" alt=""></span>
-                        <div>
-                            <p class="text1">
-                                <a>龙湖时代天街悠游堂</a>
-                                <i>￥199</i>
-                            </p>
-                            <p class="text2">
-                                <a>两大一小</a>
-                                <i>x1</i>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="btns">
-                        <span>查看订单</span>
-                        <a>进行评价</a>
-                    </div>
-                </li>
-                <li class="not_comment_list">
-                    <h3>商家名称</h3>
-                    <div class="img">
-                        <span><img src="../assets/img1.png" alt=""></span>
-                        <div>
-                            <p class="text1">
-                                <a>龙湖时代天街悠游堂</a>
-                                <i>￥199</i>
-                            </p>
-                            <p class="text2">
-                                <a>两大一小</a>
-                                <i>x1</i>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="btns">
-                        <span>查看订单</span>
-                        <a>进行评价</a>
+                        <!-- <span>查看订单</span> -->
+                        <a @click="handleComment(item.order_id,item.order_type,item.goods_id)">进行评价</a>
                     </div>
                 </li>
             </ul>
@@ -143,11 +81,28 @@ export default {
     },
     components: {},
     methods: {
+        //评价订单
+        async handleComment(id, type, goods_id) {
+            this.$router.push({
+                name: "Comment",
+                query: {
+                    id: id,
+                    type: type,
+                    goods_id: goods_id,
+                }
+            });
+        },
+        toTime(time) {
+            return this.$dayjs.unix(time).format('YYYY-MM-DD')
+        },
+        strToArr(str) {
+            return str.split(',')
+        },
         commentStateChage(num) {
             const that = this;
             that.commentState = num;
             this.list = []
-
+            this.getList()
         },
         async getList() {
             let user = this.$localstore.get('userInfo')
@@ -156,8 +111,15 @@ export default {
                 status: this.commentState,
                 page: this.page
             }
-            let res = await this.$getRequest('/user/MyComments', data)
-            console.log(res);
+            let url = '/user/MyComments'
+            if (this.commentState == 2) {
+                url = '/user/MyComments2'
+            }
+
+            let res = await this.$getRequest(url, data)
+            this.list = res.data.data.list
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
         },
         async getListMore() {
             let data = {
@@ -165,9 +127,14 @@ export default {
                 status: this.commentState,
                 page: this.page
             }
-            let res = await this.$getRequest('/store/WidthdrewList', data)
-            this.data.list = this.data.list.concat(res.data.data.list);
-            this.currSize = res.data.data.list.length
+            let url = '/user/MyComments'
+            if (this.commentState == 2) {
+                url = '/user/MyComments2'
+            }
+
+            let res = await this.$getRequest(url, data)
+            this.list = this.list.concat(res.data.data.list);
+            this.currSize = res.data.data.res.length
         },
     },
 
@@ -367,6 +334,7 @@ export default {
                 }
 
                 .text {
+                    word-break:break-all;
                     font-size: .24rem;
                     color: #515C6F;
                     padding: .3rem 0 .2rem;

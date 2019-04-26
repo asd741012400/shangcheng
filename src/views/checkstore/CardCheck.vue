@@ -35,7 +35,7 @@ export default {
         return {
             active: 0,
             cardInfo: {},
-            product: {},
+            product: '',
             code: '',
         }
     },
@@ -46,15 +46,24 @@ export default {
             this.product = this.cardInfo.pro_list[index]
         },
         async submit() {
-                        let data = {
-               code: this.cancle_code,
-                admin_id: this.userInfo.user_id,
-                shop_id: this.userInfo.business_id,
-                project_id: this.project_id,
+            let userInfo = this.$localstore.get('business_user')
+            if (!this.product) {
+                 this.product = this.cardInfo.pro_list[0]
+            }
+            let data = {
+                code: this.code,
+                admin_id: userInfo.user_id,
+                shop_id: userInfo.business_id,
+                project_id: this.product.project_id,
                 cp_id: this.product.cp_id
             }
             let res = await this.$postRequest('/cancle/CancleCode', data)
-            console.log(res);
+            this.$message(res.data.msg)
+            if (res.data.code == 1) {
+                setTimeout(() => {
+                    this.$router.go(-1)
+                }, 2000)
+            }
         },
         cardCheckFn(index) {
             this.list[index].state = !this.list[index].state
@@ -70,7 +79,7 @@ export default {
         document.title = "卡片核销"
         let list = this.$localstore.get('cehckGoods')
         this.cardInfo = list.product_info
-        this.code = this.$router.query.code
+        this.code = this.$route.query.code
 
         // const date1 = this.$dayjs().format('YYYY-MM-DD')
         // const date2 = this.$dayjs(this.cardInfo.birthday)

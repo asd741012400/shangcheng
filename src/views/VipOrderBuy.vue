@@ -9,38 +9,14 @@
             <div class="vip_card">
                 <p>
                     <span>累积为您节省：￥</span>
-                    <a>99999</a>
+                    <a>{{plus.price}}</a>
                 </p>
             </div>
             <div class="nav">
                 <ul>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
+                    <li v-for="(item,ii) in vip" :key="ii">
+                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                        <p>{{item.name}}</p>
                     </li>
                 </ul>
             </div>
@@ -66,7 +42,9 @@ export default {
     name: 'VipOrderBuy',
     data() {
         return {
-            order: {}
+            vip: [],
+            plus: {},
+            order: {},
         }
     },
     components: {},
@@ -77,10 +55,21 @@ export default {
             let res = await this.$getRequest('/order/getOrder', { id: id })
             this.order = res.data.data
         },
+        //获取PlUS
+        async getPlus() {
+            let id = this.$route.query.id
+            let res = await this.$getRequest('/home/GetPlus')
+            this.plus = res.data.data
+        },
+        //获取所有权益
+        async getVipList() {
+            let res = await this.$getRequest('/plus/PlusEquityList')
+            this.vip = res.data.data
+        },
         //支付
         async payOrder() {
             let that = this
-                // that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
+            // that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
             if (res.data.code == 1) {
@@ -119,7 +108,9 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#f6f6f6";
+        this.getPlus()
         this.getOrder()
+        this.getVipList()
         wxapi.wxRegister() //微信config注册
     },
 
@@ -209,6 +200,7 @@ export default {
                 justify-content: center;
 
                 a {
+                    color: #ffe29f;
                     font-size: .36rem;
                 }
             }

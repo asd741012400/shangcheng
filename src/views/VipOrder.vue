@@ -9,50 +9,39 @@
             <div class="vip_card">
                 <p>
                     <span>累积为您节省：￥</span>
-                    <a>99999</a>
+                    <a>{{plus.price}}</a>
                 </p>
             </div>
             <div class="nav">
                 <ul>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
-                    </li>
-                    <li>
-                        <span><img src="../assets/VipEquity_icon_active7.png" alt=""></span>
-                        <p>畅玩特权</p>
+                    <li v-for="(item,ii) in vip" :key="ii">
+                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                        <p>{{item.name}}</p>
                     </li>
                 </ul>
             </div>
             <div class="agreement">
-    <!--             <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
+                <!--             <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
                 <span v-else><img src="../assets/icon_unselected.png" alt=""></span> -->
-                 <van-checkbox v-model="agreementStuats">同意激活协议</van-checkbox>
-                <p>同意</p>
-                <a href="#">会员协议</a>
+                <van-checkbox v-model="agreementState" @click.stop="confirmPopShow">同意会员协议</van-checkbox>
+                <!--                 <p>同意</p>
+                <a href="#">会员协议</a> -->
             </div>
             <div class="total">
                 <p>合计:￥{{plus.sale_price}}</p>
+            </div>
+        </div>
+        <div class="confirm_pop_bg" v-if="confirmPop">
+            <div class="confirm_pop">
+                <div class="boxs">
+                    <h3>会员协议</h3>
+                    <div class="detail" v-html="plus.agreement"></div>
+                    <div class="btn">
+                        <a @click="confirmPopHide">拒 绝</a>
+                        <b @click="changeStatus">同 意</b>
+                    </div>
+                    <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
+                </div>
             </div>
         </div>
         <footer>
@@ -70,19 +59,42 @@ export default {
         return {
             share_id: '',
             plus: {},
+            vip: [],
+            confirmPop: false,
             agreementState: false
         }
     },
     components: {},
     methods: {
+        changeStatus() {
+            this.agreementState = true
+            this.confirmPop = false
+        },
+        confirmPopShow() {
+            this.confirmPop = true
+        },
+        confirmPopHide() {
+            this.agreementState = false
+            this.confirmPop = false
+        },
         //获取PlUS
         async getOrder() {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
         },
+        //获取所有权益
+        async getVipList() {
+            let res = await this.$getRequest('/plus/PlusEquityList')
+            this.vip = res.data.data
+        },
         //添加订单
         async addOrder() {
+            if (!this.agreementState) {
+                this.$message('你未同意会员协议！')
+                return false
+            }
+
             let postData = {
                 order_type: 2,
                 share_id: this.share_id,
@@ -114,6 +126,7 @@ export default {
             }
         }
         this.getOrder()
+        this.getVipList()
     },
 
     // 挂载前状态
@@ -202,6 +215,7 @@ export default {
                 justify-content: center;
 
                 a {
+                    color: #ffe29f;
                     font-size: .36rem;
                 }
             }
@@ -308,5 +322,128 @@ export default {
             font-size: .32rem;
         }
     }
+
+    .confirm_pop_bg {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha:0.24);
+        top: 0;
+        left: 0;
+
+        .confirm_pop {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.02rem;
+
+            .boxs {
+                background: #fff;
+                border-radius: 10px;
+                position: relative;
+                overflow: hidden;
+
+                .detail {
+                    padding: 0.2rem .6rem;
+                    background: #fff;
+                    max-height: 250px;
+                    overflow-y: auto;
+                }
+
+                h3 {
+                    font-size: .32rem;
+                    color: #515C6F;
+                    padding: .74rem 0 .2rem;
+                    text-align: center;
+                }
+
+                ul {
+                    padding: 0 .5rem 0 .4rem;
+
+                    li {
+                        padding-bottom: .2rem;
+
+                        h4 {
+                            display: flex;
+                            align-items: center;
+                            font-size: .24rem;
+                            color: #FF6666;
+                            padding-bottom: .1rem;
+
+                            i {
+                                width: .1rem;
+                                margin-right: .18rem;
+                            }
+                        }
+
+                        p {
+                            font-size: .24rem;
+                            color: #515C6F;
+                            text-indent: 2em;
+                        }
+
+                    }
+                }
+
+                .agreement {
+                    display: flex;
+                    align-items: center;
+                    padding: .16rem .5rem 0 .4rem;
+
+                    span {
+                        width: .3rem;
+                        margin-right: .18rem;
+                    }
+
+                    b {
+                        font-size: .24rem;
+                        color: #515C6F;
+                    }
+                }
+
+                .btn {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding-top: .6rem;
+
+                    a {
+                        text-align: center;
+                        flex: 1;
+                        color: #fff;
+                        background: #8A8A8A;
+                        font-weight: bold;
+                        line-height: 1.06rem;
+                    }
+
+                    b {
+                        flex: 1;
+                        text-align: center;
+                        color: #fff;
+                        background: #FF6666;
+                        line-height: 1.06rem;
+                    }
+                }
+
+                .colse {
+                    position: absolute;
+                    right: .16rem;
+                    top: .16rem;
+                    width: 1rem;
+                    height: 1rem;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: flex-end;
+
+                    span {
+                        width: .48rem;
+                        height: .48rem;
+                    }
+                }
+            }
+        }
+    }
+
 }
 </style>

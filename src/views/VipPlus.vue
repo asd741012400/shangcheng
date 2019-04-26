@@ -39,7 +39,7 @@ export default {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
-            this.poster_img = this.getUrlBase64(this.$imgUrl + this.plus.poster)
+            this.poster_img = this.$imgUrl + this.plus.poster
             this.wxRegister()
 
 
@@ -56,15 +56,15 @@ export default {
 
             //合成分享图
             this.$nextTick(() => {
-                setTimeout(() => {
-                    html2canvas(this.$refs.imageDom, { allowTaint: false, useCORS: true }).then((canvas) => {
-                        //海报生成
-                        // this.imgUrl = URL.createObjectURL(this.base64ToBlob(canvas.toDataURL()))
-                        let dataURL = canvas.toDataURL("image/png");
-                        this.imgUrl = dataURL;
+                // setTimeout(() => {
+                //     html2canvas(this.$refs.imageDom, { allowTaint: false, useCORS: true }).then((canvas) => {
+                //         //海报生成
+                //         // this.imgUrl = URL.createObjectURL(this.base64ToBlob(canvas.toDataURL()))
+                //         let dataURL = canvas.toDataURL("image/png");
+                //         this.imgUrl = dataURL;
 
-                    });
-                }, 5000)
+                //     });
+                // }, 5000)
             })
         },
         /**
