@@ -37,19 +37,19 @@
             </div> -->
             <div class="message">
                 <ul>
-                    <li v-if="is_inArrary('1')">
+                    <li v-if="is_inArrary('3')">
                         <label>孩子姓名</label>
                         <p><input type="text" v-model="real_name" placeholder="请输入姓名"></p>
                     </li>
-                    <li v-if="is_inArrary('2')">
+                    <li v-if="is_inArrary('4')">
                         <label>监护人手机号</label>
                         <p><input type="text" v-model="tel" placeholder="请输入正确的手机号码"></p>
                     </li>
-                    <li v-if="is_inArrary('3')">
+                    <li v-if="is_inArrary('1')">
                         <label>监护人身份证</label>
                         <p><input type="text" v-model="card_ID" placeholder="请输入正确的身份证号码"></p>
                     </li>
-                    <li v-if="is_inArrary('4')">
+                    <li v-if="is_inArrary('2')">
                         <label>游玩日期</label>
                         <p>
                             <b>
@@ -145,10 +145,33 @@ export default {
                 this.show = true
                 return false
             }
+            
+            if (this.form_table.indexOf('1') > -1) {
+                var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+                if (!regIdNo.test(this.card_ID)) {
+                    this.$message('身份证号填写有误');
+                    return false;
+                }
+            }
+            if (this.form_table.indexOf('3') > -1) {
+                var regName = /^[\u4e00-\u9fa5]{2,4}$/;
+                if (!regName.test(this.real_name)) {
+                    this.$message('真实姓名填写有误');
+                    return false;
+                }
+            }
+            if (this.form_table.indexOf('4') > -1) {
+                if (!(/^1(3|4|5|7|8)\d{9}$/.test(this.tel))) {
+                    this.$message("手机号码有误，请重填");
+                    return false;
+                }
+            }
+
 
             if (!this.goods) {
                 return false;
             }
+            let WxAuth = this.$localstore.get('WxAuth')
             let postData = {
                 order_type: this.$route.query.order_type,
                 goods_id: this.$route.query.id,
@@ -160,7 +183,7 @@ export default {
                 is_wechat: this.is_wechat,
                 attr_id: this.$route.query.attr_id,
                 tel: this.tel,
-                openid: this.$localstore.get('openid6'),
+                union_id: WxAuth.unionid,
                 order_num: this.num,
                 amount: this.price,
                 total_amount: this.total,

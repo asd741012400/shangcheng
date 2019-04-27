@@ -65,7 +65,7 @@
                     <div class="user">
                         <div class="user_message">
                             <i>
-                               <template v-if="item.anonymous == 0">                          
+                               <template v-if="item.anonymous == 0">
                                 <img :src="item.wechat_img" alt="" />
                                 </template>
                             </i>
@@ -136,7 +136,7 @@
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城首页</p>
                 </li>
-                <li @click="collectGoods()">
+                <!--          <li @click="collectGoods()">
                     <template v-if="isCollect">
                         <span><img src="../assets/icon_collectB.png" alt=""></span>
                     </template>
@@ -144,12 +144,12 @@
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
                     <p>我要收藏</p>
-                </li>
+                </li> -->
             </ul>
             <!-- <div class="btn"> -->
             <!-- 可购买状态 -->
             <div class="btn" v-show="cardDetailsState == 1">
-                <div class="share" @click="shareShowFn">
+                <div class="share" @click="shareShowFn" v-if="this.CardDetail.is_dist == 1">
                     <span>￥10</span>
                     <p>分享赚</p>
                 </div>
@@ -242,9 +242,8 @@ export default {
         },
         //确认下单
         ConfirmAnOrderPage() {
-            let userInfo = this.$localstore.get('userInfo')
-            if (!userInfo) {
-                this.show = true
+            let is_login = this.checkUser()
+            if (!is_login) {
                 return false
             }
 
@@ -275,7 +274,7 @@ export default {
                     if (that.CardDetail.store == 0) {
                         that.cardDetailsState = 2
                     } else if (that.CardDetail.is_online == 0) {
-                        // that.cardDetailsState = 3
+                        that.cardDetailsState = 3
                     } else if (that.CardDetail.is_vip == 1 && that.user.status == 0) {
                         that.cardDetailsState = 4
                     } else {
@@ -291,8 +290,11 @@ export default {
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
-                this.isCollect = Boolean(res.data.data.is_coolect);        
-                this.wxRegister()
+                this.isCollect = Boolean(res.data.data.is_coolect);
+                if (this.CardDetail.is_dist == 1) {
+                    this.wxRegister()
+                }
+
                 this.timer()
             }
         },
@@ -305,9 +307,22 @@ export default {
         async GetCardProject() {
             let res = await this.$getRequest('/home/GetCardProject', { card_id: this.$route.query.id })
             this.projects = res.data.data;
-            console.log(this.projects);
+
         },
-        // 用于微信JS-SDK回调   
+        //检测用户是否登录
+        async checkUser() {
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
+            if (!res.data.data || !res.data.data.user_id) {
+                this.show = true
+                return false
+            } else {
+                this.user = res.data.data
+                this.$localstore.set('userInfo', this.user)
+                return true
+            }
+        },
+        // 用于微信JS-SDK回调
         async wxRegister() {
             //获取微信jssdk
             let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
@@ -360,7 +375,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         let user = this.$localstore.get('userInfo')
         if (user) {

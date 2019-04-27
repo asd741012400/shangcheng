@@ -30,7 +30,7 @@
 </template>
 <script>
 export default {
-    name: 'MyTeam',
+    name: 'Cardcheck',
     data() {
         return {
             active: 0,
@@ -48,7 +48,7 @@ export default {
         async submit() {
             let userInfo = this.$localstore.get('business_user')
             if (!this.product) {
-                 this.product = this.cardInfo.pro_list[0]
+                this.product = this.cardInfo.pro_list[0]
             }
             let data = {
                 code: this.code,
@@ -109,6 +109,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .MyTeam {
+    padding-bottom:100px;
     header {
         height: 2.4rem;
         background: #FF6C5F;
@@ -214,14 +215,20 @@ export default {
     }
 
     .sub_btn {
-        margin: .54rem .68rem 0;
+        position: fixed;
+        margin: 0 auto;
+        left: 0;
+        right: 0;
+        bottom:50px;
         height: 0.8rem;
+        width: 94%;
         line-height: 0.8rem;
         background-color: #ff6c60;
         border-radius: 0.1rem;
         text-align: center;
         color: #fff;
         display: block;
+        box-sizing: border-box;
         font-size: 0.32rem;
     }
 }

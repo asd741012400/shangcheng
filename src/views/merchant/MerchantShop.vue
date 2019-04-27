@@ -74,13 +74,11 @@ export default {
             this.info = res.data.data
         },
         goTeam() {
-            // if (this.user.level == 1) {
-            //     this.$router.push({ name: 'MemberDel' })
-            // } else if (this.user.level == 2) {
-                // this.$router.push({ name: 'Generalize' })
-            // } else if (this.user.level == 3) {
+            if (this.user.level == 2) {
+                this.$router.push({ name: 'Generalize' })
+            } else if (this.user.level == 3) {
                 this.$router.push({ name: 'MyTeamTow' })
-            // }
+            }
         }
     },
 
@@ -91,13 +89,7 @@ export default {
     created() {
         document.body.style.background = "#fff";
         this.user = this.$localstore.get('userInfo');
-        if (this.user.level == 2) {
-            document.title = "我的推广（二级）"
-        } else if (this.user.level == 3) {
-            document.title = "我的推广（三级）"
-        } else {
-            document.title = "分销商城"
-        }
+        document.title = "分销商城"
         this.getInfo()
     },
 

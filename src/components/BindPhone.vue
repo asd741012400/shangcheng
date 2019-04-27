@@ -4,7 +4,7 @@
             <van-cell-group>
                 <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
                 <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
-                    <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+                    <van-button :disabled="disabled" slot="button" size="small" type="primary" @click="sendSMS">{{msg}}</van-button>
                 </van-field>
             </van-cell-group>
         </van-dialog>
@@ -16,16 +16,36 @@ export default {
         return {
             // show: '',
             phone: '',
+            msg: '请求验证码',
             sms: '',
+            disabled: false,
         }
     },
     props: {
-        show:{
-            default:false
+        show: {
+            default: false
         }
     },
     components: {},
     methods: {
+        async sendSMS() {
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$postRequest('/user/SendMsg', { union_id: WxAuth.unionid, tel_phone: this.phone })
+            this.$notify(res.data.msg);
+            if (res.data.code == 1) {
+                var num = 60
+                var timer = setInterval(() => {
+                    num--
+                    this.msg = num + '秒后重新获取'
+                    this.disabled = true
+                    if (num === 0) {
+                        this.disabled = false
+                        this.msg = '获取验证码'
+                        clearInterval(timer)
+                    }
+                }, 1000)
+            }
+        },
         showBind() {
             this.show = false;
         },
@@ -34,12 +54,14 @@ export default {
         },
         //关闭填写手机号
         async beforeCloseModel(action, done) {
-            let openid = this.$localstore.get('openid6')
-            let res = await this.$postRequest('/user/saveMobile', { openid: openid, phone: this.phone, sms: this.sms })
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.unionid, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 this.$localstore.set('userInfo', res.data.data)
                 this.show = false
-                window.location.reload()
+                setTimeout(() => {
+                    window.location.reload()
+                }, 3000)
                 done()
             } else {
                 this.$notify(res.data.msg);

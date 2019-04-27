@@ -78,11 +78,19 @@ export default {
                 wx.ready(function() {
                     // 这里获取到PHP生成签名参数包，注意是JSON格式
                     var options = config;
-
+                    that.$localstore.set('has_share', '')
                     // 支付成功后的操作
                     options.success = async function() {
                         let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
+                        if (res.data.code == 1) {
+                            that.$router.push({
+                                name: 'PaySucceed',
+                                query: {
+                                    id: that.order.order_id,
+                                    type: that.order.order_type,
+                                }
+                            })
+                        }
                     };
 
                     //  取消支付的操作
@@ -111,14 +119,15 @@ export default {
         this.getPlus()
         this.getOrder()
         this.getVipList()
-        wxapi.wxRegister() //微信config注册
     },
 
     // 挂载前状态
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {},
+    mounted() {
+         wxapi.wxRegister() //微信config注册
+    },
 
     // 更新前状态
     beforeUpdate() {},

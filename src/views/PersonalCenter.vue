@@ -141,30 +141,7 @@
                 </div>
             </div>
         </div>
-        <!-- 兑换券 -->
-        <div class="pop_bg" v-if="popShow1">
-            <div class="pop" v-if="popState == 1">
-                <p>XX商品兑换成功</p>
-                <time>到期时间：2018-5-6</time>
-                <span>立即使用</span>
-                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
-            <div class="pop" v-else-if="popState == 2">
-                <p>会员激活成功</p>
-                <em>邀请好友可获得奖励</em>
-                <time>到期时间：2018-5-6</time>
-                <span>邀请好友</span>
-                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
-            <div class="pop" v-else-if="popState == 3">
-                <p>恭喜你获得卡券一张</p>
-                <em>前往激活即可使用</em>
-                <time>到期时间：2018-5-6</time>
-                <span>立即激活</span>
-                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
-        </div>
-        <!-- 兑换券 -->
+
         <Share ref="myShare"></Share>
         <BindPhone :show="show"></BindPhone>
     </div>
@@ -185,7 +162,7 @@ export default {
             code: '',
             popState: 3,
             popShow: false,
-            popShow1: false,
+            popShow1: true,
         }
     },
     components: { Share },
@@ -211,7 +188,7 @@ export default {
         },
         //兑换卡片商品权益
         async getcode() {
-            let data = { code: this.code }
+            let data = { code: this.code, user_id: this.userInfo.user_id }
             if (this.code == '') {
                 this.$message('兑换码不能为空！')
                 return false
@@ -220,10 +197,22 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 this.code == ''
-            }else{
-                this.popShow = false;                
+                that.popShow1 = true;
+            } else {
+                this.popShow = false;
             }
         },
+        //检测用户是否登录
+        async checkUser() {
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
+            if (!res.data.data || !res.data.data.user_id) {
+                this.show = true
+            } else {
+                this.userInfo = res.data.data
+                this.$localstore.set('userInfo', this.userInfo)
+            }
+        }
     },
 
     // 创建前状态
@@ -235,11 +224,7 @@ export default {
         if (userInfo) {
             this.userInfo = userInfo
         }
-        this.$nextTick(() => {
-            if (!userInfo) {
-                this.show = true
-            }
-        })
+        this.checkUser()
         document.body.style.background = "#fff";
     },
 
@@ -666,71 +651,7 @@ body {
         }
     }
 
-    .pop_bg {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: rgba($color: #000000, $alpha: 0.3);
-        top: 0;
-        left: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
 
-        .pop {
-            background: #fff;
-            border-radius: 10px;
-            width: 5.72rem;
-            position: relative;
-            padding: .94rem .3rem .54rem;
-
-            i {
-                position: absolute;
-                width: .48rem;
-                height: .48rem;
-                overflow: hidden;
-                display: block;
-                right: .24rem;
-                top: .24rem;
-            }
-
-            p {
-                font-size: .4rem;
-                color: #FF6666;
-                text-align: center;
-            }
-
-            em {
-                font-size: .4rem;
-                color: #FF6666;
-                text-align: center;
-                display: block;
-                font-style: normal;
-            }
-
-            time {
-                font-size: .32rem;
-                color: #515C6F;
-                text-align: center;
-                display: block;
-            }
-
-            span {
-                display: block;
-                width: 3.7rem;
-                background: #FF6666;
-                border-radius: 50px;
-                text-align: center;
-                line-height: .8rem;
-                height: .8rem;
-                color: #fff;
-                font-weight: bold;
-                font-size: .32rem;
-                margin: .26rem auto 0;
-            }
-
-        }
-    }
 
 }
 </style>

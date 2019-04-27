@@ -94,13 +94,14 @@ export default {
                 this.$message('你未同意会员协议！')
                 return false
             }
-
+            let WxAuth = this.$localstore.get('WxAuth')
             let postData = {
                 order_type: 2,
                 share_id: this.share_id,
                 goods_id: this.plus.setting_id,
                 goods_title: this.plus.name,
-                openid: this.$localstore.get('openid6'),
+                union_id: WxAuth.unionid,
+                is_wechat: 1,
                 order_num: 1,
                 amount: this.plus.sale_price,
                 total_amount: this.plus.sale_price

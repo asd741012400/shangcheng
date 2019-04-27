@@ -11,9 +11,9 @@
                 <div class="to_activate card_commonality">
                     <div class="image" >
                         <i><img :src="item.thumb_img" alt=""></i>
-                        <div @click="activeCard(index)">
+                        <div>
                             <p>卡号：{{item.card_sn}}</p>
-                            <span>去激活</span>
+                            <span @click="activeCard(index)">去激活</span>
                         </div>
                     </div>
                     <div class="content">
@@ -21,8 +21,8 @@
                             <p>{{item.card_name}}</p>
                             <!-- <span>剩余20天</span> -->
                         </div>
-                        <div class="btn">
-                            <span @click.stop="confirmPopShow(index)">转赠</span>
+                        <div class="btn" @click="confirmPopShow(index)">
+                            <span>转赠</span>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                     <h3>兑换码</h3>
                     <p>
                         <input type="number"  v-model.number="getCode">
-                        <i><img src="../assets/icon_close2.png" alt=""></i>
+                        <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getCard">提 交</a>
                 </div>
@@ -177,7 +177,7 @@ export default {
                 this.$message('兑换码不能为空！')
                 return false
             }
-            let data = { user_id: 14, give_id: 1, password: this.getCode }
+            let data = { user_id: this.user_id, give_id: 1, password: this.getCode }
             let res = await this.$postRequest('/card/GetGiveCard', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {

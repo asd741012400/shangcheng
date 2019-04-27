@@ -127,17 +127,25 @@ export default {
     methods: {
         //购买Plus
         BuyPlus() {
-            let user = this.$localstore.get('userInfo')
-            if (user) {
-                this.user = user
-            }
-            if (!user.tel_phone) {
-                this.show = true
+            let is_login = this.checkUser()
+            if (!is_login) {
                 return false
             } else {
                 this.$router.push({ name: 'VipOrder', query: { type: 2 } })
             }
-
+        },
+        //检测用户是否登录
+        async checkUser() {
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
+            if (!res.data.data || !res.data.data.user_id) {
+                this.show = true
+                return false
+            } else {
+                this.user = res.data.data
+                this.$localstore.set('userInfo', this.user)
+                return true
+            }
         },
         goGoodsDetail(item) {
             this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
@@ -204,7 +212,7 @@ export default {
             this.plus = res.data.data
             this.wxRegister()
         },
-        // 用于微信JS-SDK回调   
+        // 用于微信JS-SDK回调
         async wxRegister() {
             //获取微信jssdk
             let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
@@ -480,6 +488,10 @@ header {
                     display: inline-block;
                     margin-right: .29rem;
 
+                    &.active {
+                        border-bottom: 2px solid #c1a06b;
+                    }
+
                     span {
                         display: block;
                         overflow: hidden;
@@ -536,6 +548,7 @@ header {
                     overflow: hidden;
                     display: flex;
                     flex-direction: column;
+
                     .detail {
                         img {
                             display: block;

@@ -26,20 +26,20 @@
             <div class="message">
                 <h3>订单信息</h3>
                 <ul>
-                    <li>
-                        <label>宝贝姓名：</label>
+                    <li v-show="is_inArrary('3')">
+                        <label>宝贝姓名：</label>&nbsp;&nbsp;
                         <p>{{order.real_name}}</p>
                     </li>
-                    <li>
-                        <label>监护人手机号</label>
+                    <li v-show="is_inArrary('4')">
+                        <label>监护人手机号</label>&nbsp;&nbsp;
                         <p>{{order.tel_phone}}</p>
                     </li>
-                    <li>
+                    <li v-show="is_inArrary('1')">&nbsp;&nbsp;
                         <label>监护人身份证</label>
                         <p>{{order.id_code}}</p>
                     </li>
-                    <li>
-                        <label>游玩日期</label>
+                    <li v-show="is_inArrary('2')">
+                        <label>游玩日期</label>&nbsp;&nbsp;
                         <p>{{order.play_time}}</p>
                     </li>
                 </ul>
@@ -68,6 +68,7 @@ export default {
     data() {
         return {
             order: '',
+            form_table: [],
             attr_name: ''
         }
     },
@@ -75,6 +76,13 @@ export default {
 
     },
     methods: {
+        is_inArrary(num) {
+            if (this.form_table.indexOf(num) > -1) {
+                return true
+            } else {
+                return false
+            }
+        },
         //获取订单
         async getOrder() {
             let id = this.$route.query.id
@@ -84,6 +92,7 @@ export default {
             if (this.order.order_type == 1) {
                 let res1 = await this.$getRequest('home/GetGoodsDetail', { id: this.order.goods_id })
                 this.goods = res1.data.data
+                this.form_table = res1.data.data.form_table
 
                 if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
                     this.goods.goods_attr.map(item => {
@@ -94,6 +103,10 @@ export default {
                 }
             }
 
+            if (this.order.order_type == 3) {
+                let res1 = await this.$getRequest('home/GetCardDetail', { id: this.order.goods_id })
+                this.form_table = res1.data.data.form_table
+            }
         },
         //支付
         async payOrder() {
@@ -297,7 +310,8 @@ export default {
                         text-align: right;
                         font-size: .3rem;
                     }
-                    p{
+
+                    p {
                         font-size: .3rem;
                     }
                 }

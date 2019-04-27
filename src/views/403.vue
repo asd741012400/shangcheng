@@ -79,9 +79,9 @@ export default {
       display: block;
       text-align: center;
       font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 12px;
-      color: #ccc;
+      font-weight: 900;
+      letter-spacing: 2px;
+      color: red;
     }
   }
   &-btn-con {

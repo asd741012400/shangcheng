@@ -59,29 +59,7 @@
             <div class="confirm_pop">
                 <div class="boxs">
                     <h3>转赠须知</h3>
-                    <ul>
-                        <li>
-                            <h4>
-                                    <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                    <span>须知一</span>
-                                  </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                        <li>
-                            <h4>
-                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                        <span>须知二</span>
-                                      </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                        <li>
-                            <h4>
-                                        <i><img src="../assets/icon_yuan.png" alt=""></i>
-                                        <span>须知三</span>
-                                      </h4>
-                            <p>想参考自行车的路线，可以看看我的上一篇的游记： 熊本 人吉市 ｜寻访夏目友人帐的温柔治愈地</p>
-                        </li>
-                    </ul>
+                    <div class="detail"></div>
                     <div class="agreement">
                         <input class="song" type="password" v-model="value" placeholder="请输入转赠密码" />
                     </div>
@@ -94,8 +72,58 @@
             </div>
         </div>
         <!-- 转赠须知 -->
-        <!-- plus专属 -->
-        <!-- plus专属 -->
+        <!-- 兑换券 -->
+        <div class="confirm_pop_bg" v-if="PlusPop">
+            <div class="confirm_pop">
+                <div class="boxs">
+                    <h3>PLUS专享</h3>
+                    <div class="detail">
+                        <div class="pop_bg">
+                            <div class="pop">
+                                <p>XX商品兑换成功</p>
+                                <time>到期时间：2018-5-6</time>
+                                <span>立即使用</span>
+                            </div>
+                            <div class="pop">
+                                <p>会员激活成功</p>
+                                <em>邀请好友可获得奖励</em>
+                                <time>到期时间：2018-5-6</time>
+                                <span>邀请好友</span>
+                            </div>
+                            <div class="pop">
+                                <p>恭喜你获得卡券一张</p>
+                                <em>前往激活即可使用</em>
+                                <time>到期时间：2018-5-6</time>
+                                <span>立即激活</span>
+                            </div>
+                            <div class="pop">
+                                <p>恭喜你获得卡券一张</p>
+                                <em>前往激活即可使用</em>
+                                <time>到期时间：2018-5-6</time>
+                                <span>立即激活</span>
+                            </div>
+                            <div class="pop">
+                                <p>恭喜你获得卡券一张</p>
+                                <em>前往激活即可使用</em>
+                                <time>到期时间：2018-5-6</time>
+                                <span>立即激活</span>
+                            </div>
+                            <div class="pop">
+                                <p>恭喜你获得卡券一张</p>
+                                <em>前往激活即可使用</em>
+                                <time>到期时间：2018-5-6</time>
+                                <span>立即激活</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btn">
+                        <b @click="submit">收下并前往</b>
+                    </div>
+                    <div class="colse" @click="confirmPlusPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
+                </div>
+            </div>
+        </div>
+        <!-- 兑换券 -->
         <Share ref="myShare"></Share>
     </div>
 </template>
@@ -105,6 +133,7 @@ export default {
     name: 'PaySucceed',
     data() {
         return {
+            PlusPop: false,
             confirmPop: false,
             PaySucceedState: 3
         }
@@ -112,7 +141,6 @@ export default {
     components: { Share },
     methods: {
         shareShowFn() {
-            // this.$refs.myShare.shareShowFn();
             this.$router.push({ name: 'VipPlus' })
         },
         goHome() {
@@ -124,6 +152,13 @@ export default {
         confirmPopHide() {
             this.confirmPop = false
         },
+        confirmPlusPopShow() {
+            this.PlusPop = true
+        },
+        confirmPlusPopHide() {
+            this.PlusPop = false
+        },
+
     },
 
     // 创建前状态
@@ -133,6 +168,10 @@ export default {
     created() {
         document.body.style.background = "#fff";
         this.PaySucceedState = this.$route.query.type
+        if (this.PaySucceedState == 3) {
+            this.goods_count = this.$route.query.goods_count
+            this.card_count = this.$route.query.card_count
+        }
     },
 
     // 挂载前状态
@@ -365,6 +404,13 @@ export default {
                 position: relative;
                 overflow: hidden;
 
+                .detail {
+                    padding: 0.2rem .6rem;
+                    background: #fff;
+                    max-height: 250px;
+                    overflow-y: auto;
+                }
+
                 h3 {
                     font-size: .32rem;
                     color: #515C6F;
@@ -464,6 +510,75 @@ export default {
                     }
                 }
             }
+        }
+    }
+
+    .pop_bg {
+        // position: fixed;
+        width: 100%;
+        height: 100%;
+        // background: rgba($color: #000000, $alpha: 0.3);
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        .pop {
+            background: #fff;
+            border-radius: 10px;
+            width: 4rem;
+            margin-bottom: 5px;
+            position: relative;
+            padding: .94rem .3rem .54rem;
+            border: 1px solid #eee;
+
+            i {
+                position: absolute;
+                width: .48rem;
+                height: .48rem;
+                overflow: hidden;
+                display: block;
+                right: .24rem;
+                top: .24rem;
+            }
+
+            p {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+            }
+
+            em {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+                display: block;
+                font-style: normal;
+            }
+
+            time {
+                font-size: .32rem;
+                color: #515C6F;
+                text-align: center;
+                display: block;
+            }
+
+            span {
+                display: block;
+                width: 3.7rem;
+                background: #FF6666;
+                border-radius: 50px;
+                text-align: center;
+                line-height: .8rem;
+                height: .8rem;
+                color: #fff;
+                font-weight: bold;
+                font-size: .32rem;
+                margin: .26rem auto 0;
+            }
+
         }
     }
 

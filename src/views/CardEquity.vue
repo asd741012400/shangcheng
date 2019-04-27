@@ -14,12 +14,14 @@
                 <div class="user">
                     <span><img :src="card.head_img" alt=""></span>
                     <p>{{card.child_name}}</p>
-                    <a>已领取{{total_num || 0}}/{{card.free_num}}</a>
                 </div>
                 <div class="content">
                     <div class="text">
                         <p>{{card.card_name}}</p>
                         <span>剩余{{card.days}}天</span>
+                    </div>
+                    <div class="right">
+                        <a>已领取{{total_num || 0}}/{{card.free_num}}</a>
                     </div>
                 </div>
             </div>
@@ -65,17 +67,18 @@
                     <div class="text">
                         <h3>
                           <span>{{item.project_name}}</span>
-                          <b>畅玩{{item.use_num}}次</b>
+                          <b>畅玩</b>
                         </h3>
                         <div class="text_div">
                             <p>{{item.project_dsc}}</p>
                             <p>有效期：{{item.limit_stime}}至{{item.limit_etime}}</p>
                             <em v-if="item.is_deduct == 2">消耗1次权益</em>
-                            <em v-else>不限次数</em>
+                            <em v-else>免费</em>
                         </div>
                         <div class="price_div">
                             <b>价值￥{{item.project_price}}</b>
-                            <a @click="getPlus(item)">领 取</a>
+                            <a v-if="item.is_deduct == 2" @click="getPlus(item)">领 取</a>
+                            <a v-else @click="getPlus(item)">免费领取</a>
                         </div>
                     </div>
                 </li>
@@ -139,6 +142,7 @@ export default {
             }
 
             // 接口请求
+            this.getList()
 
         },
         actionsheetShow(num){
@@ -171,12 +175,12 @@ export default {
                     {
                         name: '全部'
                     },
-                    {
-                        name: '类型1',
-                    },
-                    {
-                        name: '类型2',
-                    }
+                    // {
+                    //     name: '类型1',
+                    // },
+                    // {
+                    //     name: '类型2',
+                    // }
                 ],
                 that.show = true; 
             }
@@ -201,26 +205,31 @@ export default {
         },
         //领取
         async getPlus(item) {
-            if (item.is_vip == 2 && this.user.status == 0) {
-                this.$message('该项目只限会员领取！')
-                return false
-            }
-            if (this.total_num == this.card.free_num) {
-                this.$message('你的权益次数已领取完！')
-                return false
-            }
-
-            this.$dialog.alert({
-                showCancelButton: true,
-                message: '你当前消耗剩余' + this.card.free_num + '次权益，领取将消耗1次机会'
-            }).then(async () => {
+            if (item.is_deduct !== 2) {
                 let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
                 this.$message(res.data.msg)
-                this.getList()
-            }).catch(() => {
+            } else {
+                if (item.is_vip == 2 && this.user.status == 0) {
+                    this.$message('该项目只限会员领取！')
+                    return false
+                }
 
-            });
+                if (this.total_num == this.card.free_num) {
+                    this.$message('你的权益次数已领取完！')
+                    return false
+                }
 
+                this.$dialog.alert({
+                    showCancelButton: true,
+                    message: '你当前消耗剩余' + this.card.free_num + '次权益，领取将消耗1次机会'
+                }).then(async () => {
+                    let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
+                    this.$message(res.data.msg)
+                    this.getList()
+                }).catch(() => {
+
+                });
+            }
         },
         useCard() {
             this.$router.push({ name: 'UseCard' })

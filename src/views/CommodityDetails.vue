@@ -104,7 +104,7 @@
                     <div class="user">
                         <div class="user_message">
                             <i>
-                               <template v-if="item.anonymous == 0">                          
+                               <template v-if="item.anonymous == 0">
                                 <img :src="item.wechat_img" alt="" />
                                 </template>
                             </i>
@@ -298,8 +298,8 @@ export default {
         },
         //检测用户是否登录
         async checkUser() {
-            let openid = this.$localstore.get('openid6')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { openid: openid })
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
             if (!res.data.data || !res.data.data.user_id) {
                 this.show = true
                 return false
@@ -362,7 +362,7 @@ export default {
             this.storeList = res.data.data;
         },
 
-        // 用于微信JS-SDK回调   
+        // 用于微信JS-SDK回调
         async wxRegister() {
             //获取微信jssdk
             let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
@@ -415,7 +415,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         let user = this.$localstore.get('userInfo')
         if (user) {

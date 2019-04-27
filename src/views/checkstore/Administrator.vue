@@ -40,8 +40,8 @@ export default {
         //检测是否注册过
         async checkAuth() {
             let business_id = this.$localstore.get('business_id')
-            let openid = this.$localstore.get('openid6')
-            let res = await this.$getRequest('/business/checkUser', { business_id: business_id, openid: openid })
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/business/checkUser', { business_id: business_id, open_id: WxAuth.openid })
             if (res.data.code == 1) {
                 this.$localstore.set('business_user', res.data.data)
                 this.$router.push({ name: 'CheckHome' })
@@ -56,11 +56,11 @@ export default {
         //注册
         async register() {
             let business_id = this.$localstore.get('business_id')
-            let openid = this.$localstore.get('openid6')
+            let WxAuth = this.$localstore.get('WxAuth')
             let userInfo = this.$localstore.get('userInfo')
             let data = {
                 business_id: business_id,
-                openid: openid,
+                open_id: WxAuth.open_id,
                 nickname: userInfo.username,
                 name: this.name,
                 phone: this.phone
@@ -82,7 +82,7 @@ export default {
 
     // 创建完毕状态
     created() {
-        document.title = "绑定管理员"
+        document.title = "核销端"
         document.body.style.background = "#f0f0f0";
         let business_id = this.$route.query.business_id
         if (business_id) {

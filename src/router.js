@@ -44,7 +44,7 @@ import VipPlus from './views/VipPlus.vue'
 
 
 //分销商城
-// import Login from './views/merchant/Login.vue'
+import Login from './views/merchant/Login.vue'
 import MerchantShop from './views/merchant/MerchantShop.vue' //主页
 // import ChageShop from './views/merchant/ChageShop.vue' //切换门店
 // import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
@@ -88,7 +88,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Administrator
+            component: Index
         },
         {
             path: '/Index',
@@ -407,19 +407,36 @@ let router = new Router({
 
 
 import wx from 'weixin-js-sdk' //微信sdk依赖
-
+import Cookies from 'js-cookie';
 
 // 进入页面判断是否微信授权 没授权 拉取授权
 //Router
 router.beforeEach((to, from, next) => {
-
     //存储来源地址 用于分享返回主页
     localstore.set('from_url', business_id)
 
     //分享来源处理
     shareFrom(to);
+    let code = getParamString('code');
+    let user = localstore.get('WxAuth')
+    if (!code && !user) {
+        getAuth()
+    }
 
-    let openid = getParamString('openid1');
+    //使用code获取用户身份
+    if (code) {
+        getRequest('/wechat/GetCode', { code: code }).then(res => {
+            if (res.data.code == 1) {
+                localstore.set('WxAuth', res.data.data)
+            } else {
+                if (!user) {
+                    getAuth()
+                }
+            }
+        })
+    }
+
+
 
     //门店id存储
     let business_id = getParamString('business_id');
@@ -427,41 +444,16 @@ router.beforeEach((to, from, next) => {
         localstore.set('business_id', business_id)
     }
 
-    let openid2 = localstore.get('openid6')
-
-    if (!openid2 && !openid) {
-        // let url = window.location.href
-        let url = encodeURIComponent(window.location.href.split('#')[0]);
-        //微信授权
-        getRequest('/wechat/check', { url: url }).then(res => {
-            window.location.href = res.data
-        })
-    }
-
-    //使用 openid 获取用户资料 缓存本地
-    if (openid || openid2) {
-        let openid = openid || openid2
-        //保存openid
-        localstore.set('openid6', openid)
-        getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {
-            if (res.data.data && res.data.data.user_id) {
-                localstore.set('userInfo', res.data.data)
-            } else {
-                localstore.set('userInfo', '')
-            }
-        })
-    }
 
     //判断用户头像链接是否存在 否则缓存
     userAvatar()
 
 
     //用户来自分享  但未注册
-    let user = localstore.get('userInfo')
     if (!user && to.query.share_id) {
         let data = {
             share_id: to.query.share_id,
-            openid: openid2
+            union_id: user.unionid
         }
         getRequest('/user/Recommend', data)
     }
@@ -471,7 +463,7 @@ router.beforeEach((to, from, next) => {
     if (to.name == 'VipEquity' || to.name == 'CardDetails' || to.name == 'CommodityDetails') {
         // next()
     } else {
-        // let share = localstore.get('to_share')
+        let share = localstore.get('to_share')
         // if (share && share.name) {
         //     localstore.set('to_share', '')
         //     localstore.set('has_share', share)
@@ -486,13 +478,22 @@ router.beforeEach((to, from, next) => {
 
 export default router
 
+//微信授权
+function getAuth() {
+    let url = encodeURIComponent(window.location.href.split('#')[0]);
+    //微信授权
+    getRequest('/wechat/check', { url: url }).then(res => {
+        window.location.href = res.data
+    })
+}
+
 /**
  * [shareFrom 分享来源处理]
  */
 function shareFrom(to) {
     if (!isEmptyObject(to.query) && to.query.share_id) {
         //分享存储
-        localstore.set('to_share', to)
+        localstore.set('has_share', to)
     }
 }
 

@@ -95,6 +95,7 @@ export default {
             border: solid 0.02rem #f0f0f0;
 
             input {
+                font-size:0.3rem;
                 width: 100%;
                 height: 100%;
             }
