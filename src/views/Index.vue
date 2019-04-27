@@ -27,6 +27,10 @@
                         <!--         <div class="swiper-pagination"></div>
                         </div> -->
         </header>
+
+         <button @click="actionsheetShow(1)">{{selectTypes.distance}}</button>
+        <button @click="actionsheetShow(2)">{{selectTypes.types}}</button>
+        <button @click="actionsheetShow(3)">{{selectTypes.age}}</button>
         <div class="nav">
             <ul>
                 <li v-for="(item ,index) in NavList">
@@ -104,12 +108,23 @@
             </van-cell-group>
         </van-dialog> -->
         <MyFooter></MyFooter>
+        <van-actionsheet
+            v-model="show"
+            :actions="actions"
+            cancel-text="取消"
+            @select="onSelect"
+        />
+       
+
+
     </div>
 </template>
 <script>
 import Swiper from 'swiper';
 import 'swiper/dist/css/swiper.css';
 import '../components/iconfont/iconfont.css'
+import { Actionsheet } from 'vant';
+
 export default {
     name: 'Index',
     data() {
@@ -122,10 +137,104 @@ export default {
             GoodsList: [],
             goodsListSum: 0,
             goodsListLength: 0,
+            show: false,
+            actions: [],
+            actionsIndex:0,
+            selectTypes:{
+                distance:"距离",
+                types:"类型",
+                age:"年龄"
+            }
         }
     },
-    components: {},
+    
+
+
+
+
+    components: {
+        Actionsheet
+    },
     methods: {
+        onSelect(item,index){
+            const that = this;
+            that.show = false;
+            if(that.actionsIndex == 1)
+            {
+                that.selectTypes.distance = item.name;
+            }
+            else if(that.actionsIndex == 2)
+            {
+                that.selectTypes.types = item.name;
+            }
+            else if(that.actionsIndex == 3)
+            {
+                that.selectTypes.age = item.name;
+            }
+
+            // 接口请求
+
+
+        },
+        actionsheetShow(num){
+            const that = this;
+            that.actionsIndex = num;
+            if(num == 1)
+            {
+                that.actions = [
+                    {
+                        name: '不限'
+                    },
+                    {
+                        name: '1km以内',
+                    },
+                    {
+                        name: '3km以内',
+                    },
+                    {
+                        name: '5km以内',
+                    },
+                    {
+                        name: '10km以上',
+                    }
+                ],
+                that.show = true;  
+            }
+            else if(num == 2)
+            {
+                that.actions = [
+                    {
+                        name: '全部'
+                    },
+                    {
+                        name: '类型1',
+                    },
+                    {
+                        name: '类型2',
+                    }
+                ],
+                that.show = true; 
+            }
+            else if(num == 3)
+            {
+                that.actions = [
+                    {
+                        name: '全部'
+                    },
+                    {
+                        name: '0-3岁',
+                    },
+                    {
+                        name: '6-12岁',
+                    },
+                    {
+                        name: '12岁以上',
+                    }
+                ],
+                that.show = true; 
+            }
+        },
+
         skipPages(str) {
             this.$router.push({
                 name: str,

@@ -39,18 +39,18 @@
             </div>
         </div>
         <div class="project_select">
-            <div class="distance">
-                <span>距离</span>
+            <div class="distance" @click="actionsheetShow(1)">
+                <span>{{selectTypes.distance}}</span>
                 <i v-if="distance"><img src="../assets/icon_up.png" alt=""></i>
                 <i v-else><img src="../assets/icon_pull_down.png" alt=""></i>
             </div>
-            <div class="types">
-                <span>类型</span>
+            <div class="types" @click="actionsheetShow(2)">
+                <span>{{selectTypes.types}}</span>
                 <i v-if="distance"><img src="../assets/icon_up.png" alt=""></i>
                 <i v-else><img src="../assets/icon_pull_down.png" alt=""></i>
             </div>
-            <div class="age">
-                <span>年龄</span>
+            <div class="age" @click="actionsheetShow(3)">
+                <span>{{selectTypes.age}}</span>
                 <i v-if="distance"><img src="../assets/icon_up.png" alt=""></i>
                 <i v-else><img src="../assets/icon_pull_down.png" alt=""></i>
             </div>
@@ -82,10 +82,18 @@
             </ul>
         </div>
         <div class="sub_btn" @click="useCard"><span>去使用</span></div>
+        <van-actionsheet
+            v-model="show"
+            :actions="actions"
+            cancel-text="取消"
+            @select="onSelect"
+        />
     </div>
 </template>
 <script>
 import QRCode from 'qrcodejs2'
+import { Actionsheet } from 'vant';
+
 export default {
     name: 'CardEquity',
     data() {
@@ -100,10 +108,97 @@ export default {
             page: 1,
             currSize: 0,
             pageSize: 10,
+            show: false,
+            actions: [],
+            actionsIndex:0,
+            selectTypes:{
+                distance:"距离",
+                types:"类型",
+                age:"年龄"
+            }
         }
     },
-    components: {},
+    components: {
+        Actionsheet
+    },
     methods: {
+        onSelect(item,index){
+            const that = this;
+            that.show = false;
+            if(that.actionsIndex == 1)
+            {
+                that.selectTypes.distance = item.name;
+            }
+            else if(that.actionsIndex == 2)
+            {
+                that.selectTypes.types = item.name;
+            }
+            else if(that.actionsIndex == 3)
+            {
+                that.selectTypes.age = item.name;
+            }
+
+            // 接口请求
+
+        },
+        actionsheetShow(num){
+            const that = this;
+            that.actionsIndex = num;
+            if(num == 1)
+            {
+                that.actions = [
+                    {
+                        name: '不限'
+                    },
+                    {
+                        name: '1km以内',
+                    },
+                    {
+                        name: '3km以内',
+                    },
+                    {
+                        name: '5km以内',
+                    },
+                    {
+                        name: '10km以上',
+                    }
+                ],
+                that.show = true;  
+            }
+            else if(num == 2)
+            {
+                that.actions = [
+                    {
+                        name: '全部'
+                    },
+                    {
+                        name: '类型1',
+                    },
+                    {
+                        name: '类型2',
+                    }
+                ],
+                that.show = true; 
+            }
+            else if(num == 3)
+            {
+                that.actions = [
+                    {
+                        name: '全部'
+                    },
+                    {
+                        name: '0-3岁',
+                    },
+                    {
+                        name: '6-12岁',
+                    },
+                    {
+                        name: '12岁以上',
+                    }
+                ],
+                that.show = true; 
+            }
+        },
         //领取
         async getPlus(item) {
             if (item.is_vip == 2 && this.user.status == 0) {
