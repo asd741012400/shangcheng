@@ -93,12 +93,12 @@
             </div>
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
-            <li>
+<!--             <li>
                 <router-link :to="{name:'Collect'}">
                     <span><img src="../assets/icon_collect.png" alt=""></span>
                     <p>我的收藏</p>
                 </router-link>
-            </li>
+            </li> -->
             <li>
                 <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_card_bag2.png" alt=""></span>
@@ -135,7 +135,7 @@
                     <h3>兑换码</h3>
                     <p>
                         <input v-model="code" type="text">
-                        <i><img src="../assets/icon_close2.png" alt=""></i>
+                        <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getcode">提 交</a>
                 </div>

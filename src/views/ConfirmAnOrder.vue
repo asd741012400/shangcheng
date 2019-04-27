@@ -37,33 +37,33 @@
             </div> -->
             <div class="message">
                 <ul>
-                    <li>
+                    <li v-if="is_inArrary('1')">
                         <label>孩子姓名</label>
                         <p><input type="text" v-model="real_name" placeholder="请输入姓名"></p>
                     </li>
-                    <li>
+                    <li v-if="is_inArrary('2')">
                         <label>监护人手机号</label>
                         <p><input type="text" v-model="tel" placeholder="请输入正确的手机号码"></p>
                     </li>
-                    <li>
+                    <li v-if="is_inArrary('3')">
                         <label>监护人身份证</label>
                         <p><input type="text" v-model="card_ID" placeholder="请输入正确的身份证号码"></p>
                     </li>
-                    <li>
+                    <li v-if="is_inArrary('4')">
                         <label>游玩日期</label>
                         <p>
                             <b>
-                {{play_time}}
-                <mt-datetime-picker
-                  type="date"
-                  ref="picker"
-                  year-format="{value} 年"
-                  month-format="{value} 月"
-                  date-format="{value} 日"
-                  @confirm="handleConfirm"
-                  :startDate="startDate">
-                </mt-datetime-picker>
-              </b>
+                                {{play_time}}
+                                <mt-datetime-picker
+                                  type="date"
+                                  ref="picker"
+                                  year-format="{value} 年"
+                                  month-format="{value} 月"
+                                  date-format="{value} 日"
+                                  @confirm="handleConfirm"
+                                  :startDate="startDate">
+                                </mt-datetime-picker>
+                              </b>
                             <a @click="openPicker"></a>
                             <span><img src="../assets/icon_pull_down.png" alt=""></span>
                         </p>
@@ -100,6 +100,7 @@ export default {
             limit_num: 0,
             store: 0,
             tel: '',
+            form_table: [],
             goods: '',
             attr_name: '',
             id: '',
@@ -118,6 +119,13 @@ export default {
 
     },
     methods: {
+        is_inArrary(num) {
+            if (this.form_table.indexOf(num) > -1) {
+                return true
+            } else {
+                return false
+            }
+        },
         //开启时间选择器
         openPicker() {
             this.$refs.picker.open()
@@ -197,6 +205,9 @@ export default {
                 this.goods = res.data.data
                 this.title = this.goods.goods_name
                 this.limit_num = this.goods.limit_num
+                this.form_table = res.data.data.form_table.split(',');
+
+
                 this.store = this.goods.store
                 if (this.userInfo.status == 0) {
                     this.price = this.goods.goods_price
@@ -231,6 +242,9 @@ export default {
                 let res = await this.$getRequest('home/GetCardDetail', { id: id })
                 this.goods = res.data.data
                 this.title = this.goods.card_name
+                this.form_table = res.data.data.form_table.split(',');
+
+
                 if (this.userInfo.status == 0) {
                     this.price = this.goods.card_price
                 } else {

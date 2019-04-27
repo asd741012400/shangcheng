@@ -44,53 +44,57 @@
                             <span></span>
                     </div>
                     <i class="tle_en">EXCLUSIVE RIGHTS</i>
-                    <div class="privilege_img"><img :src="$imgUrl+plus.photo" alt=""></div>
+                    <div class="privilege_img">
+                        <!-- <img :src="$imgUrl+plus.photo" alt=""> -->
+                        <div class="detail" v-html="currVip.detail">
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="recommend">
-                <div class="tle_text">
-                    <span></span>
-                    <a class="left"></a>
-                    <p><img src="../assets/title2.png" alt=""></p>
-                        <a class="right"></a>
-                        <span></span>
-                </div>
-                <ul class="tab">
-                    <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
-                        <p>{{item.c_name}}</p>
-                        <span></span>
-                    </li>
-                </ul>
-                <ul class="product">
-                    <li v-for="(item,ii) in goodsList" @click="goGoodsDetail(item)">
-                        <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
-                        <p>{{item.goods_name}}</p>
-                        <a>免费</a>
-                        <span>市场价：￥{{item.mkt_price}}</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="buyVip">
-                <template v-if="share_id !== '' &&　user.status < 1">
-                    <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
-                    <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
-                    <!-- </router-link> -->
-                </template>
-                <template v-else-if="share_id !== '' &&　!user.user_id">
-                    <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
-                    <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
-                    <!-- </router-link> -->
-                </template>
-                <template v-else-if="user.status >= 1">
-                    <router-link :to="{name:'VipPlus'}">
-                        <van-button round block type="info">邀请好友赚 ￥100</van-button>
-                    </router-link>
-                </template>
-            </div>
-            <BindPhone :show="show"></BindPhone>
-            <MyFooter></MyFooter>
         </div>
+        <div class="recommend">
+            <div class="tle_text">
+                <span></span>
+                <a class="left"></a>
+                <p><img src="../assets/title2.png" alt=""></p>
+                    <a class="right"></a>
+                    <span></span>
+            </div>
+            <ul class="tab">
+                <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
+                    <p>{{item.c_name}}</p>
+                    <span></span>
+                </li>
+            </ul>
+            <ul class="product">
+                <li v-for="(item,ii) in goodsList" @click="goGoodsDetail(item)">
+                    <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
+                    <p>{{item.goods_name}}</p>
+                    <a>免费</a>
+                    <span>市场价：￥{{item.mkt_price}}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="buyVip">
+            <template v-if="share_id !== '' &&　user.status < 1">
+                <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
+                <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
+                <!-- </router-link> -->
+            </template>
+            <template v-else-if="share_id !== '' &&　!user.user_id">
+                <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
+                <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
+                <!-- </router-link> -->
+            </template>
+            <template v-else-if="user.status >= 1">
+                <router-link :to="{name:'VipPlus'}">
+                    <van-button round block type="info">邀请好友赚 ￥100</van-button>
+                </router-link>
+            </template>
+        </div>
+        <BindPhone :show="show"></BindPhone>
+        <MyFooter></MyFooter>
+    </div>
 </template>
 <script>
 import wx from 'weixin-js-sdk'
@@ -530,6 +534,15 @@ header {
                 .privilege_img {
                     padding: .3rem .14rem .2rem;
                     overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    .detail {
+                        img {
+                            display: block;
+                            width: 100% !important;
+                            height: auto !important;
+                        }
+                    }
                 }
             }
         }

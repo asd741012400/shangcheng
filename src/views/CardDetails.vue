@@ -291,7 +291,7 @@ export default {
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
-                this.isCollect = Boolean(res.data.data.is_coolect);
+                this.isCollect = Boolean(res.data.data.is_coolect);        
                 this.wxRegister()
                 this.timer()
             }
