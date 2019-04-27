@@ -142,7 +142,7 @@
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城首页</p>
                 </li>
-                <li @click="collectGoods()">
+                <!--             <li @click="collectGoods()">
                     <template v-if="isCollect">
                         <span><img src="../assets/icon_collectB.png" alt=""></span>
                     </template>
@@ -150,7 +150,7 @@
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
                     <p>我要收藏</p>
-                </li>
+                </li> -->
             </ul>
             <!-- <div class="btn"> -->
             <!-- 可购买状态 -->
@@ -267,6 +267,10 @@ export default {
         },
         //确认下单
         ConfirmAnOrderPage() {
+            let is_login = this.checkUser()
+            if (!is_login) {
+                return false
+            }
             if (this.limit_num == 0) {
                 this.$message('当前限购0件!');
                 return false;
@@ -291,6 +295,19 @@ export default {
                 }
             })
 
+        },
+        //检测用户是否登录
+        async checkUser() {
+            let openid = this.$localstore.get('openid6')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { openid: openid })
+            if (!res.data.data || !res.data.data.user_id) {
+                this.show = true
+                return false
+            } else {
+                this.user = res.data.data
+                this.$localstore.set('userInfo', this.user)
+                return true
+            }
         },
         //定时器判断 商品是否截止销售
         timer() {
@@ -408,7 +425,7 @@ export default {
         this.getDetail()
         this.getComment()
         this.getStore()
- 
+
         document.body.style.background = '#fff'
 
     },

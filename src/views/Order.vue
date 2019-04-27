@@ -66,22 +66,21 @@
                                 <template v-else-if="item.order_status == 4">
                                 </template>
                             </template>
+                            <!-- 待付款 -->
                             <template v-if="active == 1">
                                 <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
                             </template>
-                            <!-- 待付款 -->
-                            <template v-else-if="active == 2">
-                                <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
-                            </template>
                             <!-- 待使用 -->
-                            <template v-else-if="active == 3">
+                            <template v-else-if="active == 2">
                                 <van-button type="info" size="mini">去使用</van-button>
                             </template>
                             <!-- 待评价 -->
-                            <template v-else-if="active == 4">
+                            <template v-else-if="active == 3">
                                 <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             </template>
                             <!-- 退款 -->
+                            <template v-else-if="active == 4">
+                            </template>
                             <template v-else-if="active == 5">
                             </template>
                             <!-- <van-button type="danger" size="mini">取消订单</van-button> -->

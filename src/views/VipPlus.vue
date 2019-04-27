@@ -7,6 +7,13 @@
                 </div>
                 <div class="img"><img :src="poster_img" alt=""></div>
                 </div>
+                <div class="masking" v-if="maskingShow">
+                    <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
+                    <div>
+                        <i><img src="../assets/share_img1.png" alt=""></i>
+                        <p>微信分享移到这里啦~</p>
+                    </div>
+                </div>
             </div>
 </template>
 <script>
@@ -28,12 +35,19 @@ export default {
             avatar: "",
             wechat_img: "",
             poster_img: "",
+            maskingShow: true,
         }
     },
     components: {
         // Poster
     },
     methods: {
+        maskingShowFn(ev) {
+            this.maskingShow = true;
+        },
+        maskingHideFn() {
+            this.maskingShow = false;
+        },
         //获取PlUS
         async getPlUS() {
             let id = this.$route.query.id
@@ -78,14 +92,14 @@ export default {
             var ctx = canvas.getContext("2d");
             var img = new Image;
             img.crossOrigin = 'Anonymous';
-            img.src = url+'?number='+Math.random();
+            img.src = url + '?number=' + Math.random();
             img.onload = function() {
                 canvas.height = 60; //指定画板的高度,自定义
                 canvas.width = 85; //指定画板的宽度，自定义
                 ctx.drawImage(img, 0, 0, 60, 85); //参数可自定义
-                var dataURL = canvas.toDataURL("image/png");    
+                var dataURL = canvas.toDataURL("image/png");
                 canvas = null;
-                return dataURL//回掉函数获取Base64编码
+                return dataURL //回掉函数获取Base64编码
             };
         },
         //base64转blob
@@ -247,6 +261,47 @@ export default {
 
         img {
             height: 100%;
+        }
+    }
+}
+
+
+.masking {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: #000000, $alpha: 0.5);
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+        width: 3.48rem;
+        overflow: hidden;
+    }
+
+    div {
+        position: absolute;
+        right: .5rem;
+        top: 0;
+
+        p {
+            width: 2rem;
+            font-size: .36rem;
+            margin: 1.5rem .6rem 0 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        i {
+            width: 1.2rem;
+            overflow: hidden;
+            position: absolute;
+            right: 0;
+            top: 0;
         }
     }
 }

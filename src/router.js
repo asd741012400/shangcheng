@@ -88,7 +88,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Administrator
+            component: Index
         },
         {
             path: '/Index',
@@ -439,8 +439,8 @@ router.beforeEach((to, from, next) => {
     }
 
     //使用 openid 获取用户资料 缓存本地
-    if (openid || openid2) {
-        let openid = openid || openid2
+    if (openid) {
+        // let openid = openid || openid2
         //保存openid
         localstore.set('openid6', openid)
         getRequest('/wechat/GetUserInfo', { openid: openid }).then(res => {

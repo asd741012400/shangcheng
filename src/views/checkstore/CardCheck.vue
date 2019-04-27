@@ -30,7 +30,7 @@
 </template>
 <script>
 export default {
-    name: 'MyTeam',
+    name: 'Cardcheck',
     data() {
         return {
             active: 0,
@@ -214,6 +214,7 @@ export default {
     }
 
     .sub_btn {
+        position:fixed;
         margin: .54rem .68rem 0;
         height: 0.8rem;
         line-height: 0.8rem;

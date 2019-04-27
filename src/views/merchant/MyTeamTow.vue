@@ -19,7 +19,7 @@
             <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">直属会员</p>
         </div>
         <ul class="team_member">
-            <li v-for="item in list">
+            <li v-for="item in list" @click="getDetail()">
                 <i><img :src="item.wechat_img"></i>
                 <div>
                     <p class="name">
@@ -56,6 +56,8 @@ export default {
         tabkeChage(num) {
             const that = this;
             that.table = num;
+            this.page = 1
+            this.getList()
         },
         //获取列表
         async getNum() {
@@ -72,12 +74,25 @@ export default {
                 user_id: 1,
                 page: this.page
             }
-            let res = await this.$getRequest('/store/MyTeam2', data)
-            this.data = res.data.data
-            this.list = res.data.data.my_people
-            this.currSize = res.data.data.my_people.length
-            this.pageSize = res.data.data.count
+            let url = '/store/MyTeam2';
+            if (this.table == 1) {
+                url = '/store/MyTeam2';
+            } else {
+                url = '/store/MySubMember';
+            }
+            let res = await this.$getRequest(url, data)
+            if (this.table == 1) {
+                this.data = res.data.data
+                this.list = res.data.data.my_people
+                this.currSize = res.data.data.my_people.length
+            } else {
+                this.data = res.data.data
+                this.list = res.data.data
+                this.currSize = res.data.data.length
+            }
             this.team_nums = res.data.data.team_nums
+            this.pageSize = res.data.data.count
+
         },
 
         //获取更多列表
@@ -86,12 +101,25 @@ export default {
                 user_id: this.user.user_id,
                 page: this.page
             }
-            let res = await this.$getRequest('/store/MyTeam2', data)
-            this.list = this.list.concat(res.data.data.my_people);
-            this.currSize = res.data.data.my_people.length
+
+            let url = '/store/MyTeam2';
+            if (this.table == 1) {
+                url = '/store/MyTeam2';
+            } else {
+                url = '/store/MySubMember';
+            }
+            let res = await this.$getRequest(url, data)
+            if (this.table == 1) {
+                this.list = this.list.concat(res.data.data.my_people);
+                this.currSize = res.data.data.my_people.length
+            } else {
+                this.list = this.list.concat(res.data.data);
+                this.currSize = res.data.data.length
+            }
         },
+        //成员详情
         async getDetail(id) {
-            this.$router.push({ name: "WithdrawDepositDel", query: { id: id } })
+            // this.$router.push({ name: "WithdrawDepositDel", query: { id: id } })
         }
 
     },

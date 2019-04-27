@@ -93,12 +93,12 @@
             </div>
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
-            <li>
+            <!--             <li>
                 <router-link :to="{name:'Collect'}">
                     <span><img src="../assets/icon_collect.png" alt=""></span>
                     <p>我的收藏</p>
                 </router-link>
-            </li>
+            </li> -->
             <li>
                 <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_card_bag2.png" alt=""></span>
@@ -135,7 +135,7 @@
                     <h3>兑换码</h3>
                     <p>
                         <input v-model="code" type="text">
-                        <i><img src="../assets/icon_close2.png" alt=""></i>
+                        <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getcode">提 交</a>
                 </div>
@@ -211,7 +211,7 @@ export default {
         },
         //兑换卡片商品权益
         async getcode() {
-            let data = { code: this.code }
+            let data = { code: this.code, user_id: this.userInfo.user_id }
             if (this.code == '') {
                 this.$message('兑换码不能为空！')
                 return false
@@ -220,10 +220,22 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 this.code == ''
-            }else{
-                this.popShow = false;                
+                that.popShow1 = true;
+            } else {
+                this.popShow = false;
             }
         },
+        //检测用户是否登录
+        async checkUser() {
+            let openid = this.$localstore.get('openid6')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { openid: openid })
+            if (!res.data.data || !res.data.data.user_id) {
+                this.show = true
+            } else {
+                this.userInfo = res.data.data
+                this.$localstore.set('userInfo',this.userInfo)
+            }
+        }
     },
 
     // 创建前状态
@@ -235,11 +247,7 @@ export default {
         if (userInfo) {
             this.userInfo = userInfo
         }
-        this.$nextTick(() => {
-            if (!userInfo) {
-                this.show = true
-            }
-        })
+        this.checkUser()
         document.body.style.background = "#fff";
     },
 

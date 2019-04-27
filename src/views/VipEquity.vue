@@ -123,17 +123,25 @@ export default {
     methods: {
         //购买Plus
         BuyPlus() {
-            let user = this.$localstore.get('userInfo')
-            if (user) {
-                this.user = user
-            }
-            if (!user.tel_phone) {
-                this.show = true
+            let is_login = this.checkUser()
+            if (!is_login) {
                 return false
             } else {
                 this.$router.push({ name: 'VipOrder', query: { type: 2 } })
             }
-
+        },
+        //检测用户是否登录
+        async checkUser() {
+            let openid = this.$localstore.get('openid6')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { openid: openid })
+            if (!res.data.data || !res.data.data.user_id) {
+                this.show = true
+                return false
+            } else {
+                this.user = res.data.data
+                this.$localstore.set('userInfo', this.user)
+                return true
+            }
         },
         goGoodsDetail(item) {
             this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
@@ -475,6 +483,10 @@ header {
                 li {
                     display: inline-block;
                     margin-right: .29rem;
+
+                    &.active {
+                        border-bottom: 2px solid #c1a06b;
+                    }
 
                     span {
                         display: block;
