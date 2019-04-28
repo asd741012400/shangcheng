@@ -11,29 +11,17 @@
                     <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
                 </div>
             </div>
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="../assets/activity_img1.png" />
-                    </div>
-                        <div class="swiper-slide">
-                            <img src="../assets/activity_img1.png" />
-                        </div>
-                            <div class="swiper-slide">
-                                <img src="../assets/activity_img1.png" />
-                            </div>
-                            </div>
-                        </div>
-                        <!--         <div class="swiper-pagination"></div>
-                        </div> -->
         </header>
-
-
+        <mt-swipe :auto="4000">
+            <mt-swipe-item><img src="../assets/activity_img1.png" /></mt-swipe-item>
+                <mt-swipe-item><img src="../assets/activity_img1.png" /></mt-swipe-item>
+                    <mt-swipe-item><img src="../assets/activity_img1.png" /></mt-swipe-item>
+        </mt-swipe>
         <div class="nav">
             <ul>
                 <li v-for="(item ,index) in NavList">
                     <router-link :to="{name:'ClassifyList',query:{id:item.c_id}}">
-                        <span><img :src="item.thumb_img" alt=""></span>
+                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                         <p>{{item.c_name}}</p>
                     </router-link>
                 </li>
@@ -50,7 +38,7 @@
                     <li v-for="(item , index) in Cardlist">
                         <router-link :to="{name:'CardDetails',query:{id:item.card_id,type:3}}">
                             <div class="img">
-                                <span><img :src="item.thumb_img" alt=""></span>
+                                <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                                 <div>
                                     <p>会员价</p>
                                     <i>￥</i>
@@ -74,7 +62,7 @@
                 <li class="vip_price" v-for="(item,index) in GoodsList">
                     <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
                         <div class="img">
-                            <span><img :src="item.thumb_img" alt=""></span>
+                            <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                             <div>
                                 <p>会员价</p>
                                 <i>￥</i>
@@ -128,7 +116,7 @@ export default {
         }
     },
     components: {
-     
+
     },
     methods: {
         skipPages(str) {
@@ -137,14 +125,14 @@ export default {
             });
         },
         async getGoodsList() {
-            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages,keyword:this.keywords })
+            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             const resData = res.data.data
             this.GoodsList = resData.list
             this.goodsListLength = resData.list.length;
             this.goodsListSum = resData.count;
         },
         async GoodsListPush() {
-            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages,keyword:this.keywords })
+            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             const resData = res.data.data
             this.GoodsList = this.GoodsList.concat(resData.list);
             this.goodsListLength = resData.list.length;
@@ -255,10 +243,10 @@ export default {
 <style lang="scss" scoped>
 .Index {
     header {
-        height: 4.4rem;
+        // height: 4.4rem;
 
         .header_top {
-            height: 2.84rem;
+            // height: 2.84rem;
             background: linear-gradient(90deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
 
             .header {
@@ -401,12 +389,14 @@ export default {
                         background: #ccc;
                         border-radius: 5px;
                         position: relative;
-                        span{
+
+                        span {
                             height: 2.04rem;
                             overflow: hidden;
                             display: block;
                             border-radius: 5px;
                         }
+
                         div {
                             width: 2.48rem;
                             background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
@@ -418,8 +408,8 @@ export default {
                             height: .62rem;
                             justify-content: center;
                             color: #fff;
-                            
-                            
+
+
 
                             p {
                                 font-size: .28rem;
@@ -691,23 +681,8 @@ export default {
         }
     }
 }
-</style>
-<style>
-.swiper-container {
-    margin: 0 .16rem;
-    height: 2.76rem;
-    background: #ccc;
-    top: -1.2rem;
-    border-radius: 5px;
-}
 
-.swiper-pagination-bullet {
-    background: #fff;
-    opacity: 1;
-}
-
-.swiper-pagination-active {
-    background: #FF6666;
-    opacity: 1;
+.mint-swipe{
+   height: 2.76rem;
 }
 </style>

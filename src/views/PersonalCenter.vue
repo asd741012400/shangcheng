@@ -93,7 +93,7 @@
             </div>
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
-<!--             <li>
+            <!--             <li>
                 <router-link :to="{name:'Collect'}">
                     <span><img src="../assets/icon_collect.png" alt=""></span>
                     <p>我的收藏</p>
@@ -141,7 +141,6 @@
                 </div>
             </div>
         </div>
-
         <Share ref="myShare"></Share>
         <BindPhone :show="show"></BindPhone>
     </div>
@@ -202,15 +201,17 @@ export default {
                 this.popShow = false;
             }
         },
-        //检测用户是否登录
+        //检测用户是否注册过
         async checkUser() {
             let WxAuth = this.$localstore.get('WxAuth')
             let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (!res.data.data || !res.data.data.user_id) {
-                this.show = true
-            } else {
+            if (res.data.code == 1) {
                 this.userInfo = res.data.data
                 this.$localstore.set('userInfo', this.userInfo)
+                return true
+            } else {
+                this.show = true
+                return false
             }
         }
     },

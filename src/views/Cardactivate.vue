@@ -37,16 +37,10 @@
             <div class="user_sex box">
                 <label>性别</label>
                 <div class="boxs">
-                    <p>
-                        <i v-if="sex != 1"><img src="../assets/icon_unselected.png" alt=""></i>
-                        <i v-else><img src="../assets/icon_pitch_on.png" alt=""></i>
-                        <span>王子</span>
-                    </p>
-                    <p>
-                        <i v-if="sex != 2"><img src="../assets/icon_unselected.png" alt=""></i>
-                        <i v-else><img src="../assets/icon_pitch_on.png" alt=""></i>
-                        <span>公主</span>
-                    </p>
+                    <van-radio-group v-model="sex">
+                        <van-radio  name="1">王子</van-radio>
+                        <van-radio name="2">公主</van-radio>
+                    </van-radio-group>
                 </div>
             </div>
             <div class="user_date box">
@@ -108,7 +102,7 @@ export default {
             card: {},
             imgUrl: '',
             child_name: '',
-            sex: 1,
+            sex: '1',
             birthday: '2000-01-01',
             tel_phone: '',
             tall: '1m以下',
@@ -122,6 +116,14 @@ export default {
     },
     components: {},
     methods: {
+        changeSex() {
+            console.log(111);
+            if (this.sex == 1) {
+                this.sex == 2
+            } else {
+                this.sex == 1
+            }
+        },
         getTall(tall) {
             this.tall = tall
         },
@@ -139,7 +141,7 @@ export default {
                 let url = event.target.result;
                 let res = await that.$postRequest('/upload/UpBase64Image', { img: url })
                 if (res.data.code == 1) {
-                    that.imgUrl = res.data.data
+                    that.imgUrl = that.$imgUrl + res.data.data
                 } else {
                     this.$message(res.data.msg);
                 }
@@ -401,13 +403,23 @@ export default {
         }
 
         .user_sex {
+            margin: 10px 0;
             padding-top: 0;
 
             div.boxs {
                 background: none;
                 display: flex;
                 align-items: center;
+                flex-direction: row;
                 justify-content: space-around;
+
+                .van-radio-group {
+                    display: flex;
+                    flex-direction: row;
+                    .van-radio{
+                        margin-right:15px;
+                    }
+                }
 
                 p {
                     display: flex;
@@ -444,6 +456,7 @@ export default {
                     border: 1px solid #fff;
                     margin-bottom: .14rem;
                     font-size: .3rem;
+
                     &.active {
                         border: 1px solid #FF6666;
                     }

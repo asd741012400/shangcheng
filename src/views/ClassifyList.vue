@@ -16,7 +16,7 @@
                 <li v-for="(item,index) in goodsList" :key="index">
                     <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
                         <div class="img">
-                            <span><img :src="item.thumb_img" alt=""></span>
+                            <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                             <div>
                                 <p>会员价</p>
                                 <i>￥</i>

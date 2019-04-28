@@ -21,11 +21,10 @@
                 </ul>
             </div>
             <div class="agreement">
-                <!--             <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
-                <span v-else><img src="../assets/icon_unselected.png" alt=""></span> -->
-                <van-checkbox v-model="agreementState" @click.stop="confirmPopShow">同意会员协议</van-checkbox>
-                <!--                 <p>同意</p>
-                <a href="#">会员协议</a> -->
+                <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
+                <span v-else><img src="../assets/icon_unselected.png" alt=""></span>
+                <p @click.stop="changeAgree">同意</p>&nbsp;&nbsp;
+                <a herf="javascript:;" @click="changeStatus">PLUS协议</a>
             </div>
             <div class="total">
                 <p>合计:￥{{plus.sale_price}}</p>
@@ -35,11 +34,7 @@
             <div class="confirm_pop">
                 <div class="boxs">
                     <h3>会员协议</h3>
-                    <div class="detail" v-html="plus.agreement"></div>
-                    <div class="btn">
-                        <a @click="confirmPopHide">拒 绝</a>
-                        <b @click="changeStatus">同 意</b>
-                    </div>
+                    <div class="detail" v-html="plus.agreement"></div>   
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
             </div>
@@ -66,9 +61,11 @@ export default {
     },
     components: {},
     methods: {
+        changeAgree() {
+            this.agreementState = !this.agreementState
+        },
         changeStatus() {
-            this.agreementState = true
-            this.confirmPop = false
+            this.confirmPop = true
         },
         confirmPopShow() {
             this.confirmPop = true

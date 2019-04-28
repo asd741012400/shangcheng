@@ -19,19 +19,22 @@
                         <span>待付款</span>
                     </template>
                     <template v-else-if="item.order_status == 1">
-                        <template v-if="item.is_comment == 1">
+                        <template v-if="item.is_comment == 0">
                             <span>待评价</span>
                         </template>
-                        <template v-else>
+                        <template v-else-if="item.is_use == 0">
                             <span>待使用</span>
+                        </template>
+                        <template v-else>
+                            <span>已使用</span>
                         </template>
                     </template>
                 </div>
                 <div class="mid">
-                    <div class="img-box">
+                    <div class="img-box" @click="getOrder(item.order_id)">
                         <img :src="$imgUrl + item.goods_img">
                     </div>
-                        <div class="center">
+                        <div class="center" @click="getOrder(item.order_id)">
                             <div class="clip title">{{item.goods_title}}</div>
                             <div>有效期 2015-8-6 至 2018-8-9</div>
                         </div>
@@ -49,14 +52,18 @@
                             <!-- order_status`'订单状态 0:未支付;1:订单完成;2:订单超时 3分单退款 4:已退款 5已使用 6 退款中 200:用户取消订单 201:后台取消订单;', -->
                             <template v-if="active == 0">
                                 <template v-if="item.order_status == 0">
-                                    <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
+                                    <van-button type="danger" size="mini" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
+                                    <van-button type="danger" size="mini" @click.stop="payOrder(item.order_id)">去付款</van-button>
                                 </template>
                                 <template v-else-if="item.order_status == 1">
                                     <template v-if="item.is_comment == 1">
-                                        <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                        <van-button type="primary" size="mini" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                                     </template>
-                                    <template v-else>
+                                    <template v-else-if="item.order_type == 1">
                                         <van-button type="info" size="mini">去使用</van-button>
+                                    </template>
+                                    <template v-else-if="item.order_type == 3">
+                                        <van-button type="info" size="mini">去激活</van-button>
                                     </template>
                                 </template>
                                 <template v-else-if="item.order_status == 2">
@@ -68,7 +75,8 @@
                             </template>
                             <!-- 待付款 -->
                             <template v-if="active == 1">
-                                <van-button type="danger" size="mini" @click="payOrder(item.order_id)">去付款</van-button>
+                                <van-button type="danger" size="mini" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
+                                <van-button type="primary" size="mini" @click.stop="payOrder(item.order_id)">去付款</van-button>
                             </template>
                             <!-- 待使用 -->
                             <template v-else-if="active == 2">
@@ -76,7 +84,7 @@
                             </template>
                             <!-- 待评价 -->
                             <template v-else-if="active == 3">
-                                <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                <van-button type="primary" size="mini" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             </template>
                             <!-- 退款 -->
                             <template v-else-if="active == 4">
@@ -136,14 +144,34 @@ export default {
         }
     },
     methods: {
+        //取消订单
+        async cancleOrder(id) {
+            this.$dialog.alert({
+                showCancelButton: true,
+                message: '你确定要取消订单吗？'
+            }).then(async () => {
+                let res = await this.$getRequest('/order/CancelOrder', { order_id: id })
+                this.$message(res.data.msg)
+                if (res.data.code == 1) {
+                    setTimeout(() => {
+                        this.getOrderList();
+                    }, 2000)
+                }
+            }).catch(() => {
+
+            });
+        },
         //支付
         payOrder(id) {
             this.$router.push({ name: 'ConfirmPay', query: { id: id } })
         },
+        //订单详情
+        getOrder(id) {
+            this.$router.push({ name: 'OrderDetail', query: { id: id } })
+        },
         //获取订单
         async getOrderList(index) {
             this.orderList = []
-            console.log(this.order_status);
             let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             this.orderList = res.data.data.list
             if (res.data.data.list) {

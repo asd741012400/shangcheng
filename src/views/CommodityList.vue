@@ -35,7 +35,7 @@
                     </div>
                     <div class="text">{{item.content}}</div>
                     <ul>
-                        <li v-for="img in strToArr(item.thumb)">
+                        <li v-for="(img,index) in strToArr(item.thumb)" @click="previewImg(item,index)">
                             <span><img :src="$imgUrl+img" alt=""></span>
                         </li>
                     </ul>
@@ -64,6 +64,8 @@
                 </li>
             </ul>
         </div>
+        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange">
+        </van-image-preview>
     </div>
 </template>
 <script>
@@ -74,6 +76,9 @@ export default {
             user: {},
             commentState: 2,
             list: [],
+            images: [],
+            show: false,
+            index: 1,
             page: 1,
             currSize: 0,
             pageSize: 10,
@@ -81,6 +86,18 @@ export default {
     },
     components: {},
     methods: {
+        previewImg(item,index) {
+            this.images = []
+            let arr = this.strToArr(item.thumb)
+            arr.map(item=>{
+                this.images.push(this.$imgUrl+item)
+            })
+            this.index = index
+            this.show = true
+        },
+        onChange(){
+
+        },
         //评价订单
         async handleComment(id, type, goods_id) {
             this.$router.push({

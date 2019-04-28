@@ -139,7 +139,7 @@ export default {
                 wx.onMenuShareTimeline({
                     title: this.plus.title, // 分享标题, 请自行替换
                     link: url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.poster_img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -153,7 +153,7 @@ export default {
                     title: this.plus.title, // 分享标题, 请自行替换
                     desc: this.plus.desc, // 分享描述, 请自行替换
                     link: url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.poster_img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 

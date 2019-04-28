@@ -2,8 +2,10 @@
     <div class="Share">
         <div class="share_bg" v-if="shareShow" @click="shareHideFn">
             <div class="share_div" @click.stop>
-                <h3><span>分享赚</span><a>4.99</a>元</h3>
-                <p>好友通过你的购买链接进行购买，你将获得至少<span>12</span>元的分享收益</p>
+                <template v-if="money && userInfo.status > 0">                    
+                    <h3><span>分享赚</span>{{money}}元</h3>
+                    <p>好友通过你的购买链接进行购买，你将获得至少<span>{{money}}</span>元的分享收益</p>
+                </template>
                 <ul>
                     <li @click="maskingShowFn">
                         <span><img src="../assets/share_wx.png" alt=""></span>
@@ -44,6 +46,7 @@ export default {
     name: 'Share',
     data() {
         return {
+            userInfo: {},
             message: "123",
             shareShow: false,
             maskingShow: false
@@ -52,6 +55,7 @@ export default {
     props: [
         'goodsId',
         'type',
+        'money',
     ],
     components: {},
     methods: {
@@ -89,7 +93,10 @@ export default {
 
     // 创建完毕状态 
     created() {
-
+        let userInfo = this.$localstore.get('userInfo')
+        if (userInfo) {
+            this.userInfo = userInfo
+        }
     },
 
     // 挂载前状态

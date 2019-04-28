@@ -6,7 +6,7 @@
         </header>
         <ul class="team_member">
             <li v-for="item in list">
-                <i><img :src="item.wechat_img"></i>
+                <i><img :src="$imgUrl+item.wechat_img"></i>
                 <div>
                     <p class="name">
                         <b>{{item.username}}</b>

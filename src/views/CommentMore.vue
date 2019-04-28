@@ -23,13 +23,13 @@
                             </div>
                         </div>
                         <div class="grade">
-                            <van-rate v-model="item.star_level" readonly />
+                            <van-rate v-model="item.star_level - 0" readonly />
                         </div>
                     </div>
                     <div class="text">{{item.content}}</div>
                     <ul>
-                        <li v-for="img in item.thumb">
-                            <span><img :src="img" alt=""></span>
+                        <li v-for="(img,ii) in item.thumb" @click="previewImg(item,ii)">
+                            <span><img :src="$imgUrl+img" alt=""></span>
                         </li>
                     </ul>
                 </div>
@@ -48,6 +48,8 @@ export default {
             CardDetail: {},
             comments: [],
             page: 1,
+            index: 1,
+            images: [],
             currSize: 0,
             pageSize: 10,
             countDownNum: 0,
@@ -57,13 +59,22 @@ export default {
     },
     components: {},
     methods: {
+        previewImg(item, index) {
+            this.images = []
+            let arr = item.thumb
+            arr.map(item => {
+                this.images.push(this.$imgUrl + item)
+            })
+            this.index = index
+            this.show = true
+        },
         goBack() {
             this.$router.go(-1)
         },
         //获取评论
         async getComment() {
             this.comments = []
-            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1, page: this.page })
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: this.$route.query.type, page: this.page })
             if (res.data.data.list) {
                 this.comments = res.data.data.list;
                 this.currSize = res.data.data.list.length
@@ -73,7 +84,7 @@ export default {
         },
         //获取更多评论
         async getCommentMore() {
-            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: 1, page: this.page })
+            let res = await this.$getRequest('/comment/GetComments', { goods_id: this.$route.query.id, type: this.$route.query.type, page: this.page })
             if (res.data.data.list) {
                 this.comments = this.comments.concat(res.data.data.list);
                 this.currSize = res.data.data.list.length

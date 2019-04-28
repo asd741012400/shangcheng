@@ -115,6 +115,31 @@ export default {
   components:{
   },
   methods:{
+            //获取订单
+        async getOrder() {
+            let id = this.$route.query.id
+            let res = await this.$getRequest('/order/getOrder', { id: id })
+            this.order = res.data.data
+
+            if (this.order.order_type == 1) {
+                let res1 = await this.$getRequest('home/GetGoodsDetail', { id: this.order.goods_id })
+                this.goods = res1.data.data
+                this.form_table = res1.data.data.form_table
+
+                if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
+                    this.goods.goods_attr.map(item => {
+                        if (item.attr_id == this.order.attr_id) {
+                            this.attr_name = item.attr_name
+                        }
+                    })
+                }
+            }
+
+            if (this.order.order_type == 3) {
+                let res1 = await this.$getRequest('home/GetCardDetail', { id: this.order.goods_id })
+                this.form_table = res1.data.data.form_table
+            }
+        },
 
   },
 
@@ -125,6 +150,7 @@ export default {
   // 创建完毕状态 
   created(){
     document.body.style.background = "#F6F6F6";
+    this.getOrder()
   },
 
   // 挂载前状态

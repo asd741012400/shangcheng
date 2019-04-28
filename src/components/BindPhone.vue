@@ -3,9 +3,10 @@
         <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
             <van-cell-group>
                 <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
-                <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
+                <van-field v-model="sms" label="验证码" placeholder="请输入验证码" />      
+                <van-field readonly>
                     <van-button :disabled="disabled" slot="button" size="small" type="primary" @click="sendSMS">{{msg}}</van-button>
-                </van-field>
+                </van-field>   
             </van-cell-group>
         </van-dialog>
     </div>
@@ -61,7 +62,7 @@ export default {
                 this.show = false
                 setTimeout(() => {
                     window.location.reload()
-                }, 3000)
+                }, 1000)
                 done()
             } else {
                 this.$notify(res.data.msg);

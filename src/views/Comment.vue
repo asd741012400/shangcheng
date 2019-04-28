@@ -18,7 +18,7 @@
             </div>
             <div class="camera">
                 <p v-for="(item,index) in imagesUrl">
-                    <span><img :src="item" alt=""></span>
+                    <span><img :src="$imgUrl+item" alt=""></span>
                     <em @click="removeImages(index)"><img src="../assets/icon_close.png" alt=""></em>
                 </p>
                 <p>
@@ -256,6 +256,7 @@ export default {
                 height: 100%;
                 outline: medium;
                 border: none;
+                font-size:14px;
             }
         }
 

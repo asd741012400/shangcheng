@@ -7,27 +7,27 @@
                 <span><img :src="userInfo.wechat_img" alt=""></span>
                 <div>
                     <h3>
-            <b>江北万象城店</b>
-            <i><img src="../assets/icon_vip2.png" alt=""></i>
-          </h3>
+                    <b>江北万象城店</b>
+                    <i><img src="../assets/icon_vip2.png" alt=""></i>
+                  </h3>
                     <p>{{userInfo.tel_phone}}</p>
                 </div>
                 <em>我的店铺 ></em>
             </div>
             <div class="message_show">
                 <ul>
-                <li>
-                    <p>￥{{userInfo.history_money}}</p>
-                    <a>历史收益</a>
-                </li>
-                <li>
-                    <p>￥{{userInfo.freeze_money}}</p>
-                    <a>可提现</a>
-                </li>
-                <li>
-                    <p>￥{{userInfo.getmoney}}</p>
-                    <a>待生效</a>
-                </li>
+                    <li>
+                        <p>￥{{userInfo.history_money}}</p>
+                        <a>历史收益</a>
+                    </li>
+                    <li>
+                        <p>￥{{userInfo.freeze_money}}</p>
+                        <a>可提现</a>
+                    </li>
+                    <li>
+                        <p>￥{{userInfo.getmoney}}</p>
+                        <a>待生效</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -68,7 +68,7 @@ export default {
     name: 'DistributionTow',
     data() {
         return {
-          userInfo:{}
+            userInfo: {}
         }
     },
     components: {},

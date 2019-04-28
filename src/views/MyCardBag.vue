@@ -9,8 +9,8 @@
             <!--  'ac_status 0 未激活 1已激活 2作废 -->
             <template v-if="item.ac_status == 0">
                 <div class="to_activate card_commonality">
-                    <div class="image" >
-                        <i><img :src="item.thumb_img" alt=""></i>
+                    <div class="image">
+                        <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
                         <div>
                             <p>卡号：{{item.card_sn}}</p>
                             <span @click="activeCard(index)">去激活</span>
@@ -27,12 +27,30 @@
                     </div>
                 </div>
             </template>
+            <!-- 过期 -->
+            <template v-else-if="item.days < 0">
+                <div class="expired card_commonality">
+                    <div class="image">
+                        <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
+                        <div>
+                            <p>卡号：{{item.card_sn}}</p>
+                            <span class="color_hei">已过期</span>
+                            <em><img src="../assets/icon_close.png" alt=""></em>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="text">
+                            <p>{{item.card_name}}</p>
+                        </div>
+                    </div>
+                </div>
+            </template>
             <!-- 正常 -->
             <template v-else-if="item.ac_status == 1">
                 <div class="to_be_used" @click="goCardDetail(index)">
                     <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                     <div class="user">
-                        <span><img :src="item.head_img" alt=""></span>
+                        <span><img :src="$imgUrl+item.head_img" alt=""></span>
                         <p>{{item.child_name}}</p>
                     </div>
                     <div class="content">
@@ -52,7 +70,7 @@
                     <div class="image">
                         <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                         <div>
-                            <p>卡号：00000000</p>
+                            <p>卡号：{{item.card_sn}}</p>
                             <span class="color_hei">已过期</span>
                             <em><img src="../assets/icon_close.png" alt=""></em>
                         </div>
@@ -72,7 +90,7 @@
                     <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input type="number"  v-model.number="getCode">
+                        <input type="number" v-model.number="getCode">
                         <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getCard">提 交</a>
@@ -86,7 +104,6 @@
                     <h3>转赠须知</h3>
                     <div class="detail" v-html="desc">
                     </div>
-
                     <div class="agreement">
                         <input class="song" type="number" v-model.number="value" placeholder="请输入转赠密码" />
                     </div>

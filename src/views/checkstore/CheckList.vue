@@ -129,6 +129,12 @@ export default {
     created() {
         document.title = "核销记录"
         document.body.style.background = "#fff";
+
+     let userInfo = this.$localstore.get('business_user')
+     if (!userInfo) {
+        
+     }
+
         this.getShop()
         this.getCheckList()
 

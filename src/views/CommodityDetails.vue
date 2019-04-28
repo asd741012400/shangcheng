@@ -20,7 +20,7 @@
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,index) in GoodsDetail.def_pic" :key="index">
-                    <img :src="item" alt="">
+                    <img :src="$imgUrl+item" alt="">
                   </van-swipe-item>
             </van-swipe>
             <!-- <span></span> -->
@@ -105,7 +105,7 @@
                         <div class="user_message">
                             <i>
                                <template v-if="item.anonymous == 0">
-                                <img :src="item.wechat_img" alt="" />
+                                <img :src="$imgUrl+item.wechat_img" alt="" />
                                 </template>
                             </i>
                             <div class="user_name">
@@ -119,7 +119,7 @@
                             </div>
                         </div>
                         <div class="grade">
-                            <van-rate v-model="item.star_level" readonly />
+                            <van-rate v-model="item.star_level - 0" readonly />
                         </div>
                     </div>
                     <div class="text">{{item.content}}</div>
@@ -156,15 +156,15 @@
             <!-- 可购买状态 -->
             <div class="btn" v-show="GoodsDetailsState == 1">
                 <div class="share" @click="shareShowFn">
-                    <span>￥10</span>
-                    <p>分享赚</p>
+                    <span>分享好友</span>
+                    <!-- <p>分享赚</p> -->
                 </div>
                 <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
             </div>
             <div class="btn" v-show="GoodsDetailsState == 7">
                 <div class="share" @click="shareShowFn">
-                    <span>￥10</span>
-                    <p>分享赚</p>
+                    <span>分享好友</span>
+                    <!-- <p>分享</p> -->
                 </div>
                 <div class="buy" @click="ConfirmAnOrderPage"><span>立即领取</span></div>
             </div>
@@ -188,7 +188,7 @@
             </div>
             <!-- </div> -->
         </footer>
-        <Share :goods-id="GoodsDetail.goods_id" type="1" ref="myShare"></Share>
+        <Share :goods-id="GoodsDetail.goods_id" type="1" :money="GoodsDetail.dist_money" ref="myShare"></Share>
         <BindPhone :show="show" ref="bindPhone"></BindPhone>
     </div>
 </template>
@@ -296,17 +296,17 @@ export default {
             })
 
         },
-        //检测用户是否登录
+        //检测用户是否注册过
         async checkUser() {
             let WxAuth = this.$localstore.get('WxAuth')
             let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (!res.data.data || !res.data.data.user_id) {
+            if (res.data.code == 1) {
+                this.userInfo = res.data.data
+                this.$localstore.set('userInfo', this.userInfo)
+                return true
+            } else {
                 this.show = true
                 return false
-            } else {
-                this.user = res.data.data
-                this.$localstore.set('userInfo', this.user)
-                return true
             }
         },
         //定时器判断 商品是否截止销售

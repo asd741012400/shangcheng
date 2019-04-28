@@ -138,13 +138,13 @@ export default {
         async checkUser() {
             let WxAuth = this.$localstore.get('WxAuth')
             let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (!res.data.data || !res.data.data.user_id) {
+            if (res.data.code == 1) {
+                this.userInfo = res.data.data
+                this.$localstore.set('userInfo', this.userInfo)
+                return true
+            } else {
                 this.show = true
                 return false
-            } else {
-                this.user = res.data.data
-                this.$localstore.set('userInfo', this.user)
-                return true
             }
         },
         goGoodsDetail(item) {

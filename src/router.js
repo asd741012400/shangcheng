@@ -437,7 +437,6 @@ router.beforeEach((to, from, next) => {
     }
 
 
-
     //门店id存储
     let business_id = getParamString('business_id');
     if (business_id) {
@@ -480,9 +479,9 @@ export default router
 
 //微信授权
 function getAuth() {
-    let url = encodeURIComponent(window.location.href.split('#')[0]);
+    let url = window.location.href.split('#')[0];
     //微信授权
-    getRequest('/wechat/check', { url: url }).then(res => {
+    postRequest('/wechat/check', { url: url }).then(res => {
         window.location.href = res.data
     })
 }
