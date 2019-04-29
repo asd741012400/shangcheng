@@ -934,7 +934,8 @@ export default {
             .detail {
                 padding: 0.2rem .6rem;
                 background: #fff;
-                display: flex;
+                display: inherit;
+                margin-bottom: 3.5rem;
 
                 img {
                     margin: 5px 0;

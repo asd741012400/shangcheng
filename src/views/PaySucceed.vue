@@ -50,7 +50,7 @@
                 <div class="continue" @click="goHome">继续逛逛</div>
                 <div class="turn" @click="confirmPopShow">转赠好友</div>
                 <router-link :to="{name:'CardActivate',query:{id:$route.query.id}}">
-                    <div class="activate">前去激活</div>
+                    <div class="activate" @click="activeCard(index)">前去激活</div>
                 </router-link>
             </div>
         </div>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
-                        <b @click="submit">确 定</b>
+                        <b @click="handleGive()">确 定</b>
                     </div>
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
@@ -133,7 +133,9 @@ export default {
     name: 'PaySucceed',
     data() {
         return {
-            cd_id: false,
+            cd_id: '',
+            cg_id: '',
+            value: '',
             card: {},
             PlusPop: false,
             confirmPop: false,
@@ -159,6 +161,10 @@ export default {
         },
         confirmPlusPopHide() {
             this.PlusPop = false
+        },
+       //激活
+        activeCard(){
+            this.$router.push({ name: 'CardActivate', query: { id: this.cg_id } })
         },
         //赠送卡片
         async handleGive() {
@@ -198,6 +204,7 @@ export default {
         this.order_type = this.$route.query.type
         this.order_id = this.$route.query.id
         this.cd_id = this.$route.query.cd_id
+        this.cg_id = this.$route.query.cg_id
         if (this.order_type == 3) {
             this.getOrder()
         }

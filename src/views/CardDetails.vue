@@ -751,6 +751,7 @@ export default {
         .shop_del {
             border-top: 10px solid #f6f6f6;
             background: #fff;
+            margin-bottom: 2.5rem;
 
             h3 {
                 font-size: .28rem;

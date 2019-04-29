@@ -149,7 +149,8 @@ export default {
                                     query: {
                                         id: that.order.order_id,
                                         type: that.order.order_type,
-                                        cd_id: res.data.data.cd_id
+                                        cd_id: res.data.data.cd_id,
+                                        cg_id: res.data.data.cg_id
                                     }
                                 })
                             }

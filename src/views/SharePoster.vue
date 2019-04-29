@@ -6,10 +6,10 @@
                 <img class="poster-img" ref="image" :src="imgUrl">
                 <div class="Poster" ref="imageDom">
                     <div class="name">
-                        <span><img :src="wechat_img"></span>
+                        <span><img :src="wechat_img +'?'+ new Date().getTime()"></span>
                         <b>{{user.username}}</b>
                     </div>
-                    <div class="img"><img :src="$imgUrl + poster_img" alt=""></div>
+                    <div class="img"><img :src="poster_img" alt=""></div>
                         <!-- <div class="img"><img :src="$imgUrl +goods.share_img" alt=""></div> -->
                         <div class="code">
                             <div class="code_text">
@@ -146,24 +146,36 @@ export default {
             // alert(this.imgUrl)
         },
 
+        async toBase64(img) {
+            let res = await this.$postRequest('/upload/Tobase64', { img: img })
+            return res.data.data
+        },
+
         //获取商品
         async getGoods() {
             let that = this;
+
+            this.wechat_img = this.user.wechat_img
+
+
             if (this.type == 1) {
                 let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.goods_id })
                 this.goods = res.data.data
                 this.price = res.data.data.goods_price
                 this.title = res.data.data.goods_name
                 this.desc = res.data.data.goods_info
-                this.poster_img = res.data.data.dist_poster
+                // this.poster_img = res.data.data.dist_poster
+                this.poster_img = await this.toBase64(this.$imgUrl + res.data.data.dist_poster)
             } else {
                 let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
                 this.goods = res.data.data
                 this.price = res.data.data.card_price
                 this.title = res.data.data.share_title
                 this.desc = res.data.data.share_desc
-                this.poster_img = res.data.data.share_img
+                // this.poster_img = res.data.data.share_img
+                this.poster_img = await this.toBase64(this.$imgUrl + res.data.data.share_img)
             }
+
             this.wxRegister()
 
             let qrcode = new QRCode('qrcode', {
@@ -176,36 +188,66 @@ export default {
             })
 
 
-            //合成分享图
-            that.$nextTick(function() {
-                //海报生成
-                setTimeout(() => {
-                    html2canvas(that.$refs.imageDom).then((canvas) => {
-                        // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-                        let dataURL = canvas.toDataURL("image/png");
-                        that.imgUrl = dataURL;
-                    });
-                }, 5000)
-            })
+            //判断图片是否加载完成
+            let timer = setInterval(() => {
+                if (this.wechat_img && this.poster_img) {
+                    this.getPoster()
+                    clearInterval(timer)
+                }
+            }, 100)
         },
-
-        getBase64Image(img) {
-            var canvas = document.createElement("canvas");
-            canvas.width = img.width;
-            canvas.height = img.height;
+        //海报生成
+        getPoster() {
+            let that = this
+            html2canvas(that.$refs.imageDom, {
+                // useCORS:true,//（图片跨域相关）
+                allowTaint: false
+            }).then((canvas) => {
+                // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+                let dataURL = canvas.toDataURL("image/jpeg");
+                that.imgUrl = dataURL;
+            });
+        },
+        getBase64(imgUrl) { //转base64插入用户头像，imgUrl为图片链接
+            window.URL = window.URL || window.webkitURL;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", imgUrl, true);
+            xhr.responseType = "blob";
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    var blob = this.response;
+                    let oFileReader = new FileReader();
+                    oFileReader.onloadend = function(e) {
+                        console.log(e.target.result) //输出转化结果
+                    };
+                    oFileReader.readAsDataURL(blob);
+                }
+            }
+            xhr.send();
+        },
+        getBase64Image(url, ext, callback) {
+            var canvas = document.createElement("canvas"); //创建canvas DOM元素
             var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height);
-            var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
-            var dataURL = canvas.toDataURL("image/" + ext);
-            return dataURL;
+            var img = new Image;
+            img.crossOrigin = '*';
+            img.src = url;
+            img.onload = function() {
+                canvas.height = 60; //指定画板的高度,自定义
+                canvas.width = 85; //指定画板的宽度，自定义
+                ctx.drawImage(img, 0, 0, 60, 85); //参数可自定义
+                var dataURL = canvas.toDataURL("image/jpeg");
+                callback.call(this, dataURL); //回掉函数获取Base64编码
+                canvas = null;
+            };
         }
+
     },
 
     // 创建前状态
     beforeCreate() {},
 
     // 创建完毕状态 
-    created() {
+    async created() {
         document.body.style.background = "#fff";
         this.user = this.$localstore.get('userInfo')
         this.goods_id = this.$route.query.id
@@ -218,8 +260,6 @@ export default {
             this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
                 '&type=3&id=' + this.goods_id
         }
-
-        this.wechat_img = this.$localstore.get('avatar') || this.user.wechat_img
         this.getGoods()
 
 
