@@ -241,9 +241,11 @@ export default {
             that.table = num;
         },
         //确认下单
-        ConfirmAnOrderPage() {
-            let is_login = this.checkUser()
-            if (!is_login) {
+        async ConfirmAnOrderPage() {
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
+            if (res.data.code !== 1) {
+                this.show = true
                 return false
             }
 
@@ -309,19 +311,7 @@ export default {
             this.projects = res.data.data;
 
         },
-        //检测用户是否注册过
-        async checkUser() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (res.data.code == 1) {
-                this.userInfo = res.data.data
-                this.$localstore.set('userInfo', this.userInfo)
-                return true
-            } else {
-                this.show = true
-                return false
-            }
-        },
+
         // 用于微信JS-SDK回调
         async wxRegister() {
             //获取微信jssdk

@@ -11,12 +11,21 @@
                     <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
                 </div>
             </div>
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="../assets/activity_img1.png" />
+                    </div>
+                        <div class="swiper-slide">
+                            <img src="../assets/activity_img1.png" />
+                    </div>
+                            <div class="swiper-slide">
+                                <img src="../assets/activity_img1.png" />
+                    </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
         </header>
-        <mt-swipe :auto="4000">
-            <mt-swipe-item><img src="../assets/activity_img1.png" /></mt-swipe-item>
-                <mt-swipe-item><img src="../assets/activity_img1.png" /></mt-swipe-item>
-                    <mt-swipe-item><img src="../assets/activity_img1.png" /></mt-swipe-item>
-        </mt-swipe>
         <div class="nav">
             <ul>
                 <li v-for="(item ,index) in NavList">
@@ -32,7 +41,7 @@
             <h3>
                 <span><img src="../assets/icon_play_freely.png" alt=""></span>
                 <a>宝贝计划</a>
-              </h3>
+            </h3>
             <div class="play_freely_box">
                 <ul>
                     <li v-for="(item , index) in Cardlist">
@@ -55,9 +64,9 @@
         </div>
         <div class="activity_list">
             <h3>
-        <span><img src="../assets/icon_recommend.png" alt=""></span>
-        <a>爆款推荐</a>
-      </h3>
+                <span><img src="../assets/icon_recommend.png" alt=""></span>
+                <a>爆款推荐</a>
+            </h3>
             <ul>
                 <li class="vip_price" v-for="(item,index) in GoodsList">
                     <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
@@ -84,15 +93,6 @@
                 </li>
             </ul>
         </div>
-        <!-- 手机号绑定 -->
-        <!--         <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
-            <van-cell-group>
-                <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
-                <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
-                    <van-button slot="button" size="small" type="primary">发送验证码</van-button>
-                </van-field>
-            </van-cell-group>
-        </van-dialog> -->
         <MyFooter></MyFooter>
     </div>
 </template>
@@ -160,8 +160,6 @@ export default {
     // 创建完毕状态 
     created() {
         let userInfo = this.$localstore.get('userInfo')
-
-
         document.body.style.background = "#F6F6F6";
         const that = this;
         that.$http.get(that.apiUrl + 'home/getcardlist')
@@ -216,7 +214,9 @@ export default {
     // 挂载结束状态
     mounted() {
         new Swiper('.swiper-container', {
-            loop: true,
+            autoplay: {
+                delay: 3000, //1秒切换一次
+            },
             // 如果需要分页器
             pagination: {
                 el: '.swiper-pagination',
@@ -243,10 +243,10 @@ export default {
 <style lang="scss" scoped>
 .Index {
     header {
-        // height: 4.4rem;
+        height: 4.4rem;
 
         .header_top {
-            // height: 2.84rem;
+            height: 2.84rem;
             background: linear-gradient(90deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
 
             .header {
@@ -681,8 +681,16 @@ export default {
         }
     }
 }
-
-.mint-swipe{
-   height: 2.76rem;
+</style>
+<style>
+.swiper-container {
+    margin: 0 .16rem;
+    height: 2.76rem;
+    background: #ccc;
+    top: -1.2rem;
+    border-radius: 5px;
+}
+.swiper-pagination-bullets .swiper-pagination-bullet.swiper-pagination-active {
+    background: #fff !important;
 }
 </style>

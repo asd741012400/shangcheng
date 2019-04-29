@@ -5,7 +5,7 @@
             <div class="tel">支付成功</div>
             <div class="add"></div>
         </header>
-        <div class="shop" v-if="PaySucceedState == 1">
+        <div class="shop" v-if="order_type == 1">
             <div class="header">
                 <div class="use_card_message">
                     <i><img src="../assets/PaySucceed_img1.png" alt=""></i>
@@ -21,7 +21,7 @@
                 <div class="employ">去使用</div>
             </div>
         </div>
-        <div class="vip" v-else-if="PaySucceedState == 2">
+        <div class="vip" v-else-if="order_type == 2">
             <div class="header">
                 <div class="use_card_message">
                     <i class="vip_img"><img src="../assets/PaySucceed_img2.png" alt=""></i>
@@ -35,7 +35,7 @@
                 <div class="employ" @click="shareShowFn">领取海报分享赚￥100</div>
             </div>
         </div>
-        <div class="card" v-else-if="PaySucceedState == 3">
+        <div class="card" v-else-if="order_type == 3">
             <div class="header">
                 <div class="use_card_message">
                     <i><img src="../assets/PaySucceed_img3.png" alt=""></i>
@@ -59,7 +59,7 @@
             <div class="confirm_pop">
                 <div class="boxs">
                     <h3>转赠须知</h3>
-                    <div class="detail"></div>
+                    <div class="detail" v-html="card.give_other"></div>
                     <div class="agreement">
                         <input class="song" type="password" v-model="value" placeholder="请输入转赠密码" />
                     </div>
@@ -133,9 +133,11 @@ export default {
     name: 'PaySucceed',
     data() {
         return {
+            cd_id: false,
+            card: {},
             PlusPop: false,
             confirmPop: false,
-            PaySucceedState: 3
+            order_type: 3
         }
     },
     components: { Share },
@@ -158,6 +160,32 @@ export default {
         confirmPlusPopHide() {
             this.PlusPop = false
         },
+        //赠送卡片
+        async handleGive() {
+            if (this.value == '') {
+                this.$message('转赠码不能为空！')
+                return false
+            }
+            let data = {
+                cdid: this.cdid,
+                card_password: this.value
+            }
+            let res = await this.$postRequest('/card/GiveCard', data)
+            this.$message(res.data.msg);
+            if (res.data.code == 1) {
+                this.confirmPop = false
+                this.maskingShow = true;
+                this.share_url = 'http://' + window.location.host + '/#/MyCardBag?share_card=' + this.user_id
+                // wxapi.wxRegister(this.wxRegCallback)
+            }
+        },
+        async getOrder() {
+            this.cardList = []
+            let res = await this.$getRequest('card/CardInfo', { cd_id: this.cd_id })
+            if (res.data.code == 0) {
+                this.card = res.data.data
+            }
+        },
 
     },
 
@@ -167,10 +195,11 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#fff";
-        this.PaySucceedState = this.$route.query.type
-        if (this.PaySucceedState == 3) {
-            this.goods_count = this.$route.query.goods_count
-            this.card_count = this.$route.query.card_count
+        this.order_type = this.$route.query.type
+        this.order_id = this.$route.query.id
+        this.cd_id = this.$route.query.cd_id
+        if (this.order_type == 3) {
+            this.getOrder()
         }
     },
 

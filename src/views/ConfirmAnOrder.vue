@@ -145,7 +145,7 @@ export default {
                 this.show = true
                 return false
             }
-            
+
             if (this.form_table.indexOf('1') > -1) {
                 var regIdNo = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
                 if (!regIdNo.test(this.card_ID)) {
@@ -169,6 +169,7 @@ export default {
 
 
             if (!this.goods) {
+                this.$message("数据未加载完，请耐心等待或刷新页面");
                 return false;
             }
             let WxAuth = this.$localstore.get('WxAuth')
@@ -254,11 +255,11 @@ export default {
                     })
                 }
 
-                if (this.goods.is_free) {
-                    this.limit_num = 0
-                    this.price = 0
-                    this.is_wechat = 0
-                }
+                // if (this.goods.is_free) {
+                //     this.limit_num = 0
+                //     this.price = 0
+                //     this.is_wechat = 0
+                // }
 
 
             } else if (type == 3) {

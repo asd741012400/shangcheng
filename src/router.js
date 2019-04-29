@@ -88,7 +88,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index
+            component: MerchantShop
         },
         {
             path: '/Index',
@@ -412,13 +412,12 @@ import Cookies from 'js-cookie';
 // 进入页面判断是否微信授权 没授权 拉取授权
 //Router
 router.beforeEach((to, from, next) => {
-    //存储来源地址 用于分享返回主页
-    localstore.set('from_url', business_id)
 
     //分享来源处理
     shareFrom(to);
     let code = getParamString('code');
     let user = localstore.get('WxAuth')
+    let userInfo = localstore.get('userInfo')
     if (!code && !user) {
         getAuth()
     }
@@ -428,6 +427,11 @@ router.beforeEach((to, from, next) => {
         getRequest('/wechat/GetCode', { code: code }).then(res => {
             if (res.data.code == 1) {
                 localstore.set('WxAuth', res.data.data)
+                let from_url = localstore.get('from_url')
+                if (from_url) {
+                    localstore.remove('from_url')
+                    window.location.href = 'http://'+window.location.host+'/#'+from_url
+                }
             } else {
                 if (!user) {
                     getAuth()
@@ -449,27 +453,13 @@ router.beforeEach((to, from, next) => {
 
 
     //用户来自分享  但未注册
-    if (!user && to.query.share_id) {
+    if (!userInfo && to.query.share_id) {
         let data = {
             share_id: to.query.share_id,
             union_id: user.unionid
         }
         getRequest('/user/Recommend', data)
     }
-
-
-    //判断是否会员分享
-    if (to.name == 'VipEquity' || to.name == 'CardDetails' || to.name == 'CommodityDetails') {
-        // next()
-    } else {
-        let share = localstore.get('to_share')
-        // if (share && share.name) {
-        //     localstore.set('to_share', '')
-        //     localstore.set('has_share', share)
-        //     next({ name: share.name, query: share.query })
-        // }
-    }
-
     next()
 })
 
@@ -480,6 +470,9 @@ export default router
 //微信授权
 function getAuth() {
     let url = window.location.href.split('#')[0];
+    let hash = window.location.href.split('#')[1];
+    //存储来源地址 用于授权返回
+    localstore.set('from_url', hash)
     //微信授权
     postRequest('/wechat/check', { url: url }).then(res => {
         window.location.href = res.data

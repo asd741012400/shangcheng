@@ -126,25 +126,15 @@ export default {
     components: {},
     methods: {
         //购买Plus
-        BuyPlus() {
-            let is_login = this.checkUser()
-            if (!is_login) {
-                return false
-            } else {
-                this.$router.push({ name: 'VipOrder', query: { type: 2 } })
-            }
-        },
-        //检测用户是否登录
-        async checkUser() {
+        async BuyPlus() {
             let WxAuth = this.$localstore.get('WxAuth')
             let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
             if (res.data.code == 1) {
                 this.userInfo = res.data.data
                 this.$localstore.set('userInfo', this.userInfo)
-                return true
+                this.$router.push({ name: 'VipOrder', query: { type: 2 } })
             } else {
                 this.show = true
-                return false
             }
         },
         goGoodsDetail(item) {

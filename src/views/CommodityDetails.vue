@@ -266,11 +266,14 @@ export default {
             this.$refs.myShare.shareShowFn();
         },
         //确认下单
-        ConfirmAnOrderPage() {
-            let is_login = this.checkUser()
-            if (!is_login) {
+        async ConfirmAnOrderPage() {
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
+            if (res.data.code !== 1) {
+                this.show = true
                 return false
             }
+
             if (this.limit_num == 0) {
                 this.$message('当前限购0件!');
                 return false;
@@ -280,11 +283,6 @@ export default {
                 this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
             }
 
-            let userInfo = this.$localstore.get('userInfo')
-            if (!userInfo) {
-                this.show = true
-                return false
-            }
 
             this.$router.push({
                 path: 'ConfirmAnOrder',
@@ -295,19 +293,6 @@ export default {
                 }
             })
 
-        },
-        //检测用户是否注册过
-        async checkUser() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (res.data.code == 1) {
-                this.userInfo = res.data.data
-                this.$localstore.set('userInfo', this.userInfo)
-                return true
-            } else {
-                this.show = true
-                return false
-            }
         },
         //定时器判断 商品是否截止销售
         timer() {

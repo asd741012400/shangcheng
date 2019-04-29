@@ -132,14 +132,29 @@ export default {
 
                         let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
                         if (res.data.code == 1) {
-                            that.$router.push({
-                                name: 'PaySucceed',
-                                query: {
-                                    id: that.order.order_id,
-                                    type: that.order.order_type,
-                                    cd_id: res.data.data
-                                }
-                            })
+
+                            if (that.order.order_type == 1) {
+                                that.$router.push({
+                                    name: 'PaySucceed',
+                                    query: {
+                                        id: that.order.order_id,
+                                        type: that.order.order_type,
+                                    }
+                                })
+                            }
+
+                            if (that.order.order_type == 3) {
+                                that.$router.push({
+                                    name: 'PaySucceed',
+                                    query: {
+                                        id: that.order.order_id,
+                                        type: that.order.order_type,
+                                        cd_id: res.data.data.cd_id
+                                    }
+                                })
+                            }
+
+
                         }
                     };
 

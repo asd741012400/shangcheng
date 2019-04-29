@@ -127,7 +127,7 @@
             </li>
         </ul>
         <MyFooter></MyFooter>
-        <div class="service"><a href="javascript:;"><img src="../assets/icon_service.png" alt=""></a></div>
+        <div class="service" v-if="mobile"><a :href="'tel:'+mobile"><img src="../assets/icon_service.png" alt=""></a></div>
         <div class="card_add_pop" v-if="popShow">
             <div class="card_add">
                 <div>
@@ -159,6 +159,7 @@ export default {
                 status: 0
             },
             code: '',
+            mobile: '',
             popState: 3,
             popShow: false,
             popShow1: true,
@@ -201,6 +202,13 @@ export default {
                 this.popShow = false;
             }
         },
+        //获取客服电话
+        async getMobile() {
+            let res = await this.$postRequest('/home/GetCustomMobile')
+            if (res.data.code == 1) {
+                this.mobile = res.data.data
+            }
+        },
         //检测用户是否注册过
         async checkUser() {
             let WxAuth = this.$localstore.get('WxAuth')
@@ -226,6 +234,7 @@ export default {
             this.userInfo = userInfo
         }
         this.checkUser()
+        this.getMobile()
         document.body.style.background = "#fff";
     },
 

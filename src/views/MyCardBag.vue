@@ -10,7 +10,7 @@
             <template v-if="item.ac_status == 0">
                 <div class="to_activate card_commonality">
                     <div class="image">
-                        <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
+                        <i ><img src="" alt=""></i>
                         <div>
                             <p>卡号：{{item.card_sn}}</p>
                             <span @click="activeCard(index)">去激活</span>
