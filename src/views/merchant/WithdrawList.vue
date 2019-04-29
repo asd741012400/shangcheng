@@ -2,11 +2,11 @@
     <div class="StoreList">
         <header>
             <div>
-                <p>￥{{month_money}}</p>
+                <p>￥{{month_money || '0.00'}}</p>
                 <span>当月提现</span>
             </div>
             <div>
-                <p>￥{{total_money}}</p>
+                <p>￥{{total_money || '0.00'}}</p>
                 <span>累计提现</span>
             </div>
         </header>

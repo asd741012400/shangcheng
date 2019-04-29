@@ -81,10 +81,10 @@ export default {
         this.cardInfo = list.product_info
         this.code = this.$route.query.code
 
-        // const date1 = this.$dayjs().format('YYYY-MM-DD')
-        // const date2 = this.$dayjs(this.cardInfo.birthday)
-        // date1.diff(date2, 'year')
-        // console.log(date1.diff(date2, 'year'));
+        if (!this.$localstore.get('business_id') || !this.$localstore.get('business_user')) {
+            this.$router.push({ name: 'Administrator' })
+        }
+
     },
 
     // 挂载前状态
@@ -109,7 +109,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .MyTeam {
-    padding-bottom:100px;
+    padding-bottom: 100px;
+
     header {
         height: 2.4rem;
         background: #FF6C5F;
@@ -219,7 +220,7 @@ export default {
         margin: 0 auto;
         left: 0;
         right: 0;
-        bottom:50px;
+        bottom: 50px;
         height: 0.8rem;
         width: 94%;
         line-height: 0.8rem;

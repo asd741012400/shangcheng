@@ -4,28 +4,30 @@
         <header><span>我的推广</span></header>
         <div class="header">
             <div class="shop_message">
-                <span><img :src="userInfo.wechat_img" alt=""></span>
+                <span><img :src="user.wechat_img" alt=""></span>
                 <div>
                     <h3>
-                    <b>江北万象城店</b>
+                    <b>{{user.username}}</b>
                     <i><img src="../assets/icon_vip2.png" alt=""></i>
                   </h3>
-                    <p>{{userInfo.tel_phone}}</p>
+                    <p>{{user.tel_phone}}</p>
                 </div>
-                <em>我的店铺 ></em>
+                <router-link :to="{name:'MyShop',query:{user_id:user.user_id}}">
+                    <em>我的店铺 ></em>
+                </router-link>
             </div>
             <div class="message_show">
                 <ul>
                     <li>
-                        <p>￥{{userInfo.history_money}}</p>
+                        <p>￥{{info.history_money || '0.00'}}</p>
                         <a>历史收益</a>
                     </li>
-                    <li>
-                        <p>￥{{userInfo.freeze_money}}</p>
+                    <li @click="goWidthdrew">
+                        <p>￥{{info.freeze_money || '0.00'}}</p>
                         <a>可提现</a>
                     </li>
                     <li>
-                        <p>￥{{userInfo.getmoney}}</p>
+                        <p>￥{{info.getmoney || '0.00'}}</p>
                         <a>待生效</a>
                     </li>
                 </ul>
@@ -33,19 +35,20 @@
         </div>
         <div class="project_nav">
             <ul>
-                <li>
+                <li @click="goTeam">
                     <div>
                         <i><img src="../assets/icon_team.png" alt=""></i>
-                        <p>团队成员<span>(<b>1</b>）</span></p>
+                        <!-- <p>团队成员<span>(<b>1</b>）</span></p> -->
+                        <p>团队成员</p>
                     </div>
                 </li>
-                <li>
+                <li @click="goTuiGuang">
                     <div>
                         <i><img src="../assets/icon_generalize2.png" alt=""></i>
                         <p>我的推广</p>
                     </div>
                 </li>
-                <li>
+                <li @click="goWidthdrew">
                     <div>
                         <router-link :to="{name:'WithdrawDeposit'}">
                             <i><img src="../assets/icon_withdraw_deposit.png" alt=""></i>
@@ -53,7 +56,7 @@
                         </router-link>
                     </div>
                 </li>
-                <li>
+                <li @click="goWidthdrewList">
                     <div>
                         <i><img src="../assets/icon_record2.png" alt=""></i>
                         <p>提现记录</p>
@@ -68,11 +71,33 @@ export default {
     name: 'DistributionTow',
     data() {
         return {
-            userInfo: {}
+            info: {},
+            user: {},
         }
     },
     components: {},
-    methods: {},
+    methods: {
+        goWidthdrew() {
+            this.$router.push({ name: 'WithdrawDeposit' })
+        },
+        goTuiGuang() {
+            this.$router.push({ name: 'TeamDelTow' })
+        },
+        goWidthdrewList() {
+            this.$router.push({ name: 'WithdrawList' })
+        },
+        async getInfo() {
+            let res = await this.$getRequest('/store/StoreHome', { user_id: this.user.user_id })
+            this.info = res.data.data
+        },
+        goTeam() {
+            if (this.user.level == 2) {
+                this.$router.push({ name: 'Generalize' })
+            } else if (this.user.level == 3) {
+                this.$router.push({ name: 'MyTeamTow' })
+            }
+        }
+    },
 
     // 创建前状态
     beforeCreate() {},
@@ -81,7 +106,11 @@ export default {
     created() {
         document.body.style.background = "#fff";
         let user = this.$localstore.get('userInfo')
-        this.userInfo = user
+        this.user = user
+        if (!user) {
+             this.$router.push({ name: 'Login' })
+        }
+        this.getInfo()
     },
 
     // 挂载前状态

@@ -38,7 +38,8 @@ Vue.use(vConsole)
 import { Toast } from 'mint-ui'; 
 
 Vue.config.productionTip = false
-Vue.prototype.$imgUrl = 'http://yuouimg.shizuyx.com';
+Vue.prototype.$imgUrl = 'http://quandouimg.qinzinianka.com/upload';
+Vue.prototype.$imgUrl1 = 'http://yuouimg.shizuyx.com';
 Vue.prototype.$message = Toast;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;

@@ -88,7 +88,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: MerchantShop
+            component: Index
         },
         {
             path: '/Index',
@@ -430,7 +430,7 @@ router.beforeEach((to, from, next) => {
                 let from_url = localstore.get('from_url')
                 if (from_url) {
                     localstore.remove('from_url')
-                    window.location.href = 'http://'+window.location.host+'/#'+from_url
+                    window.location.href = 'http://' + window.location.host + '/#' + from_url
                 }
             } else {
                 if (!user) {
@@ -440,6 +440,15 @@ router.beforeEach((to, from, next) => {
         })
     }
 
+    if (user) {
+        getRequest('/wechat/GetUserInfo', { union_id: user.unionid }).then(res => {
+            if (res.data.code == 1) {
+                localstore.set('userInfo', res.data.data)
+            } else {
+                localstore.set('userInfo', '')
+            }
+        })
+    }
 
     //门店id存储
     let business_id = getParamString('business_id');

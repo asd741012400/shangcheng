@@ -15,9 +15,28 @@
         <ul class="goods_list">
             <li v-for="(item,index) in orderList">
                 <div class="top">
-                    <template v-if="item.order_status == 0">
+                    <template v-if="item.order_status == 200">
+                        <span>已撤销</span>
+                    </template>
+                    <template v-else-if="item.order_status == 0">
                         <span>待付款</span>
                     </template>
+                         <template v-else-if="item.order_status == 2">
+                        <span>订单超时</span>
+                    </template>
+                         <template v-else-if="item.order_status == 3">
+                        <span>分单退款</span>
+                    </template>
+                         <template v-else-if="item.order_status == 4">
+                        <span>已退款</span>
+                    </template>
+                         <template v-else-if="item.order_status == 5">
+                        <span>已使用</span>
+                    </template>
+                         <template v-else-if="item.order_status == 6">
+                        <span>退款中</span>
+                    </template>
+
                     <template v-else-if="item.order_status == 1">
                         <template v-if="item.is_comment == 0">
                             <span>待评价</span>
@@ -26,17 +45,35 @@
                             <span>待使用</span>
                         </template>
                         <template v-else>
-                            <span>已使用</span>
+                            <span v-if="item.order_type == 1">已使用</span>
+                            <span v-else-if="item.order_type == 3">已激活</span>
                         </template>
                     </template>
                 </div>
                 <div class="mid">
-                    <div class="img-box" @click="getOrder(item.order_id)">
+                    <div class="img-box" @click="getOrder(item.order_id,item.order_type)">
                         <img :src="$imgUrl + item.goods_img">
                     </div>
-                        <div class="center" @click="getOrder(item.order_id)">
+                        <div class="center" @click="getOrder(item.order_id,item.order_type)">
                             <div class="clip title">{{item.goods_title}}</div>
-                            <div>有效期 2015-8-6 至 2018-8-9</div>
+                            <template v-if="item.order_status == 1">
+                                <template v-if="item.order_type == 1">
+                                    <template v-if="item.goods_info.limit_type == 2">
+                                        {{toTime(item.pay_time,item.goods_info.limit_days)}}
+                                    </template>
+                                    <template v-else>
+                                        <div>有效期 {{item.goods_info.limit_stime}} 至 {{item.goods_info.limit_etime}}</div>
+                                    </template>
+                                </template>
+                                <template v-if="item.order_type == 3">
+                                    <template v-if="item.card_info.limit_type == 2">
+                                        {{toTime(item.pay_time,item.card_info.limit_days)}}
+                                    </template>
+                                    <template v-else>
+                                        <div>有效期 {{item.card_info.limit_stime}} 至 {{item.card_info.limit_etime}}</div>
+                                    </template>
+                                </template>
+                            </template>
                         </div>
                         <div class="right">
                             <div>￥{{item.amount}}</div>
@@ -56,14 +93,13 @@
                                     <van-button type="danger" size="mini" @click.stop="payOrder(item.order_id)">去付款</van-button>
                                 </template>
                                 <template v-else-if="item.order_status == 1">
-                                    <template v-if="item.is_comment == 1">
-                                        <van-button type="primary" size="mini" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                    <van-button v-if="item.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                    <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1">
+                                        <van-button type="warning" size="mini" @click="refundApply(item.order_id)">申请退款</van-button>
                                     </template>
-                                    <template v-else-if="item.order_type == 1">
-                                        <van-button type="info" size="mini">去使用</van-button>
-                                    </template>
-                                    <template v-else-if="item.order_type == 3">
-                                        <van-button type="info" size="mini">去激活</van-button>
+                                    <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                                    <template v-if="item.is_use == 0">
+                                        <van-button v-if="item.order_type == 3" type="info" size="mini" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                     </template>
                                 </template>
                                 <template v-else-if="item.order_status == 2">
@@ -80,7 +116,10 @@
                             </template>
                             <!-- 待使用 -->
                             <template v-else-if="active == 2">
-                                <van-button type="info" size="mini">去使用</van-button>
+                                <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                                <template v-if="item.is_use == 0">
+                                    <van-button v-if="item.order_type == 3" type="info" size="mini" @click="activeCard(item.cg_id.id)">去激活</van-button>
+                                </template>
                             </template>
                             <!-- 待评价 -->
                             <template v-else-if="active == 3">
@@ -94,7 +133,7 @@
                             <!-- <van-button type="danger" size="mini">取消订单</van-button> -->
                             <!-- <van-button type="danger" size="mini">申请退款</van-button> -->
                             <!-- <van-button type="primary" size="mini">还想买</van-button> -->
-                            <!-- <van-button type="info" size="mini">去使用</van-button> -->
+                            <!-- <van-button type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button> -->
                             <!--                     <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             <van-button type="info" size="mini">激活使用</van-button> -->
                         </div>
@@ -130,7 +169,7 @@ export default {
                     return status = 1
                     break;
                 case 3:
-                    return status = 1
+                    return status = 3
                     break;
                 case 4:
                     return status = 4
@@ -144,6 +183,32 @@ export default {
         }
     },
     methods: {
+        //激活
+        activeCard(cgid) {
+            this.$router.push({ name: 'CardActivate', query: { id: cgid } })
+        },
+        toTime(t1, t2) {
+            let day1 = this.$dayjs.unix(t1).format('YYYY-MM-DD')
+            let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')
+            return '有效期' + day1 + '至' + day2
+        },
+        //申请退款
+        async refundApply(id) {
+            this.$dialog.alert({
+                showCancelButton: true,
+                message: '你确定要申请退款吗？'
+            }).then(async () => {
+                let res = await this.$getRequest('/order/ApplyRefundOrder', { order_id: id })
+                this.$message(res.data.msg)
+                if (res.data.code == 1) {
+                    setTimeout(() => {
+                        this.getOrderList();
+                    }, 2000)
+                }
+            }).catch(() => {
+
+            });
+        },
         //取消订单
         async cancleOrder(id) {
             this.$dialog.alert({
@@ -166,13 +231,13 @@ export default {
             this.$router.push({ name: 'ConfirmPay', query: { id: id } })
         },
         //订单详情
-        getOrder(id) {
-            this.$router.push({ name: 'OrderDetail', query: { id: id } })
+        getOrder(id, type) {
+            this.$router.push({ name: 'OrderDetail', query: { id: id, type: type } })
         },
         //获取订单
         async getOrderList(index) {
             this.orderList = []
-            let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
+            let res = await this.$getRequest('/order/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             this.orderList = res.data.data.list
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
@@ -182,7 +247,7 @@ export default {
 
         //获取更多订单
         async getOrderListMore(cid) {
-            let res = await this.$getRequest('wechat/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
+            let res = await this.$getRequest('/order/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             let data = res.data.data.list
             this.orderList = this.orderList.concat(data);
             if (res.data.data.list) {

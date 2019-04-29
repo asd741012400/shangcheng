@@ -141,7 +141,7 @@ export default {
                 let url = event.target.result;
                 let res = await that.$postRequest('/upload/UpBase64Image', { img: url })
                 if (res.data.code == 1) {
-                    that.imgUrl = that.$imgUrl + res.data.data
+                    that.imgUrl = that.$imgUrl1 + res.data.data
                 } else {
                     this.$message(res.data.msg);
                 }

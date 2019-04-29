@@ -58,7 +58,7 @@
                         </div>
                     </div>
                     <div class="btns">
-                        <!-- <span>查看订单</span> -->
+                        <span>查看订单</span>
                         <a @click="handleComment(item.order_id,item.order_type,item.goods_id)">进行评价</a>
                     </div>
                 </li>

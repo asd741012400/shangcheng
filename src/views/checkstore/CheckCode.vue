@@ -19,7 +19,7 @@ export default {
         //核销提交
         async submit() {
             if (this.code == '') {
-                  this.$message('请输入核销码！');
+                this.$message('请输入核销码！');
                 return false
             }
             this.$localstore.set('cehckGoods', '')
@@ -33,9 +33,9 @@ export default {
             if (res.data.code == 1) {
                 this.$localstore.set('cehckGoods', res.data.data)
                 if (res.data.data.card_info.type == 1) {
-                    this.$router.push({ name: 'Commodity',query:{code:this.code} })
+                    this.$router.push({ name: 'Commodity', query: { code: this.code } })
                 } else {
-                    this.$router.push({ name: 'CardCheck',query:{code:this.code} })
+                    this.$router.push({ name: 'CardCheck', query: { code: this.code } })
                 }
             } else {
                 this.$message(res.data.msg);
@@ -52,6 +52,9 @@ export default {
     created() {
         document.body.style.background = "#F0F0F0";
         document.title = "核销码核销"
+        if (!this.$localstore.get('business_id') && !this.$localstore.get('business_user')) {
+            this.$router.push({ name: 'Administrator' })
+        }
     },
 
     // 挂载前状态
@@ -95,7 +98,7 @@ export default {
             border: solid 0.02rem #f0f0f0;
 
             input {
-                font-size:0.3rem;
+                font-size: 0.3rem;
                 width: 100%;
                 height: 100%;
             }

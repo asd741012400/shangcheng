@@ -52,16 +52,14 @@ export default {
             }
         },
 
-
         //注册
         async register() {
             let business_id = this.$localstore.get('business_id')
             let WxAuth = this.$localstore.get('WxAuth')
-            let userInfo = this.$localstore.get('userInfo')
             let data = {
                 business_id: business_id,
-                open_id: WxAuth.open_id,
-                nickname: userInfo.username,
+                open_id: WxAuth.openid,
+                nickname: WxAuth.nickname,
                 name: this.name,
                 phone: this.phone
             }
@@ -88,8 +86,8 @@ export default {
         if (business_id) {
             this.$localstore.set('business_id', business_id)
         }
-        this.getStore()
         this.checkAuth()
+        this.getStore()
     },
 
     // 挂载前状态

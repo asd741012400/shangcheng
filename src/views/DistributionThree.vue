@@ -73,6 +73,26 @@
       components:{
       },
       methods:{
+         goWidthdrew() {
+            this.$router.push({ name: 'WithdrawDeposit' })
+        },
+        goTuiGuang() {
+            this.$router.push({ name: 'TeamDelTow' })
+        },
+        goWidthdrewList() {
+            this.$router.push({ name: 'WithdrawList' })
+        },
+        async getInfo() {
+            let res = await this.$getRequest('/store/StoreHome', { user_id: this.user.user_id })
+            this.info = res.data.data
+        },
+        goTeam() {
+            if (this.user.level == 2) {
+                this.$router.push({ name: 'Generalize' })
+            } else if (this.user.level == 3) {
+                this.$router.push({ name: 'MyTeamTow' })
+            }
+        }
       },
 
       // 创建前状态
@@ -81,7 +101,10 @@
 
       // 创建完毕状态 
       created(){
-        document.body.style.background = "#fff";
+             document.body.style.background = "#fff";
+        let user = this.$localstore.get('userInfo')
+        this.user = user
+        this.getInfo()
       },
 
       // 挂载前状态

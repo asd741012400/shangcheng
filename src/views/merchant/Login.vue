@@ -56,7 +56,9 @@ export default {
                     return false
                 }
                 this.$localstore.set('userInfo', res.data.data)
-                this.$router.push({ name: 'MerchantShop' })
+                if (res.data.data.level > 1) {
+                    this.$router.push({ name: 'DistributionTow' })
+                }
             } else {
                 this.$notify(res.data.msg);
             }
@@ -69,7 +71,7 @@ export default {
                 return false
             }
             if (user) {
-                this.$router.push({ name: 'MerchantShop' })
+                this.$router.push({ name: 'DistributionTow' })
             }
         }
     },

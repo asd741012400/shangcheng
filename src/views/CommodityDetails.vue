@@ -230,7 +230,7 @@ export default {
             this.attr_id = this.GoodsDetail.goods_attr[index].attr_id
             this.cost_price = this.GoodsDetail.goods_attr[index].attr_vip_price
             this.goods_price = this.GoodsDetail.goods_attr[index].attr_price
-            this.mkt_price = this.GoodsDetail.goods_attr[index].attr_dist_money
+            // this.mkt_price = this.GoodsDetail.goods_attr[index].attr_dist_money
             this.limit_num = this.GoodsDetail.goods_attr[index].attr_limit_num
         },
         async collectGoods() {
@@ -280,7 +280,9 @@ export default {
             }
 
             if (!this.attr_id) {
-                this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
+                if (this.GoodsDetail.goods_attr.length > 0) {
+                    this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
+                }
             }
 
 
@@ -331,6 +333,14 @@ export default {
                 this.goods_price = this.GoodsDetail.goods_price
                 this.mkt_price = this.GoodsDetail.mkt_price
                 this.limit_num = this.GoodsDetail.limit_num
+
+                if (this.GoodsDetail.goods_attr.length > 0) {
+                    this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
+                    this.cost_price = this.GoodsDetail.goods_attr[0].attr_vip_price
+                    this.goods_price = this.GoodsDetail.goods_attr[0].attr_price
+                }
+
+
                 this.isCollect = Boolean(res.data.data.is_coolect);
                 this.wxRegister()
                 this.timer();

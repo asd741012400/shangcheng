@@ -127,6 +127,9 @@ export default {
     created() {
         document.title = "主页"
         document.body.style.background = "#fff"
+        if (!this.$localstore.get('business_id') && !this.$localstore.get('business_user')) {
+            this.$router.push({ name: 'Administrator' })
+        }
         this.getShop()
         this.getStore()
     },

@@ -76,15 +76,11 @@
             </ul>
         </div>
         <div class="buyVip">
-            <template v-if="share_id !== '' &&　user.status < 1">
-                <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
-                <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
-                <!-- </router-link> -->
+            <template v-if="share_id &&　!user.user_id">
+                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
             </template>
-            <template v-else-if="share_id !== '' &&　!user.user_id">
-                <!-- <router-link :to="{name:'VipOrder',query:{type:2}}"> -->
-                <van-button round block type="info" @click="BuyPlus">立即开通 ￥599</van-button>
-                <!-- </router-link> -->
+            <template v-else-if="share_id &&　user.status < 1">
+                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
             </template>
             <template v-else-if="user.status >= 1">
                 <router-link :to="{name:'VipPlus'}">
@@ -148,7 +144,6 @@ export default {
                 this.$router.go(-1)
             }
         },
-
         //获取所有分类
         async getAllCate() {
             let res = await this.$getRequest('/home/GetAllCate')
@@ -186,7 +181,6 @@ export default {
                 this.currSize = res.data.data.list.length
             }
         },
-
         //获取更多商品
         async getGoodsListMore(cid) {
             let res = await this.$getRequest('/plus/PlusGoods', { cid: cid, page: this.page })
@@ -263,9 +257,11 @@ export default {
         }
         let has_share = this.$localstore.get('has_share')
         this.share_id = this.$route.query.share_id
-        if (has_share && has_share.query.share_id) {
+        if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
             this.share_id = has_share.query.share_id
         }
+
+
         this.getPlUS()
         this.getVipList()
         this.getAllCate()

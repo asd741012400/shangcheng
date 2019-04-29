@@ -97,6 +97,7 @@ export default {
                 share_id: this.share_id,
                 goods_id: this.plus.setting_id,
                 goods_title: this.plus.name,
+                goods_img: this.plus.thumb,
                 union_id: WxAuth.unionid,
                 is_wechat: 1,
                 order_num: 1,
