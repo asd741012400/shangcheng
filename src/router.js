@@ -422,6 +422,9 @@ router.beforeEach((to, from, next) => {
         getAuth()
     }
 
+    //判断用户头像链接是否存在 否则缓存
+    // userAvatar()
+
     //使用code获取用户身份
     if (code) {
         getRequest('/wechat/GetCode', { code: code }).then(res => {
@@ -456,15 +459,17 @@ router.beforeEach((to, from, next) => {
         localstore.set('business_id', business_id)
     }
 
-
-    //用户来自分享  但未注册
-    if (!userInfo && to.query.share_id) {
+    //用户关系绑定
+    let has_share = localstore.get('has_share')
+    if (has_share && has_share.query.share_id) {
         let data = {
-            share_id: to.query.share_id,
+            share_id: has_share.query.share_id,
             union_id: user.unionid
         }
         getRequest('/user/Recommend', data)
     }
+
+
     next()
 })
 
@@ -520,3 +525,34 @@ function getParamString(name) {
         return false;
     }
 }
+
+
+// 用户头像设置
+// function userAvatar() {
+//     let avatar = localstore.get('avatar')
+//     let user = localstore.get('userInfo')
+//     if (!avatar && user) {
+//         let image = new Image();
+//         image.src = user.wechat_img;
+//         image.onload = async () => {
+//             let base64 = getBase64Image(image);
+//             localstore.set('avatar', base64)
+//             // postRequest('/upload/UpBase64Image', { img: base64 }).then((res) => {
+//             //     if (res.data.code == 1) {
+//             //         localstore.set('avatar', res.data.data)
+//             //     }
+//             // })
+//         }
+//     }
+// }
+
+// function getBase64Image(img) {
+//     var canvas = document.createElement("canvas");
+//     canvas.width = img.width;
+//     canvas.height = img.height;
+//     var ctx = canvas.getContext("2d");
+//     ctx.drawImage(img, 0, 0, img.width, img.height);
+//     var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
+//     var dataURL = canvas.toDataURL("image/jpeg");
+//     return dataURL;
+// }

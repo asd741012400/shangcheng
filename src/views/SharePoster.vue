@@ -67,6 +67,7 @@ export default {
             title: "",
             price: "",
             desc: "",
+            instance: "",
             wechat_img: "",
             poster_img: "",
             maskingShow: false,
@@ -155,9 +156,6 @@ export default {
         async getGoods() {
             let that = this;
 
-            this.wechat_img = this.user.wechat_img
-
-
             if (this.type == 1) {
                 let res = await this.$getRequest('/home/GetGoodsDetail', { id: this.goods_id })
                 this.goods = res.data.data
@@ -179,8 +177,8 @@ export default {
             this.wxRegister()
 
             let qrcode = new QRCode('qrcode', {
-                // width: 60,
-                // height: 60, // 高度  
+                width: 60,
+                height: 60, // 高度  
                 text: this.url, // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                 // background: '#f0f',  
@@ -190,7 +188,9 @@ export default {
 
             //判断图片是否加载完成
             let timer = setInterval(() => {
-                if (this.wechat_img && this.poster_img) {
+                if (this.poster_img) {
+                    this.instance.close(); 
+                    this.$message('海报制作完成，长按海报分享给朋友吧！');       
                     this.getPoster()
                     clearInterval(timer)
                 }
@@ -200,46 +200,14 @@ export default {
         getPoster() {
             let that = this
             html2canvas(that.$refs.imageDom, {
-                // useCORS:true,//（图片跨域相关）
+                useCORS:true,//（图片跨域相关）
                 allowTaint: false
-            }).then((canvas) => {
+            }).then((canvas) => {    
                 // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
                 let dataURL = canvas.toDataURL("image/jpeg");
                 that.imgUrl = dataURL;
             });
         },
-        getBase64(imgUrl) { //转base64插入用户头像，imgUrl为图片链接
-            window.URL = window.URL || window.webkitURL;
-            var xhr = new XMLHttpRequest();
-            xhr.open("get", imgUrl, true);
-            xhr.responseType = "blob";
-            xhr.onload = function() {
-                if (this.status == 200) {
-                    var blob = this.response;
-                    let oFileReader = new FileReader();
-                    oFileReader.onloadend = function(e) {
-                        console.log(e.target.result) //输出转化结果
-                    };
-                    oFileReader.readAsDataURL(blob);
-                }
-            }
-            xhr.send();
-        },
-        getBase64Image(url, ext, callback) {
-            var canvas = document.createElement("canvas"); //创建canvas DOM元素
-            var ctx = canvas.getContext("2d");
-            var img = new Image;
-            img.crossOrigin = '*';
-            img.src = url;
-            img.onload = function() {
-                canvas.height = 60; //指定画板的高度,自定义
-                canvas.width = 85; //指定画板的宽度，自定义
-                ctx.drawImage(img, 0, 0, 60, 85); //参数可自定义
-                var dataURL = canvas.toDataURL("image/jpeg");
-                callback.call(this, dataURL); //回掉函数获取Base64编码
-                canvas = null;
-            };
-        }
 
     },
 
@@ -260,6 +228,15 @@ export default {
             this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
                 '&type=3&id=' + this.goods_id
         }
+        this.wechat_img = this.user.wechat_img
+        var url = this.user.wechat_img;
+        this.wechat_img = this.$imgUrl1 + '/wechat_image' + url.substring(23)
+
+       this.instance = this.$message({
+            message: '海报正在生成中。。。',
+            duration: 30000
+        });
+
         this.getGoods()
 
 

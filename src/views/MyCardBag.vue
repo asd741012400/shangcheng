@@ -152,6 +152,23 @@ export default {
     },
     components: {},
     methods: {
+        //删除卡片
+        async delCard(item) {
+            this.$dialog.alert({
+                showCancelButton: true,
+                message: '你确定删除该卡片吗？'
+            }).then(async () => {
+                let res = await this.$getRequest('/card/delcard', { user_id: this.user.user_id, card_id: item.card_id })
+                this.$message(res.data.msg)
+                if (res.data.code == 1) {
+                    setTimeout(() => {
+                        this.getCardList();
+                    }, 2000)
+                }
+            }).catch(() => {
+
+            });
+        },
         maskingHideFn() {
             this.maskingShow = false;
         },

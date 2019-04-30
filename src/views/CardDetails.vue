@@ -98,9 +98,9 @@
           </h3>
                 <div v-if="table == 1">
                     <ul>
-                        <li class="vip_price" v-for="item in projects">
+                        <li class="vip_price" v-for="item in projects" @click="goProject(item)">
                             <div class="img">
-                                <span><img :src="$imgUrl +item.def_pic" alt="" /></span>
+                                <span><img :src="$imgUrl +item.thumb_img" alt="" /></span>
                                 <!--              <div>
                                     <p>会员价</p>
                                     <i>￥</i>
@@ -150,7 +150,7 @@
             <!-- 可购买状态 -->
             <div class="btn" v-show="cardDetailsState == 1">
                 <div class="share" @click="shareShowFn" v-if="this.CardDetail.is_dist == 1">
-                     <span>分享好友</span>
+                    <span>分享好友</span>
                     <!-- <p>分享赚</p> -->
                 </div>
                 <div class="buy" @click="ConfirmAnOrderPage"><span>立即购买</span></div>
@@ -204,6 +204,9 @@ export default {
     },
     components: { Share },
     methods: {
+        goProject(item) {
+            this.$router.push({ name: 'CardProjectDetails',query:{project_id:item.project_id,card_id:this.id} })
+        },
         async collectGoods() {
             let data = {
                 user_id: this.user.user_id,
@@ -288,7 +291,7 @@ export default {
         },
         //获取详情
         async getDetail() {
-            let data = { id: this.$route.query.id, user_id: this.user.user_id }
+            let data = { id: this.$route.query.id}
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;

@@ -29,7 +29,8 @@
             <h3>权益项目</h3>
             <ul>
                 <template v-for="(item,index) in list">
-                    <h2 v-if="index !== '一选一'"><b>{{index}}</b><span>（使用其中一项，则另外几项失效）</span></h2>
+                    <h2 v-if="item[0].rule_group_name !== ''"><b></b><span>{{item[0].rule_group_name}}（使用其中一项，则另外几项失效）</span></h2>
+                    <h2 v-else><b></b><span></span></h2>
                     <li class="padding" v-for="(vv,ii) in list[index]" :class="vv.project_cancle_status == 2 ? 'li_color' : ''">
                         <div class="image">
                             <i><img :src="$imgUrl+vv.thumb_img" alt=""></i>

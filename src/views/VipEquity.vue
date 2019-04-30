@@ -109,7 +109,11 @@ export default {
             index: 0,
             share_id: '',
             vip: [],
-            currVip: {},
+            currVip: {
+                name:'',
+                desc:'',
+                detail:'',
+            },
             vipIndex: 0,
             AllCate: [],
             goodsList: [],
@@ -260,8 +264,6 @@ export default {
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
             this.share_id = has_share.query.share_id
         }
-
-
         this.getPlUS()
         this.getVipList()
         this.getAllCate()

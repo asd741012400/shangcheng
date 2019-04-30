@@ -64,8 +64,10 @@ export default {
             }
         },
         //检测是否登录
-        checkAuth() {
-            let user = this.$localstore.get('userInfo')
+        async checkAuth() {
+            let WxAuth = this.$localstore.get('WxAuth')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
+            let user =  res.data.data 
             if (user && user.level < 2) {
                 this.$notify('你不是商家用户！');
                 return false

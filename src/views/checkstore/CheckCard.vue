@@ -41,6 +41,7 @@ export default {
         if (!this.$localstore.get('business_id') && !this.$localstore.get('business_user')) {
             this.$router.push({ name: 'Administrator' })
         }
+        
 
     },
 

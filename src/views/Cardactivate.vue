@@ -11,7 +11,7 @@
                     <img src="../assets/head_portrait2.png" alt="">
                         </template>
                     <template v-else>
-                        <img :src="imgUrl" alt="">
+                        <img :src="$imgUrl1 + imgUrl" alt="">
                     </template>
             </div>
             <div class="text">
@@ -141,7 +141,7 @@ export default {
                 let url = event.target.result;
                 let res = await that.$postRequest('/upload/UpBase64Image', { img: url })
                 if (res.data.code == 1) {
-                    that.imgUrl = that.$imgUrl1 + res.data.data
+                    that.imgUrl = res.data.data
                 } else {
                     this.$message(res.data.msg);
                 }
@@ -190,7 +190,7 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 setTimeout(() => {
-                    this.$router.go(-1)
+                    this.$router.push({name:"MyCardBag"})
                 }, 2000);
             }
 

@@ -134,6 +134,8 @@ export default {
         let user = this.$localstore.get('userInfo')
         if (user) {
             this.user = user
+        }else{
+            this.$router.psuh({name:"Login"})
         }
         this.getNum()
         this.getList()

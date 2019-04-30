@@ -21,22 +21,21 @@
                     <template v-else-if="item.order_status == 0">
                         <span>待付款</span>
                     </template>
-                         <template v-else-if="item.order_status == 2">
+                    <template v-else-if="item.order_status == 2">
                         <span>订单超时</span>
                     </template>
-                         <template v-else-if="item.order_status == 3">
+                    <template v-else-if="item.order_status == 3">
                         <span>分单退款</span>
                     </template>
-                         <template v-else-if="item.order_status == 4">
+                    <template v-else-if="item.order_status == 4">
                         <span>已退款</span>
                     </template>
-                         <template v-else-if="item.order_status == 5">
+                    <template v-else-if="item.order_status == 5">
                         <span>已使用</span>
                     </template>
-                         <template v-else-if="item.order_status == 6">
+                    <template v-else-if="item.order_status == 6">
                         <span>退款中</span>
                     </template>
-
                     <template v-else-if="item.order_status == 1">
                         <template v-if="item.is_comment == 0">
                             <span>待评价</span>
@@ -116,7 +115,10 @@
                             </template>
                             <!-- 待使用 -->
                             <template v-else-if="active == 2">
-                                <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                                <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1">
+                                    <van-button type="warning" size="mini" @click="refundApply(item.order_id)">申请退款</van-button>
+                                </template>
+                                <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>                
                                 <template v-if="item.is_use == 0">
                                     <van-button v-if="item.order_type == 3" type="info" size="mini" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                 </template>

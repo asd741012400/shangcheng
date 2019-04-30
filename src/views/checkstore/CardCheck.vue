@@ -1,13 +1,13 @@
 <template>
     <div class="MyTeam">
         <header>
-            <span><img src="../../assets/head_portrait2.png" alt=""></span>
+            <span><img :src="checkInfo.product_info.head_img" alt=""></span>
             <div>
                 <h3>
-          <a>{{cardInfo.child_name}}【3岁】</a>
-        </h3>
+                  <a>{{checkInfo.product_info.child_name}}【{{calcAge(checkInfo.product_info.birthday)}}岁】</a>
+                </h3>
                 <p>
-                    <a>1362541254125</a>
+                    <a>{{checkInfo.product_info.tel_phone}}</a>
                 </p>
             </div>
         </header>
@@ -35,12 +35,20 @@ export default {
         return {
             active: 0,
             cardInfo: {},
+            checkInfo: {},
             product: '',
             code: '',
         }
     },
     components: {},
     methods: {
+        calcAge(day) {
+            let now = this.$dayjs().format('YYYY-MM-DD')
+            const date1 = this.$dayjs(now)
+            const date2 = this.$dayjs(day)
+            let num = date1.diff(date2, 'year')
+            return num
+        },
         changeSelect(index) {
             this.active = index
             this.product = this.cardInfo.pro_list[index]
@@ -68,6 +76,22 @@ export default {
         cardCheckFn(index) {
             this.list[index].state = !this.list[index].state
         },
+        //查询核销信息
+        async getInfo() {
+            let userInfo = this.$localstore.get('business_user')
+            let data = {
+                code: this.code,
+                admin_id: userInfo.user_id,
+                shop_id: userInfo.business_id
+            }
+            let res = await this.$postRequest('/cancle/CancleOne', data)
+            if (res.data.code == 1) {
+                this.checkInfo = res.data.data
+                console.log(res.data.data);
+            } else {
+                this.$message(res.data.msg);
+            }
+        }
     },
 
     // 创建前状态
@@ -84,6 +108,8 @@ export default {
         if (!this.$localstore.get('business_id') || !this.$localstore.get('business_user')) {
             this.$router.push({ name: 'Administrator' })
         }
+
+        this.getInfo()
 
     },
 

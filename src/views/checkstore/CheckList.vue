@@ -50,9 +50,10 @@ export default {
     name: 'CheckList',
     data() {
         let date = this.$dayjs().subtract(3, 'year').format('YYYY-MM')
+        let date1 = this.$dayjs().format('YYYY-MM')
         return {
             startDate: new Date(date),
-            dateTime: date,
+            dateTime: date1,
             checklist: [],
             shop: {},
             today_num: 0,
@@ -95,7 +96,7 @@ export default {
                 page: this.page,
                 date: this.dateTime,
                 admin_id: userInfo.user_id,
-                shop_id: userInfo.business_id,
+                business_id: userInfo.business_id,
             }
             let res = await this.$getRequest('/cancle/CancleList', data)
             if (res.data.data.list) {
@@ -111,7 +112,7 @@ export default {
                 page: this.page,
                 date: this.dateTime,
                 admin_id: userInfo.user_id,
-                shop_id: userInfo.business_id,
+                business_id: userInfo.business_id,
             }
             let res = await this.$getRequest('/cancle/CancleList', data)
             if (res.data.data.list) {

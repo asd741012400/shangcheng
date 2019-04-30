@@ -7,7 +7,7 @@
         </header>
         <div class="mian">
             <div class="commodity">
-                <i><img src="../assets/img1.png" alt=""></i>
+                <i><img :src="$imgUrl + goods.thumb_img" alt=""></i>
                 <ul>
                     <li>
                         <strong>{{title}}</strong>
@@ -200,16 +200,6 @@ export default {
         numChage(str) {
             const that = this;
 
-            if (that.num > this.limit_num) {
-                this.$message('已到最大限购数量')
-                return false
-            }
-
-            if (that.num > this.store) {
-                this.$message('库存不足')
-                return false
-            }
-
             if (str == "-") {
                 if (that.num <= 1) {
                     that.num = 1
@@ -217,6 +207,18 @@ export default {
                     that.num = --that.num
                 }
             } else {
+
+                if (that.num > this.limit_num) {
+                    this.$message('已到最大限购数量')
+                    return false
+                }
+
+                if (that.num > this.store) {
+                    this.$message('库存不足')
+                    return false
+                }
+
+
                 that.num = ++that.num
             }
         },

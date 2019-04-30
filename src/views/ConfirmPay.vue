@@ -7,7 +7,7 @@
         </header>
         <div class="mian">
             <div class="commodity">
-                <i><img src="../assets/img1.png" alt=""></i>
+                <i><img :src="$imgUrl + order.thumb_img" alt=""></i>
                 <ul>
                     <li>
                         <strong>{{order.goods_title}}</strong>

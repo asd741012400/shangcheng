@@ -3,7 +3,7 @@
         <header>
             <div class="return" @click="$router.go(-1)"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
             <div class="shop_message">
-                <span><img src="../assets/head_portrait.png" alt="" srcset=""></span>
+                <span><img src="" alt="" srcset=""></span>
                 <div>
                     <p>
                         <input type="text" :value="storeInfo.shop_info || storeInfo.username +'的小店'">

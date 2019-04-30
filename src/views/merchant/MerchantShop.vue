@@ -87,9 +87,14 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.title = "分销商城"
         document.body.style.background = "#fff";
         this.user = this.$localstore.get('userInfo');
-        document.title = "分销商城"
+
+        if (this.user.level < 2) {
+            this.$router.push({ name: 'Login' })
+        }
+
         this.getInfo()
     },
 

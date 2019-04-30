@@ -33,9 +33,10 @@ export default {
             title: "",
             price: "",
             avatar: "",
+            instance: "",
             wechat_img: "",
             poster_img: "",
-            maskingShow: true,
+            maskingShow: false,
         }
     },
     components: {
@@ -48,19 +49,22 @@ export default {
         maskingHideFn() {
             this.maskingShow = false;
         },
+        async toBase64(img) {
+            let res = await this.$postRequest('/upload/Tobase64', { img: img })
+            return res.data.data
+        },
         //获取PlUS
         async getPlUS() {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
-            this.poster_img = this.$imgUrl + this.plus.poster
+            this.poster_img = await this.toBase64(this.$imgUrl + this.plus.poster)
             this.wxRegister()
-
 
             //生成二维码
             let qrcode = new QRCode('qrcode', {
-                // width: 80,
-                // height: 80, // 高度  
+                width: 80,
+                height: 80, // 高度  
                 text: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
                     '&type=2', // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
@@ -68,18 +72,29 @@ export default {
                 // foreground: '#ff0'  
             })
 
-            //合成分享图
-            this.$nextTick(() => {
-                // setTimeout(() => {
-                //     html2canvas(this.$refs.imageDom, { allowTaint: false, useCORS: true }).then((canvas) => {
-                //         //海报生成
-                //         // this.imgUrl = URL.createObjectURL(this.base64ToBlob(canvas.toDataURL()))
-                //         let dataURL = canvas.toDataURL("image/png");
-                //         this.imgUrl = dataURL;
 
-                //     });
-                // }, 5000)
-            })
+            //判断图片是否加载完成
+            let timer = setInterval(() => {
+                if (this.poster_img) {
+                    this.instance.close();
+                    this.$message('海报制作完成，长按海报分享给朋友吧！');
+                    this.getPoster()
+                    this.maskingShow = true
+                    clearInterval(timer)
+                }
+            }, 100)
+        },
+        //海报生成
+        getPoster() {
+            let that = this
+            html2canvas(that.$refs.imageDom, {
+                useCORS: true, //（图片跨域相关）
+                allowTaint: false
+            }).then((canvas) => {
+                // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
+                let dataURL = canvas.toDataURL("image/jpeg");
+                that.imgUrl = dataURL;
+            });
         },
         /**
          *
@@ -174,11 +189,20 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#fff";
+
+        this.instance = this.$message({
+            message: '海报正在生成中。。。',
+            duration: 30000
+        });
+
+
         this.getPlUS()
         let that = this
         document.title = "PLUS会员"
         this.user = this.$localstore.get('userInfo')
-        this.avatar = this.$localstore.get('avatar') || this.user.wechat_img
+        var url = this.user.wechat_img;
+        this.avatar = this.$imgUrl1 + '/wechat_image' + url.substring(23)
+
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type
 
