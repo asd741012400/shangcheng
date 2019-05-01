@@ -1,142 +1,42 @@
 <template>
     <div class="MyCardBag">
         <header>
-            <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
-            <div class="tel">我的卡包</div>
-            <div class="add" @click="cardAddPopShow">添加</div>
+            <div class="icon_return" @click="goHome"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+            <div class="tel">领取卡片</div>
+            <div class="add"></div>
         </header>
-        <template v-for="(item,index) in cardList">
-            <!--  'ac_status 0 未激活 1已激活 2作废 -->
-            <template v-if="item.ac_status == 0">
-                <div class="to_activate card_commonality">
-                    <div class="image">
-                        <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
-                        <div>
-                            <p>卡号：{{item.card_sn}}</p>
-                            <span @click="activeCard(index)">去激活</span>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="text">
-                            <p>{{item.card_name}}</p>
-                            <!-- <span>剩余20天</span> -->
-                        </div>
-                        <div class="btn" @click="confirmPopShow(index)">
-                            <span>转赠</span>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <!-- 过期 -->
-            <template v-else-if="item.days < 0">
-                <div class="expired card_commonality">
-                    <div class="image">
-                        <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
-                        <div>
-                            <p>卡号：{{item.card_sn}}</p>
-                            <span class="color_hei">已过期</span>
-                            <em><img src="../assets/icon_close.png" alt=""></em>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="text">
-                            <p>{{item.card_name}}</p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <!-- 正常 -->
-            <template v-else-if="item.ac_status == 1">
-                <div class="to_be_used" @click="goCardDetail(index)">
-                    <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
-                    <div class="user">
-                        <span><img :src="$imgUrl+item.head_img" alt=""></span>
-                        <p>{{item.child_name}}</p>
-                    </div>
-                    <div class="content">
-                        <div class="text">
-                            <p>{{item.card_name}}</p>
-                            <span>剩余{{item.days}}天</span>
-                        </div>
-                        <div class="btn">
-                            <span @click.stop="useCard(index)">去使用</span>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <!-- 过期 -->
-            <template v-else>
-                <div class="expired card_commonality">
-                    <div class="image">
-                        <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
-                        <div>
-                            <p>卡号：{{item.card_sn}}</p>
-                            <span class="color_hei">已过期</span>
-                            <em><img src="../assets/icon_close.png" alt=""></em>
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="text">
-                            <p>{{item.card_name}}</p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-        </template>
         <!-- 兑换码 -->
-        <div class="card_add_pop" v-if="cardAddPop">
-            <div class="card_add">
-                <div>
-                    <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
-                    <h3>兑换码</h3>
-                    <p>
-                        <input type="number" v-model.number="getCode">
-                        <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
-                    </p>
-                    <a @click="getCard">提 交</a>
-                </div>
-            </div>
-        </div>
-        <!-- 转赠须知 -->
         <div class="confirm_pop_bg" v-if="confirmPop">
             <div class="confirm_pop">
                 <div class="boxs">
-                    <h3>转赠须知</h3>
-                    <div class="detail" v-html="desc">
+                    <h3>卡片领取</h3>
+                    <div class="detail">
+                        <p>亲爱的<i style="color: red">{{user.username}}</i>，你的好友赠送你一张<i style="color: red">{{title}}</i>，请输入密码领取<i style="color: red">{{title}}</i></p>
                     </div>
                     <div class="agreement">
-                        <input class="song" type="number" v-model.number="value" placeholder="请输入转赠密码" />
+                        <input class="song" v-model="value" placeholder="请输入转赠时设置的密码" />
                     </div>
                     <div class="btn">
-                        <a @click="confirmPopHide">取 消</a>
-                        <b @click="handleGive()">确 定</b>
+                        <b @click="handleGive()">立即领取</b>
                     </div>
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
             </div>
         </div>
-        <!-- 转赠须知 -->
-        <!-- 分享 -->
-        <div class="masking" v-if="maskingShow">
-            <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
-            <div>
-                <i><img src="../assets/share_img1.png" alt=""></i>
-                <p>点击上方分享此卡片给好友吧,让好友领取吧~</p>
-            </div>
-        </div>
-        <!-- 分享 -->
     </div>
 </template>
 <script>
 import wxapi from '@/lib/wx.js'
 
 export default {
-    name: 'MyCardBag',
+    name: 'GiveCard',
     data() {
         return {
             user_id: '',
             cdid: '',
-            value: '',
+            give_id: '',
+            exchange_id: '',
+            title: '',
             getCode: '',
             share_url: '',
             cardList: [],
@@ -146,29 +46,14 @@ export default {
             card: {},
             currSize: 0,
             pageSize: 10,
-            confirmPop: false,
-            maskingShow: false,
-            cardAddPop: false
+            confirmPop: true,
+            cardAddPop: true
         }
     },
     components: {},
     methods: {
-        //删除卡片
-        async delCard(item) {
-            this.$dialog.alert({
-                showCancelButton: true,
-                message: '你确定删除该卡片吗？'
-            }).then(async () => {
-                let res = await this.$getRequest('/card/delcard', { user_id: this.user.user_id, card_id: item.card_id })
-                this.$message(res.data.msg)
-                if (res.data.code == 1) {
-                    setTimeout(() => {
-                        this.getCardList();
-                    }, 2000)
-                }
-            }).catch(() => {
-
-            });
+        goHome(){
+            this.$router.push({name:"Index"})
         },
         maskingHideFn() {
             this.maskingShow = false;
@@ -177,21 +62,6 @@ export default {
             let card = this.cardList[index]
             this.$localstore.set('usecard', card)
             this.$router.push({ name: 'UseCard' })
-        },
-        //激活
-        activeCard(index) {
-            let card = this.cardList[index]
-            this.$localstore.set('usecard', card)
-            this.$router.push({ name: 'CardActivate', query: { id: card.cgid } })
-        },
-        //转赠
-        confirmPopShow(index) {
-            this.desc = this.cardList[index].give_other
-            this.cdid = this.cardList[index].cdid
-            this.card = this.cardList[index]
-            this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.user_id + '&title=' + this.card.card_name
-            wxapi.wxRegister(this.wxRegCallback)
-            this.confirmPop = true
         },
         confirmPopHide() {
             this.confirmPop = false
@@ -214,101 +84,16 @@ export default {
                 this.$message('兑换码不能为空！')
                 return false
             }
-            let data = { code: this.getCode }
-            let res = await this.$postRequest('/user/GetThings', data)
+            let data = { user_id: this.user_id,exchange_id:this.exchange_id,redeem_code: this.getCode }
+            let res = await this.$postRequest('/card/GetGiveCard', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-                this.code == ''
                 this.cardAddPop = false;
                 this.getCardList()
             }
         },
-        //赠送卡片
-        async handleGive() {
-            if (this.value == '') {
-                this.$message('转赠码不能为空！')
-                return false
-            }
-            let data = {
-                cdid: this.cdid,
-                card_password: this.value
-            }
-            let res = await this.$postRequest('/card/GiveCard', data)
-            this.$message(res.data.msg);
-            if (res.data.code == 1) {
-                this.confirmPop = false
-                this.maskingShow = true;
-                this.value = ''
-            }
-        },
-        getLimitDay(day) {
-            let now = this.$dayjs().format('YYYY-MM-DD')
-            const date1 = this.$dayjs(now)
-            const date2 = this.$dayjs(day)
-            let num = date1.diff(date2, 'day')
-            if (num <= 0) {
-                return false
-            } else {
-                return num
-            }
 
-        },
-        //获取卡包
-        async getCardList(index) {
-            this.cardList = []
-            let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
-            if (res.data.data.list) {
-                this.cardList = res.data.data.list
-                this.currSize = res.data.data.list.length
-                this.pageSize = res.data.data.count
-            }
 
-        },
-        //获取更多卡包
-        async getCardListMore() {
-            let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
-            let data = res.data.data.list
-            this.cardList = this.cardList.concat(data);
-            this.currSize = res.data.data.list.length
-        },
-        // 用于微信JS-SDK回调   
-        wxRegCallback() {
-            this.wxShareTimeline()
-            this.wxShareAppMessage()
-        },
-        // 微信自定义分享到朋友圈
-        wxShareTimeline() {
-            let option = {
-                title: this.card.card_name, // 分享标题, 请自行替换
-                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareTimeline(option)
-        },
-        // 微信自定义分享给朋友
-        wxShareAppMessage() {
-            let option = {
-                title: this.card.card_name, // 分享标题, 请自行替换
-                desc: '你的好友' + this.user.username + '赠送了你一张' + this.card.card_name + '卡片,快来领取吧！', // 分享描述, 请自行替换
-                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareAppMessage(option)
-        },
     },
 
     // 创建前状态
@@ -316,36 +101,21 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.body.style.background = "#F6F6F6";
         let user = this.$localstore.get('userInfo')
         this.user = user
         this.user_id = user.user_id
-        this.getCardList()
-        document.body.style.background = "#F6F6F6";
+        this.give_id = this.$route.query.give_id
+        this.exchange_id = this.$route.query.exchange_id
+        this.title = this.$route.query.title
 
-        window.onscroll = () => {
-            //变量scrollTop是滚动条滚动时，距离顶部的距离
-            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            //变量windowHeight是可视区的高度
-            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            //变量scrollHeight是滚动条的总高度
-            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-            //滚动条到底部的条件
-            if (scrollTop + windowHeight == scrollHeight) {
-                if (this.currSize >= this.pageSize) {
-                    this.page++;
-                    this.getCardListMore()
-                }
-            }
-        }
     },
 
     // 挂载前状态
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {
-
-    },
+    mounted() {},
 
     // 更新前状态
     beforeUpdate() {},
@@ -594,6 +364,10 @@ export default {
             align-items: center;
             justify-content: center;
 
+            .detail {
+                display: block;
+            }
+
             div {
                 background: #fff;
                 border-radius: 10px;
@@ -734,12 +508,12 @@ export default {
                     align-items: center;
                     padding: .16rem .5rem 0 .4rem;
 
-                    .song {
-                        // text-align: center;
-                        width: 100%;
+                    input{
                         border: 1px solid #ccc;
-                        padding: 0.14rem 0.1rem;
-                        border-radius: 0.4rem;
+                        padding: 0.1rem 0.2rem;
+                        border-radius:6px;
+                        width:100%;
+                        font-size:14px;
                     }
 
                     span {
@@ -793,48 +567,6 @@ export default {
                     }
                 }
             }
-        }
-    }
-
-
-}
-
-.masking {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba($color: #000000, $alpha: 0.5);
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    span {
-        width: 3.48rem;
-        overflow: hidden;
-    }
-
-    div {
-        position: absolute;
-        right: .5rem;
-        top: 0;
-
-        p {
-            width: 2rem;
-            font-size: .36rem;
-            margin: 1.5rem .6rem 0 0;
-            color: #fff;
-            text-align: center;
-        }
-
-        i {
-            width: 1.2rem;
-            overflow: hidden;
-            position: absolute;
-            right: 0;
-            top: 0;
         }
     }
 }

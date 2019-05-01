@@ -18,7 +18,7 @@
             </div>
             <div class="btn">
                 <div class="continue" @click="goHome">继续逛逛</div>
-                <div class="employ">去使用</div>
+                <div class="employ" @click="goOrder">去使用</div>
             </div>
         </div>
         <div class="vip" v-else-if="order_type == 2">
@@ -49,9 +49,7 @@
             <div class="btns">
                 <div class="continue" @click="goHome">继续逛逛</div>
                 <div class="turn" @click="confirmPopShow">转赠好友</div>
-                <router-link :to="{name:'CardActivate',query:{id:$route.query.id}}">
-                    <div class="activate" @click="activeCard(index)">前去激活</div>
-                </router-link>
+                <div class="activate" @click.stop="activeCard(index)">前去激活</div>
             </div>
         </div>
         <!-- 转赠须知 -->
@@ -61,7 +59,7 @@
                     <h3>转赠须知</h3>
                     <div class="detail" v-html="card.give_other"></div>
                     <div class="agreement">
-                        <input class="song" type="password" v-model="value" placeholder="请输入转赠密码" />
+                        <input class="song" v-model="value" placeholder="请输入转赠密码" />
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
@@ -80,54 +78,56 @@
                     <div class="detail">
                         <div class="pop_bg">
                             <div class="pop">
-                                <p>XX商品兑换成功</p>
-                                <time>到期时间：2018-5-6</time>
-                                <span>立即使用</span>
-                            </div>
-                            <div class="pop">
                                 <p>会员激活成功</p>
                                 <em>邀请好友可获得奖励</em>
-                                <time>到期时间：2018-5-6</time>
-                                <span>邀请好友</span>
+                                <!-- <time>到期时间：2018-5-6</time> -->
+                                <span @click="shareShowFn">邀请好友</span>
                             </div>
-                            <div class="pop">
-                                <p>恭喜你获得卡券一张</p>
-                                <em>前往激活即可使用</em>
-                                <time>到期时间：2018-5-6</time>
-                                <span>立即激活</span>
+                            <div class="pop" v-for="item in give_goods">
+                                <p>{{item.goods_name}}商品兑换成功</p>
+                                <template v-if="item.limit_type == 2">
+                                    <time>到期时间：{{toTime(order.pay_time,item.limit_days)}}</time>
+                                </template>
+                                <template v-else>
+                                    <time>{{item.limit_etime}}到期</time>
+                                </template>
+                                <span @click="getAll">前去查看</span>
                             </div>
-                            <div class="pop">
-                                <p>恭喜你获得卡券一张</p>
+                            <div class="pop" v-for="item in give_cards">
+                                <p>恭喜你获得{{item.card_name}}一张</p>
                                 <em>前往激活即可使用</em>
-                                <time>到期时间：2018-5-6</time>
-                                <span>立即激活</span>
-                            </div>
-                            <div class="pop">
-                                <p>恭喜你获得卡券一张</p>
-                                <em>前往激活即可使用</em>
-                                <time>到期时间：2018-5-6</time>
-                                <span>立即激活</span>
-                            </div>
-                            <div class="pop">
-                                <p>恭喜你获得卡券一张</p>
-                                <em>前往激活即可使用</em>
-                                <time>到期时间：2018-5-6</time>
-                                <span>立即激活</span>
+                                <template v-if="item.limit_type == 2">
+                                    <time>到期时间：{{toTime(order.pay_time,item.limit_days)}}</time>
+                                </template>
+                                <template v-else>
+                                    <time>{{item.limit_etime}}到期</time>
+                                </template>
+                                <span @click="goMyCardBag">前去查看</span>
                             </div>
                         </div>
                     </div>
                     <div class="btn">
-                        <b @click="submit">收下并前往</b>
+                        <b @click="getAll">收下并前往</b>
                     </div>
                     <div class="colse" @click="confirmPlusPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
             </div>
         </div>
+        <!-- 分享 -->
+        <div class="masking" v-if="maskingShow">
+            <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
+            <div>
+                <i><img src="../assets/share_img1.png" alt=""></i>
+                <p>点击上方分享此卡片给好友吧,让好友领取吧~</p>
+            </div>
+        </div>
+        <!-- 分享 -->
         <!-- 兑换券 -->
         <Share ref="myShare"></Share>
     </div>
 </template>
 <script>
+import wxapi from '@/lib/wx.js'
 import Share from '../components/Share'
 export default {
     name: 'PaySucceed',
@@ -135,20 +135,41 @@ export default {
         return {
             cd_id: '',
             cg_id: '',
+            goods_id: '',
+            share_url: '',
             value: '',
+            give_goods: {},
+            give_cards: {},
             card: {},
+            user: {},
+            order: {},
             PlusPop: false,
+            maskingShow: false,
             confirmPop: false,
             order_type: 3
         }
     },
     components: { Share },
     methods: {
+        toTime(t1, t2) {
+            let day1 = this.$dayjs.unix(t1).format('YYYY-MM-DD')
+            let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')
+            return day2
+        },
+        getAll() {
+            this.$router.replace({ name: 'Order' })
+        },
         shareShowFn() {
-            this.$router.push({ name: 'VipPlus' })
+            this.$router.replace({ name: 'VipPlus' })
         },
         goHome() {
-            this.$router.push({ name: 'Index' })
+            this.$router.replace({ name: 'Index' })
+        },
+        goMyCardBag() {
+            this.$router.replace({ name: 'MyCardBag' })
+        },
+        goOrder() {
+            this.$router.replace({ name: 'OrderDetail', query: { "id": this.order_id, "type": 1 } })
         },
         confirmPopShow() {
             this.confirmPop = true
@@ -162,9 +183,39 @@ export default {
         confirmPlusPopHide() {
             this.PlusPop = false
         },
-       //激活
-        activeCard(){
-            this.$router.push({ name: 'CardActivate', query: { id: this.cg_id } })
+        //激活
+        activeCard() {
+            this.$router.replace({ name: 'CardActivate', query: { id: this.cg_id } })
+        },
+        maskingHideFn() {
+            this.maskingShow = false;
+        },
+        //获取支付成功后回调
+        async getPay() {
+            let res = await this.$getRequest('/order/PaySuccess', { id: this.order_id })
+            if (this.order_type == 2) {
+                this.give_goods = res.data.data.goods_count
+                this.give_cards = res.data.data.card_count
+                this.PlusPop = true
+            }
+            if (this.order_type == 3) {
+                this.cd_id = res.data.data.cd_id
+                this.cg_id = res.data.data.cg_id
+                this.getCard()
+            }
+
+        },
+        //获取订单
+        async getOrder() {
+            let res = await this.$getRequest('/order/getOrder', { id: this.order_id })
+            this.order = res.data.data
+        },
+        //获取卡片
+        async getCard() {
+            let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
+            this.card = res.data.data
+            this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.user_id + '&title=' + this.card.card_name
+            wxapi.wxRegister(this.wxRegCallback)
         },
         //赠送卡片
         async handleGive() {
@@ -173,24 +224,56 @@ export default {
                 return false
             }
             let data = {
-                cdid: this.cdid,
+                cdid: this.cd_id,
                 card_password: this.value
             }
             let res = await this.$postRequest('/card/GiveCard', data)
-            this.$message(res.data.msg);
+
             if (res.data.code == 1) {
+                this.$message('操作成功！');
                 this.confirmPop = false
                 this.maskingShow = true;
-                this.share_url = 'http://' + window.location.host + '/#/MyCardBag?share_card=' + this.user_id
-                // wxapi.wxRegister(this.wxRegCallback)
+            } else {
+                this.$message(res.data.msg);
             }
         },
-        async getOrder() {
-            this.cardList = []
-            let res = await this.$getRequest('card/CardInfo', { cd_id: this.cd_id })
-            if (res.data.code == 0) {
-                this.card = res.data.data
+        // 用于微信JS-SDK回调   
+        wxRegCallback() {
+            this.wxShareTimeline()
+            this.wxShareAppMessage()
+        },
+        // 微信自定义分享到朋友圈
+        wxShareTimeline() {
+            let option = {
+                title: this.card.card_name, // 分享标题, 请自行替换
+                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    this.$router.replace({ name: 'MyCardBag' })
+                },
+                error: () => {
+                    this.$router.replace({ name: 'MyCardBag' })
+                }
             }
+            // 将配置注入通用方法
+            wxapi.ShareTimeline(option)
+        },
+        // 微信自定义分享给朋友
+        wxShareAppMessage() {
+            let option = {
+                title: this.card.card_name, // 分享标题, 请自行替换
+                desc: '你的好友' + this.user.username + '赠送了你一张' + this.card.card_name + '卡片,快来领取吧！', // 分享描述, 请自行替换
+                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
+                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
+                success: () => {
+                    this.$router.replace({ name: 'MyCardBag' })
+                },
+                error: () => {
+                    this.$router.replace({ name: 'MyCardBag' })
+                }
+            }
+            // 将配置注入通用方法
+            wxapi.ShareAppMessage(option)
         },
 
     },
@@ -201,13 +284,14 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#fff";
-        this.order_type = this.$route.query.type
+        let user = this.$localstore.get('userInfo')
+        this.user = user
+        this.user_id = user.user_id
         this.order_id = this.$route.query.id
-        this.cd_id = this.$route.query.cd_id
-        this.cg_id = this.$route.query.cg_id
-        if (this.order_type == 3) {
-            this.getOrder()
-        }
+        this.order_type = this.$route.query.type
+        this.goods_id = this.$route.query.goods_id
+        this.getOrder()
+        this.getPay()
     },
 
     // 挂载前状态
@@ -618,5 +702,45 @@ export default {
         }
     }
 
+}
+
+.masking {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: #000000, $alpha: 0.5);
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+        width: 3.48rem;
+        overflow: hidden;
+    }
+
+    div {
+        position: absolute;
+        right: .5rem;
+        top: 0;
+
+        p {
+            width: 2rem;
+            font-size: .36rem;
+            margin: 1.5rem .6rem 0 0;
+            color: #fff;
+            text-align: center;
+        }
+
+        i {
+            width: 1.2rem;
+            overflow: hidden;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
 }
 </style>

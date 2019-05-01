@@ -2,7 +2,7 @@
     <div class="Share">
         <div class="share_bg" v-if="shareShow" @click="shareHideFn">
             <div class="share_div" @click.stop>
-                <template v-if="money && userInfo.status > 0">                    
+                <template v-if="money && userInfo.status > 0">
                     <h3><span>分享赚</span>{{money}}元</h3>
                     <p>好友通过你的购买链接进行购买，你将获得至少<span>{{money}}</span>元的分享收益</p>
                 </template>
@@ -21,7 +21,7 @@
                             <a>生成海报</a>
                         </li>
                     </template>
-                    <li v-clipboard:copy="message">
+                    <li v-clipboard:copy="shareurl" v-clipboard:success="copy" v-clipboard:error="onError">
                         <span><img src="../assets/share_copy.png" alt=""></span>
                         <a>复制链接</a>
                     </li>
@@ -47,22 +47,32 @@ export default {
     data() {
         return {
             userInfo: {},
-            message: "123",
+            // message: "123",
             shareShow: false,
             maskingShow: false
         }
     },
-    props: [
-        'goodsId',
-        'type',
-        'money',
-    ],
+    props: {
+        shareurl: {
+            default: ''
+        },
+        money: {
+            default: ''
+        },
+        type: {
+            default: ''
+        },
+        goodsId: {
+            default: ''
+        },
+
+    },
     components: {},
     methods: {
         showPoster() {
             let userInfo = this.$localstore.get('userInfo')
             if (!userInfo) {
-                this.$router.push({name:'Index'})
+                this.$router.push({ name: 'Index' })
                 return false
             }
             this.$router.push({
@@ -76,6 +86,13 @@ export default {
         },
         shareShowFn(ev) {
             this.shareShow = true;
+        },
+        copy(e) {
+            console.log(e.text);
+            this.$message('复制成功，快去分享给好友吧！')
+        },
+        onError() {
+            this.$message('复制失败！')
         },
         shareHideFn() {
             this.shareShow = false;

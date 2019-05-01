@@ -36,7 +36,8 @@
     </div>
 </template>
 <script>
-import { log } from 'util';
+// import { log } from 'util';
+import { postRequest } from '@/lib/axios'
 export default {
     name: 'Comment',
     data() {
@@ -74,10 +75,17 @@ export default {
                 reader.readAsDataURL(arr[i]);
                 reader.onload = async function(event) {
                     let url = event.target.result;
-                    let res = await that.$postRequest('/upload/UpBase64Image', { img: url })
-                    if (res.data.code == 1) {
-                        that.imagesUrl.push(res.data.data)
-                    }
+                    postRequest(that.$api + '/upload/UpBase64Image', { img: url })
+                        .then(res => {
+                            if (res.data.code == 1) {
+                                that.imagesUrl.push(res.data.data)
+                            } else {
+                                that.$message(res.data.msg);
+                            }
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
                 }
             }
             that.imagesUrlLength = that.imagesUrl.length
@@ -105,8 +113,7 @@ export default {
 
             //获取详情
             let data = { id: this.$route.query.goods_id }
-            let res = await this.$getRequest(url, data)
-;
+            let res = await this.$getRequest(url, data);
             if (res.data.code == 1) {
                 this.thumb_img = res.data.data.thumb_img || res.data.data.thumb
             }
@@ -256,7 +263,7 @@ export default {
                 height: 100%;
                 outline: medium;
                 border: none;
-                font-size:14px;
+                font-size: 14px;
             }
         }
 

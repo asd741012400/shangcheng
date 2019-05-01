@@ -175,7 +175,7 @@
             </div>
             <!-- </div> -->
         </footer>
-        <Share :goods-id="CardDetail.card_id" type="3" :money="CardDetail.dist_money" ref="myShare"></Share>
+        <Share :goods-id="CardDetail.card_id" type="3" :money="CardDetail.dist_money" :shareurl="url" ref="myShare"></Share>
         <BindPhone :show="show" ref="bindPhone"></BindPhone>
     </div>
 </template>
@@ -200,12 +200,13 @@ export default {
             countDownNum: 0,
             countDownArr: "",
             id: '',
+            url: '',
         }
     },
     components: { Share },
     methods: {
         goProject(item) {
-            this.$router.push({ name: 'CardProjectDetails',query:{project_id:item.project_id,card_id:this.id} })
+            this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: this.id } })
         },
         async collectGoods() {
             let data = {
@@ -245,9 +246,8 @@ export default {
         },
         //确认下单
         async ConfirmAnOrderPage() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (res.data.code !== 1) {
+            let WxAuth = this.$localstore.get('userInfo')
+            if (!WxAuth.tel_phone) {
                 this.show = true
                 return false
             }
@@ -289,9 +289,9 @@ export default {
 
             }, 1000)
         },
-        //获取详情
+        //获取卡片详情
         async getDetail() {
-            let data = { id: this.$route.query.id}
+            let data = { id: this.$route.query.id }
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
@@ -329,12 +329,11 @@ export default {
                 jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
             })
             wx.ready(() => {
-                let url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
-                    '&type=3&id=' + this.$route.query.id
+
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
-                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
@@ -348,7 +347,7 @@ export default {
                 wx.onMenuShareAppMessage({
                     title: this.cardDetailsState.share_title, // 分享标题, 请自行替换
                     desc: this.cardDetailsState.share_desc, // 分享描述, 请自行替换
-                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.$imgUrl + this.cardDetailsState.dist_poster, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
@@ -370,15 +369,18 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.body.style.background = "#fff";
         let user = this.$localstore.get('userInfo')
         if (user) {
             this.user = user
         }
         this.id = this.$route.query.id
+        this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+            '&type=3&id=' + this.$route.query.id
+            
         this.getComment()
         this.getDetail()
         this.GetCardProject()
-        document.body.style.background = "#fff";
     },
 
     // 挂载前状态

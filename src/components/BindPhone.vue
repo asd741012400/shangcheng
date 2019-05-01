@@ -2,10 +2,10 @@
     <div>
         <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
             <van-cell-group>
-                <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />             
-                <van-field v-model="sms" label="验证码" placeholder="请输入验证码">      
+                <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
+                <van-field v-model="sms" label="验证码" placeholder="请输入验证码">
                     <van-button :disabled="disabled" slot="button" size="small" type="primary" @click.stop="sendSMS">{{msg}}</van-button>
-                </van-field>   
+                </van-field>
             </van-cell-group>
         </van-dialog>
     </div>
@@ -29,8 +29,8 @@ export default {
     components: {},
     methods: {
         async sendSMS() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$postRequest('/user/SendMsg', { union_id: WxAuth.unionid, tel_phone: this.phone })
+            let WxAuth = this.$localstore.get('userInfo')
+            let res = await this.$postRequest('/user/SendMsg', { union_id: WxAuth.union_id, tel_phone: this.phone })
             this.$notify(res.data.msg);
             if (res.data.code == 1) {
                 var num = 60
@@ -54,8 +54,8 @@ export default {
         },
         //关闭填写手机号
         async beforeCloseModel(action, done) {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.unionid, phone: this.phone, sms: this.sms })
+            let WxAuth = this.$localstore.get('userInfo')
+            let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 this.$localstore.set('userInfo', res.data.data)
                 this.show = false

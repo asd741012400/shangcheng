@@ -35,6 +35,8 @@
                 </div>
             </div>
         </div>
+        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange" @close="onClose">
+        </van-image-preview>
     </div>
 </template>
 <script>
@@ -50,6 +52,7 @@ export default {
             page: 1,
             index: 1,
             images: [],
+            show: false,
             currSize: 0,
             pageSize: 10,
             countDownNum: 0,
@@ -59,12 +62,19 @@ export default {
     },
     components: {},
     methods: {
+        onChange(index) {
+            this.index = index;
+        },
+        onClose() {
+            this.show = false
+        },
         previewImg(item, index) {
             this.images = []
             let arr = item.thumb
             arr.map(item => {
                 this.images.push(this.$imgUrl + item)
             })
+
             this.index = index
             this.show = true
         },

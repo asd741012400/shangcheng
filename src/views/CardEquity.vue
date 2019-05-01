@@ -67,7 +67,7 @@
                     <div class="text">
                         <h3>
                           <span>{{item.project_name}}</span>
-                          <b>畅玩</b>
+                          <b>畅玩{{item.use_num}}次</b>
                         </h3>
                         <div class="text_div">
                             <p>{{item.project_dsc}}</p>
@@ -85,12 +85,7 @@
             </ul>
         </div>
         <div class="sub_btn" @click="useCard"><span>去使用</span></div>
-        <van-actionsheet
-            v-model="show"
-            :actions="actions"
-            cancel-text="取消"
-            @select="onSelect"
-        />
+        <van-actionsheet v-model="show" :actions="actions" cancel-text="取消" @select="onSelect" />
     </div>
 </template>
 <script>
@@ -113,11 +108,11 @@ export default {
             pageSize: 10,
             show: false,
             actions: [],
-            actionsIndex:0,
-            selectTypes:{
-                distance:"距离",
-                types:"类型",
-                age:"年龄"
+            actionsIndex: 0,
+            selectTypes: {
+                distance: "距离",
+                types: "类型",
+                age: "年龄"
             }
         }
     },
@@ -125,19 +120,14 @@ export default {
         Actionsheet
     },
     methods: {
-        onSelect(item,index){
+        onSelect(item, index) {
             const that = this;
             that.show = false;
-            if(that.actionsIndex == 1)
-            {
+            if (that.actionsIndex == 1) {
                 that.selectTypes.distance = item.name;
-            }
-            else if(that.actionsIndex == 2)
-            {
+            } else if (that.actionsIndex == 2) {
                 that.selectTypes.types = item.name;
-            }
-            else if(that.actionsIndex == 3)
-            {
+            } else if (that.actionsIndex == 3) {
                 that.selectTypes.age = item.name;
             }
 
@@ -145,91 +135,86 @@ export default {
             this.getList()
 
         },
-        actionsheetShow(num){
+        actionsheetShow(num) {
             const that = this;
             that.actionsIndex = num;
-            if(num == 1)
-            {
-                that.actions = [
-                    {
-                        name: '不限'
-                    },
-                    {
-                        name: '1km以内',
-                    },
-                    {
-                        name: '3km以内',
-                    },
-                    {
-                        name: '5km以内',
-                    },
-                    {
-                        name: '10km以上',
-                    }
-                ],
-                that.show = true;  
-            }
-            else if(num == 2)
-            {
-                that.actions = [
-                    {
-                        name: '全部'
-                    },
-                    // {
-                    //     name: '类型1',
-                    // },
-                    // {
-                    //     name: '类型2',
-                    // }
-                ],
-                that.show = true; 
-            }
-            else if(num == 3)
-            {
-                that.actions = [
-                    {
-                        name: '全部'
-                    },
-                    {
-                        name: '0-3岁',
-                    },
-                    {
-                        name: '6-12岁',
-                    },
-                    {
-                        name: '12岁以上',
-                    }
-                ],
-                that.show = true; 
+            if (num == 1) {
+                that.actions = [{
+                            name: '不限'
+                        },
+                        {
+                            name: '1km以内',
+                        },
+                        {
+                            name: '3km以内',
+                        },
+                        {
+                            name: '5km以内',
+                        },
+                        {
+                            name: '10km以上',
+                        }
+                    ],
+                    that.show = true;
+            } else if (num == 2) {
+                that.actions = [{
+                            name: '全部'
+                        },
+                        // {
+                        //     name: '类型1',
+                        // },
+                        // {
+                        //     name: '类型2',
+                        // }
+                    ],
+                    that.show = true;
+            } else if (num == 3) {
+                that.actions = [{
+                            name: '全部'
+                        },
+                        {
+                            name: '0-3岁',
+                        },
+                        {
+                            name: '6-12岁',
+                        },
+                        {
+                            name: '12岁以上',
+                        }
+                    ],
+                    that.show = true;
             }
         },
         //领取
         async getPlus(item) {
-            if (item.is_deduct !== 2) {
+            if (item.is_vip == 2 && this.user.status == 0) {
+                this.$message('该项目只限会员领取！')
+                return false
+            }
+
+            if (this.total_num == this.card.free_num) {
+                this.$message('你的权益次数已领取完！')
+                return false
+            }
+
+           if (item.is_deduct == 2) {
                 let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
                 this.$message(res.data.msg)
-            } else {
-                if (item.is_vip == 2 && this.user.status == 0) {
-                    this.$message('该项目只限会员领取！')
-                    return false
-                }
-
-                if (this.total_num == this.card.free_num) {
-                    this.$message('你的权益次数已领取完！')
-                    return false
-                }
-
-                this.$dialog.alert({
-                    showCancelButton: true,
-                    message: '你当前消耗剩余' + this.card.free_num + '次权益，领取将消耗1次机会'
-                }).then(async () => {
-                    let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
-                    this.$message(res.data.msg)
-                    this.getList()
-                }).catch(() => {
-
-                });
+                this.getList()
+                return false
             }
+
+            this.$dialog.alert({
+                showCancelButton: true,
+                message: '你当前消耗剩余' + this.card.free_num + '次权益，领取将消耗1次机会'
+            }).then(async () => {
+                let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
+                this.$message(res.data.msg)
+                this.getList()
+            }).catch(() => {
+
+            });
+
         },
         useCard() {
             this.$router.push({ name: 'UseCard' })

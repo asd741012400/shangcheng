@@ -3,11 +3,11 @@
         <header v-if="userInfo.status == 1" class="vip_class">
             <div class="user_message">
                 <div class="head_portrait">
-                    <span><img :src="userInfo.wechat_img" alt="" srcset=""></span>
+                    <span><img :src="userInfo.wechat_img || avatar" alt="" srcset=""></span>
                     <i><img src="../assets/icon_vip.png" alt=""></i>
                 </div>
                 <div class="user_name">
-                    <p>{{userInfo.username}}</p>
+                    <p>{{userInfo.username || username}}</p>
                     <div>
                         <a>会员到期：{{userInfo.over_time}}</a>
                         <i><img src="../assets/vt_renew.png" alt=""></i>
@@ -158,6 +158,8 @@ export default {
                 tel_phone: '',
                 status: 0
             },
+            avatar: '',
+            username: '',
             code: '',
             mobile: '',
             popState: 3,
@@ -209,13 +211,10 @@ export default {
                 this.mobile = res.data.data
             }
         },
-        //检测用户是否注册过
+        //检测用户是否绑定手机号
         async checkUser() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (res.data.code == 1) {
-                this.userInfo = res.data.data
-                this.$localstore.set('userInfo', this.userInfo)
+            let userInfo = this.$localstore.get('userInfo')       
+            if (userInfo.tel_phone) {       
                 return true
             } else {
                 this.show = true
@@ -232,6 +231,8 @@ export default {
         let userInfo = this.$localstore.get('userInfo')
         if (userInfo) {
             this.userInfo = userInfo
+            this.avatar = userInfo.wechat_img
+            this.username = userInfo.username
         }
         this.checkUser()
         this.getMobile()

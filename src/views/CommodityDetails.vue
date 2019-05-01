@@ -71,8 +71,8 @@
                                         <span><img src="../assets/icon_enshrineA.png" alt=""></span>
                                         <span><img src="../assets/icon_enshrineA.png" alt=""></span>
                                         <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineB.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
                                     </div>
                                 </div>
                                 <div class="timer">营业时间：{{item.sale_time}}、{{item.sale_time2}}</div>
@@ -188,7 +188,7 @@
             </div>
             <!-- </div> -->
         </footer>
-        <Share :goods-id="GoodsDetail.goods_id" type="1" :money="GoodsDetail.dist_money" ref="myShare"></Share>
+        <Share :goods-id="GoodsDetail.goods_id" type="1" :money="GoodsDetail.dist_money" :shareurl="url" ref="myShare"></Share>
         <BindPhone :show="show" ref="bindPhone"></BindPhone>
     </div>
 </template>
@@ -200,6 +200,7 @@ export default {
     name: 'CommodityDetails',
     data() {
         return {
+            url: '',
             GoodsDetailsState: 1,
             GoodsDetail: {},
             user: {
@@ -267,9 +268,8 @@ export default {
         },
         //确认下单
         async ConfirmAnOrderPage() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (res.data.code !== 1) {
+            let WxAuth = this.$localstore.get('userInfo')
+            if (!WxAuth.tel_phone) {
                 this.show = true
                 return false
             }
@@ -371,12 +371,11 @@ export default {
                 jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
             })
             wx.ready(() => {
-                let url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
-                    '&type=1&id=' + this.GoodsDetail.goods_id
+
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.GoodsDetail.goods_name, // 分享标题, 请自行替换
-                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.$imgUrl + this.GoodsDetail.dist_poster, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
@@ -390,7 +389,7 @@ export default {
                 wx.onMenuShareAppMessage({
                     title: this.GoodsDetail.goods_name, // 分享标题, 请自行替换
                     desc: this.GoodsDetail.goods_info, // 分享描述, 请自行替换
-                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.$imgUrl + this.GoodsDetail.dist_poster, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
@@ -417,6 +416,10 @@ export default {
             this.user = user
         }
         this.id = this.$route.query.id
+
+        this.url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
+            '&type=1&id=' + this.id
+
         this.getDetail()
         this.getComment()
         this.getStore()

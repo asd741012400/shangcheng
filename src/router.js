@@ -14,6 +14,7 @@ import CardActivate from './views/Cardactivate.vue' // 卡片激活
 import PaySucceed from './views/PaySucceed.vue' //付款成功
 import WithdrawDeposit from './views/WithdrawDeposit.vue' //申请提现
 import CardDetails from './views/CardDetails.vue' //卡片详情
+import GiveCard from './views/GiveCard.vue' //获取卡片
 import CommodityDetails from './views/CommodityDetails.vue' //商品详情
 import CommentMore from './views/CommentMore.vue' //更多评论
 import Comment from './views/Comment.vue' //提交评论
@@ -145,6 +146,11 @@ let router = new Router({
             path: '/CardDetails',
             name: 'CardDetails',
             component: CardDetails
+        },
+        {
+            path: '/GiveCard',
+            name: 'GiveCard',
+            component: GiveCard
         },
         {
             path: '/CommodityDetails',
@@ -407,7 +413,6 @@ let router = new Router({
 
 
 import wx from 'weixin-js-sdk' //微信sdk依赖
-import Cookies from 'js-cookie';
 
 // 进入页面判断是否微信授权 没授权 拉取授权
 //Router
@@ -416,24 +421,16 @@ router.beforeEach((to, from, next) => {
     //分享来源处理
     shareFrom(to);
     let code = getParamString('code');
-    let user = localstore.get('WxAuth')
-    let userInfo = localstore.get('userInfo')
-    if (!code && !user) {
-        getAuth()
-    }
-
-    //判断用户头像链接是否存在 否则缓存
-    // userAvatar()
+    let user = localstore.get('userInfo')
 
     //使用code获取用户身份
     if (code) {
         getRequest('/wechat/GetCode', { code: code }).then(res => {
             if (res.data.code == 1) {
-                localstore.set('WxAuth', res.data.data)
+                localstore.set('userInfo', res.data.data)
                 let from_url = localstore.get('from_url')
                 if (from_url) {
                     localstore.remove('from_url')
-                    window.location.href = 'http://' + window.location.host + '/#' + from_url
                 }
             } else {
                 if (!user) {
@@ -444,7 +441,7 @@ router.beforeEach((to, from, next) => {
     }
 
     if (user) {
-        getRequest('/wechat/GetUserInfo', { union_id: user.unionid }).then(res => {
+        getRequest('/wechat/GetUserInfo', { union_id: user.union_id }).then(res => {
             if (res.data.code == 1) {
                 localstore.set('userInfo', res.data.data)
             } else {
@@ -453,6 +450,12 @@ router.beforeEach((to, from, next) => {
         })
     }
 
+
+    if (!code && !user) {
+        getAuth()
+    }
+
+
     //门店id存储
     let business_id = getParamString('business_id');
     if (business_id) {
@@ -460,11 +463,11 @@ router.beforeEach((to, from, next) => {
     }
 
     //用户关系绑定
-    let has_share = localstore.get('has_share')
+    let has_share = localstore.session.get('has_share')
     if (has_share && has_share.query.share_id) {
         let data = {
             share_id: has_share.query.share_id,
-            union_id: user.unionid
+            union_id: user.union_id
         }
         getRequest('/user/Recommend', data)
     }
@@ -495,7 +498,7 @@ function getAuth() {
 function shareFrom(to) {
     if (!isEmptyObject(to.query) && to.query.share_id) {
         //分享存储
-        localstore.set('has_share', to)
+        localstore.session('has_share', to)
     }
 }
 
@@ -525,34 +528,3 @@ function getParamString(name) {
         return false;
     }
 }
-
-
-// 用户头像设置
-// function userAvatar() {
-//     let avatar = localstore.get('avatar')
-//     let user = localstore.get('userInfo')
-//     if (!avatar && user) {
-//         let image = new Image();
-//         image.src = user.wechat_img;
-//         image.onload = async () => {
-//             let base64 = getBase64Image(image);
-//             localstore.set('avatar', base64)
-//             // postRequest('/upload/UpBase64Image', { img: base64 }).then((res) => {
-//             //     if (res.data.code == 1) {
-//             //         localstore.set('avatar', res.data.data)
-//             //     }
-//             // })
-//         }
-//     }
-// }
-
-// function getBase64Image(img) {
-//     var canvas = document.createElement("canvas");
-//     canvas.width = img.width;
-//     canvas.height = img.height;
-//     var ctx = canvas.getContext("2d");
-//     ctx.drawImage(img, 0, 0, img.width, img.height);
-//     var ext = img.src.substring(img.src.lastIndexOf(".") + 1).toLowerCase();
-//     var dataURL = canvas.toDataURL("image/jpeg");
-//     return dataURL;
-// }

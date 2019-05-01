@@ -8,6 +8,11 @@ import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
 
+//剪切板
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
+
+
 // 引入全局组件
 //注册全局组件
 Vue.component('MyFooter', resolve => { require(['@/components/Footer'], resolve) }) //footer
@@ -40,6 +45,7 @@ import { Toast } from 'mint-ui';
 Vue.config.productionTip = false
 Vue.prototype.$imgUrl = 'http://quandouimg.qinzinianka.com/upload';
 Vue.prototype.$imgUrl1 = 'http://yuouimg.shizuyx.com';
+Vue.prototype.$api = 'http://quandouapi.qinzinianka.com';
 Vue.prototype.$message = Toast;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;

@@ -7,7 +7,7 @@
         </header>
         <div class="header">
             <div class="use_card_message">
-                <i><img :src="card.head_img"></i>
+                <i><img :src="$imgUrl+card.head_img"></i>
                 <div class="name">
                     <p>{{card.child_name}} {{card.age}}岁</p>
                     <!-- <sub>{{card.age}}岁</sub> -->
@@ -139,6 +139,10 @@ export default {
             justify-content: center;
             align-items: center;
             height: 100%;
+
+            img{
+               height: 100%;  
+            }
 
             i {
                 width: 3.52rem;

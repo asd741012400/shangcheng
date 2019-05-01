@@ -33,7 +33,7 @@
                         <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
                         <p>朋友圈</p>
                     </li>
-                    <li @click="handleJpeg()">
+                    <li @click="saveImg()">
                         <span><img src="../assets/share_download.png" alt=""></span>
                         <p>保存图片</p>
                     </li>
@@ -115,7 +115,7 @@ export default {
                 wx.onMenuShareTimeline({
                     title: this.title, // 分享标题, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.$imgUrl + this.poster_img, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.imgUrl, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -129,7 +129,7 @@ export default {
                     title: this.title, // 分享标题, 请自行替换
                     desc: this.desc, // 分享描述, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.$imgUrl + this.poster_img, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.imgUrl, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -142,14 +142,26 @@ export default {
             })
         },
 
-
-        handleJpeg() {
-            // alert(this.imgUrl)
+        //下载图片
+        saveImg() {
+            this.$message('请长按海报保存至本地！')
         },
 
         async toBase64(img) {
             let res = await this.$postRequest('/upload/Tobase64', { img: img })
             return res.data.data
+        },
+
+        //下载
+        downloadFile(fileName, content) {
+            let aLink = document.createElement('a');
+            let blob = this.base64ToBlob(content); //new Blob([content]);
+
+            let evt = document.createEvent("HTMLEvents");
+            evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+            aLink.download = fileName;
+            aLink.href = URL.createObjectURL(blob);
+            aLink.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window })); //兼容火狐
         },
 
         //获取商品
@@ -177,8 +189,8 @@ export default {
             this.wxRegister()
 
             let qrcode = new QRCode('qrcode', {
-                width: 60,
-                height: 60, // 高度  
+                // width: 60,
+                // height: 60, // 高度  
                 text: this.url, // 二维码内容  
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                 // background: '#f0f',  
@@ -189,8 +201,8 @@ export default {
             //判断图片是否加载完成
             let timer = setInterval(() => {
                 if (this.poster_img) {
-                    this.instance.close(); 
-                    this.$message('海报制作完成，长按海报分享给朋友吧！');       
+                    this.instance.close();
+                    this.$message('海报制作完成，长按海报分享给朋友吧！');
                     this.getPoster()
                     clearInterval(timer)
                 }
@@ -200,9 +212,9 @@ export default {
         getPoster() {
             let that = this
             html2canvas(that.$refs.imageDom, {
-                useCORS:true,//（图片跨域相关）
+                useCORS: true, //（图片跨域相关）
                 allowTaint: false
-            }).then((canvas) => {    
+            }).then((canvas) => {
                 // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
                 let dataURL = canvas.toDataURL("image/jpeg");
                 that.imgUrl = dataURL;
@@ -232,7 +244,7 @@ export default {
         var url = this.user.wechat_img;
         this.wechat_img = this.$imgUrl1 + '/wechat_image' + url.substring(23)
 
-       this.instance = this.$message({
+        this.instance = this.$message({
             message: '海报正在生成中。。。',
             duration: 30000
         });
@@ -265,7 +277,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        this.instance.close();
+    },
 
     // 销毁完成状态
     destroyed() {}

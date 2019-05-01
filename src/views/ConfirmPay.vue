@@ -7,7 +7,7 @@
         </header>
         <div class="mian">
             <div class="commodity">
-                <i><img :src="$imgUrl + order.thumb_img" alt=""></i>
+                <i><img :src="$imgUrl + order.goods_img" alt=""></i>
                 <ul>
                     <li>
                         <strong>{{order.goods_title}}</strong>
@@ -111,7 +111,7 @@ export default {
         //支付
         async payOrder() {
             let that = this
-            // that.$router.push({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
+            // that.$router.replace({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
             if (res.data.code == 1) {
@@ -123,40 +123,50 @@ export default {
 
                     // 支付成功后的操作
                     options.success = async function() {
-                        let has_share = that.$localstore.get('has_share')
+                        let has_share = that.$localstore.session.get('has_share')
                         if (has_share && has_share.query.share_id) {
                             if (has_share.query.id == that.order.order_id && has_share.query.type == that.order.order_type) {
-                                that.$localstore.set('has_share', '')
+                                that.$localstore.session.set('has_share', '')
                             }
                         }
-
-                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        if (res.data.code == 1) {
-
-                            if (that.order.order_type == 1) {
-                                that.$router.push({
-                                    name: 'PaySucceed',
-                                    query: {
-                                        id: that.order.order_id,
-                                        type: that.order.order_type,
-                                    }
-                                })
+                        that.$router.replace({
+                            name: 'PaySucceed',
+                            query: {
+                                id: that.order.order_id,
+                                goods_id: that.order.goods_id,
+                                type: that.order.order_type,
                             }
+                        })
 
-                            if (that.order.order_type == 3) {
-                                that.$router.push({
-                                    name: 'PaySucceed',
-                                    query: {
-                                        id: that.order.order_id,
-                                        type: that.order.order_type,
-                                        cd_id: res.data.data.cd_id,
-                                        cg_id: res.data.data.cg_id
-                                    }
-                                })
-                            }
+                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        // if (res.data.code == 1) {
+
+                        //     if (that.order.order_type == 1) {
+                        //         that.$router.replace({
+                        //             name: 'PaySucceed',
+                        //             query: {
+                        //                 id: that.order.order_id,
+                        //                 goods_id: that.order.goods_id,
+                        //                 type: that.order.order_type,
+                        //             }
+                        //         })
+                        //     }
+
+                        //     if (that.order.order_type == 3) {
+                        //         that.$router.replace({
+                        //             name: 'PaySucceed',
+                        //             query: {
+                        //                 id: that.order.order_id,
+                        //                 goods_id: that.order.goods_id,
+                        //                 type: that.order.order_type,
+                        //                 cd_id: res.data.data.cd_id,
+                        //                 cg_id: res.data.data.cg_id
+                        //             }
+                        //         })
+                        //     }
 
 
-                        }
+                        // }
                     };
 
                     //  取消支付的操作

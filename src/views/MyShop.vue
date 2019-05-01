@@ -3,13 +3,13 @@
         <header>
             <div class="return" @click="$router.go(-1)"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
             <div class="shop_message">
-                <span><img src="" alt="" srcset=""></span>
+                <span><img class="avatar" :src="userInfo.wechat_img" alt="" srcset=""></span>
                 <div>
                     <p>
-                        <input type="text" :value="storeInfo.shop_info || storeInfo.username +'的小店'">
-                        <i><img src="../assets/icon_compile.png" alt=""></i>
+                        <input type="text" :value="userInfo.username +'的小店'">
+                        <!-- <i><img src="../assets/icon_compile.png" alt=""></i> -->
                     </p>
-                    <a>ID：{{user_id}}</a>
+                    <a>ID：{{userInfo.user_id}}</a>
                 </div>
             </div>
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
@@ -25,30 +25,33 @@
         <span>
             <img src="../assets/icon_recommend.png" alt="">
         </span>
-        <a>为您推荐</a>
+        <a>爆款推荐</a>
       </h3>
             <ul>
                 <li class="vip_price" v-for="(item,index) in list">
-                    <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
-                        <div class="img">
-                            <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
-                            <div>
-                                <p>会员价</p>
-                                <i>￥</i>
-                                <a>{{item.cost_price}}</a>
-                            </div>
+                    <div class="img" @click="goGoods(item)">
+                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                        <div>
+                            <p>会员价</p>
+                            <i>￥</i>
+                            <a>{{item.cost_price}}</a>
                         </div>
-                        <div class="project">
-                            <p>{{item.goods_name}}</p>
-                            <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
-                        </div>
-                        <div class="price">
+                    </div>
+                    <div class="project">
+                        <p>{{item.goods_name}}</p>
+                        <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
+                    </div>
+                    <div class="price">
+                        <div>
                             <span>现价</span>
-                            <b>￥{{item.goods_price}}</b>
-                            <a>￥{{item.mkt_price}}</a>
+                            <b>￥{{item.goods_price}}</b>&nbsp;&nbsp;
+                            <del>￥{{item.mkt_price}}</del>
                         </div>
-                        <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
-                    </router-link>
+                        <div>
+                            <span class="btn" @click.stop="shareWin(item)">分享赚 ￥{{item.dist_money}}</span>
+                        </div>
+                    </div>
+                    <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                 </li>
             </ul>
         </div>
@@ -58,7 +61,7 @@
                 <p>分享店铺</p>
             </div>
         </div>
-        <Share ref="myShare"></Share>
+        <Share ref="myShare" :shareurl="url"></Share>
     </div>
 </template>
 <script>
@@ -70,6 +73,7 @@ export default {
         return {
             userInfo: {},
             user_id: '',
+            url: '',
             page: 1,
             storeInfo: {},
             list: [],
@@ -82,11 +86,24 @@ export default {
         Share
     },
     methods: {
+        goGoods(item) {
+            this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
+        },
         invitation() {
             this.$router.push({ name: "VipPlus" })
         },
         shareShowFn() {
             this.$refs.myShare.shareShowFn();
+        },
+        shareWin(item) {
+            this.$router.push({
+                name: "SharePoster",
+                query: {
+                    id: item.goods_id,
+                    type: 1,
+                    share_id: this.user_id,
+                }
+            });
         },
         async getInfo() {
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
@@ -116,12 +133,11 @@ export default {
                 jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
             })
             wx.ready(() => {
-                let url = 'http://' + window.location.host + '/#/MyShop?share_id=' + this.userInfo.user_id +
-                    '&uer_id=' + this.userInfo.user_id
+
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.userInfo.username + '的小店', // 分享标题, 请自行替换
-                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.userInfo.wechat_img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
@@ -134,8 +150,8 @@ export default {
                 });
                 wx.onMenuShareAppMessage({
                     title: this.userInfo.username + '的小店', // 分享标题, 请自行替换
-                    desc: this.plus.desc, // 分享描述, 请自行替换
-                    link: url, // 分享链接，根据自身项目决定是否需要split
+                    desc: this.userInfo.username + '分享给你的店铺快来看看吧', // 分享描述, 请自行替换
+                    link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.userInfo.wechat_img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
@@ -161,11 +177,12 @@ export default {
         if (userInfo) {
             this.userInfo = userInfo
         }
-        this.user_id = this.$route.query.user_id || this.$route.query.share_id
-        if (!this.user_id) {
+        this.user_id = this.$route.query.user_id
+        if (!this.userInfo.user_id) {
             this.$router.push({ name: 'Index' })
         }
 
+        this.url = 'http://' + window.location.host + '/#/MyShopUser?share_id=' + this.userInfo.user_id
         this.getInfo()
 
         window.onscroll = () => {
@@ -239,6 +256,10 @@ export default {
             align-items: center;
             display: flex;
             padding-top: .3rem;
+
+            .avatar {
+                border-radius: 50%;
+            }
 
             span {
                 width: 1.36rem;
@@ -397,6 +418,22 @@ export default {
 
                         span {
                             color: #FF6666;
+                        }
+                    }
+
+                    .price {
+                        padding: .3rem .2rem;
+                        display: flex;
+                        justify-content: space-between;
+
+                        .btn {
+                            padding: 0.12rem 0.5rem;
+                            color: #fff;
+                            height: .8rem;
+                            background: #FF6666;
+                            border-radius: 50px;
+                            box-shadow: 0px 5px 10px rgba(255, 128, 128, 0.6);
+
                         }
                     }
 

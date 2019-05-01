@@ -31,7 +31,7 @@
             <ul>
                 <li v-for="(img,index) in shop.business_img" :key="index" @click="previewImg(index)">
                     <div>
-                        <span><img :src="img" alt=""></span>
+                        <span><img :src="$imgUrl+img" alt=""></span>
                     </div>
                 </li>
             </ul>
@@ -40,7 +40,7 @@
             <h3>介绍</h3>
             <div class="detail" v-html="shop.shop_des"></div>
         </div>
-        <footer>
+        <div class="address">
             <div>
                 <p><span><img src="../assets/btn_navigation.png" alt=""></span></p>
                 <p>
@@ -49,8 +49,8 @@
                     </a>
                 </p>
             </div>
-        </footer>
-        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange">
+        </div>
+        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange"@close="onClose">
         </van-image-preview>
     </div>
 </template>
@@ -67,20 +67,25 @@ export default {
     },
     components: {},
     methods: {
+        onChange(index) {
+            this.index = index;
+        },
+        onClose() {
+            this.show = false
+        },
         //获取门店
         async getShop() {
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: this.$route.query.store_id })
             this.shop = res.data.data;
-            this.images = this.shop.business_img
-
+            let arr = res.data.data.business_img.map(item => {
+                return item = this.$imgUrl + item
+            })
+            this.images = arr
         },
         previewImg(index) {
             this.index = index
             this.show = true
         },
-        onChange(){
-
-        }
     },
 
     // 创建前状态
@@ -237,7 +242,7 @@ export default {
         }
     }
 
-    footer {
+    .address {
         position: fixed;
         bottom: .76rem;
         width: 100%;

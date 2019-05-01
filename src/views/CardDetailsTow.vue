@@ -8,7 +8,7 @@
                     <i><img :src="$imgUrl + card.thumb_img" alt=""></i>
                 </div>
                 <div class="user">
-                    <span><img :src="card.head_img" alt=""></span>
+                    <span><img :src="$imgUrl + card.head_img" alt=""></span>
                     <p>{{card.child_name}}</p>
                 </div>
                 <div class="content">
@@ -192,6 +192,7 @@ export default {
             .image {
                 height: 2.4rem;
                 position: relative;
+                overflow:hidden;
 
                 i {
                     overflow: hidden;

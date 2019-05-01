@@ -29,8 +29,8 @@ export default {
     methods: {
         //发送验证码
         async sendSMS() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$postRequest('/user/SendMsg', { union_id: WxAuth.unionid, tel_phone: this.phone })
+            let WxAuth = this.$localstore.get('userInfo')
+            let res = await this.$postRequest('/user/SendMsg', { union_id: WxAuth.union_id, tel_phone: this.phone })
             this.$notify(res.data.msg);
             if (res.data.code == 1) {
                 var num = 60
@@ -48,8 +48,8 @@ export default {
         },
         //注册
         async submit() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.unionid, phone: this.phone, sms: this.sms })
+            let WxAuth = this.$localstore.get('userInfo')
+            let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 if (res.data.data.level < 2) {
                     this.$notify('你不是商家用户！');
@@ -65,9 +65,9 @@ export default {
         },
         //检测是否登录
         async checkAuth() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            let user =  res.data.data 
+            let WxAuth = this.$localstore.get('userInfo')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.union_id })
+            let user =  res.data.data
             if (user && user.level < 2) {
                 this.$notify('你不是商家用户！');
                 return false
@@ -81,7 +81,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.title = "登录"
         document.body.style.background = "#fff";

@@ -13,7 +13,10 @@ export default {
     },
     components: {},
     methods: {
-
+        async check(index) {
+            let user = this.$localstore.get('userInfo')
+            let res = await this.$getRequest('/home/AutoCount', {union_id: user.union_id })
+        },
     },
     watch: {
         '$route': function(to, from) {
@@ -27,7 +30,7 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#000";
-
+        this.check()
     },
 
     // 挂载前状态

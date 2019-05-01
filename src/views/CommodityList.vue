@@ -58,13 +58,13 @@
                         </div>
                     </div>
                     <div class="btns">
-                        <span>查看订单</span>
+                        <span @click="getOrder(item.order_id,item.order_type)">查看订单</span>
                         <a @click="handleComment(item.order_id,item.order_type,item.goods_id)">进行评价</a>
                     </div>
                 </li>
             </ul>
         </div>
-        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange">
+        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange" @close="onClose">
         </van-image-preview>
     </div>
 </template>
@@ -86,17 +86,24 @@ export default {
     },
     components: {},
     methods: {
-        previewImg(item,index) {
+        //查看订单
+        getOrder(id, type) {
+            this.$router.push({ name: 'OrderDetail', query: { id: id, type: type } })
+        },
+        previewImg(item, index) {
             this.images = []
             let arr = this.strToArr(item.thumb)
-            arr.map(item=>{
-                this.images.push(this.$imgUrl+item)
+            arr.map(item => {
+                this.images.push(this.$imgUrl + item)
             })
             this.index = index
             this.show = true
         },
-        onChange(){
-
+        onChange(index) {
+            this.index = index;
+        },
+        onClose() {
+            this.show = false
         },
         //评价订单
         async handleComment(id, type, goods_id) {
@@ -351,7 +358,7 @@ export default {
                 }
 
                 .text {
-                    word-break:break-all;
+                    word-break: break-all;
                     font-size: .24rem;
                     color: #515C6F;
                     padding: .3rem 0 .2rem;

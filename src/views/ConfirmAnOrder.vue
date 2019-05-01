@@ -172,7 +172,7 @@ export default {
                 this.$message("数据未加载完，请耐心等待或刷新页面");
                 return false;
             }
-            let WxAuth = this.$localstore.get('WxAuth')
+            let WxAuth = this.$localstore.get('userInfo')
             let postData = {
                 order_type: this.$route.query.order_type,
                 goods_id: this.$route.query.id,
@@ -184,7 +184,7 @@ export default {
                 is_wechat: this.is_wechat,
                 attr_id: this.$route.query.attr_id,
                 tel: this.tel,
-                union_id: WxAuth.unionid,
+                union_id: WxAuth.union_id,
                 order_num: this.num,
                 amount: this.price,
                 total_amount: this.total,
@@ -193,7 +193,7 @@ export default {
             let res = await this.$postRequest('/order/AddOrder', postData)
             this.$message(res.data.msg)
             if (res.data.code == 1) {
-                this.$router.push({ name: 'ConfirmPay', query: { id: res.data.data } })
+                this.$router.replace({ name: 'ConfirmPay', query: { id: res.data.data } })
             }
         },
 
@@ -294,7 +294,7 @@ export default {
         this.type = this.$route.query.order_type
         this.attr_id = this.$route.query.attr_id
         document.body.style.background = "#F6F6F6";
-        let has_share = this.$localstore.get('has_share')
+        let has_share = this.$localstore.session.get('has_share')
         if (has_share && has_share.query.share_id) {
             if (has_share.query.id == this.id && has_share.query.type == this.type) {
                 this.share_id = has_share.query.share_id

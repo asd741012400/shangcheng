@@ -93,7 +93,7 @@
                                 </template>
                                 <template v-else-if="item.order_status == 1">
                                     <van-button v-if="item.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
-                                    <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1">
+                                    <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1 && item.order_status == 1">
                                         <van-button type="warning" size="mini" @click="refundApply(item.order_id)">申请退款</van-button>
                                     </template>
                                     <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
@@ -115,7 +115,7 @@
                             </template>
                             <!-- 待使用 -->
                             <template v-else-if="active == 2">
-                                <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1">
+                                <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1 && item.order_status == 1">
                                     <van-button type="warning" size="mini" @click="refundApply(item.order_id)">申请退款</van-button>
                                 </template>
                                 <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>                

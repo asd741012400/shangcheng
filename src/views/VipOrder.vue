@@ -34,7 +34,7 @@
             <div class="confirm_pop">
                 <div class="boxs">
                     <h3>会员协议</h3>
-                    <div class="detail" v-html="plus.agreement"></div>   
+                    <div class="detail" v-html="plus.agreement"></div>
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
             </div>
@@ -91,14 +91,14 @@ export default {
                 this.$message('你未同意会员协议！')
                 return false
             }
-            let WxAuth = this.$localstore.get('WxAuth')
+            let WxAuth = this.$localstore.get('userInfo')
             let postData = {
                 order_type: 2,
                 share_id: this.share_id,
                 goods_id: this.plus.setting_id,
                 goods_title: this.plus.name,
                 goods_img: this.plus.thumb,
-                union_id: WxAuth.unionid,
+                union_id: WxAuth.union_id,
                 is_wechat: 1,
                 order_num: 1,
                 amount: this.plus.sale_price,
@@ -107,7 +107,7 @@ export default {
             let res = await this.$postRequest('/order/AddOrder', postData)
             this.$message(res.data.msg)
             if (res.data.code == 1) {
-                this.$router.push({ name: 'VipOrderBuy', query: { id: res.data.data } })
+                this.$router.replace({ name: 'VipOrderBuy', query: { id: res.data.data } })
             }
         },
     },
@@ -118,7 +118,7 @@ export default {
     // 创建完毕状态
     created() {
         document.body.style.background = "#f6f6f6";
-        let has_share = this.$localstore.get('has_share')
+        let has_share = this.$localstore.session.get('has_share')
         if (has_share && has_share.query.share_id) {
             if (has_share.query.id == this.id && has_share.query.type == this.type) {
                 this.share_id = has_share.query.share_id

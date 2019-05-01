@@ -5,7 +5,7 @@
         </header>
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
-                <van-swipe-item v-for="(item,index) in strToArr(info.def_pic)" :key="index">
+                <van-swipe-item v-for="(item,index) in imgList" :key="index">
                     <img :src="$imgUrl+item" alt="">
                   </van-swipe-item>
             </van-swipe>
@@ -33,42 +33,32 @@
             <div class="shop">
                 <h3>使用门店</h3>
                 <ul>
-                    <li>
+                    <li v-for="(item,index) in storeList" :key="index">
                         <div class="del">
-                            <div class="tle">
-                                <h4>悠游堂南坪店</h4>
-                                <div>
-                                    <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineB.png" alt=""></span>
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                <div class="tle">
+                                    <h4>{{item.business_name}}</h4>
+                                    <div>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="timer">营业时间：10:00-12:00</div>
-                            <div class="site">
-                                <i><img src="../assets/icon_site.png" alt=""></i>
-                                <p>地点：重庆南岸区南坪经纬大道</p>
-                            </div>
+                                <div class="timer">营业时间：{{item.sale_time}}、{{item.sale_time2}}</div>
+                                <div class="site">
+                                    <i><img src="../assets/icon_site.png" alt=""></i>
+                                    <p>地点：{{item.address}}</p>
+                                </div>
+                            </router-link>
                         </div>
-                    </li>
-                    <li>
-                        <div class="del">
-                            <div class="tle">
-                                <h4>悠游堂南坪店</h4>
-                                <div>
-                                    <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                                    <span><img src="../assets/icon_enshrineB.png" alt=""></span>
-                                </div>
-                            </div>
-                            <div class="timer">营业时间：10:00-12:00</div>
-                            <div class="site">
-                                <i><img src="../assets/icon_site.png" alt=""></i>
-                                <p>地点：重庆南岸区南坪经纬大道</p>
-                            </div>
+                        <div class="advance">
+                            <span>
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                    <img src="../assets/icon_advance.png" alt="">
+                            </router-link>
+                                </span>
                         </div>
                     </li>
                 </ul>
@@ -115,6 +105,8 @@ export default {
             state: false,
             user: '',
             info: '',
+            imgList: '',
+            storeList: '',
             card: '',
             card_id: '',
             project_id: '',
@@ -125,14 +117,18 @@ export default {
         goPlus() {
             this.$router.push({ name: 'VipEquity' })
         },
-        strToArr(str) {
-            return str.split(',')
-        },
         //获取项目详情
         async getDetail() {
             let data = { project_id: this.project_id }
             let res = await this.$getRequest('/home/GetCardProjectDetail', data)
             this.info = res.data.data
+            this.imgList = this.info.def_pic.split(',')
+        },
+        //获取门店
+        async getStore() {
+            let res = await this.$getRequest('/home/GetProjectStore', { project_id: this.project_id })
+            this.storeList = res.data.data;
+            console.log(this.storeList);
         },
         //获取卡片详情
         async getCardDetail() {
@@ -180,6 +176,7 @@ export default {
         this.card_id = this.$route.query.card_id
         this.project_id = this.$route.query.project_id
         this.getDetail()
+        this.getStore()
         this.getCardDetail()
     },
 

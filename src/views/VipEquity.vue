@@ -127,9 +127,9 @@ export default {
     methods: {
         //购买Plus
         async BuyPlus() {
-            let WxAuth = this.$localstore.get('WxAuth')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.unionid })
-            if (res.data.code == 1) {
+            let WxAuth = this.$localstore.get('userInfo')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.union_id })
+            if (res.data.code == 1 && res.data.data.tel_phone) {
                 this.userInfo = res.data.data
                 this.$localstore.set('userInfo', this.userInfo)
                 this.$router.push({ name: 'VipOrder', query: { type: 2 } })
@@ -259,7 +259,8 @@ export default {
         if (user) {
             this.user = user
         }
-        let has_share = this.$localstore.get('has_share')
+        let has_share = this.$localstore.session.get('has_share')
+
         this.share_id = this.$route.query.share_id
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
             this.share_id = has_share.query.share_id

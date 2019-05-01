@@ -11,7 +11,7 @@
                     <img src="../assets/head_portrait2.png" alt="">
                         </template>
                     <template v-else>
-                        <img :src="$imgUrl1 + imgUrl" alt="">
+                        <img :src="$imgUrl + imgUrl" alt="">
                     </template>
             </div>
             <div class="text">
@@ -38,7 +38,7 @@
                 <label>性别</label>
                 <div class="boxs">
                     <van-radio-group v-model="sex">
-                        <van-radio  name="1">王子</van-radio>
+                        <van-radio name="1">王子</van-radio>
                         <van-radio name="2">公主</van-radio>
                     </van-radio-group>
                 </div>
@@ -90,7 +90,7 @@
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
-
+import { postRequest } from '@/lib/axios'
 import Vue from "vue";
 
 Vue.component(DatetimePicker.name, DatetimePicker);
@@ -100,6 +100,7 @@ export default {
         let date = this.$dayjs().format('YYYY-MM-DD');
         return {
             card: {},
+            cd_id: '',
             imgUrl: '',
             child_name: '',
             sex: '1',
@@ -117,7 +118,6 @@ export default {
     components: {},
     methods: {
         changeSex() {
-            console.log(111);
             if (this.sex == 1) {
                 this.sex == 2
             } else {
@@ -129,7 +129,6 @@ export default {
         },
         handleInputChange(ev) {
             let fil = document.getElementById('upload-ele').files[0];
-
             if (fil.size > 5 * 1024 * 1024) {
                 this.$message('上传文件大小不能超过 5MB!');
                 return false;
@@ -137,14 +136,19 @@ export default {
             const that = this;
             var reader = new FileReader();
             reader.readAsDataURL(fil);
-            reader.onload = async function(event) {
+            reader.onload = function(event) {
                 let url = event.target.result;
-                let res = await that.$postRequest('/upload/UpBase64Image', { img: url })
-                if (res.data.code == 1) {
-                    that.imgUrl = res.data.data
-                } else {
-                    this.$message(res.data.msg);
-                }
+                postRequest(that.$api + '/upload/UpBase64Image', { img: url })
+                    .then(res => {
+                        if (res.data.code == 1) {
+                            that.imgUrl = res.data.data
+                        } else {
+                            that.$message(res.data.msg);
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
             }
 
         },
@@ -160,8 +164,6 @@ export default {
             this.$refs.picker.close()
             event.stopPropagation()
         },
-
-
         confirmPopShow() {
             this.confirmPop = true
         },
@@ -190,7 +192,7 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 setTimeout(() => {
-                    this.$router.push({name:"MyCardBag"})
+                    this.$router.push({ name: "MyCardBag" })
                 }, 2000);
             }
 
@@ -206,9 +208,9 @@ export default {
         document.body.style.background = '#fff'
         let card = this.$localstore.get('usecard')
         this.card = card
-        if (!card) {
-            this.$router.push({ name: "Index" })
-        }
+        // if (!card) {
+        //     this.$router.push({ name: "Index" })
+        // }
     },
 
     // 挂载前状态
@@ -416,8 +418,9 @@ export default {
                 .van-radio-group {
                     display: flex;
                     flex-direction: row;
-                    .van-radio{
-                        margin-right:15px;
+
+                    .van-radio {
+                        margin-right: 15px;
                     }
                 }
 
