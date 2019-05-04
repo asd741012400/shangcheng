@@ -65,8 +65,8 @@ export default {
     // 挂载结束状态
     mounted() {
         let qrcode = new QRCode('qrcode', {
-            // width: 60,
-            // height: 60, // 高度  
+            width: 60,
+            height: 60, // 高度  
             text: this.card.cancle_code, // 二维码内容  
             // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
             // background: '#f0f',  

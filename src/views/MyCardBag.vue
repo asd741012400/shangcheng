@@ -271,7 +271,7 @@ export default {
             this.cardList = this.cardList.concat(data);
             this.currSize = res.data.data.list.length
         },
-        // 用于微信JS-SDK回调   
+        // 用于微信JS-SDK回调
         wxRegCallback() {
             this.wxShareTimeline()
             this.wxShareAppMessage()
@@ -314,9 +314,9 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         this.user = user
         this.user_id = user.user_id
         this.getCardList()

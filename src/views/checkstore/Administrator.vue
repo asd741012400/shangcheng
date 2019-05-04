@@ -16,7 +16,7 @@
                 <a><input type="number" v-model="phone" placeholder="请输入正确的电话号码"></a>
             </p>
         </div>
-        <a class="sub_btn" @click="register()">确定</a>
+        <a href="javascript:;" class="sub_btn" @click="register">确定</a>
     </div>
 </template>
 <script>
@@ -34,15 +34,21 @@ export default {
     methods: {
         //获取门店信息
         async getStore() {
-            let business_id = this.$localstore.get('business_id') || this.$route.query.business_id
+             let WxAuth = this.$localstore.get('business_user')
+            let business_id = this.$localstore.session.get('business_id') || WxAuth.business_id
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
             this.store = res.data.data
         },
         //检测是否注册过
         async checkAuth() {
-            let business_id = this.$localstore.get('business_id')
-            let WxAuth = this.$localstore.get('userInfo')
-            let res = await this.$getRequest('/business/checkUser', { union_id: WxAuth.union_id })
+            let business_id = this.$localstore.session.get('business_id') || this.business_id
+            let WxAuth = this.$localstore.get('business_user')
+            if (!WxAuth && !business_id) {
+                this.$router.push({ name: 'error403' })
+            }
+
+            let wx = this.$localstore.get('wx')
+            let res = await this.$getRequest('/business/checkUser', { union_id: wx.unionid, business_id: business_id || WxAuth.business_id})
             if (res.data.code == 1) {
                 this.$localstore.set('business_user', res.data.data)
                 this.$router.push({ name: 'CheckHome', query: { id: res.data.data.business_id } })
@@ -55,12 +61,13 @@ export default {
 
         //注册
         async register() {
-            let WxAuth = this.$localstore.get('userInfo')
+            let wx = this.$localstore.get('wx')
+            let User = this.$localstore.get('wx_user')
             let data = {
                 business_id: this.business_id,
-                open_id: WxAuth.openid,
-                union_id: WxAuth.union_id,
-                nickname: WxAuth.nickname,
+                open_id: wx.openid,
+                union_id: wx.unionid,
+                nickname: wx.nickname,
                 name: this.name,
                 phone: this.phone
             }
@@ -84,9 +91,9 @@ export default {
         document.title = "核销端"
         document.body.style.background = "#f0f0f0";
         let business_id = this.$route.query.business_id
-        this.business_id = business_id
         if (business_id) {
-            this.$localstore.set('business_id', business_id)
+            this.business_id = business_id
+            this.$localstore.session('business_id', business_id)
         }
         this.checkAuth()
         this.getStore()

@@ -64,12 +64,12 @@ export default {
             //生成二维码
             let qrcode = new QRCode('qrcode', {
                 width: 80,
-                height: 80, // 高度  
+                height: 80, // 高度
                 text: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
-                    '&type=2', // 二维码内容  
-                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                // background: '#f0f',  
-                // foreground: '#ff0'  
+                    '&type=2', // 二维码内容
+                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+                // background: '#f0f',
+                // foreground: '#ff0'
             })
 
 
@@ -134,7 +134,7 @@ export default {
         downloadImg() {
             this.$refs.myPoster.clickGeneratePicture();
         },
-        // 用于微信JS-SDK回调   
+        // 用于微信JS-SDK回调
         async wxRegister() {
             //获取微信jssdk
             let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
@@ -186,7 +186,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#fff";
 
@@ -199,9 +199,9 @@ export default {
         this.getPlUS()
         let that = this
         document.title = "PLUS会员"
-        this.user = this.$localstore.get('userInfo')
+        this.user = this.$localstore.get('wx_user')
         var url = this.user.wechat_img;
-        this.avatar = this.$imgUrl1 + '/wechat_image' + url.substring(23)
+        this.avatar = this.$imgUrl + '/wechat_image' + url.substring(23)
 
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type
@@ -232,7 +232,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-         this.instance.close(); 
+         this.instance.close();
     },
 
     // 销毁完成状态

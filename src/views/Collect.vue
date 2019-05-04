@@ -88,7 +88,7 @@ export default {
         changeTabs() {
             this.getList()
         },
-        //删除收藏        
+        //删除收藏
         async delCollect(id) {
             let res = await this.$getRequest('/user/DelCollectById', { id: id })
             this.$message(res.data.msg)
@@ -98,7 +98,7 @@ export default {
         },
         //情空
         async delCollectAll(id) {
- 
+
         },
 
         async getList() {
@@ -138,9 +138,9 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }

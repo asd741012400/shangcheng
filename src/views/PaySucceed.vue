@@ -76,34 +76,13 @@
                 <div class="boxs">
                     <h3>PLUS专享</h3>
                     <div class="detail">
-                        <div class="pop_bg">
-                            <div class="pop">
-                                <p>会员激活成功</p>
-                                <em>邀请好友可获得奖励</em>
-                                <!-- <time>到期时间：2018-5-6</time> -->
-                                <span @click="shareShowFn">邀请好友</span>
-                            </div>
-                            <div class="pop" v-for="item in give_goods">
-                                <p>{{item.goods_name}}商品兑换成功</p>
-                                <template v-if="item.limit_type == 2">
-                                    <time>到期时间：{{toTime(order.pay_time,item.limit_days)}}</time>
-                                </template>
-                                <template v-else>
-                                    <time>{{item.limit_etime}}到期</time>
-                                </template>
-                                <span @click="getAll">前去查看</span>
-                            </div>
-                            <div class="pop" v-for="item in give_cards">
-                                <p>恭喜你获得{{item.card_name}}一张</p>
-                                <em>前往激活即可使用</em>
-                                <template v-if="item.limit_type == 2">
-                                    <time>到期时间：{{toTime(order.pay_time,item.limit_days)}}</time>
-                                </template>
-                                <template v-else>
-                                    <time>{{item.limit_etime}}到期</time>
-                                </template>
-                                <span @click="goMyCardBag">前去查看</span>
-                            </div>
+                        <div class="give-box" v-for="item in give_goods" @click="getAll">
+                            <img :src="$imgUrl+item.thumb_img" alt="">
+                            <h4>{{item.goods_name}}</h4>
+                        </div>
+                        <div class="give-box" v-for="item in give_cards" @click="goMyCardBag">
+                            <img :src="$imgUrl+item.thumb_img" alt="">
+                            <h4>{{item.card_name}}</h4>
                         </div>
                     </div>
                     <div class="btn">
@@ -237,7 +216,7 @@ export default {
                 this.$message(res.data.msg);
             }
         },
-        // 用于微信JS-SDK回调   
+        // 用于微信JS-SDK回调
         wxRegCallback() {
             this.wxShareTimeline()
             this.wxShareAppMessage()
@@ -281,10 +260,10 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#fff";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         this.user = user
         this.user_id = user.user_id
         this.order_id = this.$route.query.id
@@ -702,6 +681,23 @@ export default {
         }
     }
 
+}
+
+
+.give-box {
+    display: flex;
+    margin-top: 10px;
+
+    img {
+        width: 1.5rem;
+        height: 1.2rem;
+    }
+
+    h4 {
+        flex: 1;
+        word-break: break-all;
+        margin-left: 10px;
+    }
 }
 
 .masking {

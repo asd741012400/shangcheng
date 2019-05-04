@@ -127,11 +127,11 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.title = "我的团队（二级）"
         document.body.style.background = "#fff";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }else{

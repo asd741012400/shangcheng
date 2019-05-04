@@ -85,11 +85,11 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.title = "分销商城"
         document.body.style.background = "#fff";
-        this.user = this.$localstore.get('userInfo');
+        this.user = this.$localstore.get('wx_user');
 
         if (this.user.level < 2) {
             this.$router.push({ name: 'Login' })

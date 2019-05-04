@@ -2,7 +2,7 @@ import axios from 'axios'
 import localStore from 'store2'
 
 //默认配置地址
-axios.defaults.baseURL = 'http://yuouapi.shizuyx.com'
+axios.defaults.baseURL = 'http://quandouapi.qinzinianka.com'
 
 //axios:请求拦截器
 axios.interceptors.request.use(function(config) {

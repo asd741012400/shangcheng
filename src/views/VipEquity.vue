@@ -24,7 +24,7 @@
                 <i class="tle_en">EXCLUSIVE RIGHTS</i>
                 <ul class="tab">
                     <li :class="ii == vipIndex ? 'active' : ''" v-for="(item,ii) in vip" :key="ii" @click="getVip(ii)">
-                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                        <span><img :src="$imgUrl+item.thumb" alt=""></span>
                         <p>{{item.name}}</p>
                     </li>
                 </ul>
@@ -33,7 +33,7 @@
                         <span></span>
                         <b>{{currVip.name}}</b>
                       </h3>
-                    <p>{{currVip.desc}}</p>
+                    <p v-html="currVip.desc"></p>
                 </div>
                 <div class="privilege">
                     <div class="tle_text">
@@ -60,7 +60,7 @@
                     <a class="right"></a>
                     <span></span>
             </div>
-            <ul class="tab">
+            <ul class="tab" id="product">
                 <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
                     <p>{{item.c_name}}</p>
                     <span></span>
@@ -110,9 +110,9 @@ export default {
             share_id: '',
             vip: [],
             currVip: {
-                name:'',
-                desc:'',
-                detail:'',
+                name: '',
+                desc: '',
+                detail: '',
             },
             vipIndex: 0,
             AllCate: [],
@@ -127,11 +127,11 @@ export default {
     methods: {
         //购买Plus
         async BuyPlus() {
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.union_id })
             if (res.data.code == 1 && res.data.data.tel_phone) {
                 this.userInfo = res.data.data
-                this.$localstore.set('userInfo', this.userInfo)
+                this.$localstore.set('wx_user', this.userInfo)
                 this.$router.push({ name: 'VipOrder', query: { type: 2 } })
             } else {
                 this.show = true
@@ -184,6 +184,7 @@ export default {
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
             }
+            document.getElementById("product").scrollIntoView();
         },
         //获取更多商品
         async getGoodsListMore(cid) {
@@ -255,12 +256,11 @@ export default {
     // 创建完毕状态
     created() {
         document.body.style.background = "#000";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }
         let has_share = this.$localstore.session.get('has_share')
-
         this.share_id = this.$route.query.share_id
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
             this.share_id = has_share.query.share_id

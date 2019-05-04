@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="user">
-                    <span><img :src="card.head_img" alt=""></span>
+                    <span><img :src="$imgUrl + card.head_img" alt=""></span>
                     <p>{{card.child_name}}</p>
                 </div>
                 <div class="content">
@@ -41,11 +41,11 @@
             </div>
         </div>
         <div class="project_select">
-            <div class="distance" @click="actionsheetShow(1)">
+            <!--             <div class="distance" @click="actionsheetShow(1)">
                 <span>{{selectTypes.distance}}</span>
                 <i v-if="distance"><img src="../assets/icon_up.png" alt=""></i>
                 <i v-else><img src="../assets/icon_pull_down.png" alt=""></i>
-            </div>
+            </div> -->
             <div class="types" @click="actionsheetShow(2)">
                 <span>{{selectTypes.types}}</span>
                 <i v-if="distance"><img src="../assets/icon_up.png" alt=""></i>
@@ -61,7 +61,7 @@
             <ul>
                 <li v-for="(item,index) in list" :key="index">
                     <div class="image">
-                        <i><img src="../assets/img1.png" alt=""></i>
+                        <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
                         <p>剩余次数<span>{{item.store}}</span></p>
                     </div>
                     <div class="text">
@@ -192,28 +192,27 @@ export default {
                 return false
             }
 
-            if (this.total_num == this.card.free_num) {
-                this.$message('你的权益次数已领取完！')
-                return false
-            }
+            if (item.is_deduct == 2) {
+                if (this.total_num == this.card.free_num) {
+                    this.$message('你的权益次数已领取完！')
+                    return false
+                }
+                let num = this.card.free_num - this.total_num
+                this.$dialog.alert({
+                    showCancelButton: true,
+                    message: '你当前消耗剩余' + num + '次权益，领取将消耗1次机会'
+                }).then(async () => {
+                    let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
+                    this.$message(res.data.msg)
+                    this.getList()
+                }).catch(() => {
 
-           if (item.is_deduct == 2) {
+                });
+            } else {
                 let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
                 this.$message(res.data.msg)
                 this.getList()
-                return false
             }
-
-            this.$dialog.alert({
-                showCancelButton: true,
-                message: '你当前消耗剩余' + this.card.free_num + '次权益，领取将消耗1次机会'
-            }).then(async () => {
-                let res = await this.$postRequest('/card/SureProject', { project_id: item.project_id, cd_id: this.card.cdid })
-                this.$message(res.data.msg)
-                this.getList()
-            }).catch(() => {
-
-            });
 
         },
         useCard() {
@@ -237,7 +236,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#F6F6F6";
         let card = this.$localstore.get('usecard')
@@ -246,7 +245,7 @@ export default {
         if (!card) {
             this.$router.push({ name: "Index" })
         }
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }
@@ -277,11 +276,11 @@ export default {
     mounted() {
         let qrcode = new QRCode('qrcode', {
             // width: 60,
-            // height: 60, // 高度  
-            text: this.card.cancle_code, // 二维码内容  
-            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-            // background: '#f0f',  
-            // foreground: '#ff0'  
+            // height: 60, // 高度
+            text: this.card.cancle_code, // 二维码内容
+            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+            // background: '#f0f',
+            // foreground: '#ff0'
         })
     },
 

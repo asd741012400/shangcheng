@@ -118,7 +118,7 @@
                                 <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1 && item.order_status == 1">
                                     <van-button type="warning" size="mini" @click="refundApply(item.order_id)">申请退款</van-button>
                                 </template>
-                                <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>                
+                                <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
                                 <template v-if="item.is_use == 0">
                                     <van-button v-if="item.order_type == 3" type="info" size="mini" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                 </template>
@@ -275,10 +275,10 @@ export default {
 
     },
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         this.active = this.$route.query.index - 1
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         this.user_id = user.user_id
         this.getOrderList()
         document.body.style.background = "#F6F6F6";

@@ -53,13 +53,13 @@
                                 </div>
                             </router-link>
                         </div>
-                        <div class="advance">
+      <!--                   <div class="advance">
                             <span>
                             <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                     <img src="../assets/icon_advance.png" alt="">
                             </router-link>
                                 </span>
-                        </div>
+                        </div> -->
                     </li>
                 </ul>
             </div>
@@ -166,9 +166,9 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }

@@ -99,10 +99,10 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#F6F6F6";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         this.user = user
         this.user_id = user.user_id
         this.give_id = this.$route.query.give_id

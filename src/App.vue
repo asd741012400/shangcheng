@@ -14,8 +14,12 @@ export default {
     components: {},
     methods: {
         async check(index) {
-            let user = this.$localstore.get('userInfo')
-            let res = await this.$getRequest('/home/AutoCount', {union_id: user.union_id })
+            let user = this.$localstore.get('wx_user')
+            let union_id = ''
+            if (user && user.union_id) {
+                union_id = user.union_id
+            }
+            let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
         },
     },
     watch: {
@@ -27,7 +31,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#000";
         this.check()

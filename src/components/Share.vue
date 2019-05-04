@@ -70,7 +70,7 @@ export default {
     components: {},
     methods: {
         showPoster() {
-            let userInfo = this.$localstore.get('userInfo')
+            let userInfo = this.$localstore.get('wx_user')
             if (!userInfo) {
                 this.$router.push({ name: 'Index' })
                 return false
@@ -108,9 +108,9 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
-        let userInfo = this.$localstore.get('userInfo')
+        let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {
             this.userInfo = userInfo
         }

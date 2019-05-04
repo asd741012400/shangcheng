@@ -172,7 +172,7 @@ export default {
                 this.$message("数据未加载完，请耐心等待或刷新页面");
                 return false;
             }
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             let postData = {
                 order_type: this.$route.query.order_type,
                 goods_id: this.$route.query.id,
@@ -286,14 +286,14 @@ export default {
 
     // 创建完毕状态
     created() {
-        let userInfo = this.$localstore.get('userInfo')
+        document.body.style.background = "#F6F6F6";
+        let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {
             this.userInfo = userInfo
         }
         this.id = this.$route.query.id;
         this.type = this.$route.query.order_type
         this.attr_id = this.$route.query.attr_id
-        document.body.style.background = "#F6F6F6";
         let has_share = this.$localstore.session.get('has_share')
         if (has_share && has_share.query.share_id) {
             if (has_share.query.id == this.id && has_share.query.type == this.type) {

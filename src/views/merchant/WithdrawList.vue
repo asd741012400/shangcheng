@@ -32,7 +32,7 @@
                             </template>
                             <template v-else-if="item.status == 3">
                                   <a>已拒绝</a>
-                            </template>                      
+                            </template>
                         </h3>
                         <em>商户流水号：{{item.transaction_no}}</em>
                         <p>
@@ -116,11 +116,11 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.title = "提现记录"
         document.body.style.background = "#fff";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }

@@ -102,10 +102,10 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#fff";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         this.user = user
         if (!user) {
              this.$router.push({ name: 'Login' })

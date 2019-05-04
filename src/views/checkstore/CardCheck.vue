@@ -1,13 +1,13 @@
 <template>
     <div class="MyTeam">
         <header>
-            <span><img :src="checkInfo.product_info.head_img" alt=""></span>
+            <span><img :src="$imgUrl + chackUser.head_img" alt=""></span>
             <div>
                 <h3>
-                  <a>{{checkInfo.product_info.child_name}}【{{calcAge(checkInfo.product_info.birthday)}}岁】</a>
+                  <a>{{chackUser.child_name}}【{{calcAge(chackUser.birthday)}}岁】</a>
                 </h3>
                 <p>
-                    <a>{{checkInfo.product_info.tel_phone}}</a>
+                    <a>{{chackUser.tel_phone}}</a>
                 </p>
             </div>
         </header>
@@ -34,6 +34,7 @@ export default {
     data() {
         return {
             active: 0,
+            chackUser: {},
             cardInfo: {},
             checkInfo: {},
             product: '',
@@ -55,6 +56,7 @@ export default {
         },
         async submit() {
             let userInfo = this.$localstore.get('business_user')
+            console.log(userInfo);
             if (!this.product) {
                 this.product = this.cardInfo.pro_list[0]
             }
@@ -87,7 +89,8 @@ export default {
             let res = await this.$postRequest('/cancle/CancleOne', data)
             if (res.data.code == 1) {
                 this.checkInfo = res.data.data
-                console.log(res.data.data);
+                this.chackUser = res.data.data.product_info
+                this.cardInfo = res.data.data.product_info
             } else {
                 this.$message(res.data.msg);
             }
@@ -102,10 +105,10 @@ export default {
         document.body.style.background = "#F0F0F0";
         document.title = "卡片核销"
         let list = this.$localstore.get('cehckGoods')
-        this.cardInfo = list.product_info
+        // this.cardInfo = list.product_info
         this.code = this.$route.query.code
 
-        if (!this.$localstore.get('business_id') || !this.$localstore.get('business_user')) {
+        if (!this.$localstore.get('business_user')) {
             this.$router.push({ name: 'Administrator' })
         }
 
@@ -192,6 +195,10 @@ export default {
             border-bottom: 1px solid #F0F0F0;
             display: flex;
             align-items: center;
+
+            img{
+                height:100%;
+            }
 
             i {
                 width: 1.28rem;

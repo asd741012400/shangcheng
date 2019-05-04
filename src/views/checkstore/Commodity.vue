@@ -1,6 +1,6 @@
 <template>
     <div class="Commodity">
-        <i><img :src="productInfo.thumb_img"></i>
+        <i><img :src="$imgUrl + productInfo.thumb_img"></i>
         <p>{{productInfo.goods_name}}</p>
         <a class="sub_btn" @click="submit">确定</a>
     </div>
@@ -10,6 +10,7 @@ export default {
     name: 'Commodity',
     data() {
         return {
+            code: '',
             checkInfo: {},
             productInfo: {}
         }
@@ -30,8 +31,24 @@ export default {
                 }, 2000)
             }
             this.$message(res.data.msg);
-
+        },
+        //查询核销信息
+        async getInfo() {
+            let userInfo = this.$localstore.get('business_user')
+            let data = {
+                code: this.code,
+                admin_id: userInfo.user_id,
+                shop_id: userInfo.business_id
+            }
+            let res = await this.$postRequest('/cancle/CancleOne', data)
+            if (res.data.code == 1) {
+                this.checkInfo = res.data.data.card_info
+                this.productInfo = res.data.data.product_info
+            } else {
+                this.$message(res.data.msg);
+            }
         }
+
     },
 
     // 创建前状态
@@ -42,8 +59,8 @@ export default {
         document.body.style.background = "#fff";
         document.title = "商品核销"
         let cehckGoods = this.$localstore.get('cehckGoods')
-        this.checkInfo = cehckGoods.card_info
-        this.productInfo = cehckGoods.product_info
+        this.code = this.$route.query.code
+        this.getInfo()
     },
 
     // 挂载前状态
@@ -74,6 +91,10 @@ export default {
     height: 100%;
     left: 0;
     top: 0;
+
+    img {
+        height: 100%;
+    }
 
     i {
         display: block;

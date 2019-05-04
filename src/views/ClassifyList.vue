@@ -81,7 +81,7 @@ export default {
             this.cid = id
             let res = await this.$getRequest('home/GetGoodsListByCid', { cid: id, page: this.page })
             this.goodsList = res.data.data.list
-            if (res.data.data.list) {                
+            if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
             }
         },
@@ -262,6 +262,10 @@ export default {
                     border-radius: 5px;
                     position: relative;
 
+                    img {
+                        height: 3rem;
+                    }
+
                     div {
                         width: 2.48rem;
                         background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
@@ -293,6 +297,7 @@ export default {
                 .project {
                     display: flex;
                     padding: .3rem .2rem;
+                    font-size: 0.3rem;
 
                     p {
                         flex: 1;

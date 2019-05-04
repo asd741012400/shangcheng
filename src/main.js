@@ -36,16 +36,14 @@ Vue.component(CountDown.name, CountDown);
 
 
 //移动端调试
-import Vconsole from 'vconsole';
-const vConsole = new Vconsole();
-Vue.use(vConsole)
+// import Vconsole from 'vconsole';
+// const vConsole = new Vconsole();
+// Vue.use(vConsole)
 
 import { Toast } from 'mint-ui'; 
 
 Vue.config.productionTip = false
 Vue.prototype.$imgUrl = 'http://quandouimg.qinzinianka.com/upload';
-Vue.prototype.$imgUrl1 = 'http://yuouimg.shizuyx.com';
-Vue.prototype.$api = 'http://quandouapi.qinzinianka.com';
 Vue.prototype.$message = Toast;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;

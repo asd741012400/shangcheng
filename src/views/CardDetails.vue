@@ -188,13 +188,13 @@ export default {
     data() {
         return {
             apiUrl: this.$common.ApiUrl(),
-            cardDetailsState: 4, //状态 1正常 2已售罄 3已下架 4会员购买 5还未开售 6售卖截止
+            cardDetailsState: 1, //状态 1正常 2已售罄 3已下架 4会员购买 5还未开售 6售卖截止
             user: '',
             active: 1,
             table: 1,
             show: false,
             isCollect: false,
-            CardDetail: {},
+            CardDetail: '',
             comments: [],
             projects: [],
             countDownNum: 0,
@@ -246,9 +246,13 @@ export default {
         },
         //确认下单
         async ConfirmAnOrderPage() {
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             if (!WxAuth.tel_phone) {
                 this.show = true
+                return false
+            }
+
+            if (!this.CardDetail) {
                 return false
             }
 
@@ -370,14 +374,14 @@ export default {
     // 创建完毕状态
     created() {
         document.body.style.background = "#fff";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }
         this.id = this.$route.query.id
         this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
             '&type=3&id=' + this.$route.query.id
-            
+
         this.getComment()
         this.getDetail()
         this.GetCardProject()

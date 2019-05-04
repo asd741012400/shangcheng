@@ -185,11 +185,11 @@ export default {
         //查看商品
         goDetail(id) {
             if (this.type == 1) {
-                this.$router.push({ name: 'CommodityDetails', query: { id: id,type:1 } })
+                this.$router.push({ name: 'CommodityDetails', query: { id: id, type: 1 } })
             } else if (this.type == 2) {
                 this.$router.push({ name: 'VipEquity' })
             } else if (this.type == 3) {
-                this.$router.push({ name: 'CardDetails', query: { id: id,type:3 } })
+                this.$router.push({ name: 'CardDetails', query: { id: id, type: 3 } })
             }
         },
         //评价订单
@@ -217,31 +217,28 @@ export default {
             let res = await this.$getRequest('/order/OrderDetail', { order_id: id })
             this.goods_info = res.data.data.goods_info
             this.goods_cancle = res.data.data.goods_cancle
-
-            this.$nextTick(() => {
-                let arr = this.$refs.qrcodes
-                setTimeout(() => {
-                 arr && arr.map(item => {
-                        let qrcode = new QRCode(item.id, {
-                            // width: 60,
-                            // height: 60, // 高度  
-                            text: item.dataset.code, // 二维码内容  
-                            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                            // background: '#f0f',  
-                            // foreground: '#ff0'  
-                        })
-                    })
-                }, 30)
-            })
-
-
-
         },
         //获取订单详情
         async getOrderDetail() {
             let res = await this.$getRequest('/order/getOrder', { id: this.id })
             this.order = res.data.data
             this.attr_name = this.order.attr_name
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    let arr = this.$refs.qrcodes
+                    arr && arr.map(item => {
+                        let qrcode = new QRCode(item.id, {
+                            width: 60,
+                            height: 60, // 高度  
+                            text: item.dataset.code, // 二维码内容  
+                            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                            // background: '#f0f',  
+                            // foreground: '#ff0'  
+                        })
+                    })
+                })
+            }, 200)
+
         }
 
 
@@ -270,10 +267,14 @@ export default {
     },
 
     // 更新前状态
-    beforeUpdate() {},
+    beforeUpdate() {
+
+    },
 
     // 更新完成状态
-    updated() {},
+    updated() {
+
+    },
 
     // 销毁前状态
     beforeDestroy() {},

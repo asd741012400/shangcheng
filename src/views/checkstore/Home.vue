@@ -72,19 +72,18 @@ export default {
     methods: {
         //获取门店信息
         async getStore() {
-            let business_id = this.$localstore.get('business_id') || this.$route.query.business_id
+            let business_id = this.$localstore.session.get('business_id') || this.$route.query.id
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
             this.store = res.data.data
         },
         //获取店铺信息 及核销信息
         async getShop() {
             let userInfo = this.$localstore.get('business_user')
-            let res = await this.$getRequest('/cancle/CancleOne', { business_id: userInfo.user_id })
-            if (res.data.data) {
-                this.shop = res.data.data.shopinfo
-                this.today_num = res.data.data.cur_nums.nums
-                this.total = res.data.data.all_nums.nums
-            }
+            let res = await this.$getRequest('/cancle/ShopInfo', { business_id: userInfo.business_id })
+            this.shop = res.data.data.shopinfo
+            this.today_num = res.data.data.cur_nums.nums
+            this.total = res.data.data.all_nums.nums
+
         },
         sacnCode() {
             wx.ready(() => {

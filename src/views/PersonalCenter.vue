@@ -10,7 +10,7 @@
                     <p>{{userInfo.username || username}}</p>
                     <div>
                         <a>会员到期：{{userInfo.over_time}}</a>
-                        <i><img src="../assets/vt_renew.png" alt=""></i>
+                        <i v-if="overTime(userInfo.over_time)"><img src="../assets/vt_renew.png" alt=""></i>
                     </div>
                 </div>
             </div>
@@ -128,6 +128,7 @@
         </ul>
         <MyFooter></MyFooter>
         <div class="service" v-if="mobile"><a :href="'tel:'+mobile"><img src="../assets/icon_service.png" alt=""></a></div>
+        <!-- 兑换码兑换 -->
         <div class="card_add_pop" v-if="popShow">
             <div class="card_add">
                 <div>
@@ -139,6 +140,29 @@
                     </p>
                     <a @click="getcode">提 交</a>
                 </div>
+            </div>
+        </div>
+        <!-- 兑换成功后提示 -->
+        <div class="pop_bg" v-if="popShow1">
+            <div class="pop">
+                <p>恭喜你成为PLUS</p>
+                <em>你可以邀请好友获得奖励</em>
+                <!-- <time>到期时间：2018-5-6</time> -->
+                <span @click="shareShowFn">邀请好友</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+            </div>
+            <div class="pop" v-if="goods_count > 0">
+                <p>恭喜成功兑换{{goods_count}}件商品</p>
+                <!-- <time>到期时间：2018-5-6</time> -->
+                <span @click="goOrder">前去查看</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+            </div>
+            <div class="pop" v-if="card_count > 0">
+                <p>恭喜你获得卡券{{card_count}}张</p>
+                <em>前往激活即可使用</em>
+                <!-- <time>到期时间：2018-5-6</time> -->
+                <span @click="goCardDetail">前往激活</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
         </div>
         <Share ref="myShare"></Share>
@@ -159,34 +183,51 @@ export default {
                 status: 0
             },
             avatar: '',
+            card_count: 0,
+            goods_count: 0,
             username: '',
             code: '',
             mobile: '',
             popState: 3,
             popShow: false,
-            popShow1: true,
+            popShow1: false,
         }
     },
     components: { Share },
     methods: {
+        //是否到过期时间
+        overTime(day) {
+            let now = this.$dayjs().format('YYYY-MM-DD')
+            const date1 = this.$dayjs(now)
+            const date2 = this.$dayjs(day)
+            let num = date2.diff(date1, 'day')
+            if (num <= 30) {
+                return true
+            } else {
+                return false
+            }
+        },
         shareShowFn() {
             this.$router.push({ name: 'VipPlus' })
         },
+        goOrder() {
+            this.$router.push({ name: 'Order' })
+        },
+        goCardDetail() {
+            this.$router.push({ name: 'MyCardBag' })
+        },
         popShowFn() {
-            const that = this;
-            that.popShow = true;
+            this.popShow = true;
         },
         popHideFn() {
-            const that = this;
-            that.popShow = false;
+            this.popShow = false;
         },
         popShowFn1() {
-            const that = this;
-            that.popShow1 = true;
+            this.popShow1 = true;
         },
         popHideFn1() {
-            const that = this;
-            that.popShow1 = false;
+            this.popShow1 = false;
+            location.reload()
         },
         //兑换卡片商品权益
         async getcode() {
@@ -198,10 +239,20 @@ export default {
             let res = await this.$postRequest('/user/GetThings', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-                this.code == ''
-                that.popShow1 = true;
-            } else {
+                this.card_count = res.data.data.card_count.length || 0
+                this.goods_count = res.data.data.goods_count.length || 0
+                this.code = ''
                 this.popShow = false;
+                this.popShow1 = true;
+
+                this.getUser()
+            }
+        },
+        //更新用户身份
+        async getUser() {
+            let res = await this.$postRequest('/wechat/GetUserInfo', { union_id: this.userInfo.union_id })
+            if (res.data.code == 1) {
+                this.$localstore.set('wx_user', res.data.data)
             }
         },
         //获取客服电话
@@ -211,10 +262,11 @@ export default {
                 this.mobile = res.data.data
             }
         },
+
         //检测用户是否绑定手机号
         async checkUser() {
-            let userInfo = this.$localstore.get('userInfo')       
-            if (userInfo.tel_phone) {       
+            let userInfo = this.$localstore.get('wx_user')
+            if (userInfo.tel_phone) {
                 return true
             } else {
                 this.show = true
@@ -228,7 +280,7 @@ export default {
 
     // 创建完毕状态
     created() {
-        let userInfo = this.$localstore.get('userInfo')
+        let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {
             this.userInfo = userInfo
             this.avatar = userInfo.wechat_img
@@ -377,6 +429,7 @@ body {
                     display: flex;
                     align-items: center;
                     flex-direction: column;
+                    text-align: center;
 
                     a {
                         color: #fff;
@@ -662,7 +715,73 @@ body {
         }
     }
 
+    .pop_bg {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha: 0.3);
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
 
+        .pop {
+            background: #fff;
+            border-radius: 10px;
+            width: 5rem;
+            position: relative;
+            margin-top: 5px;
+            padding: .4rem .3rem .54rem;
+
+            i {
+                position: absolute;
+                width: .48rem;
+                height: .48rem;
+                overflow: hidden;
+                display: block;
+                right: .24rem;
+                top: .24rem;
+            }
+
+            p {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+            }
+
+            em {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+                display: block;
+                font-style: normal;
+            }
+
+            time {
+                font-size: .32rem;
+                color: #515C6F;
+                text-align: center;
+                display: block;
+            }
+
+            span {
+                display: block;
+                width: 3.7rem;
+                background: #FF6666;
+                border-radius: 50px;
+                text-align: center;
+                line-height: .8rem;
+                height: .8rem;
+                color: #fff;
+                font-weight: bold;
+                font-size: .32rem;
+                margin: .26rem auto 0;
+            }
+
+        }
+    }
 
 }
 </style>

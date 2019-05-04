@@ -137,16 +137,23 @@ export default {
             var reader = new FileReader();
             reader.readAsDataURL(fil);
             reader.onload = function(event) {
+                let instance = that.$message({
+                    message: '图片正在上传中',
+                    duration: 30000
+                });
+
                 let url = event.target.result;
-                postRequest(that.$api + '/upload/UpBase64Image', { img: url })
+                postRequest('/upload/UpBase64Image', { img: url })
                     .then(res => {
                         if (res.data.code == 1) {
                             that.imgUrl = res.data.data
                         } else {
                             that.$message(res.data.msg);
                         }
+                        instance.close();
                     })
                     .catch(function(error) {
+                        instance.close();
                         console.log(error);
                     });
             }
@@ -176,7 +183,7 @@ export default {
                 this.$message('你未同意激活协议！');
                 return false;
             }
-            let userInfo = this.$localstore.get('userInfo')
+            let userInfo = this.$localstore.get('wx_user')
             let data = {
                 user_id: userInfo.user_id,
                 cancle_id: this.$route.query.id,
@@ -203,7 +210,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = '#fff'
         let card = this.$localstore.get('usecard')
@@ -346,6 +353,7 @@ export default {
         background: #EEEEEF;
         border-radius: 10px;
         padding: .4rem 0;
+        font-size:0.3rem;
 
         .box {
             display: flex;

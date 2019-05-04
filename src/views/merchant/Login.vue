@@ -29,7 +29,7 @@ export default {
     methods: {
         //发送验证码
         async sendSMS() {
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$postRequest('/user/SendMsg', { union_id: WxAuth.union_id, tel_phone: this.phone })
             this.$notify(res.data.msg);
             if (res.data.code == 1) {
@@ -48,14 +48,14 @@ export default {
         },
         //注册
         async submit() {
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 if (res.data.data.level < 2) {
                     this.$notify('你不是商家用户！');
                     return false
                 }
-                this.$localstore.set('userInfo', res.data.data)
+                this.$localstore.set('wx_user', res.data.data)
                 if (res.data.data.level > 1) {
                     this.$router.push({ name: 'DistributionTow' })
                 }
@@ -65,16 +65,20 @@ export default {
         },
         //检测是否登录
         async checkAuth() {
-            let WxAuth = this.$localstore.get('userInfo')
-            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.union_id })
-            let user =  res.data.data
-            if (user && user.level < 2) {
-                this.$notify('你不是商家用户！');
-                return false
+            let WxAuth = this.$localstore.get('wx')
+            let union_id = ''
+            if (WxAuth && WxAuth.unionid) {
+                union_id = WxAuth.unionid
             }
-            if (user) {
-                this.$router.push({ name: 'DistributionTow' })
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: union_id })
+            if (res.data.code == 1) {
+                this.$localstore.set('wx_user', res.data.data)
+                let user = res.data.data
+                if (user && user.level > 1) {                
+                     this.$router.push({ name: 'DistributionTow' })
+                }
             }
+
         }
     },
 
@@ -85,6 +89,7 @@ export default {
     created() {
         document.title = "登录"
         document.body.style.background = "#fff";
+
         this.checkAuth()
     },
 

@@ -32,7 +32,7 @@
                             </template>
                             <template v-else-if="item.status == 3">
                                   <a>已拒绝</a>
-                            </template>                      
+                            </template>
                         </h3>
                         <em>商户流水号：{{item.transaction_no}}</em>
                         <p>
@@ -55,10 +55,11 @@ Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
     name: 'StoreList',
     data() {
-        let date = this.$dayjs().format('YYYY-MM')
+        let date = this.$dayjs().subtract(1, 'year').format('YYYY-MM')
+        let date1 = this.$dayjs().format('YYYY-MM')
         return {
             startDate: new Date(date),
-            dateTime: date,
+            dateTime: date1,
             data: {},
             page: 1,
             currSize: 0,
@@ -112,11 +113,11 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.title = "提现记录"
         document.body.style.background = "#fff";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }

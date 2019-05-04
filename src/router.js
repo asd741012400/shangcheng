@@ -47,7 +47,7 @@ import VipPlus from './views/VipPlus.vue'
 //分销商城
 import Login from './views/merchant/Login.vue'
 import MerchantShop from './views/merchant/MerchantShop.vue' //主页
-// import ChageShop from './views/merchant/ChageShop.vue' //切换门店
+// import ChageShop from './views/merchant/checkstore.vue' //切换门店
 // import WithdrawList from './views/merchant/WithdrawList.vue' //提现列表
 import WithdrawDepositDel from './views/merchant/WithdrawDepositDel.vue' //提现明细
 // import MyTeam from './views/merchant/MyTeam.vue' //我的团队
@@ -377,7 +377,7 @@ let router = new Router({
         {
             path: '/ChageShop',
             name: 'ChageShop',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/ChageShop.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/checkstore/ChageShop.vue')
         },
         {
             path: '/TeamDelTow',
@@ -421,16 +421,24 @@ router.beforeEach((to, from, next) => {
     //分享来源处理
     shareFrom(to);
     let code = getParamString('code');
-    let user = localstore.get('userInfo')
+    let user = localstore.get('wx_user')
+    let union_id =   ''
+    if (user && user.union_id) {
+        union_id = user.union_id
+    }
 
     //使用code获取用户身份
     if (code) {
         getRequest('/wechat/GetCode', { code: code }).then(res => {
             if (res.data.code == 1) {
-                localstore.set('userInfo', res.data.data)
+                localstore.set('wx_user', res.data.data.user)
+                localstore.set('wx', res.data.data.wx)
                 let from_url = localstore.get('from_url')
                 if (from_url) {
                     localstore.remove('from_url')
+                    if (from_url.length > 2) {
+                        window.location.href = '/#'+from_url
+                    }
                 }
             } else {
                 if (!user) {
@@ -441,15 +449,14 @@ router.beforeEach((to, from, next) => {
     }
 
     if (user) {
-        getRequest('/wechat/GetUserInfo', { union_id: user.union_id }).then(res => {
+        getRequest('/wechat/GetUserInfo', { union_id: union_id }).then(res => {
             if (res.data.code == 1) {
-                localstore.set('userInfo', res.data.data)
+                localstore.set('wx_user', res.data.data)
             } else {
-                localstore.set('userInfo', '')
+                localstore.set('wx_user', '')
             }
         })
     }
-
 
     if (!code && !user) {
         getAuth()
@@ -467,7 +474,7 @@ router.beforeEach((to, from, next) => {
     if (has_share && has_share.query.share_id) {
         let data = {
             share_id: has_share.query.share_id,
-            union_id: user.union_id
+            union_id: union_id
         }
         getRequest('/user/Recommend', data)
     }
@@ -482,8 +489,9 @@ export default router
 
 //微信授权
 function getAuth() {
-    let url = window.location.href.split('#')[0];
+    let url = 'http://' + window.location.host;
     let hash = window.location.href.split('#')[1];
+
     //存储来源地址 用于授权返回
     localstore.set('from_url', hash)
     //微信授权
@@ -519,12 +527,10 @@ function isEmptyObject(val) {
  * 调用方法:getParam("name")
  * 返回值:tyler
  */
-function getParamString(name) {
-    var url = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-    var newUrl = window.location.search.substr(1).match(url);
-    if (newUrl != null) {
-        return unescape(newUrl[2]);
-    } else {
-        return false;
+const getParamString = (param) => {
+    const reg = new RegExp('(^|&)' + param + '=([^&]*)(&|$)');
+    const r = window.location.search.substr(1).match(reg) || window.location.hash.substring((window.location.hash.search(/\?/)) + 1).match(reg);
+    if (r != null) {
+        return decodeURIComponent(r[2]);
     }
-}
+};

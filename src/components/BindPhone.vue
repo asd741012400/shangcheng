@@ -29,7 +29,7 @@ export default {
     components: {},
     methods: {
         async sendSMS() {
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$postRequest('/user/SendMsg', { union_id: WxAuth.union_id, tel_phone: this.phone })
             this.$notify(res.data.msg);
             if (res.data.code == 1) {
@@ -54,10 +54,10 @@ export default {
         },
         //关闭填写手机号
         async beforeCloseModel(action, done) {
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
-                this.$localstore.set('userInfo', res.data.data)
+                this.$localstore.set('wx_user', res.data.data)
                 this.show = false
                 setTimeout(() => {
                     window.location.reload()

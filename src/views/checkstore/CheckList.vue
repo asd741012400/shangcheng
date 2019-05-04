@@ -36,7 +36,7 @@
                 </li>
             </ul>
         </div>
-        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" @confirm="handleConfirm" :startDate="startDate">
+        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate">
         </mt-datetime-picker>
     </div>
 </template>
@@ -49,8 +49,8 @@ Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
     name: 'CheckList',
     data() {
-        let date = this.$dayjs().subtract(3, 'year').format('YYYY-MM')
-        let date1 = this.$dayjs().format('YYYY-MM')
+        let date = this.$dayjs().subtract(1, 'year').format('YYYY-MM-DD')
+        let date1 = this.$dayjs().format('YYYY-MM-DD')
         return {
             startDate: new Date(date),
             dateTime: date1,
@@ -77,20 +77,20 @@ export default {
             let date = this.$dayjs(data).format('YYYY-MM-DD')
             this.dateTime = date;
             this.$refs.picker.close()
+            this.getCheckList()
             event.stopPropagation()
         },
         //获取店铺信息 及核销信息
         async getShop() {
             let userInfo = this.$localstore.get('business_user')
-            let res = await this.$getRequest('/cancle/CancleOne', { business_id: userInfo.user_id })
-            if (res.data.data) {
-                this.shop = res.data.data.shopinfo
-                this.today_num = res.data.data.cur_nums.nums
-                this.total = res.data.data.all_nums.nums
-            }
+            let res = await this.$getRequest('/cancle/ShopInfo', { business_id: userInfo.business_id })
+            this.shop = res.data.data.shopinfo
+            this.today_num = res.data.data.cur_nums.nums
+            this.total = res.data.data.all_nums.nums
         },
         //获取核销记录
         async getCheckList() {
+            this.checklist = []
             let userInfo = this.$localstore.get('business_user')
             let data = {
                 page: this.page,
@@ -131,10 +131,10 @@ export default {
         document.title = "核销记录"
         document.body.style.background = "#fff";
 
-     let userInfo = this.$localstore.get('business_user')
-     if (!userInfo) {
-        
-     }
+        let userInfo = this.$localstore.get('business_user')
+        if (!userInfo) {
+
+        }
 
         this.getShop()
         this.getCheckList()
@@ -244,6 +244,10 @@ export default {
                 border-top: 2px solid #f6f6f6;
                 display: flex;
                 align-items: center;
+
+                img {
+                    height: 100%;
+                }
 
                 i {
                     width: 1.26rem;

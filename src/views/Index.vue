@@ -13,18 +13,12 @@
             </div>
             <div class="swiper-container">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <img src="../assets/activity_img1.png" />
+                    <div class="swiper-slide" v-for="item in banner" @click="goUrl(item)">
+                        <img :src="$imgUrl + item.pic_url" />
                     </div>
-                        <div class="swiper-slide">
-                            <img src="../assets/activity_img1.png" />
                     </div>
-                            <div class="swiper-slide">
-                                <img src="../assets/activity_img1.png" />
-                    </div>
-                            </div>
-                            <div class="swiper-pagination"></div>
-                        </div>
+                    <div class="swiper-pagination"></div>
+                </div>
         </header>
         <div class="nav">
             <ul>
@@ -107,6 +101,7 @@ export default {
             apiUrl: this.$common.ApiUrl(),
             Cardlist: [],
             keywords: '',
+            banner: [],
             NavList: [],
             pages: 1,
             GoodsList: [],
@@ -119,11 +114,20 @@ export default {
 
     },
     methods: {
+        goUrl(item) {
+            window.location.href = item.to_url
+        },
         skipPages(str) {
             this.$router.push({
                 name: str,
             });
         },
+        //获取banner
+        async getBanner() {
+            let res = await this.$getRequest('/home/getad')
+            this.banner = res.data.data
+        },
+        //获取商品列表
         async getGoodsList() {
             let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             const resData = res.data.data
@@ -131,6 +135,7 @@ export default {
             this.goodsListLength = resData.list.length;
             this.goodsListSum = resData.count;
         },
+
         async GoodsListPush() {
             let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             const resData = res.data.data
@@ -157,9 +162,9 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
-        let userInfo = this.$localstore.get('userInfo')
+        let userInfo = this.$localstore.get('wx_user')
         document.body.style.background = "#F6F6F6";
         const that = this;
         that.$http.get(that.apiUrl + 'home/getcardlist')
@@ -188,6 +193,7 @@ export default {
                 console.log(error);
             });
 
+        this.getBanner()
         this.getGoodsList()
 
         window.onscroll = function() {
@@ -214,6 +220,10 @@ export default {
     // 挂载结束状态
     mounted() {
         new Swiper('.swiper-container', {
+            paginationClickable: true,
+            observer: true, //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true, //修改swiper的父元素时，自动初始化swiper
+            // loop: true, // 循环模式选项
             autoplay: {
                 delay: 3000, //1秒切换一次
             },
@@ -594,6 +604,10 @@ export default {
                         border-radius: 5px;
                         position: relative;
 
+                        img {
+                            height: 3rem;
+                        }
+
                         div {
                             width: 2.48rem;
                             background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
@@ -625,6 +639,7 @@ export default {
                     .project {
                         display: flex;
                         padding: .3rem .2rem;
+                        font-size: 0.3rem;
 
                         p {
                             flex: 1;
@@ -690,7 +705,13 @@ export default {
     top: -1.2rem;
     border-radius: 5px;
 }
+
 .swiper-pagination-bullets .swiper-pagination-bullet.swiper-pagination-active {
     background: #fff !important;
+}
+
+.swiper-slide img {
+    width: 100%;
+    height: 100%;
 }
 </style>

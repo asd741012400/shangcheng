@@ -137,36 +137,6 @@ export default {
                                 type: that.order.order_type,
                             }
                         })
-
-                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
-
-                        //     if (that.order.order_type == 1) {
-                        //         that.$router.replace({
-                        //             name: 'PaySucceed',
-                        //             query: {
-                        //                 id: that.order.order_id,
-                        //                 goods_id: that.order.goods_id,
-                        //                 type: that.order.order_type,
-                        //             }
-                        //         })
-                        //     }
-
-                        //     if (that.order.order_type == 3) {
-                        //         that.$router.replace({
-                        //             name: 'PaySucceed',
-                        //             query: {
-                        //                 id: that.order.order_id,
-                        //                 goods_id: that.order.goods_id,
-                        //                 type: that.order.order_type,
-                        //                 cd_id: res.data.data.cd_id,
-                        //                 cg_id: res.data.data.cg_id
-                        //             }
-                        //         })
-                        //     }
-
-
-                        // }
                     };
 
                     //  取消支付的操作

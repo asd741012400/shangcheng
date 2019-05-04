@@ -202,7 +202,7 @@ export default {
         return {
             url: '',
             GoodsDetailsState: 1,
-            GoodsDetail: {},
+            GoodsDetail: '',
             user: {
                 status: 0
             },
@@ -268,9 +268,13 @@ export default {
         },
         //确认下单
         async ConfirmAnOrderPage() {
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             if (!WxAuth.tel_phone) {
                 this.show = true
+                return false
+            }
+
+            if (!this.GoodsDetail) {
                 return false
             }
 
@@ -411,7 +415,7 @@ export default {
 
     // 创建完毕状态
     created() {
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }

@@ -99,10 +99,10 @@
       beforeCreate(){
       },
 
-      // 创建完毕状态 
+      // 创建完毕状态
       created(){
              document.body.style.background = "#fff";
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         this.user = user
         this.getInfo()
       },
@@ -114,7 +114,7 @@
       // 挂载结束状态
       mounted(){
       },
-      
+
       // 更新前状态
       beforeUpdate(){
       },
@@ -129,8 +129,8 @@
 
       // 销毁完成状态
       destroyed(){
-      } 
-      
+      }
+
     }
 </script>
 <style lang="scss" scoped>
@@ -155,7 +155,7 @@
     align-items: center;
     justify-content: center;
     margin:  0 auto;
-    padding-top:.3rem; 
+    padding-top:.3rem;
     background: #fff;
     background: #F6F6F6;
     span{
@@ -212,7 +212,7 @@
 
     .message_show{
       background: #fff;
-      border-radius:10px 10px 0 0; 
+      border-radius:10px 10px 0 0;
       ul{
         width: 5.6rem;
         margin: 0 auto;
@@ -249,7 +249,7 @@
         justify-content: center;
         padding-bottom: 1rem;
         div{
-          width: 2rem; 
+          width: 2rem;
           text-align: center;
           i{
             overflow: hidden;
@@ -276,4 +276,4 @@
 
 
 
-    
+

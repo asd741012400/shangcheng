@@ -75,7 +75,7 @@ export default {
                 reader.readAsDataURL(arr[i]);
                 reader.onload = async function(event) {
                     let url = event.target.result;
-                    postRequest(that.$api + '/upload/UpBase64Image', { img: url })
+                    postRequest('/upload/UpBase64Image', { img: url })
                         .then(res => {
                             if (res.data.code == 1) {
                                 that.imagesUrl.push(res.data.data)
@@ -121,7 +121,7 @@ export default {
 
         //发表评论
         async submit() {
-            let userInfo = this.$localstore.get('userInfo')
+            let userInfo = this.$localstore.get('wx_user')
             let data = {
                 user_id: userInfo.user_id,
                 user_name: userInfo.username,
@@ -146,7 +146,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#F6F6F6";
         this.getGoods()

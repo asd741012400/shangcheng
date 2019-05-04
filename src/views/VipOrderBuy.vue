@@ -80,9 +80,7 @@ export default {
                     var options = config;
                     that.$localstore.session.set('has_share', '')
                     // 支付成功后的操作
-                    options.success = async function() {
-                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
+                    options.success = async function() {          
                         that.$router.replace({
                             name: 'PaySucceed',
                             query: {
@@ -90,8 +88,7 @@ export default {
                                 goods_id: that.order.goods_id,
                                 type: that.order.order_type,
                             }
-                        })
-                        // }
+                        })      
                     };
 
                     //  取消支付的操作

@@ -97,7 +97,7 @@ export default {
             }
             return new Blob([uInt8Array], { type: contentType });
         },
-        // 用于微信JS-SDK回调   
+        // 用于微信JS-SDK回调
         async wxRegister() {
             //获取微信jssdk
             let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
@@ -127,7 +127,7 @@ export default {
                 });
                 wx.onMenuShareAppMessage({
                     title: this.title, // 分享标题, 请自行替换
-                    desc: this.desc, // 分享描述, 请自行替换
+                    desc: '', // 分享描述, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.imgUrl, // 分享图标, 请自行替换，需要绝对路径
                     success() {
@@ -190,11 +190,11 @@ export default {
 
             let qrcode = new QRCode('qrcode', {
                 // width: 60,
-                // height: 60, // 高度  
-                text: this.url, // 二维码内容  
-                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                // background: '#f0f',  
-                // foreground: '#ff0'  
+                // height: 60, // 高度
+                text: this.url, // 二维码内容
+                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+                // background: '#f0f',
+                // foreground: '#ff0'
             })
 
 
@@ -226,10 +226,10 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     async created() {
         document.body.style.background = "#fff";
-        this.user = this.$localstore.get('userInfo')
+        this.user = this.$localstore.get('wx_user')
         this.goods_id = this.$route.query.id
         this.type = this.$route.query.type
 
@@ -242,7 +242,7 @@ export default {
         }
         this.wechat_img = this.user.wechat_img
         var url = this.user.wechat_img;
-        this.wechat_img = this.$imgUrl1 + '/wechat_image' + url.substring(23)
+        this.wechat_img = this.$imgUrl + '/wechat_image' + url.substring(23)
 
         this.instance = this.$message({
             message: '海报正在生成中。。。',

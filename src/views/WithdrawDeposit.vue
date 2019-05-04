@@ -56,8 +56,8 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                setTimeout(()=>{
-                 this.$router.go(-1)
-               })
+                  this.$router.go(-1)
+               },2000)
             }
         }
     },
@@ -65,10 +65,10 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#F6F6F6";
-        let userInfo = this.$localstore.get('userInfo')
+        let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {
             this.userInfo = userInfo
         }

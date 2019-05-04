@@ -101,7 +101,7 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#F6F6F6";
         let card = this.$localstore.get('usecard')
@@ -109,7 +109,7 @@ export default {
         if (!card) {
             this.$router.push({ name: "Index" })
         }
-        let user = this.$localstore.get('userInfo')
+        let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
         }

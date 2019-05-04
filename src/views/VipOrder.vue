@@ -91,7 +91,7 @@ export default {
                 this.$message('你未同意会员协议！')
                 return false
             }
-            let WxAuth = this.$localstore.get('userInfo')
+            let WxAuth = this.$localstore.get('wx_user')
             let postData = {
                 order_type: 2,
                 share_id: this.share_id,
@@ -119,10 +119,8 @@ export default {
     created() {
         document.body.style.background = "#f6f6f6";
         let has_share = this.$localstore.session.get('has_share')
-        if (has_share && has_share.query.share_id) {
-            if (has_share.query.id == this.id && has_share.query.type == this.type) {
-                this.share_id = has_share.query.share_id
-            }
+        if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
+            this.share_id = has_share.query.share_id
         }
         this.getOrder()
         this.getVipList()

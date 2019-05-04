@@ -119,7 +119,7 @@ export default {
             this.currSize = res.data.data.goods_list.length
             this.pageSize = res.data.data.count
         },
-        // 用于微信JS-SDK回调   
+        // 用于微信JS-SDK回调
         async wxRegister() {
             //获取微信jssdk
             let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
@@ -170,10 +170,10 @@ export default {
     // 创建前状态
     beforeCreate() {},
 
-    // 创建完毕状态 
+    // 创建完毕状态
     created() {
         document.body.style.background = "#F6F6F6";
-        let userInfo = this.$localstore.get('userInfo')
+        let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {
             this.userInfo = userInfo
         }
