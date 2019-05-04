@@ -422,7 +422,7 @@ router.beforeEach((to, from, next) => {
     shareFrom(to);
     let code = getParamString('code');
     let user = localstore.get('wx_user')
-    let union_id =   ''
+    let union_id = ''
     if (user && user.union_id) {
         union_id = user.union_id
     }
@@ -437,30 +437,28 @@ router.beforeEach((to, from, next) => {
                 if (from_url) {
                     localstore.remove('from_url')
                     if (from_url.length > 2) {
-                        window.location.href = '/#'+from_url
+                        window.location.href = '/#' + from_url
                     }
                 }
-            } else {
-                if (!user) {
-                    getAuth()
+            }
+        })
+    } else {
+        if (user) {
+            getRequest('/wechat/GetUserInfo', { union_id: union_id }).then(res => {
+                if (res.data.code == 1) {
+                    localstore.set('wx_user', res.data.data)
+                }else{
+                	localstore.set('wx_user', '')
                 }
-            }
-        })
+            })
+        }
+
+        if (!code && !user) {
+            getAuth()
+        }
     }
 
-    if (user) {
-        getRequest('/wechat/GetUserInfo', { union_id: union_id }).then(res => {
-            if (res.data.code == 1) {
-                localstore.set('wx_user', res.data.data)
-            } else {
-                localstore.set('wx_user', '')
-            }
-        })
-    }
 
-    if (!code && !user) {
-        getAuth()
-    }
 
 
     //门店id存储
