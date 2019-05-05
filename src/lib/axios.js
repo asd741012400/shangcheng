@@ -1,12 +1,13 @@
 import axios from 'axios'
 import localStore from 'store2'
+import {IMG_URL,API_URL} from '../config/index.js'
 
 //默认配置地址
-axios.defaults.baseURL = 'http://quandouapi.qinzinianka.com'
+axios.defaults.baseURL = API_URL
+
 
 //axios:请求拦截器
 axios.interceptors.request.use(function(config) {
-
     
     return config;
 });

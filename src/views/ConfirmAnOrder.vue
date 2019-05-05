@@ -230,7 +230,11 @@ export default {
                 let res = await this.$getRequest('home/GetGoodsDetail', { id: id })
                 this.goods = res.data.data
                 this.title = this.goods.goods_name
-                this.limit_num = this.goods.limit_num
+                if (this.goods.limit_num == 0) {
+                    this.limit_num = 99999999999
+                } else {
+                    this.limit_num = this.goods.limit_num
+                }
                 this.form_table = res.data.data.form_table.split(',');
 
 
@@ -246,6 +250,11 @@ export default {
                         if (item.attr_id == this.attr_id) {
                             this.attr_name = item.attr_name
                             this.limit_num = item.attr_limit_num
+                            if (item.attr_limit_num == 0) {
+                                this.limit_num = 99999999999
+                            } else {
+                                this.limit_num = item.attr_limit_num
+                            }
                             this.store = item.attr_store
                             if (this.userInfo.status == 0) {
                                 this.price = item.attr_price

@@ -7,6 +7,8 @@ import dayjs from 'dayjs'
 import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
+import {IMG_URL,API_URL} from './config/index.js'
+
 
 //剪切板
 import VueClipboard from 'vue-clipboard2'
@@ -36,14 +38,14 @@ Vue.component(CountDown.name, CountDown);
 
 
 //移动端调试
-// import Vconsole from 'vconsole';
-// const vConsole = new Vconsole();
-// Vue.use(vConsole)
+import Vconsole from 'vconsole';
+const vConsole = new Vconsole();
+Vue.use(vConsole)
 
 import { Toast } from 'mint-ui'; 
 
 Vue.config.productionTip = false
-Vue.prototype.$imgUrl = 'http://quandouimg.qinzinianka.com/upload';
+Vue.prototype.$imgUrl = IMG_URL;
 Vue.prototype.$message = Toast;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;

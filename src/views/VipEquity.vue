@@ -6,10 +6,11 @@
             <div class="add"></div>
         </header>
         <div class="vip_card">
-            <p>
+            <img :src="$imgUrl+plus.photo" alt="">
+     <!--            <p>
                 <span>累积为您节省：￥</span>
                 <a>{{plus.price}}</a>
-            </p>
+            </p> -->
         </div>
         <div class="exclusive_bg">
             <i class="img1"><img src="../assets/VipEquity_img1.png" alt=""></i>
@@ -33,7 +34,9 @@
                         <span></span>
                         <b>{{currVip.name}}</b>
                       </h3>
-                    <p v-html="currVip.desc"></p>
+                    <div class="detail">
+                        <p v-html="currVip.desc"></p>
+                    </div>
                 </div>
                 <div class="privilege">
                     <div class="tle_text">
@@ -184,7 +187,6 @@ export default {
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
             }
-            document.getElementById("product").scrollIntoView();
         },
         //获取更多商品
         async getGoodsListMore(cid) {
@@ -199,7 +201,9 @@ export default {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
-            this.wxRegister()
+            if (this.user.status > 0) {
+                this.wxRegister()
+            }
         },
         // 用于微信JS-SDK回调
         async wxRegister() {
@@ -375,13 +379,18 @@ header {
     background: url('../assets/VipEquity_bg.png') top/100% 17.38rem no-repeat;
 
     .vip_card {
-        height: 4.66rem;
-        background: url('../assets/VipEquity_card.png') center/100% no-repeat;
-        border-radius: 10px;
-        margin: 0 auto;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
+        // background: url('../assets/VipEquity_card.png') center/100% no-repeat;
+    height: 4.66rem;
+    border-radius: 10px;
+    margin: 0 auto;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    padding: 0.2rem;
+
+    img{
+        border-radius:10px;
+    }
 
         p {
             margin-top: 3.1rem;
@@ -501,7 +510,12 @@ header {
             .text {
                 border: solid 1px #b19363;
                 margin: .2rem .18rem 0;
+                overflow: hidden;
                 padding: .38rem .13rem .38rem .2rem;
+
+                .detail{
+                    padding:0.1rem 0;
+                }
 
                 h3 {
                     display: flex;

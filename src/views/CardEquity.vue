@@ -62,7 +62,7 @@
                 <li v-for="(item,index) in list" :key="index">
                     <div class="image">
                         <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
-                        <p>剩余次数<span>{{item.store}}</span></p>
+                        <p>库存<span>{{item.store}}</span></p>
                     </div>
                     <div class="text">
                         <h3>
@@ -70,7 +70,7 @@
                           <b>畅玩{{item.use_num}}次</b>
                         </h3>
                         <div class="text_div">
-                            <p>{{item.project_dsc}}</p>
+                            <p class="text-clip">{{item.project_dsc}}</p>
                             <p>有效期：{{item.limit_stime}}至{{item.limit_etime}}</p>
                             <em v-if="item.is_deduct == 2">消耗1次权益</em>
                             <em v-else>免费</em>
@@ -585,6 +585,13 @@ export default {
 
                     .text_div {
                         height: 1.3rem;
+
+                        .text-clip {
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 2;
+                            overflow: hidden;
+                        }
 
                         p {
                             font-size: .24rem;

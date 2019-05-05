@@ -167,7 +167,7 @@ export default {
         let userInfo = this.$localstore.get('wx_user')
         document.body.style.background = "#F6F6F6";
         const that = this;
-        that.$http.get(that.apiUrl + 'home/getcardlist')
+        that.$http.get('/home/getcardlist')
             .then(response => {
                 var data = JSON.parse(JSON.stringify(response.data))
                 if (data.code == 1) {
@@ -180,7 +180,7 @@ export default {
                 console.log(error);
             });
 
-        that.$http.get(that.apiUrl + 'home/GetNavList')
+        that.$http.get('/home/GetNavList')
             .then(response => {
                 var data = JSON.parse(JSON.stringify(response.data))
                 if (data.code == 1) {

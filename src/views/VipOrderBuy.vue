@@ -7,15 +7,16 @@
         </header>
         <div class="mian">
             <div class="vip_card">
-                <p>
+                  <img :src="$imgUrl+plus.photo" alt="">
+        <!--         <p>
                     <span>累积为您节省：￥</span>
                     <a>{{plus.price}}</a>
-                </p>
+                </p> -->
             </div>
             <div class="nav">
                 <ul>
                     <li v-for="(item,ii) in vip" :key="ii">
-                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                        <span><img :src="$imgUrl+item.thumb" alt=""></span>
                         <p>{{item.name}}</p>
                     </li>
                 </ul>
@@ -184,14 +185,20 @@ export default {
 
         .vip_card {
             height: 4.66rem;
-            background: url('../assets/VipOrder_card.png') center/100% no-repeat;
+            // background: url('../assets/VipOrder_card.png') center/100% no-repeat;
             border-radius: 10px;
-            margin: 0 auto;
+            margin: -20px auto;
             overflow: hidden;
             display: flex;
             justify-content: center;
             position: absolute;
             width: 100%;
+            padding: 0.2rem;
+            box-sizing: border-box;
+
+            img{
+                border-radius:10px;
+            }
 
             p {
                 margin-top: 3.1rem;

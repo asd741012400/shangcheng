@@ -43,7 +43,7 @@
                           <b class="col2" v-else-if="vv.project_cancle_status != 2">剩余{{vv.project_num || 0}}次</b>
                         </h4>
                             <div class="text_div">
-                                <p>{{vv.project_dsc}}</p>
+                                <p class="text-clip">{{vv.project_dsc}}</p>
                                 <p>有效期：{{vv.limit_stime}}至{{vv.limit_etime}}</p>
                             </div>
                             <div class="price_div">
@@ -443,6 +443,13 @@ export default {
                         p {
                             font-size: .24rem;
                             color: #999999;
+                        }
+
+                        .text-clip{
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 2;
+                            overflow: hidden;
                         }
 
                         em {

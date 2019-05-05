@@ -278,10 +278,10 @@ export default {
                 return false
             }
 
-            if (this.limit_num == 0) {
-                this.$message('当前限购0件!');
-                return false;
-            }
+            // if (this.limit_num == 0) {
+            //     this.$message('当前限购0件!');
+            //     return false;
+            // }
 
             if (!this.attr_id) {
                 if (this.GoodsDetail.goods_attr.length > 0) {
@@ -682,7 +682,7 @@ export default {
             .detail {
                 padding: 0.2rem .6rem;
                 background: #fff;
-                display: flex;
+                display: inherit;
 
                 img {
                     margin: 5px 0;
