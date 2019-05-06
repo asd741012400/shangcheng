@@ -325,6 +325,7 @@ export default {
 .goods_list {
     padding: 0.1rem 0.1rem;
     background: #eee;
+    font-size:0.3rem;
 
     li {
         display: flex;

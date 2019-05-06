@@ -128,6 +128,7 @@
         </ul>
         <MyFooter></MyFooter>
         <div class="service" v-if="mobile"><a :href="'tel:'+mobile"><img src="../assets/icon_service.png" alt=""></a></div>
+        <div class="service" v-else><a href="javascript:;"><img src="../assets/icon_service.png" alt=""></a></div>
         <!-- 兑换码兑换 -->
         <div class="card_add_pop" v-if="popShow">
             <div class="card_add">

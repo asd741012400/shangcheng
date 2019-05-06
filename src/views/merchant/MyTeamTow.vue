@@ -19,8 +19,8 @@
             <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">直属会员</p>
         </div>
         <ul class="team_member">
-            <li v-for="item in list" @click="getDetail()">
-                <i><img :src="$imgUrl+item.wechat_img"></i>
+            <li v-for="item in list" @click="getDetail(item.user_id)">
+                <i><img :src="item.wechat_img"></i>
                 <div>
                     <p class="name">
                         <b>{{item.username}}</b>
@@ -71,7 +71,7 @@ export default {
         //获取列表
         async getList() {
             let data = {
-                user_id: 1,
+                user_id: this.user.user_id,
                 page: this.page
             }
             let url = '/store/MyTeam2';
@@ -119,7 +119,12 @@ export default {
         },
         //成员详情
         async getDetail(id) {
-            // this.$router.push({ name: "WithdrawDepositDel", query: { id: id } })
+            if (this.table == 1) {
+                this.$router.push({ name: "TeamDel", query: { id: id } })
+            } else {
+                this.$router.push({ name: "MemberDel", query: { id: id } })
+            }
+
         }
 
     },
@@ -129,19 +134,11 @@ export default {
 
     // 创建完毕状态
     created() {
-
         document.body.style.background = "#fff";
         let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
-
-            if (this.user.level == 2) {
-                document.title = "我的团队（二级）"
-            } else {
-                document.title = "我的团队（三级）"
-            }
-
-
+            document.title = "我的团队（三级）"
         } else {
             this.$router.psuh({ name: "Login" })
         }
@@ -180,7 +177,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-         document.title = ""
+        document.title = ""
     },
 
     // 销毁完成状态

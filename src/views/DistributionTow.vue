@@ -38,8 +38,12 @@
                 <li @click="goTeam">
                     <div>
                         <i><img src="../assets/icon_team.png" alt=""></i>
-                        <!-- <p>团队成员<span>(<b>1</b>）</span></p> -->
-                        <p>团队成员</p>
+                        <template v-if="user.level == 2">
+                            <p>团队成员<span>(<b>{{team_nums}}</b>）</span></p>
+                         </template>
+                        <template v-else-if="user.level == 3">
+                            <p>我的团队<span>(<b>{{team_nums}}</b>）</span></p>
+                        </template>
                     </div>
                 </li>
                 <li @click="goTuiGuang">
@@ -73,23 +77,37 @@ export default {
         return {
             info: {},
             user: {},
+            team_nums: 0,
         }
     },
     components: {},
     methods: {
+        //去体现
         goWidthdrew() {
             this.$router.push({ name: 'WithdrawDeposit' })
         },
+        //查看我的推广
         goTuiGuang() {
             this.$router.push({ name: 'TeamDelTow' })
         },
+        //体现记录列表
         goWidthdrewList() {
             this.$router.push({ name: 'WithdrawList' })
         },
+        //获取用户详情
         async getInfo() {
-            let res = await this.$getRequest('/store/StoreHome', { user_id: this.user.user_id })
+            let data = { user_id: this.user.user_id }
+            let res = await this.$getRequest('/store/StoreHome', data)
             this.info = res.data.data
+            if (this.user.level == 2) {
+                let result = await this.$getRequest('/store/MyTeam2', data)
+                this.team_nums = result.data.data.team_nums
+            } else if (this.user.level == 3) {
+                let result = await this.$getRequest('/store/MyTeam2', data)
+                this.team_nums = result.data.data.team_nums
+            }
         },
+        //查看我的团队
         goTeam() {
             if (this.user.level == 2) {
                 this.$router.push({ name: 'Generalize' })
@@ -108,7 +126,7 @@ export default {
         let user = this.$localstore.get('wx_user')
         this.user = user
         if (!user) {
-             this.$router.push({ name: 'Login' })
+            this.$router.push({ name: 'Login' })
         }
         this.getInfo()
     },

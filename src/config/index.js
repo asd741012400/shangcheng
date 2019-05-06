@@ -1,4 +1,4 @@
-export const ENV = false
+export const ENV = true
 
 
 //根据变量替换打包URL

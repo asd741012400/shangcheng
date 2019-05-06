@@ -38,7 +38,7 @@
                         <p v-html="currVip.desc"></p>
                     </div>
                 </div>
-                <div class="privilege">
+                <div class="privilege"  v-if="currVip.detail">
                     <div class="tle_text">
                         <span></span>
                         <a class="left"></a>
@@ -49,7 +49,7 @@
                     <i class="tle_en">EXCLUSIVE RIGHTS</i>
                     <div class="privilege_img">
                         <!-- <img :src="$imgUrl+plus.photo" alt=""> -->
-                        <div class="detail" v-html="currVip.detail">
+                        <div class="detail"  v-html="currVip.detail">
                         </div>
                     </div>
                 </div>

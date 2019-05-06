@@ -5,7 +5,7 @@
             <span>团队总人数</span>
         </header>
         <ul class="team_member">
-            <li v-for="item in list">
+            <li v-for="item in list"  @click="getDetail(item.user_id)">
                 <i><img :src="item.wechat_img"></i>
                 <div>
                     <p class="name">
@@ -66,8 +66,9 @@ export default {
             this.list = this.list.concat(res.data.data.my_people);
             this.currSize = res.data.data.my_people.length
         },
+        //成员详情
         async getDetail(id) {
-            this.$router.push({ name: "WithdrawDepositDel", query: { id: id } })
+            this.$router.push({ name: "MemberDel", query: { id: id } })
         }
 
     },
