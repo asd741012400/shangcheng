@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
-import {IMG_URL,API_URL} from './config/index.js'
+import {ENV,IMG_URL,API_URL} from './config/index.js'
 
 
 //剪切板
@@ -39,8 +39,10 @@ Vue.component(CountDown.name, CountDown);
 
 //移动端调试
 import Vconsole from 'vconsole';
-const vConsole = new Vconsole();
-Vue.use(vConsole)
+if (!ENV) {	
+	const vConsole = new Vconsole();
+	Vue.use(vConsole)
+}
 
 import { Toast } from 'mint-ui'; 
 

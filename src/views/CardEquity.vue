@@ -70,12 +70,12 @@
                           <b>畅玩{{item.use_num}}次</b>
                         </h3>
                         <div class="text_div">
-                            <p class="text-clip">{{item.project_dsc}}</p>
-                            <p>有效期：{{item.limit_stime}}至{{item.limit_etime}}</p>
+                            <div class="text-clip">{{item.project_dsc}}</div>
+                            <p style="margin: 5px 0;">有效期：{{item.limit_stime}}至{{item.limit_etime}}</p>
                             <em v-if="item.is_deduct == 2">消耗1次权益</em>
                             <em v-else>免费</em>
                         </div>
-                        <div class="price_div">
+                        <div class="price_div" style="margin-top: 15px;">
                             <b>价值￥{{item.project_price}}</b>
                             <a v-if="item.is_deduct == 2" @click="getPlus(item)">领 取</a>
                             <a v-else @click="getPlus(item)">免费领取</a>

@@ -129,13 +129,21 @@ export default {
 
     // 创建完毕状态
     created() {
-        document.title = "我的团队（二级）"
+
         document.body.style.background = "#fff";
         let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
-        }else{
-            this.$router.psuh({name:"Login"})
+
+            if (this.user.level == 2) {
+                document.title = "我的团队（二级）"
+            } else {
+                document.title = "我的团队（三级）"
+            }
+
+
+        } else {
+            this.$router.psuh({ name: "Login" })
         }
         this.getNum()
         this.getList()
@@ -171,7 +179,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+         document.title = ""
+    },
 
     // 销毁完成状态
     destroyed() {}
