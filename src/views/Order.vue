@@ -79,26 +79,26 @@
                             <div>X {{item.order_num}}</div>
                         </div>
                     </div>
-                    <div class="footer">
-                        <div>
-                            <span>合计 ￥{{item.total_amount}}</span>
+                    <div >
+                        <div class="footer">
+                            <span style="font-size:0.3rem;font-weight:700">合计 ￥{{item.total_amount}}</span>
                         </div>
-                        <div>
+                        <div class="footer">
                             <!-- 全部 -->
                             <!-- order_status`'订单状态 0:未支付;1:订单完成;2:订单超时 3分单退款 4:已退款 5已使用 6 退款中 200:用户取消订单 201:后台取消订单;', -->
                             <template v-if="active == 0">
                                 <template v-if="item.order_status == 0">
-                                    <van-button type="danger" size="mini" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
-                                    <van-button type="danger" size="mini" @click.stop="payOrder(item.order_id)">去付款</van-button>
+                                    <van-button type="danger" size="small" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
+                                    <van-button type="danger" size="small" @click.stop="payOrder(item.order_id)">去付款</van-button>
                                 </template>
                                 <template v-else-if="item.order_status == 1">
-                                    <van-button v-if="item.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                    <van-button v-if="item.is_comment == 0" type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                                     <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1 && item.order_status == 1">
-                                        <van-button type="warning" size="mini" @click="refundApply(item.order_id)">申请退款</van-button>
+                                        <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
                                     </template>
-                                    <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                                    <van-button v-if="item.order_type == 1" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
                                     <template v-if="item.is_use == 0">
-                                        <van-button v-if="item.order_type == 3" type="info" size="mini" @click="activeCard(item.cg_id.id)">去激活</van-button>
+                                        <van-button v-if="item.order_type == 3" type="info" size="small" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                     </template>
                                 </template>
                                 <template v-else-if="item.order_status == 2">
@@ -110,34 +110,34 @@
                             </template>
                             <!-- 待付款 -->
                             <template v-if="active == 1">
-                                <van-button type="danger" size="mini" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
-                                <van-button type="primary" size="mini" @click.stop="payOrder(item.order_id)">去付款</van-button>
+                                <van-button type="danger" size="small" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
+                                <van-button type="primary" size="small" @click.stop="payOrder(item.order_id)">去付款</van-button>
                             </template>
                             <!-- 待使用 -->
                             <template v-else-if="active == 2">
                                 <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1 && item.order_status == 1">
-                                    <van-button type="warning" size="mini" @click="refundApply(item.order_id)">申请退款</van-button>
+                                    <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
                                 </template>
-                                <van-button v-if="item.order_type == 1" type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                                <van-button v-if="item.order_type == 1" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
                                 <template v-if="item.is_use == 0">
-                                    <van-button v-if="item.order_type == 3" type="info" size="mini" @click="activeCard(item.cg_id.id)">去激活</van-button>
+                                    <van-button v-if="item.order_type == 3" type="info" size="small" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                 </template>
                             </template>
                             <!-- 待评价 -->
                             <template v-else-if="active == 3">
-                                <van-button type="primary" size="mini" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                <van-button type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             </template>
                             <!-- 退款 -->
                             <template v-else-if="active == 4">
                             </template>
                             <template v-else-if="active == 5">
                             </template>
-                            <!-- <van-button type="danger" size="mini">取消订单</van-button> -->
-                            <!-- <van-button type="danger" size="mini">申请退款</van-button> -->
-                            <!-- <van-button type="primary" size="mini">还想买</van-button> -->
-                            <!-- <van-button type="info" size="mini" @click="getOrder(item.order_id,item.order_type)">去使用</van-button> -->
-                            <!--                     <van-button type="info" size="mini" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
-                            <van-button type="info" size="mini">激活使用</van-button> -->
+                            <!-- <van-button type="danger" size="small">取消订单</van-button> -->
+                            <!-- <van-button type="danger" size="small">申请退款</van-button> -->
+                            <!-- <van-button type="primary" size="small">还想买</van-button> -->
+                            <!-- <van-button type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button> -->
+                            <!--                     <van-button type="info" size="small" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                            <van-button type="info" size="small">激活使用</van-button> -->
                         </div>
                     </div>
             </li>
@@ -325,7 +325,7 @@ export default {
 .goods_list {
     padding: 0.1rem 0.1rem;
     background: #eee;
-    font-size:0.3rem;
+    font-size: 0.3rem;
 
     li {
         display: flex;
@@ -346,6 +346,13 @@ export default {
 
             .img-box {
                 width: 20%;
+
+                img {
+                    display: block;
+                    width: 100%;
+                    height: 1.26rem;
+                    object-fit: cover
+                }
             }
 
             .center {
@@ -374,7 +381,10 @@ export default {
             margin-top: 0.2rem;
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            justify-content: flex-end;
+            button{
+                margin-left:10px;
+            }
         }
 
     }

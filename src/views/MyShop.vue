@@ -409,6 +409,7 @@ export default {
                     .project {
                         display: flex;
                         padding: .3rem .2rem;
+                        font-size: 0.25rem;
 
                         p {
                             flex: 1;
@@ -417,6 +418,7 @@ export default {
                         }
 
                         span {
+                            font-size: 0.25rem;
                             color: #FF6666;
                         }
                     }
@@ -425,6 +427,13 @@ export default {
                         padding: .3rem .2rem;
                         display: flex;
                         justify-content: space-between;
+
+                        b {
+                            font-weight: normal;
+                            font-size: .36rem;
+                            padding-left: 2px;
+                            padding-right: .2rem;
+                        }
 
                         .btn {
                             padding: 0.12rem 0.5rem;

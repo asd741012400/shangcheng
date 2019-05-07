@@ -47,12 +47,12 @@ export default {
     methods: {
         //获取门店信息
         async getStore() {
-            let userInfo = this.$localstore.get('business_user')
-            let res = await this.$getRequest('/business/getUserStoreList', { union_id: userInfo.union_id })
+            let userInfo = this.$localstore.get('wx')
+            let res = await this.$getRequest('/business/getUserStoreList', { union_id: userInfo.unionid })
             this.store = res.data.data
             let arr = []
             this.store.map(item => {
-                if (item.business_id == userInfo.business_id) {
+                if (item.is_default == 1) {
                     this.defaultStore = item
                 } else {
                     arr.push(item)

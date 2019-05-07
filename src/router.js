@@ -77,7 +77,6 @@ import StoreList from './views/checkstore/StoreList.vue' //提现记录
 
 import localstore from 'store2' //本地存储
 import { getRequest, postRequest } from './lib/axios'
-const qs = require('qs')
 
 
 Vue.use(Router)

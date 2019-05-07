@@ -9,7 +9,7 @@
                     <template v-else>
                         <span><a><img src="@/assets/icon_shopA.png" alt=""></a></span>
                     </template>
-                    <p>商城</p>
+                    <p :class="($route.name == 'Index' || $route.name == 'Home') ? 'active' : ''">商城</p>
                 </router-link>
             </div>
             <div class="member">
@@ -22,7 +22,7 @@
                         <b><img src="@/assets/icon_vip_imgA.png" alt=""></b>
                     </template>
                     <span></span>
-                    <p>会员</p>
+                    <p :class="($route.name == 'VipEquity') ? 'active' : ''">会员</p>
                 </router-link>
             </div>
             <div class="personal_center">
@@ -33,7 +33,7 @@
                     <template v-else>
                         <span><a><img src="@/assets/icon_myA.png" alt=""></a></span>
                     </template>
-                    <p>个人中心</p>
+                    <p :class="($route.name == 'PersonalCenter') ? 'active' : ''">个人中心</p>
                 </router-link>
             </div>
         </div>
@@ -85,7 +85,7 @@ footer {
     position: fixed;
     bottom: 0;
     box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
-    height: 1.64rem;
+    height: 1.4rem;
     width: 100%;
     background: #fff;
 
@@ -165,6 +165,11 @@ footer {
                 }
             }
         }
+    }
+
+    .active{
+        font-weight:bold;
+        font-size: 0.3rem;
     }
 }
 </style>

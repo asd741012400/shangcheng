@@ -398,7 +398,7 @@ body {
 
                     p {
                         font-weight: bold;
-                        font-size: .28rem;
+                        font-size: .32rem;
                     }
 
                     div {
@@ -407,7 +407,7 @@ body {
 
                         a {
                             color: #fff;
-                            font-size: .24rem;
+                            font-size: .3rem;
                         }
 
                         i {

@@ -375,8 +375,18 @@ export default {
 
                         span {
                             width: .88rem;
+                            height: .88rem;
                             overflow: hidden;
+
+                            img {
+                                display: block;
+                                width: 100%;
+                                height: .88rem;
+                                object-fit: cover
+                            }
                         }
+
+
                     }
 
                     li:last-of-type {
@@ -398,16 +408,25 @@ export default {
                 h3 {
                     padding: .4rem 0 .14rem;
                     border-bottom: 1px solid #CCCCCC;
+                    font-size: 0.3rem;
                 }
 
                 div.img {
                     display: flex;
                     padding-top: .24rem;
 
+
                     span {
                         width: 1.26rem;
                         height: 1.26rem;
                         overflow: hidden;
+
+                        img {
+                            display: block;
+                            width: 100%;
+                            height: 1.26rem;
+                            object-fit: cover
+                        }
                     }
 
                     div {
@@ -428,7 +447,7 @@ export default {
 
                         p.text1 {
                             a {
-                                font-size: .28rem;
+                                font-size: .32rem;
                                 color: #535D70;
                             }
 

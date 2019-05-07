@@ -56,7 +56,7 @@
                 </ul>
             </div>
         </div>
-        <div class="activity_list">
+        <div class="activity_list" id="goods">
             <h3>
                 <span><img src="../assets/icon_recommend.png" alt=""></span>
                 <a>爆款推荐</a>
@@ -153,9 +153,20 @@ export default {
             });
         },
         //商品搜索
-        searchGoods() {
+        async searchGoods() {
             this.pages = 1
-            this.getGoodsList()
+            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
+            if (res.data.code == 1) {
+                const resData = res.data.data
+                this.goodsListLength = resData.list.length;
+                if (this.goodsListLength > 0) {
+                    this.GoodsList = resData.list
+                    this.goodsListSum = resData.count;
+                    document.getElementById("goods").scrollIntoView();
+                } else {
+                    this.$message('未找到相关商品，请重新输入！')
+                }
+            }
         }
     },
 
@@ -387,6 +398,7 @@ export default {
                 white-space: nowrap;
                 width: auto;
                 overflow-x: scroll;
+                -webkit-overflow-scrolling: touch;
 
                 li {
                     background: #fff;
@@ -639,7 +651,7 @@ export default {
                     .project {
                         display: flex;
                         padding: .3rem .2rem;
-                        font-size: 0.3rem;
+                        font-size: 0.25rem;
 
                         p {
                             flex: 1;
@@ -648,6 +660,7 @@ export default {
                         }
 
                         span {
+                            font-size: 0.25rem;
                             color: #FF6666;
                         }
                     }

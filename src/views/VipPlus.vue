@@ -7,13 +7,13 @@
                 </div>
                 <div class="img"><img :src="poster_img" alt=""></div>
                 </div>
-                <div class="masking" v-if="maskingShow">
+     <!--            <div class="masking" v-if="maskingShow">
                     <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
                     <div>
                         <i><img src="../assets/share_img1.png" alt=""></i>
                         <p>微信分享移到这里啦~</p>
                     </div>
-                </div>
+                </div> -->
             </div>
 </template>
 <script>
@@ -79,7 +79,7 @@ export default {
                     this.instance.close();
                     this.$message('海报制作完成，长按海报分享给朋友吧！');
                     this.getPoster()
-                    this.maskingShow = true
+                    // this.maskingShow = true
                     clearInterval(timer)
                 }
             }, 100)

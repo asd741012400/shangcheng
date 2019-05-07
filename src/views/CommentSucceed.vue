@@ -22,11 +22,11 @@
         <div v-if="GoodsList.length > 0" class="recommend">
             <h3>精选推荐</h3>
             <ul>
-                <li v-for="(item,index) in GoodsList" @click="getDetail(item)">  
-                        <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
-                        <p>{{item.goods_name}}</p>                        
-                        <a v-if="item.is_free">免费</a>
-                        <span>市场价：￥{{item.mkt_price}}</span>
+                <li v-for="(item,index) in GoodsList" @click="getDetail(item)">
+                    <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
+                    <p>{{item.goods_name}}</p>
+                    <a v-if="item.is_free">免费</a>
+                    <span>市场价：￥{{item.mkt_price}}</span>
                 </li>
             </ul>
         </div>
@@ -55,8 +55,8 @@ export default {
             this.GoodsList = res.data.data.list
         },
         //查看商品详情
-        getDetail(item){
-            this.$router.push({name:'CommodityDetails',query:{id:item.goods_id,type:1}})
+        getDetail(item) {
+            this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
         }
 
     },
@@ -239,6 +239,13 @@ export default {
                     height: 3rem;
                     width: 3rem;
                     overflow: hidden;
+
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: 3rem;
+                        object-fit: cover
+                    }
                 }
 
                 p {

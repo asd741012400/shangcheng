@@ -358,7 +358,15 @@ export default {
 
                         span {
                             width: .88rem;
+                            height: .88rem;
                             overflow: hidden;
+
+                            img {
+                                display: block;
+                                width: 100%;
+                                height: .88rem;
+                                object-fit: cover
+                            }
                         }
                     }
 

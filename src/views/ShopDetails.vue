@@ -50,7 +50,7 @@
                 </p>
             </div>
         </div>
-        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange"@close="onClose">
+        <van-image-preview v-model="show" :start-position="index" :images="images" @change="onChange" @close="onClose">
         </van-image-preview>
     </div>
 </template>
@@ -210,6 +210,11 @@ export default {
                         overflow: hidden;
                         width: 1.2rem;
                         height: 1.2rem;
+
+                        img {
+                            width: 1.2rem;
+                            height: 1.2rem;
+                        }
                     }
                 }
             }
@@ -223,6 +228,9 @@ export default {
         .detail {
             padding: 0.2rem .6rem;
             background: #fff;
+            overflow: hidden;
+            display: inherit;
+            margin-bottom: 20px;
 
             img {
                 margin: 5px 0;
@@ -237,7 +245,7 @@ export default {
         }
 
         div {
-            height: 5rem;
+            // height: 5rem;
             background: #DFE6EC;
         }
     }

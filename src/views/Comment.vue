@@ -222,6 +222,13 @@ export default {
             width: 2.04rem;
             height: 2.04rem;
             margin-right: .2rem;
+
+            img {
+                display: block;
+                width: 100%;
+                height: 2.04rem;
+                object-fit: cover
+            }
         }
 
         div {

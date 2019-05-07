@@ -645,21 +645,35 @@ export default {
             }
 
             .option {
-                height: 1.04rem;
-                display: flex;
-                align-items: center;
-                justify-content: flex-start;
-                background: #FFF;
+                /* height: 1.04rem; */
+                padding: 0.1rem 0.2rem;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                /* display: flex; */
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                /* align-items: center; */
+                /* -webkit-box-pack: start; */
+                -ms-flex-pack: start;
+                /* justify-content: flex-start; */
+                background: #eee;
+                /* flex-wrap: wrap; */
+                /* flex-direction: column; */
+                /* width: 75%; */
 
                 span {
-                    width: 2.12rem;
+                    /* width: 2.12rem; */
                     height: .82rem;
+                    /* display: inline-block; */
                     text-align: center;
                     line-height: .82rem;
                     text-align: center;
                     background: #fff;
                     color: #515C6F;
+                    /* flex: 1; */
                     margin-left: .2rem;
+                    margin: 0.12rem 0.2rem;
+                    padding: 0.1rem;
 
                     &.active {
                         color: #FF6666;
@@ -917,9 +931,17 @@ export default {
                         display: flex;
                         padding-right: .2rem;
 
-                        span {
+                          span {
                             width: .88rem;
+                            height: .88rem;
                             overflow: hidden;
+
+                            img {
+                                display: block;
+                                width: 100%;
+                                height: .88rem;
+                                object-fit: cover
+                            }
                         }
                     }
 
@@ -942,7 +964,8 @@ export default {
                 padding: 0.2rem .6rem;
                 background: #fff;
                 display: inherit;
-                margin-bottom: 3.5rem;
+                // margin-bottom: 3.5rem;
+                overflow: hidden;
 
                 img {
                     margin: 5px 0;

@@ -358,6 +358,13 @@ export default {
                     width: 1.26rem;
                     height: 1.26rem;
                     overflow: hidden;
+
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: 1.26rem;
+                        object-fit: cover
+                    }
                 }
 
                 div {
