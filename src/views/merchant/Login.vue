@@ -48,8 +48,8 @@ export default {
         },
         //注册
         async submit() {
-            let WxAuth = this.$localstore.get('wx_user')
-            let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
+            let WxAuth = this.$localstore.get('wx')
+            let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.unionid, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 if (res.data.data.level < 2) {
                     this.$notify('你不是商家用户！');

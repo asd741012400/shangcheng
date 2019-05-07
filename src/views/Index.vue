@@ -164,7 +164,7 @@ export default {
                     this.goodsListSum = resData.count;
                     document.getElementById("goods").scrollIntoView();
                 } else {
-                    this.$message('未找到相关商品，请重新输入！')
+                    this.$notify('未找到相关商品，请重新输入！');
                 }
             }
         }
@@ -599,7 +599,7 @@ export default {
 
                         b {
                             font-weight: normal;
-                            font-size: .36rem;
+                            font-size: .38rem;
                             padding-left: 2px;
                             padding-right: .2rem;
                         }

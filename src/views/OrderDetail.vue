@@ -75,7 +75,7 @@
                             <i>￥{{order.total_amount}}</i>
                         </p>
                         <p class="text2">
-                            <a  v-if="order.attr_name">{{order.attr_name}}</a>
+                            <a class="text-hide"  v-if="order.attr_name">{{order.attr_name}}</a>
                             <i>x{{order.order_num}}</i>
                         </p>
                         <div class="btn">
@@ -399,6 +399,15 @@ export default {
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
+
+                        .text-hide {
+                            display:block;
+                            width: 0.2rem;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            color:#999;
+                        }
 
                         a {
                             font-size: .24rem;

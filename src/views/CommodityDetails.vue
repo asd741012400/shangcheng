@@ -47,11 +47,17 @@
                     <b>非会员价￥{{limit_num}}</b>
                     <p>市场价<span>￥{{mkt_price}}</span></p>
                 </div>
-
                 <div v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</div>
-       
-                <div class="option">
-                    <span @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii" :class="attrActive == ii ? 'active' : ''">{{vv.attr_name}}</span>
+                <div class="select">
+                    <div class="select-item">
+                        <h4>金币VB收ivbbjbkl</h4>
+                        <div>
+                            <span>$155</span>
+                            <span>$55</span>
+                            <del>$55</del>
+                        </div>
+                    </div>
+                    <!-- <span @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii" :class="attrActive == ii ? 'active' : ''">{{vv.attr_name}}</span> -->
                 </div>
             </div>
             <div class="attention">
@@ -645,45 +651,14 @@ export default {
                 border-radius: 15px;
             }
 
-            .option {
-                /* height: 1.04rem; */
-                padding: 0.1rem 0.2rem;
-                display: -webkit-box;
-                display: -ms-flexbox;
-                /* display: flex; */
-                -webkit-box-align: center;
-                -ms-flex-align: center;
-                /* align-items: center; */
-                /* -webkit-box-pack: start; */
-                -ms-flex-pack: start;
-                /* justify-content: flex-start; */
-                background: #eee;
-                /* flex-wrap: wrap; */
-                /* flex-direction: column; */
-                /* width: 75%; */
-
-                span {
-                    /* width: 2.12rem; */
-                    height: .82rem;
-                    /* display: inline-block; */
-                    text-align: center;
-                    line-height: .82rem;
-                    text-align: center;
-                    background: #fff;
-                    color: #515C6F;
-                    /* flex: 1; */
-                    margin-left: .2rem;
-                    margin: 0.12rem 0.2rem;
-                    padding: 0.1rem;
-                    font-size:.3rem;
-
-                    &.active {
-                        color: #FF6666;
-                        box-sizing: border-box;
-                        border: 2px solid #FF6666;
-                    }
+            .select {
+                padding: 0.2rem .6rem;
+                .select-item {
+                    display: flex;
+                    flex-direction: column;
                 }
             }
+
         }
 
         .attention {
@@ -933,7 +908,7 @@ export default {
                         display: flex;
                         padding-right: .2rem;
 
-                          span {
+                        span {
                             width: .88rem;
                             height: .88rem;
                             overflow: hidden;

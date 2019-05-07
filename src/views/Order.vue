@@ -58,18 +58,18 @@
                             <template v-if="item.order_status == 1">
                                 <template v-if="item.order_type == 1">
                                     <template v-if="item.goods_info.limit_type == 2">
-                                        {{toTime(item.pay_time,item.goods_info.limit_days)}}
+                                        <div class="limit-time">{{toTime(item.pay_time,item.goods_info.limit_days)}}</div>
                                     </template>
                                     <template v-else>
-                                        <div>有效期 {{item.goods_info.limit_stime}} 至 {{item.goods_info.limit_etime}}</div>
+                                        <div class="limit-time">有效期 {{item.goods_info.limit_stime}} 至 {{item.goods_info.limit_etime}}</div>
                                     </template>
                                 </template>
                                 <template v-if="item.order_type == 3">
                                     <template v-if="item.card_info.limit_type == 2">
-                                        {{toTime(item.pay_time,item.card_info.limit_days)}}
+                                        <div class="limit-time">{{toTime(item.pay_time,item.card_info.limit_days)}}</div>
                                     </template>
                                     <template v-else>
-                                        <div>有效期 {{item.card_info.limit_stime}} 至 {{item.card_info.limit_etime}}</div>
+                                        <div class="limit-time">有效期 {{item.card_info.limit_stime}} 至 {{item.card_info.limit_etime}}</div>
                                     </template>
                                 </template>
                             </template>
@@ -79,7 +79,7 @@
                             <div>X {{item.order_num}}</div>
                         </div>
                     </div>
-                    <div >
+                    <div>
                         <div class="footer">
                             <span style="font-size:0.3rem;font-weight:700">合计 ￥{{item.total_amount}}</span>
                         </div>
@@ -365,6 +365,11 @@ export default {
                 .title {
                     width: 160px;
                 }
+
+                .limit-time {
+                    color: #666;
+                    font-size: 0.26rem;
+                }
             }
 
             .right {
@@ -382,8 +387,9 @@ export default {
             display: flex;
             flex-direction: row;
             justify-content: flex-end;
-            button{
-                margin-left:10px;
+
+            button {
+                margin-left: 10px;
             }
         }
 

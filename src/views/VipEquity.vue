@@ -7,7 +7,7 @@
         </header>
         <div class="vip_card">
             <img :src="$imgUrl+plus.photo" alt="">
-     <!--            <p>
+            <!--            <p>
                 <span>累积为您节省：￥</span>
                 <a>{{plus.price}}</a>
             </p> -->
@@ -34,11 +34,17 @@
                         <span></span>
                         <b>{{currVip.name}}</b>
                       </h3>
-                    <div class="detail">
-                        <p v-html="currVip.desc"></p>
+                    <div class="detail" id="swiper">
+                        <div class="swiper-container">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide" v-for="(item,ii) in vip" v-html="currVip.desc"></div>
+                            </div>
+                            <!-- Add Pagination -->
+                            <!-- <div class="swiper-pagination"></div> -->
+                        </div>
                     </div>
                 </div>
-                <div class="privilege"  v-if="currVip.detail">
+                <div class="privilege" v-if="currVip.detail">
                     <div class="tle_text">
                         <span></span>
                         <a class="left"></a>
@@ -49,7 +55,7 @@
                     <i class="tle_en">EXCLUSIVE RIGHTS</i>
                     <div class="privilege_img">
                         <!-- <img :src="$imgUrl+plus.photo" alt=""> -->
-                        <div class="detail"  v-html="currVip.detail">
+                        <div class="detail" v-html="currVip.detail">
                         </div>
                     </div>
                 </div>
@@ -96,6 +102,8 @@
     </div>
 </template>
 <script>
+import Swiper from 'swiper';
+import 'swiper/dist/css/swiper.css';
 import wx from 'weixin-js-sdk'
 
 export default {
@@ -297,7 +305,21 @@ export default {
 
     // 挂载结束状态
     mounted() {
-
+        new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            loop: true,
+            autoplay: 5000,
+            slidesPerView: 2,
+            spaceBetween: 3,
+            paginationClickable: true,
+            centeredSlides: true,
+            observer: true, //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true, //修改swiper的父元素时，自动初始化swiper
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
     },
 
     // 更新前状态
@@ -380,17 +402,17 @@ header {
 
     .vip_card {
         // background: url('../assets/VipEquity_card.png') center/100% no-repeat;
-    height: 4.66rem;
-    border-radius: 10px;
-    margin: 0 auto;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    padding: 0.2rem;
+        height: 4.66rem;
+        border-radius: 10px;
+        margin: 0 auto;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        padding: 0.2rem;
 
-    img{
-        border-radius:10px;
-    }
+        img {
+            border-radius: 10px;
+        }
 
         p {
             margin-top: 3.1rem;
@@ -513,8 +535,8 @@ header {
                 overflow: hidden;
                 padding: .38rem .13rem .38rem .2rem;
 
-                .detail{
-                    padding:0.1rem 0;
+                .detail {
+                    padding: 0.1rem 0;
                 }
 
                 h3 {
@@ -687,5 +709,48 @@ header {
             }
         }
     }
+}
+</style>
+<style lang="scss">
+#swiper .swiper-container {
+    width: 100%;
+    height: 100%;
+    position: static;
+    background:none;
+}
+
+#swiper .swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    transition: 300ms;
+}
+
+#swiper .swiper-wrapper {
+    position: static;
+}
+
+#swiper .swiper-container .swiper-wrapper .swiper-slide {
+    width: 6.62rem;
+    height: 240px;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+#swiper .swiper-slide:not(.swiper-slide-active) {
+    transform: scale(0.8);
 }
 </style>
