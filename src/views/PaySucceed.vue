@@ -491,6 +491,7 @@ export default {
         left: 0;
 
         .confirm_pop {
+            width:80%;
             height: 100%;
             display: flex;
             align-items: center;

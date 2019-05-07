@@ -65,7 +65,7 @@
                         <p>库存<span>{{item.store}}</span></p>
                     </div>
                     <div class="text">
-                        <h3>
+                        <h3 @click="goProject(item)">
                           <span>{{item.project_name}}</span>
                           <b>畅玩{{item.use_num}}次</b>
                         </h3>
@@ -134,6 +134,10 @@ export default {
             // 接口请求
             this.getList()
 
+        },
+        goProject(item) {
+
+            this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: 1, type: 1 } })
         },
         actionsheetShow(num) {
             const that = this;
@@ -540,9 +544,17 @@ export default {
                     align-items: center;
 
                     i {
+                        display: block;
                         width: 2.04rem;
                         height: 2.04rem;
                         overflow: hidden;
+
+                        img {
+                            display: block;
+                            width: 100%;
+                            height: 2.04rem;
+                            object-fit: cover
+                        }
                     }
 
                     p {
@@ -565,6 +577,7 @@ export default {
                     h3 {
                         display: flex;
                         align-items: center;
+                        margin-bottom: 5px;
 
                         span {
                             flex: 1;
@@ -584,17 +597,18 @@ export default {
                     }
 
                     .text_div {
-                        height: 1.3rem;
+                        // height: 1.3rem;
 
                         .text-clip {
                             display: -webkit-box;
                             -webkit-box-orient: vertical;
                             -webkit-line-clamp: 2;
                             overflow: hidden;
+                            font-size: .3rem;
                         }
 
                         p {
-                            font-size: .24rem;
+                            font-size: .3rem;
                             color: #999999;
                         }
 

@@ -263,17 +263,6 @@ export default {
                 this.mobile = res.data.data
             }
         },
-
-        //检测用户是否绑定手机号
-        async checkUser() {
-            let userInfo = this.$localstore.get('wx_user')
-            if (userInfo.tel_phone) {
-                return true
-            } else {
-                this.show = true
-                return false
-            }
-        }
     },
 
     // 创建前状态
@@ -281,15 +270,15 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.body.style.background = "#fff";
         let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {
             this.userInfo = userInfo
             this.avatar = userInfo.wechat_img
             this.username = userInfo.username
         }
-        this.checkUser()
+
         this.getMobile()
-        document.body.style.background = "#fff";
     },
 
     // 挂载前状态

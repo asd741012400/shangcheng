@@ -4,7 +4,7 @@
             <h3>当前门店</h3>
             <ul class="team_member">
                 <li>
-                    <i><img :src="$imgUrl + defaultStore.thumb_img"></i>
+                    <i><img :src="getImg(defaultStore.business_img)"></i>
                     <div>
                         <p class="name">
                             <b>{{defaultStore.business_name}}</b>
@@ -20,7 +20,7 @@
             <h3>其他门店</h3>
             <ul class="team_member">
                 <li v-for="item in store" @click="changeStore(item)">
-                    <i><img :src="$imgUrl + item.thumb_img"></i>
+                    <i><img :src="getImg(item.business_img)"></i>
                     <div>
                         <p class="name">
                             <b>{{item.business_name}}</b>
@@ -45,6 +45,10 @@ export default {
     },
     components: {},
     methods: {
+        getImg(str){
+            let img = str.split(',')
+            return this.$imgUrl + img[0]
+        },
         //获取门店信息
         async getStore() {
             let userInfo = this.$localstore.get('wx')

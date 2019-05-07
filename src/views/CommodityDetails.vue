@@ -674,6 +674,7 @@ export default {
                     margin-left: .2rem;
                     margin: 0.12rem 0.2rem;
                     padding: 0.1rem;
+                    font-size:.3rem;
 
                     &.active {
                         color: #FF6666;

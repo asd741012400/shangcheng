@@ -92,17 +92,22 @@ export default {
     left: 0;
     top: 0;
 
-    img {
-        height: 100%;
-    }
 
     i {
         display: block;
         margin: .5rem .69rem 0;
+        width: 6.12rem;
         height: 6.12rem;
         background-color: #ffffff;
         border-radius: 0.34rem;
         overflow: hidden;
+
+        img {
+            display: block;
+            width: 100%;
+            height: 6.12rem;
+            object-fit: cover
+        }
     }
 
     p {

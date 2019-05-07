@@ -361,7 +361,7 @@ export default {
                     .project {
                         display: flex;
                         padding: .3rem .2rem;
-                        font-size: 0.25rem;
+                        font-size: 0.3rem;
 
                         p {
                             flex: 1;
@@ -370,7 +370,7 @@ export default {
                         }
 
                         span {
-                            font-size: 0.25rem;
+                            font-size: 0.3rem;
                             color: #FF6666;
                         }
                     }

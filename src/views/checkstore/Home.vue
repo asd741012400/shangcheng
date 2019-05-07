@@ -2,7 +2,7 @@
     <div class="Home">
         <div class="shop_message">
             <div class="shop_img">
-                <span><img :src="$imgUrl + store.thumb_img"></span>
+                <span><img :src="$imgUrl + thumb_img"></span>
             </div>
             <h3>{{store.business_name}}</h3>
             <router-link :to="{name:'ChageShop'}">
@@ -60,6 +60,7 @@ export default {
     data() {
         return {
             store: {},
+            thumb_img:'',
             shop: {
                 thumb_img: '',
                 business_name: '',
@@ -75,6 +76,7 @@ export default {
             let business_id = this.$localstore.session.get('business_id') || this.$route.query.id
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
             this.store = res.data.data
+            this.thumb_img = this.store.thumb_img ||  this.store.business_img[0]
         },
         //获取店铺信息 及核销信息
         async getShop() {

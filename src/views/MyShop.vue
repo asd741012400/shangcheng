@@ -65,6 +65,7 @@
     </div>
 </template>
 <script>
+import { CURR_URL } from '@/config/index.js'
 import wx from 'weixin-js-sdk'
 import Share from '../components/Share'
 export default {
@@ -183,6 +184,11 @@ export default {
         }
 
         this.url = 'http://' + window.location.host + '/#/MyShopUser?share_id=' + this.userInfo.user_id
+        if (CURR_URL) {
+            this.url = CURR_URL + '/#/MyShopUser?share_id=' + this.userInfo.user_id
+        }
+
+
         this.getInfo()
 
         window.onscroll = () => {
@@ -409,7 +415,7 @@ export default {
                     .project {
                         display: flex;
                         padding: .3rem .2rem;
-                        font-size: 0.25rem;
+                        font-size: 0.3rem;
 
                         p {
                             flex: 1;
@@ -418,7 +424,7 @@ export default {
                         }
 
                         span {
-                            font-size: 0.25rem;
+                            font-size: 0.3rem;
                             color: #FF6666;
                         }
                     }

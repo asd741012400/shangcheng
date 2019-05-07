@@ -22,27 +22,27 @@
                 </div>
             </div>
         </header>
-        <div class="hint" @click="givePlus" v-if="card.get_rights == 1">
+        <div class="hint" @click="givePlus" v-if="user.status == 1 && card.get_rights == 1">
             <p>尊敬的圈豆会员{{user.username}}，价值{{project_price}}元的游乐权益，您可免费领取</p>
         </div>
-        <div class="card_project" v-if="card.get_rights == 1">
+        <div class="card_project" v-if="user.status == 1 && card.get_rights == 1">
             <h3>权益项目</h3>
             <ul>
                 <template v-for="(item,index) in list">
-                    <h2 v-if="item[0].rule_group_name !== ''"><b></b><span>{{item[0].rule_group_name}}（使用其中一项，则另外几项失效）</span></h2>
+                    <h2 v-if="item[0].rule_group_name !== ''"><b></b><span>{{item[0].rule_group_name}}<!-- （使用其中一项，则另外几项失效） --></span></h2>
                     <h2 v-else><b></b><span></span></h2>
                     <li class="padding" v-for="(vv,ii) in list[index]" :class="vv.project_cancle_status == 2 ? 'li_color' : ''">
                         <div class="image">
                             <i><img :src="$imgUrl+vv.thumb_img" alt=""></i>
                             <p v-if="vv.project_cancle_status == 2 || vv.use_status == 1"><span>失效</span></p>
                         </div>
-                        <div class="text">
+                        <div class="text" @click="goProject(vv)">
                             <h4>
                           <span>{{vv.project_name}}</span>
                           <b class="col2" v-if="vv.num_status == 1">无限畅玩</b>
                           <b class="col2" v-else-if="vv.project_cancle_status != 2">剩余{{vv.project_num || 0}}次</b>
                         </h4>
-                            <div class="text_div">                        
+                            <div class="text_div">
                                 <div class="text-clip">
                                     {{vv.project_dsc}}
                                 </div>
@@ -77,6 +77,10 @@ export default {
     },
     components: {},
     methods: {
+        goProject(item) {
+
+            this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: item.c_detail_id,type:1 } })
+        },
         givePlus() {
             this.$router.push({ name: "CardEquity" })
         },
@@ -194,11 +198,12 @@ export default {
             .image {
                 height: 2.4rem;
                 position: relative;
-                overflow:hidden;
+                overflow: hidden;
 
                 i {
                     overflow: hidden;
                     display: block;
+
                 }
 
                 div {
@@ -222,6 +227,7 @@ export default {
                         width: 1.5rem;
                         height: 1.5rem;
                         overflow: hidden;
+
                     }
                 }
             }
@@ -383,9 +389,17 @@ export default {
                     align-items: center;
 
                     i {
+                        display: block;
                         width: 2.04rem;
                         height: 2.04rem;
                         overflow: hidden;
+
+                        img {
+                            display: block;
+                            width: 100%;
+                            height: 2.04rem;
+                            object-fit: cover
+                        }
                     }
 
                     p {
@@ -414,11 +428,11 @@ export default {
                     h4 {
                         display: flex;
                         align-items: center;
+                        margin-bottom: 5px;
 
                         span {
                             flex: 1;
-                            font-size: .28rem;
-                            color: #535D70;
+                            font-size: .32rem;                     
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
@@ -443,15 +457,17 @@ export default {
                         height: 1.3rem;
 
                         p {
-                            font-size: .24rem;
+                            font-size: .3rem;
                             color: #999999;
                         }
 
-                        .text-clip{
+                        .text-clip {
                             display: -webkit-box;
                             -webkit-box-orient: vertical;
                             -webkit-line-clamp: 2;
                             overflow: hidden;
+                            font-size: .25rem;
+                            color: #535D70;
                         }
 
                         em {

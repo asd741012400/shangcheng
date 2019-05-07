@@ -53,7 +53,7 @@
                                 </div>
                             </router-link>
                         </div>
-      <!--                   <div class="advance">
+                        <!--                   <div class="advance">
                             <span>
                             <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                     <img src="../assets/icon_advance.png" alt="">
@@ -68,13 +68,15 @@
                 <div class="detail" v-html="info.project_info"></div>
             </div>
         </div>
-        <footer v-if="state">
+        <!--         <footer v-if="state">
             <div>
                 <p><span><img src="../assets/btn_navigation.png" alt=""></span></p>
-                <p><span><img src="../assets/btn_relation.png" alt=""></span></p>
+                <p><span @click="goTel(info.tel_phone)">
+                    <img src="../assets/btn_relation.png" alt="">
+                </span></p>
             </div>
-        </footer>
-        <footer v-else>
+        </footer> -->
+        <footer v-if="!state">
             <template v-if="cardDetailsState == 1">
                 <a @click="$router.go(-1)">￥{{card.card_price}}立即购卡</a>
             </template>
@@ -108,12 +110,16 @@ export default {
             imgList: '',
             storeList: '',
             card: '',
+            type: '',
             card_id: '',
             project_id: '',
         }
     },
     components: {},
     methods: {
+        goTel(tel) {
+            window.location.href = 'tel://' + tel;
+        },
         goPlus() {
             this.$router.push({ name: 'VipEquity' })
         },
@@ -128,7 +134,6 @@ export default {
         async getStore() {
             let res = await this.$getRequest('/home/GetProjectStore', { project_id: this.project_id })
             this.storeList = res.data.data;
-            console.log(this.storeList);
         },
         //获取卡片详情
         async getCardDetail() {
@@ -175,6 +180,10 @@ export default {
         document.body.style.background = '#fff'
         this.card_id = this.$route.query.card_id
         this.project_id = this.$route.query.project_id
+        this.type = this.$route.query.type
+        if (this.type) {
+            this.state = true
+        }
         this.getDetail()
         this.getStore()
         this.getCardDetail()
@@ -395,6 +404,7 @@ export default {
         .shop_del {
             border-top: 10px solid #f6f6f6;
             background: #fff;
+            overflow: hidden;
 
             .detail {
                 padding: 0.2rem .6rem;

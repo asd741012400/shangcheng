@@ -2,7 +2,7 @@
     <div class="Administrator">
         <div class="shop_message">
             <div class="shop_img">
-                <span><img :src="$imgUrl + store.thumb_img"></span>
+                <span><img :src="$imgUrl + thumb_img"></span>
             </div>
             <h3>{{store.business_name}}</h3>
         </div>
@@ -27,6 +27,7 @@ export default {
             store: {},
             business_id: '',
             name: '',
+            thumb_img: '',
             phone: ''
         }
     },
@@ -34,10 +35,11 @@ export default {
     methods: {
         //获取门店信息
         async getStore() {
-             let WxAuth = this.$localstore.get('business_user')
+            let WxAuth = this.$localstore.get('business_user')
             let business_id = this.$localstore.session.get('business_id') || WxAuth.business_id
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
             this.store = res.data.data
+            this.thumb_img = this.store.thumb_img || this.store.business_img[0]
         },
         //检测是否注册过
         async checkAuth() {
@@ -48,7 +50,7 @@ export default {
             }
 
             let wx = this.$localstore.get('wx')
-            let res = await this.$getRequest('/business/checkUser', { union_id: wx.unionid, business_id: business_id || WxAuth.business_id})
+            let res = await this.$getRequest('/business/checkUser', { union_id: wx.unionid, business_id: business_id || WxAuth.business_id })
             if (res.data.code == 1) {
                 this.$localstore.set('business_user', res.data.data)
                 this.$router.push({ name: 'CheckHome', query: { id: res.data.data.business_id } })

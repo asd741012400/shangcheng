@@ -359,7 +359,7 @@ export default {
 
                 .text {
                     word-break: break-all;
-                    font-size: .24rem;
+                    font-size: .32rem;
                     color: #515C6F;
                     padding: .3rem 0 .2rem;
                 }

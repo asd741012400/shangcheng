@@ -2,10 +2,13 @@
     <div>
         <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
             <van-cell-group>
-                <van-field v-model="phone" label="手机号" placeholder="请输入手机号" />
-                <van-field v-model="sms" label="验证码" placeholder="请输入验证码">
-                    <van-button :disabled="disabled" slot="button" size="small" type="primary" @click.stop="sendSMS">{{msg}}</van-button>
-                </van-field>
+                <mt-field v-model="phone" label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
+                <mt-field v-model="sms" label="验证码" placeholder="请输入验证码"></mt-field>
+                <van-row>
+                    <van-col offset="12" span="12" style="margin-bottom: 10px;">
+                        <van-button size="small" type="primary" @click.stop="sendSMS">{{msg}}</van-button>
+                    </van-col>
+                </van-row>
             </van-cell-group>
         </van-dialog>
     </div>
