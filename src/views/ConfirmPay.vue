@@ -13,7 +13,7 @@
                         <strong>{{order.goods_title}}</strong>
                     </li>
                     <li>
-                        <span v-if="attr_name">{{attr_name}}</span>
+                        <span v-if="order.attr_name">{{order.attr_name}}</span>
                     </li>
                     <li>
                         <p>
@@ -93,14 +93,6 @@ export default {
                 let res1 = await this.$getRequest('home/GetGoodsDetail', { id: this.order.goods_id })
                 this.goods = res1.data.data
                 this.form_table = res1.data.data.form_table
-
-                if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
-                    this.goods.goods_attr.map(item => {
-                        if (item.attr_id == this.order.attr_id) {
-                            this.attr_name = item.attr_name
-                        }
-                    })
-                }
             }
 
             if (this.order.order_type == 3) {

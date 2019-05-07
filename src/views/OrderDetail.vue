@@ -75,7 +75,7 @@
                             <i>￥{{order.total_amount}}</i>
                         </p>
                         <p class="text2">
-                            <a  v-if="attr_name">{{attr_name}}</a>
+                            <a  v-if="order.attr_name">{{order.attr_name}}</a>
                             <i>x{{order.order_num}}</i>
                         </p>
                         <div class="btn">
@@ -222,7 +222,6 @@ export default {
         async getOrderDetail() {
             let res = await this.$getRequest('/order/getOrder', { id: this.id })
             this.order = res.data.data
-            this.attr_name = this.order.attr_name
             setTimeout(() => {
                 this.$nextTick(() => {
                     let arr = this.$refs.qrcodes

@@ -424,8 +424,8 @@ export default {
                         }
 
                         span {
-                            font-size: 0.3rem;
-                            color: #FF6666;
+                             font-size: 0.25rem;
+                            color: #666;
                         }
                     }
 

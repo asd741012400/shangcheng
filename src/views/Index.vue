@@ -5,7 +5,7 @@
                 <div class="header">
                     <div class="site"><i class="iconfont icon-alldizhi"></i></div>
                     <div class="search">
-                        <input type="text" v-model="keywords" placeholder="亲子卡">
+                        <input type="text"  @keyup.enter="searchGoods" v-model="keywords" placeholder="亲子卡">
                         <span @click="searchGoods"><img src="../assets/icon_search.png" alt=""></span>
                     </div>
                     <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
@@ -662,8 +662,8 @@ export default {
                         }
 
                         span {
-                            font-size: 0.28rem;
-                            color: #FF6666;
+                            font-size: 0.25rem;
+                            color: #666;
                         }
                     }
 
