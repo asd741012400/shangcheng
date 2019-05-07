@@ -44,12 +44,12 @@
                         <i>￥</i>
                         <a>{{cost_price}}</a>
                     </div>
-                    <b>非会员价￥{{goods_price}}</b>
+                    <b>非会员价￥{{limit_num}}</b>
                     <p>市场价<span>￥{{mkt_price}}</span></p>
                 </div>
-                <template v-show="limit_num > 0">
-                    <div class="purchase_limitation">限购{{limit_num}}份</div>
-                </template>
+
+                <div v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</div>
+       
                 <div class="option">
                     <span @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii" :class="attrActive == ii ? 'active' : ''">{{vv.attr_name}}</span>
                 </div>
@@ -342,6 +342,7 @@ export default {
                     this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
                     this.cost_price = this.GoodsDetail.goods_attr[0].attr_vip_price
                     this.goods_price = this.GoodsDetail.goods_attr[0].attr_price
+                    this.limit_num = this.GoodsDetail.goods_attr[0].attr_limit_num
                 }
 
 

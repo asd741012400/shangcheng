@@ -324,6 +324,7 @@ export default {
 
                         span {
                             color: #515C6F;
+                             font-size: .28rem;
                         }
 
                         b {

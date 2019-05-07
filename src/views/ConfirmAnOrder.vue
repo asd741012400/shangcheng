@@ -183,6 +183,7 @@ export default {
                 play_time: this.play_time,
                 is_wechat: this.is_wechat,
                 attr_id: this.$route.query.attr_id,
+                attr_name: this.attr_name,
                 tel: this.tel,
                 union_id: WxAuth.union_id,
                 order_num: this.num,

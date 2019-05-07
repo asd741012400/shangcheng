@@ -410,6 +410,7 @@ export default {
                             padding-left: .46rem;
 
                             span {
+                                 font-size: .28rem;
                                 color: #515C6F;
                             }
 
