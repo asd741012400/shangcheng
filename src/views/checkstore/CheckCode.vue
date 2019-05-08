@@ -24,7 +24,7 @@ export default {
             }
             this.$localstore.set('cehckGoods', '')
             let userInfo = this.$localstore.get('business_user')
-            console.log(userInfo);
+
             let data = {
                 code: this.code,
                 admin_id: userInfo.user_id,
