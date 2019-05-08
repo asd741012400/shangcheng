@@ -120,7 +120,7 @@ export default {
         //成员详情
         async getDetail(id) {
             if (this.table == 1) {
-                this.$router.push({ name: "TeamDel", query: { id: id } })
+                // this.$router.push({ name: "TeamDel", query: { id: id } })
             } else {
                 this.$router.push({ name: "MemberDel", query: { id: id } })
             }

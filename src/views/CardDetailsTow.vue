@@ -25,7 +25,7 @@
         <div class="hint" @click="givePlus" v-if="user.status == 1 && card.get_rights == 1">
             <p>尊敬的圈豆会员{{user.username}}，价值{{project_price}}元的游乐权益，您可免费领取</p>
         </div>
-        <div class="card_project" v-if="user.status == 1 && card.get_rights == 1">
+        <div class="card_project" v-if="card.get_rights == 1">
             <h3>权益项目</h3>
             <ul>
                 <template v-for="(item,index) in list">

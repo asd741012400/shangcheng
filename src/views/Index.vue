@@ -5,7 +5,7 @@
                 <div class="header">
                     <div class="site"><i class="iconfont icon-alldizhi"></i></div>
                     <div class="search">
-                        <input type="text"  @keyup.enter="searchGoods" v-model="keywords" placeholder="亲子卡">
+                        <input type="text" @keyup.enter="searchGoods" v-model="keywords" placeholder="亲子卡">
                         <span @click="searchGoods"><img src="../assets/icon_search.png" alt=""></span>
                     </div>
                     <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
@@ -62,8 +62,8 @@
                 <a>爆款推荐</a>
             </h3>
             <ul>
-                <li class="vip_price" v-for="(item,index) in GoodsList">
-                    <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
+                <li class="vip_price" v-for="(item,index) in GoodsList" @click="goGoods(item)">
+                   
                         <div class="img">
                             <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                             <div>
@@ -83,7 +83,7 @@
                             <a>￥{{item.mkt_price}}</a>
                         </div>
                         <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
-                    </router-link>
+
                 </li>
             </ul>
         </div>
@@ -114,6 +114,11 @@ export default {
 
     },
     methods: {
+        goGoods(item){
+            if (item.store > 0) {                
+             this.$router.push({name:'CommodityDetails',query:{id:item.goods_id,type:1}});
+            }
+        },
         goUrl(item) {
             window.location.href = item.to_url
         },
@@ -354,6 +359,10 @@ export default {
                     span {
                         width: 1rem;
                         overflow: hidden;
+
+                        img {
+                            width: 1rem;
+                        }
                     }
 
                     p {
@@ -457,7 +466,7 @@ export default {
                             flex: 1;
                             color: #515C6F;
                             padding-left: .28rem;
-                            font-size:.3rem
+                            font-size: .3rem
                         }
 
                         span {

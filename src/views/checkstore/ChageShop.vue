@@ -45,9 +45,13 @@ export default {
     },
     components: {},
     methods: {
-        getImg(str){
-            let img = str.split(',')
-            return this.$imgUrl + img[0]
+        getImg(str) {
+            if (str) {
+                let img = str.split(',')
+                return this.$imgUrl + img[0]
+            } else {
+                return str
+            }
         },
         //获取门店信息
         async getStore() {
@@ -75,7 +79,7 @@ export default {
                 let res = await this.$getRequest('/business/changeStore', { union_id: wx.unionid, business_id: business_id })
                 if (res.data.code == 1) {
                     this.$localstore.set('business_user', res.data.data)
-                    this.$localstore.session('business_id',business_id)
+                    this.$localstore.session('business_id', business_id)
                     this.$router.push({ name: 'CheckHome', query: { id: business_id } })
                 } else {
                     this.$message('切换失败！')

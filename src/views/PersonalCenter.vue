@@ -16,21 +16,21 @@
             </div>
             <ul>
                 <li>
-                    <p>￥{{userInfo.history_money ||　'0.00'}}</p>
+                    <p>￥{{userInfo.history_money ||　'0'}}</p>
                     <a>历史收益</a>
                 </li>
-                <li>
-                    <p>￥{{userInfo.mymoney ||　'0.00'}}</p>
+  <!--               <li>
+                    <p>￥{{userInfo.mymoney ||　'0'}}</p>
                     <a>已提现</a>
-                </li>
+                </li> -->
                 <li>
                     <router-link :to="{name:'WithdrawDeposit'}">
-                        <p>￥{{userInfo.getmoney ||　'0.00'}}</p>
+                        <p>￥{{userInfo.getmoney ||　'0'}}</p>
                         <a>可提现</a>
                     </router-link>
                 </li>
                 <li>
-                    <p>￥{{userInfo.freeze_money ||　'0.00'}}</p>
+                    <p>￥{{userInfo.freeze_money ||　'0'}}</p>
                     <a>待生效</a>
                 </li>
             </ul>
@@ -416,7 +416,7 @@ body {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: .2rem 1rem 0;
+                padding: .2rem .8rem 0;
 
                 li {
                     color: #fff;
@@ -594,7 +594,7 @@ body {
             flex-direction: column;
             padding-right: .6rem;
             text-align: center;
-            width: 20%;
+            width: 16%;
 
             a {
                 display: block;
@@ -602,6 +602,7 @@ body {
             }
 
             span {
+                  width: .72rem;
                 overflow: hidden;
             }
         }

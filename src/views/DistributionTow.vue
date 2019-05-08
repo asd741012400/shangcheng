@@ -22,10 +22,10 @@
                         <p>￥{{info.history_money || '0.00'}}</p>
                         <a>历史收益</a>
                     </li>
-                    <li>
+      <!--               <li>
                         <p>￥{{info.mymoney ||　'0.00'}}</p>
                         <a>已提现</a>
-                    </li>
+                    </li> -->
                     <li @click="goWidthdrew">
                         <p>￥{{info.freeze_money || '0.00'}}</p>
                         <a>可提现</a>

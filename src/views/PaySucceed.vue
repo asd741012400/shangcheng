@@ -503,6 +503,7 @@ export default {
                 border-radius: 10px;
                 position: relative;
                 overflow: hidden;
+                width: 90%;
 
                 .detail {
                     padding: 0.2rem .6rem;

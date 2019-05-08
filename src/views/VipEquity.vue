@@ -5,86 +5,84 @@
             <div class="tel">会员权益</div>
             <div class="add"></div>
         </header>
-        <div class="vip_card">
-            <img :src="$imgUrl+plus.photo" alt="">
-            <!--            <p>
-                <span>累积为您节省：￥</span>
-                <a>{{plus.price}}</a>
-            </p> -->
-        </div>
-        <div class="exclusive_bg">
-            <i class="img1"><img src="../assets/VipEquity_img1.png" alt=""></i>
-            <div class="exclusive">
-                <div class="tle_text">
-                    <span></span>
-                    <a class="left"></a>
-                    <p><img src="../assets/title1.png" alt=""></p>
-                        <a class="right"></a>
-                        <span></span>
+        <!-- top -->
+        <div class="top">
+            <div class="top-box">
+                <img src="@/assets/vip_top.png">
+                <div class="center-box">
+                    <div class="vip-icon"><img src="@/assets/vip.png"></div>
+                        <img class="card" :src="$imgUrl+plus.photo">
                 </div>
-                <i class="tle_en">EXCLUSIVE RIGHTS</i>
-                <ul class="tab">
-                    <li :class="ii == vipIndex ? 'active' : ''" v-for="(item,ii) in vip" :key="ii" @click="getVip(ii)">
-                        <span><img :src="$imgUrl+item.thumb" alt=""></span>
-                        <p>{{item.name}}</p>
-                    </li>
-                </ul>
-                <div class="text">
-                    <h3>
-                        <span></span>
-                        <b>{{currVip.name}}</b>
-                      </h3>
+                    </div>
+                </div>
+                <!-- title -->
+                <div class="title">
+                    <img src="@/assets/vip1.png">
+                </div>
+                    <!-- tab -->
+                    <div class="tab-box">
+                        <ul class="tab">
+                            <li :class="ii == vipIndex ? 'active' : ''" v-for="(item,ii) in vip" :key="ii" @click="getVip(ii)">
+                                <div class="item">
+                                    <img :src="$imgUrl+item.thumb" alt="">
+                                    <p>{{item.name}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- swiper -->
                     <div class="detail" id="swiper">
                         <div class="swiper-container">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide" v-for="(item,ii) in vip" v-html="item.desc"></div>
+                                <div class="swiper-slide" v-for="(item,ii) in vip">
+                                    <span class="tip"><i></i><span>{{item.name}}</span></span>
+                                    <div class="detail" v-html="item.desc">
+                                    </div>
+                                </div>
                             </div>
                             <!-- Add Pagination -->
                             <!-- <div class="swiper-pagination"></div> -->
                         </div>
                     </div>
+                    <!-- title -->
+                    <div class="title" style="top:0">
+                        <img src="@/assets/vip2.png">
                 </div>
-                <div class="privilege" v-if="currVip.detail">
-                    <div class="tle_text">
-                        <span></span>
-                        <a class="left"></a>
-                        <p><img src="../assets/title3.png" alt=""></p>
-                            <a class="right"></a>
-                            <span></span>
-                    </div>
-                    <i class="tle_en">EXCLUSIVE RIGHTS</i>
-                    <div class="privilege_img">
-                        <!-- <img :src="$imgUrl+plus.photo" alt=""> -->
-                        <div class="detail" v-html="currVip.detail">
+                        <ul class="tab-list" id="product">
+                            <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
+                                <p>{{item.c_name}}</p>
+                                <span></span>
+                            </li>
+                        </ul>
+                        <!-- 会员推荐 -->
+                        <div class="activity_list">
+                            <ul>
+                                <li v-for="(item,index) in goodsList" :key="index">
+                                    <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
+                                        <div class="img">
+                                            <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                                            <div>
+                                                <p>会员价</p>
+                                                <i>￥</i>
+                                                <a>{{item.cost_price}}</a>
+                                            </div>
+                                        </div>
+                                        <div class="project">
+                                            <p>{{item.goods_name}}</p>
+                                            <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
+                                        </div>
+                                        <div class="share">
+                                            <div class="price">
+                                                <span>现价</span>
+                                                <b>￥{{item.mkt_price}}</b>
+                                                <a>￥{{item.goods_price}}</a>
+                                            </div>
+                                        </div>
+                                    </router-link>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="recommend">
-            <div class="tle_text">
-                <span></span>
-                <a class="left"></a>
-                <p><img src="../assets/title2.png" alt=""></p>
-                    <a class="right"></a>
-                    <span></span>
-            </div>
-            <ul class="tab" id="product">
-                <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
-                    <p>{{item.c_name}}</p>
-                    <span></span>
-                </li>
-            </ul>
-            <ul class="product">
-                <li v-for="(item,ii) in goodsList" @click="goGoodsDetail(item)">
-                    <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
-                    <p>{{item.goods_name}}</p>
-                    <a>免费</a>
-                    <span>市场价：￥{{item.mkt_price}}</span>
-                </li>
-            </ul>
-        </div>
-        <div class="buyVip">
+                                <div class="buyVip">
             <template v-if="share_id &&　!user.user_id">
                 <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
             </template>
@@ -97,9 +95,9 @@
                 </router-link>
             </template>
         </div>
-        <BindPhone :show="show"></BindPhone>
-        <MyFooter></MyFooter>
-    </div>
+                        <BindPhone :show="show"></BindPhone>
+                        <MyFooter></MyFooter>
+                    </div>
 </template>
 <script>
 import Swiper from 'swiper';
@@ -110,6 +108,7 @@ export default {
     name: 'VipEquity',
     data() {
         return {
+            active: 1,
             show: false,
             firstEnter: false,
             user: {
@@ -183,7 +182,7 @@ export default {
             } else {
                 this.index = 0
             }
-            this.goodsList = []
+
             if (index) {
                 var id = this.AllCate[index].c_id
             } else {
@@ -267,7 +266,7 @@ export default {
 
     // 创建完毕状态
     created() {
-        document.body.style.background = "#000";
+        document.body.style.background = "#FBF9F2";
         let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user
@@ -311,7 +310,7 @@ export default {
             loop: true,
             autoplay: 5000,
             slidesPerView: 2,
-            spaceBetween: 3,
+            spaceBetween: 0.3,
             paginationClickable: true,
             centeredSlides: true,
             observer: true, //修改swiper自己或子元素时，自动初始化swiper
@@ -351,15 +350,14 @@ export default {
     box-sizing: border-box;
 
     .van-button--info {
-        background: #C1A06B;
-        border: 1px solid #C1A06B;
+        background: #FF6666;
+        border: 1px solid #FF6666;
     }
 
     .van-button--block {
         width: 100%;
     }
 }
-
 header {
     height: .6rem;
     display: flex;
@@ -399,326 +397,254 @@ header {
 
 }
 
-// header + div{
-//   margin-top:1.1rem!important;
-// }
-
 .VipEquity {
-    background: url('../assets/VipEquity_bg.png') top/100% 17.38rem no-repeat;
+    padding-bottom: 55px;
+    height: 1000px;
+}
 
-    .vip_card {
-        // background: url('../assets/VipEquity_card.png') center/100% no-repeat;
-        height: 4.66rem;
-        border-radius: 10px;
-        margin: 0 auto;
-        overflow: hidden;
-        display: flex;
-        justify-content: center;
-        padding: 0.2rem;
+.top {
+    position: relative;
 
-        img {
-            border-radius: 10px;
-        }
-
-        p {
-            margin-top: 3.1rem;
-            width: 3.84rem;
-            height: .42rem;
-            border-radius: 21px;
-            border: solid 2px #d7b783;
-            text-align: center;
-            color: #ffe29f;
-            font-size: .26rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            a {
-                color: #ffe29f;
-                font-size: .36rem;
-            }
-        }
-    }
-
-    .exclusive_bg {
-        display: flex;
-        justify-content: center;
+    .top-box {
         position: relative;
+        top: -44px;
+        z-index: -1;
+        padding-bottom: 20px;
 
-        .img1 {
+        .center-box {
+            padding: .3rem .4rem;
             position: absolute;
-            left: 0;
-            top: 0;
-            width: 1.2rem;
-            overflow: hidden;
-        }
 
-        .exclusive {
-            width: 7.08rem;
-            background: url('../assets/VipEquity_bg2.png') center/100% 100% repeat-y;
-            border-radius: .1rem;
-            overflow: hidden;
-
-            .tle_text {
+            .vip-icon {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding-top: .42rem;
 
-                span {
-                    width: .1rem;
-                    height: .1rem;
-                    background: #000;
-                    border-radius: 50%;
-                    overflow: hidden;
-                }
-
-                a {
-                    width: .14rem;
-                    height: .14rem;
-                    background: #c1a06b;
-                    border-radius: 50%;
-                    overflow: hidden;
-
-                    &.left {
-                        margin-left: .1rem;
-                    }
-
-                    &.right {
-                        margin-right: .1rem;
-                    }
-                }
-
-                p {
-                    width: 1.7rem;
-                    overflow: hidden;
-                    padding: 0 .25rem;
+                img {
+                    position: relative;
+                    top: 30px;
+                    width: 1rem;
                 }
             }
 
-            .tle_en {
-                text-align: center;
-                color: #c1a06b;
-                font-size: .12rem;
-                display: block;
-                padding-top: .14rem;
-            }
-
-            ul {
-                white-space: nowrap;
-                width: auto;
-                overflow-x: scroll;
-                margin: .59rem 0 0 .48rem;
-
-                li {
-                    display: inline-block;
-                    margin-right: .29rem;
-
-                    &.active {
-                        border-bottom: 2px solid #c1a06b;
-                    }
-
-                    span {
-                        display: block;
-                        overflow: hidden;
-                        width: .8rem;
-                        height: .8rem;
-                        border-radius: 50%;
-                        margin: 0 auto;
-                    }
-
-                    p {
-                        color: #141211;
-                        font-size: .24rem;
-                        padding-top: .1rem;
-                    }
-                }
-            }
-
-            .text {
-                border: solid 1px #b19363;
-                margin: .2rem .18rem 0;
-                overflow: hidden;
-                padding: .38rem .13rem .38rem .2rem;
-
-                .detail {
-                    padding: 0.1rem 0;
-                }
-
-                h3 {
-                    display: flex;
-                    align-items: center;
-
-                    span {
-                        width: .14rem;
-                        height: .14rem;
-                        background: #c1a06b;
-                        border-radius: 50%;
-                        overflow: hidden;
-                    }
-
-                    b {
-                        color: #141211;
-                        font-size: .28rem;
-                        padding-left: .13rem;
-                    }
-                }
-
-                p {
-                    color: #141211;
-                    font-size: .24rem;
-                    line-height: .36rem;
-                }
-            }
-
-            .privilege {
-                padding-top: .47rem;
-
-                .privilege_img {
-                    padding: .3rem .14rem .2rem;
-                    overflow: hidden;
-                    display: flex;
-                    flex-direction: column;
-
-                    .detail {
-                        img {
-                            display: block;
-                            width: 100% !important;
-                            height: auto !important;
-                        }
-                    }
-                }
+            .card {
+                width: 100%;
+                height: 150px;
+                border-radius: 10px;
             }
         }
     }
+}
 
-    .recommend {
-        padding: 1.27rem .33rem 0;
+.title {
+    position: relative;
+    top: 40px;
+    margin-top: 30px;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-        .tle_text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-top: .42rem;
+    img {
+        width: 160px;
+    }
+}
 
-            span {
-                width: .1rem;
-                height: .1rem;
-                background: #c1a06b;
-                border-radius: 50%;
-                overflow: hidden;
+.tab-box {
+    width: 100%;
+    overflow-x: scroll;
+
+    .tab {
+        margin-top: 50px;
+        white-space: nowrap;
+        width: auto;
+        box-sizing: border-box;
+
+        li {
+            display: inline-block;
+
+            &.active {
+                border-bottom: 2px solid #7C5628;
             }
 
-            a {
-                width: .14rem;
-                height: .14rem;
-                background: #c1a06b;
-                border-radius: 50%;
-                overflow: hidden;
-
-                &.left {
-                    margin-left: .1rem;
-                }
-
-                &.right {
-                    margin-right: .1rem;
-                }
-            }
-
-            p {
-                width: 1.7rem;
-                overflow: hidden;
-                padding: 0 .25rem;
-            }
-        }
-
-        .tab {
-            white-space: nowrap;
-            width: auto;
-            overflow-x: scroll;
-            margin: .66rem .33rem 0 .55rem;
-
-            li {
-                display: inline-block;
-                margin-right: .7rem;
-                height: .6rem;
-
-                span {
-                    overflow: hidden;
-                    height: 2px;
-                    background-color: #ffe29f;
-                    border-radius: 2px;
-                    display: block;
-                    opacity: 0;
-                }
-
-                p {
-                    color: #c1a06b;
-                    font-size: .24rem;
-                    padding-top: .1rem;
-                }
-            }
-
-            .active {
-                span {
-                    opacity: 1;
-                }
-
-                p {
-                    color: #ffe29f;
-                }
-            }
-        }
-
-        .product {
-            flex-wrap: wrap;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: .4rem;
-
-            li {
-                background: #fff;
-                margin-bottom: .2rem;
-                padding: .18rem;
+            .item {
                 display: flex;
                 flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: .2rem;
 
-                i {
-                    height: 3rem;
-                    width: 3rem;
-                    overflow: hidden;
+                img {
+                    width: 55px;
                 }
 
                 p {
-                    font-size: .24rem;
-                    color: #515C6F;
-                    padding-top: .14rem;
+                    color: #7C5628;
+                }
+            }
+
+
+
+        }
+
+    }
+}
+
+.tab-list {
+    white-space: nowrap;
+    width: auto;
+    overflow-x: scroll;
+    margin: .66rem .33rem 0 .55rem;
+
+    li {
+        display: inline-block;
+        margin-right: .7rem;
+        height: .6rem;
+
+        span {
+            overflow: hidden;
+            height: 2px;
+            background-color: #ffe29f;
+            border-radius: 2px;
+            display: block;
+            opacity: 0;
+        }
+
+        p {
+            color: #c1a06b;
+            font-size: .24rem;
+            padding-top: .1rem;
+        }
+    }
+
+    .active {
+        span {
+            opacity: 1;
+        }
+
+        p {
+            color: #ffe29f;
+        }
+    }
+}
+
+.activity_list {
+    ul {
+        li {
+            background: #fff;
+            padding-top: .2rem;
+            margin-bottom: .2rem;
+
+            .img {
+                margin: 0 .2rem;
+                height: 3rem;
+                background: #ccc;
+                border-radius: 5px;
+                position: relative;
+
+                img {
+                    height: 3rem;
                 }
 
-                a {
-                    width: .7rem;
-                    height: .34rem;
-                    line-height: .34rem;
-                    text-align: center;
-                    color: #FFB389;
-                    font-size: .24rem;
-                    border: 1px solid #FFB389;
-                    margin-top: .44rem;
+                div {
+                    width: 2.48rem;
+                    background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
+                    border-radius: 0px 20px 20px 0px;
+                    position: absolute;
+                    bottom: -.12rem;
+                    display: flex;
+                    align-items: center;
+                    height: .62rem;
+                    justify-content: center;
+                    color: #fff;
+
+                    p {
+                        font-size: .28rem;
+                    }
+
+                    i {
+                        font-size: .32rem;
+                        font-style: normal;
+                    }
+
+                    a {
+                        color: #fff;
+                        font-size: .4rem;
+                    }
+                }
+            }
+
+            .project {
+                display: flex;
+                padding: .3rem .2rem;
+                font-size: 0.3rem;
+
+                p {
+                    flex: 1;
+                    color: #515C6F;
+                    padding-left: .28rem;
                 }
 
                 span {
+                    font-size: 0.25rem;
+                    color: #666;
+                }
+            }
+
+            .share {
+                display: flex;
+
+                .price {
+                    flex: 1;
+                    display: flex;
+                    align-items: center;
+                    padding-bottom: .4rem;
+                    justify-content: flex-start;
+                    padding-left: .46rem;
+
+                    span {
+                        color: #515C6F;
+                        font-size: .28rem;
+                    }
+
+                    b {
+                        font-weight: normal;
+                        font-size: .36rem;
+                        padding-left: 2px;
+                        padding-right: .2rem;
+                    }
+
+                    a {
+                        text-decoration: line-through;
+                    }
+                }
+
+                p {
+                    background: linear-gradient(90deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
+                    width: 2rem;
+                    height: .5rem;
+                    line-height: .5rem;
+                    border-radius: 20px;
+                    text-align: center;
                     font-size: .22rem;
-                    color: #999999;
-                    padding-top: .14rem;
+                    color: #fff;
+                    margin-right: .22rem;
+
+                    span {
+                        font-size: .28rem;
+                    }
                 }
             }
         }
+
+
     }
 }
 </style>
 <style lang="scss">
 #swiper .swiper-container {
+    margin-top: 20px;
     width: 100%;
     height: 100%;
     position: static;
@@ -726,23 +652,25 @@ header {
 }
 
 #swiper .swiper-slide {
-    text-align: center;
-    font-size: 18px;
     background: #fff;
-
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    align-items: center;
     transition: 300ms;
+    padding: .2rem .1rem;
+    color:#333;
+    .tip {
+        margin-left:5px;
+        i {
+            display:inline-block;
+            width: 2px;
+            height: 2px;
+            padding:2px;
+            margin-right:8px;
+            border-radius: 50%;
+            background: #FFD524;
+
+        }
+
+    }
+
 }
 
 #swiper .swiper-wrapper {
@@ -754,6 +682,7 @@ header {
     height: 240px;
     border-radius: 10px;
     background-color: #fff;
+
 }
 
 #swiper .swiper-slide:not(.swiper-slide-active) {

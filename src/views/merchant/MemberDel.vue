@@ -15,7 +15,7 @@
         </header>
         <ul class="team_member">
             <li v-for="item in list">
-                <i></i>
+                <i><img :src="$imgUrl+item.goods_img" alt=""></i>
                 <div>
                     <p class="name">
                         <b>{{item.goods_title}}</b>
