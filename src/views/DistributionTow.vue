@@ -43,7 +43,7 @@
                     <div>
                         <i><img src="../assets/icon_team.png" alt=""></i>
                         <template v-if="user.level == 2">
-                            <p>团队成员<span>(<b>{{team_nums}}</b>）</span></p>
+                            <p>我的成员<span>(<b>{{team_nums}}</b>）</span></p>
                         </template>
                         <template v-else-if="user.level == 3">
                             <p>我的团队<span>(<b>{{team_nums}}</b>）</span></p>
