@@ -13,7 +13,7 @@
         </div>
         <div class="activity_list">
             <ul>
-                <li v-for="(item,index) in goodsList" :key="index">
+                <li v-for="(item,index) in goodsList" :key="index" v-if="item.store > 0">
                     <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
                         <div class="img">
                             <span><img :src="$imgUrl+item.thumb_img" alt=""></span>

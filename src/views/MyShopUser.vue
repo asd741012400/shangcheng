@@ -26,7 +26,7 @@
         <a>爆款推荐</a>
       </h3>
             <ul>
-                <li class="vip_price" v-for="(item,index) in list">
+                <li class="vip_price" v-for="(item,index) in list" v-if="item.store > 0">
                     <div class="img" @click="goGoods(item)">
                         <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                         <div>

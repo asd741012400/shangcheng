@@ -21,9 +21,9 @@
         <div class="product">
             <ul>
                 <li v-for="item in checklist">
-                    <i><img :src="$imgUrl + item.thumb_img" alt="" /></i>
+                    <i><img :src="$imgUrl + item.goods_img" alt="" /></i>
                     <div>
-                        <h3>{{item.project_name}}</h3>
+                        <h3>{{item.goods_title}}</h3>
                         <p>
                             <span>用户：{{item.wechat_nickname}}</span>
                             <a>{{item.tel_phone}}</a>

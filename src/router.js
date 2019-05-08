@@ -454,7 +454,7 @@ router.beforeEach((to, from, next) => {
         }
 
         if (!code && !user) {
-            // getAuth()
+            getAuth()
         }
     }
 

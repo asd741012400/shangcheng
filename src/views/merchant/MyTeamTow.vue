@@ -15,7 +15,7 @@
             </div>
         </header>
         <div class="tab_title">
-            <p :class="table == 1 ? 'active' : ''" @click="tabkeChage(1)">团队成员</p>
+            <p :class="table == 1 ? 'active' : ''" @click="tabkeChage(1)">我的团队</p>
             <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">直属会员</p>
         </div>
         <ul class="team_member">
@@ -74,23 +74,17 @@ export default {
                 user_id: this.user.user_id,
                 page: this.page
             }
-            let url = '/store/MyTeam2';
+            let url = '/store/MyTeamMember';
             if (this.table == 1) {
-                url = '/store/MyTeam2';
+                url = '/store/MyTeamMember';
             } else {
                 url = '/store/MySubMember';
             }
             let res = await this.$getRequest(url, data)
-            if (this.table == 1) {
-                this.data = res.data.data
-                this.list = res.data.data.my_people
-                this.currSize = res.data.data.my_people.length
-            } else {
-                this.data = res.data.data
-                this.list = res.data.data
-                this.currSize = res.data.data.length
-            }
-            this.team_nums = res.data.data.team_nums
+
+            this.list = res.data.data
+            this.currSize = res.data.data.length
+
             this.pageSize = res.data.data.count
 
         },
@@ -102,25 +96,22 @@ export default {
                 page: this.page
             }
 
-            let url = '/store/MyTeam2';
+            let url = '/store/MyTeamMember';
             if (this.table == 1) {
-                url = '/store/MyTeam2';
+                url = '/store/MyTeamMember';
             } else {
                 url = '/store/MySubMember';
             }
             let res = await this.$getRequest(url, data)
-            if (this.table == 1) {
-                this.list = this.list.concat(res.data.data.my_people);
-                this.currSize = res.data.data.my_people.length
-            } else {
-                this.list = this.list.concat(res.data.data);
-                this.currSize = res.data.data.length
-            }
+
+            this.list = this.list.concat(res.data.data);
+            this.currSize = res.data.data.length
+
         },
         //成员详情
         async getDetail(id) {
             if (this.table == 1) {
-                // this.$router.push({ name: "TeamDel", query: { id: id } })
+                this.$router.push({ name: "TeamDel", query: { id: id } })
             } else {
                 this.$router.push({ name: "MemberDel", query: { id: id } })
             }
