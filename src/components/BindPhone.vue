@@ -6,7 +6,7 @@
                 <mt-field v-model="sms" label="验证码" placeholder="请输入验证码"></mt-field>
                 <van-row>
                     <van-col offset="12" span="12" style="margin-bottom: 10px;">
-                        <van-button size="small" type="primary" @click.stop="sendSMS">{{msg}}</van-button>
+                        <van-button :disabled="disabled" size="small" type="primary" @click.stop="sendSMS">{{msg}}</van-button>
                     </van-col>
                 </van-row>
             </van-cell-group>

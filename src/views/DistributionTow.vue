@@ -22,6 +22,10 @@
                         <p>￥{{info.history_money || '0.00'}}</p>
                         <a>历史收益</a>
                     </li>
+                    <li>
+                        <p>￥{{info.mymoney ||　'0.00'}}</p>
+                        <a>已提现</a>
+                    </li>
                     <li @click="goWidthdrew">
                         <p>￥{{info.freeze_money || '0.00'}}</p>
                         <a>可提现</a>
@@ -40,7 +44,7 @@
                         <i><img src="../assets/icon_team.png" alt=""></i>
                         <template v-if="user.level == 2">
                             <p>团队成员<span>(<b>{{team_nums}}</b>）</span></p>
-                         </template>
+                        </template>
                         <template v-else-if="user.level == 3">
                             <p>我的团队<span>(<b>{{team_nums}}</b>）</span></p>
                         </template>
@@ -103,8 +107,8 @@ export default {
                 let result = await this.$getRequest('/store/MyTeam2', data)
                 this.team_nums = result.data.data.team_nums
             } else if (this.user.level == 3) {
-                let result = await this.$getRequest('/store/MyTeam2', data)
-                this.team_nums = result.data.data.team_nums
+                let result = await this.$getRequest('/store/MyTeam3', data)
+                this.team_nums = result.data.data.count_teams
             }
         },
         //查看我的团队

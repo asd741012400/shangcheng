@@ -25,7 +25,7 @@
                 <span @click="changeSelect(index)" v-else><img  src="../../assets/icon_schedule.png" alt=""></span>
             </li>
         </ul>
-        <a class="sub_btn" @click="submit">确定</a>
+        <button class="sub_btn" :disabled="disable" @click="submit">确定</button>
     </div>
 </template>
 <script>
@@ -33,6 +33,7 @@ export default {
     name: 'Cardcheck',
     data() {
         return {
+            disable: false,
             active: 0,
             chackUser: {},
             cardInfo: {},
@@ -55,8 +56,8 @@ export default {
             this.product = this.cardInfo.pro_list[index]
         },
         async submit() {
+            this.disable = true
             let userInfo = this.$localstore.get('business_user')
-            console.log(userInfo);
             if (!this.product) {
                 this.product = this.cardInfo.pro_list[0]
             }
@@ -74,6 +75,9 @@ export default {
                     this.$router.go(-1)
                 }, 2000)
             }
+            setTimeout(() => {
+                this.disable = false
+            }, 3000)
         },
         cardCheckFn(index) {
             this.list[index].state = !this.list[index].state
@@ -196,8 +200,8 @@ export default {
             display: flex;
             align-items: center;
 
-            img{
-                height:100%;
+            img {
+                height: 100%;
             }
 
             i {

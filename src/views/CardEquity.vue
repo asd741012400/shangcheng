@@ -108,6 +108,7 @@ export default {
             pageSize: 10,
             show: false,
             actions: [],
+            types: [],
             actionsIndex: 0,
             selectTypes: {
                 distance: "距离",
@@ -136,7 +137,6 @@ export default {
 
         },
         goProject(item) {
-
             this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: 1, type: 1 } })
         },
         actionsheetShow(num) {
@@ -161,16 +161,7 @@ export default {
                     ],
                     that.show = true;
             } else if (num == 2) {
-                that.actions = [{
-                            name: '全部'
-                        },
-                        // {
-                        //     name: '类型1',
-                        // },
-                        // {
-                        //     name: '类型2',
-                        // }
-                    ],
+                that.actions = that.types,
                     that.show = true;
             } else if (num == 3) {
                 that.actions = [{
@@ -222,13 +213,23 @@ export default {
         useCard() {
             this.$router.push({ name: 'UseCard' })
         },
+        async getType() {
+            let res = await this.$getRequest('/business/ProjectCate')
+            let arr = []
+            this.actions = res.data.data
+            res.data.data.map(item=>{
+                arr.push({name:item.c_name})
+            })
+             this.types = arr
+        },
         async getList() {
-            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights }
+            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights,age:this.selectTypes.age,type:this.selectTypes.types }
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = res.data.data.list
             this.total_num = res.data.data.total_num.use_num
             this.project_price = res.data.data.project_price
         },
+
         async getListMore() {
             let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights }
             let res = await this.$getRequest('/card/GetProjectList', data)
@@ -254,6 +255,7 @@ export default {
             this.user = user
         }
         this.getList()
+        this.getType()
 
         window.onscroll = () => {
             //变量scrollTop是滚动条滚动时，距离顶部的距离

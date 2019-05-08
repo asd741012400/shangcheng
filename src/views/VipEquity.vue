@@ -37,7 +37,7 @@
                     <div class="detail" id="swiper">
                         <div class="swiper-container">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide" v-for="(item,ii) in vip" v-html="currVip.desc"></div>
+                                <div class="swiper-slide" v-for="(item,ii) in vip" v-html="item.desc"></div>
                             </div>
                             <!-- Add Pagination -->
                             <!-- <div class="swiper-pagination"></div> -->
@@ -305,6 +305,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
+        var _this = this
         new Swiper('.swiper-container', {
             direction: 'horizontal',
             loop: true,
@@ -319,6 +320,11 @@ export default {
                 el: '.swiper-pagination',
                 clickable: true,
             },
+            on: {
+                slideChangeTransitionEnd: function() {
+                    _this.vipIndex = this.realIndex;
+                }
+            }
         });
     },
 
@@ -716,7 +722,7 @@ header {
     width: 100%;
     height: 100%;
     position: static;
-    background:none;
+    background: none;
 }
 
 #swiper .swiper-slide {

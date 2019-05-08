@@ -77,4 +77,13 @@ a:active {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+.detail p {
+    display: block;
+    margin: 5px 0 !important;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
 </style>

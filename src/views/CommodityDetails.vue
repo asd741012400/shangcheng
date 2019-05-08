@@ -49,12 +49,17 @@
                 </div>
                 <div v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</div>
                 <div class="select">
-                    <div class="select-item">
-                        <h4>金币VB收ivbbjbkl</h4>
-                        <div>
-                            <span>$155</span>
-                            <span>$55</span>
-                            <del>$55</del>
+                    <div class="select-item" :class="attrActive == ii ? 'active' : ''" @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii">
+                        <h4>{{vv.attr_name}}</h4>
+                        <div class="footer-box">
+                            <div class="left">
+                                <span class="price1">会员价￥{{vv.attr_vip_price}}</span>
+                                <span class="price2">￥{{vv.attr_price}}</span>
+                                <!-- <del class="price3">￥{{mkt_price}}</del> -->
+                            </div>
+                            <div class="right">
+                                <!-- <span class="btn">选择</span> -->
+                            </div>
                         </div>
                     </div>
                     <!-- <span @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii" :class="attrActive == ii ? 'active' : ''">{{vv.attr_name}}</span> -->
@@ -68,7 +73,7 @@
             <div class="shop">
                 <h3>使用门店</h3>
                 <ul>
-                    <li v-for="(item,index) in storeList" :key="index">
+                    <li v-for="(item,index) in storeList" :key="index" v-if="index<2">
                         <div class="del">
                             <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                 <div class="tle">
@@ -652,10 +657,64 @@ export default {
             }
 
             .select {
-                padding: 0.2rem .6rem;
+                padding: 0.1rem .2rem;
+
                 .select-item {
+                    margin-top: 5px;
+                    padding: 0.1rem .2rem;
                     display: flex;
                     flex-direction: column;
+                    border: 1px solid #ddd;
+                    width: 100%;
+                    box-sizing: border-box;
+
+                    &.active {
+                        border: 1px solid red;
+                    }
+
+                    h4 {
+                        font-size: .32rem;
+                        font-weight: 600;
+                        word-break: break-all;
+                        color: #515C6F;
+                        // overflow: hidden;
+                        // text-overflow: ellipsis;
+                        // white-space: nowrap;
+                        margin-bottom: 10px;
+                    }
+
+                    .footer-box {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: space-between;
+
+                        .price1 {
+                            color: red;
+                            font-size: .3rem;
+                            margin-right: 5px;
+                        }
+
+                        .price2 {
+                            color: #666;
+                            font-size: .3rem;
+                            margin-right: 5px;
+                        }
+
+                        .price3 {
+                            color: #666;
+                            font-size: .25rem;
+                            margin-right: 5px;
+                        }
+
+                        .btn {
+                            display: block;
+                            padding: .1rem .2rem;
+                            border-radius: 10px;
+                            color: #fff;
+                            background: red;
+                        }
+
+                    }
                 }
             }
 
@@ -674,6 +733,16 @@ export default {
                 padding: 0.2rem .6rem;
                 background: #fff;
                 display: inherit;
+
+                p {
+                    display: block;
+                    margin: 5px 0 !important;
+                    -webkit-margin-before: 1em;
+                    -webkit-margin-after: 1em;
+                    -webkit-margin-start: 0px;
+                    -webkit-margin-end: 0px;
+                }
+
 
                 img {
                     margin: 5px 0;
@@ -944,6 +1013,15 @@ export default {
                 // margin-bottom: 3.5rem;
                 overflow: hidden;
 
+                p {
+                    display: block;
+                    margin: 5px 0;
+                    -webkit-margin-before: 1em;
+                    -webkit-margin-after: 1em;
+                    -webkit-margin-start: 0px;
+                    -webkit-margin-end: 0px;
+                }
+
                 img {
                     margin: 5px 0;
                 }
@@ -1050,4 +1128,6 @@ export default {
         }
     }
 }
+
+
 </style>

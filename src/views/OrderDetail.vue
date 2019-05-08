@@ -91,7 +91,7 @@
             </li>
         </ul>
         <!-- 核销信息 -->
-        <div class="timer" v-if="order.order_status == 1 && order.type == 1">
+        <div class="timer" v-if="order.order_status == 1 && type == 1">
             <div class="timer_top" v-for="(item,index) in goods_cancle">
                 <p>
                     <a>

@@ -36,7 +36,7 @@
                 </li>
             </ul>
         </div>
-        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate">
+        <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月"  @confirm="handleConfirm" :startDate="startDate">
         </mt-datetime-picker>
     </div>
 </template>
@@ -49,8 +49,8 @@ Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
     name: 'CheckList',
     data() {
-        let date = this.$dayjs().subtract(1, 'year').format('YYYY-MM-DD')
-        let date1 = this.$dayjs().format('YYYY-MM-DD')
+        let date = this.$dayjs().subtract(1, 'year').format('YYYY-MM')
+        let date1 = this.$dayjs().format('YYYY-MM')
         return {
             startDate: new Date(date),
             dateTime: date1,
@@ -66,7 +66,7 @@ export default {
     components: {},
     methods: {
         toTime(time) {
-            return this.$dayjs.unix(time).format('YYYY-MM-DD')
+            return this.$dayjs.unix(time).format('YYYY-MM')
         },
         //开启时间选择器
         openPicker() {
@@ -74,7 +74,7 @@ export default {
         },
         //点击确定按钮
         handleConfirm(data) {
-            let date = this.$dayjs(data).format('YYYY-MM-DD')
+            let date = this.$dayjs(data).format('YYYY-MM')
             this.dateTime = date;
             this.$refs.picker.close()
             this.getCheckList()

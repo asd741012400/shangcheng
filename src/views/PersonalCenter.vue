@@ -16,17 +16,21 @@
             </div>
             <ul>
                 <li>
-                    <p>￥{{userInfo.history_money ||　0.00}}</p>
+                    <p>￥{{userInfo.history_money ||　'0.00'}}</p>
                     <a>历史收益</a>
                 </li>
                 <li>
+                    <p>￥{{userInfo.mymoney ||　'0.00'}}</p>
+                    <a>已提现</a>
+                </li>
+                <li>
                     <router-link :to="{name:'WithdrawDeposit'}">
-                        <p>￥{{userInfo.getmoney ||　0.00}}</p>
+                        <p>￥{{userInfo.getmoney ||　'0.00'}}</p>
                         <a>可提现</a>
                     </router-link>
                 </li>
                 <li>
-                    <p>￥{{userInfo.freeze_money ||　0.00}}</p>
+                    <p>￥{{userInfo.freeze_money ||　'0.00'}}</p>
                     <a>待生效</a>
                 </li>
             </ul>
