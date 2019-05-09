@@ -27,11 +27,11 @@
                         <a>已提现</a>
                     </li> -->
                     <li @click="goWidthdrew">
-                        <p>￥{{info.freeze_money || '0.00'}}</p>
+                        <p>￥{{info.getmoney || '0.00'}}</p>
                         <a>可提现</a>
                     </li>
                     <li>
-                        <p>￥{{info.getmoney || '0.00'}}</p>
+                        <p>￥{{info.freeze_money || '0.00'}}</p>
                         <a>待生效</a>
                     </li>
                 </ul>

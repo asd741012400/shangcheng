@@ -89,7 +89,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Administrator
+            component: Index
         },
         {
             path: '/Index',

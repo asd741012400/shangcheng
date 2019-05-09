@@ -38,7 +38,7 @@ export default {
     created() {
         document.body.style.background = "#fff";
         document.title = "核销"
-        if (!this.$localstore.session.get('business_id') && !this.$localstore.get('business_user')) {
+        if (!this.$localstore.get('business_id') && !this.$localstore.get('business_user')) {
             this.$router.push({ name: 'Administrator' })
         }
         

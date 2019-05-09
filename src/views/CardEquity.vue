@@ -8,7 +8,7 @@
                     <i><img :src="$imgUrl + card.thumb_img" alt=""></i>
                     <div>
                         <p>卡号： {{card.card_sn}}</p>
-                        <span id="qrcode"><!-- <img src="../assets/code2.png" alt=""> --></span>
+                        <!-- <span id="qrcode"><img src="../assets/code2.png" alt=""></span> -->
                     </div>
                 </div>
                 <div class="user">
@@ -280,14 +280,14 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        let qrcode = new QRCode('qrcode', {
-            // width: 60,
-            // height: 60, // 高度
-            text: this.card.cancle_code, // 二维码内容
-            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-            // background: '#f0f',
-            // foreground: '#ff0'
-        })
+        // let qrcode = new QRCode('qrcode', {
+        //     // width: 60,
+        //     // height: 60, // 高度
+        //     text: this.card.cancle_code, // 二维码内容
+        //     // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+        //     // background: '#f0f',
+        //     // foreground: '#ff0'
+        // })
     },
 
     // 更新前状态

@@ -73,7 +73,7 @@ export default {
     methods: {
         //获取门店信息
         async getStore() {
-            let business_id = this.$localstore.session.get('business_id') || this.$route.query.id
+            let business_id = this.$localstore.get('business_id') || this.$route.query.id
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
             this.store = res.data.data
             this.thumb_img = this.store.thumb_img ||  this.store.business_img[0]

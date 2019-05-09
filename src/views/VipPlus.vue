@@ -7,7 +7,7 @@
                 </div>
                 <div class="img"><img :src="poster_img" alt=""></div>
                 </div>
-     <!--            <div class="masking" v-if="maskingShow">
+                <!--            <div class="masking" v-if="maskingShow">
                     <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
                     <div>
                         <i><img src="../assets/share_img1.png" alt=""></i>
@@ -29,6 +29,7 @@ export default {
             imgUrl: '',
             type: "",
             goods_id: "",
+            money: "",
             plus: "",
             title: "",
             price: "",
@@ -65,7 +66,7 @@ export default {
             let qrcode = new QRCode('qrcode', {
                 width: 80,
                 height: 80, // 高度
-                text: 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
                     '&type=2', // 二维码内容
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
                 // background: '#f0f',
@@ -148,7 +149,7 @@ export default {
                 jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
             })
             wx.ready(() => {
-                let url = 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                let url = this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
                     '&type=2'
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
@@ -195,7 +196,6 @@ export default {
             duration: 30000
         });
 
-
         this.getPlUS()
         let that = this
         document.title = "PLUS会员"
@@ -232,7 +232,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-         this.instance.close();
+        this.instance.close();
     },
 
     // 销毁完成状态

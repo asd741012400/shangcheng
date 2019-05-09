@@ -491,7 +491,7 @@ export default {
         left: 0;
 
         .confirm_pop {
-            width:80%;
+            width:90%;
             height: 100%;
             display: flex;
             align-items: center;
@@ -503,7 +503,7 @@ export default {
                 border-radius: 10px;
                 position: relative;
                 overflow: hidden;
-                width: 90%;
+                width: 95%;
 
                 .detail {
                     padding: 0.2rem .6rem;

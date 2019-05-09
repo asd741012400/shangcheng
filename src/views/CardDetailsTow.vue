@@ -6,6 +6,9 @@
             <div class="to_be_used">
                 <div class="image">
                     <i><img :src="$imgUrl + card.thumb_img" alt=""></i>
+                    <div>
+                        <p>卡号： {{card.card_sn}}</p>
+                    </div>
                 </div>
                 <div class="user">
                     <span><img :src="$imgUrl + card.head_img" alt=""></span>
@@ -80,7 +83,7 @@ export default {
     methods: {
         goProject(item) {
 
-            this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: item.c_detail_id,type:1 } })
+            this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: item.c_detail_id, type: 1 } })
         },
         givePlus() {
             this.$router.push({ name: "CardEquity" })
@@ -433,7 +436,7 @@ export default {
 
                         span {
                             flex: 1;
-                            font-size: .32rem;                     
+                            font-size: .32rem;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;

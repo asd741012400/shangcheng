@@ -12,7 +12,7 @@
             </div>
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
         </header>
-        <div class="vip_card" @click="invitation">
+        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="invitation">
             <p>
                 <span>立即开通</span>
                 <a>￥{{plus.price}}</a>
@@ -61,6 +61,7 @@ export default {
             plus: {},
             user_id: '',
             url: '',
+            plus: '',
             page: 1,
             storeInfo: {},
             list: [],
@@ -265,9 +266,10 @@ export default {
         overflow: hidden;
         display: flex;
         justify-content: center;
+        background-size: 92% 80%;
 
         p {
-            margin-top: 2.9rem;
+            margin-top: 3.9rem;
             width: 3.84rem;
             height: .8rem;
             border-radius: 21px;
@@ -275,7 +277,7 @@ export default {
             color: #fff;
             font-size: .26rem;
             display: flex;
-            background: #C1A06B;
+            background: #FF6666;
             align-items: center;
             justify-content: center;
             font-weight: bold;

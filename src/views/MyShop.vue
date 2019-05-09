@@ -14,10 +14,10 @@
             </div>
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
         </header>
-        <div class="vip_card" @click="invitation">
+        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="invitation">
             <p>
                 <span>邀请好友赚</span>
-                <a>￥100</a>
+                <a>￥{{money || 0}}</a>
             </p>
         </div>
         <div class="activity_list">
@@ -65,7 +65,7 @@
     </div>
 </template>
 <script>
-import { CURR_URL } from '@/config/index.js'
+import { HOME_URL } from '@/config/index.js'
 import wx from 'weixin-js-sdk'
 import Share from '../components/Share'
 export default {
@@ -73,6 +73,8 @@ export default {
     data() {
         return {
             userInfo: {},
+            plus: '',
+            money: '',
             user_id: '',
             url: '',
             page: 1,
@@ -105,6 +107,17 @@ export default {
                     share_id: this.user_id,
                 }
             });
+        },
+        //获取PlUS
+        async getPlUS() {
+            let id = this.$route.query.id
+            let res = await this.$getRequest('/home/GetPlus')
+            this.plus = res.data.data
+        },
+        //推广赚
+        async getMoney() {
+            let res = await this.$postRequest('/store/GetLevel', { user_id: this.user_id })
+            this.money = res.data.data
         },
         async getInfo() {
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
@@ -184,13 +197,14 @@ export default {
         }
 
         this.url = 'http://' + window.location.host + '/#/MyShopUser?share_id=' + this.userInfo.user_id
-        if (CURR_URL) {
-            this.url = CURR_URL + '/#/MyShopUser?share_id=' + this.userInfo.user_id
+        if (HOME_URL) {
+            this.url = HOME_URL + '/#/MyShopUser?share_id=' + this.userInfo.user_id
         }
 
 
         this.getInfo()
-
+        this.getPlUS()
+        this.getMoney()
         window.onscroll = () => {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -319,9 +333,10 @@ export default {
         overflow: hidden;
         display: flex;
         justify-content: center;
+        background-size: 92% 80%;
 
         p {
-            margin-top: 2.9rem;
+            margin-top: 3.9rem;
             width: 3.84rem;
             height: .8rem;
             border-radius: 21px;
@@ -329,7 +344,7 @@ export default {
             color: #fff;
             font-size: .26rem;
             display: flex;
-            background: #C1A06B;
+            background: #FF6666;
             align-items: center;
             justify-content: center;
             font-weight: bold;
@@ -424,7 +439,7 @@ export default {
                         }
 
                         span {
-                             font-size: 0.25rem;
+                            font-size: 0.25rem;
                             color: #666;
                         }
                     }
@@ -464,7 +479,7 @@ export default {
                             padding-left: .46rem;
 
                             span {
-                                 font-size: .28rem;
+                                font-size: .28rem;
                                 color: #515C6F;
                             }
 

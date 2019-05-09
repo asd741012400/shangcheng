@@ -1,15 +1,15 @@
 <template>
     <div class="TeamDel">
         <header>
-            <span><img src="../../assets/head_portrait2.png" alt=""></span>
+            <span><img :src="user.wechat_img" alt=""></span>
             <div>
                 <h3>
-          <a>默写组</a>
-          <i></i>
+          <a>{{user.username}}</a>
+          <!-- <i></i> -->
         </h3>
                 <p>
-                    <a>会员：8人</a>
-                    <b>收益：￥800.00</b>
+                    <a>会员：{{refer_orders}}人</a>
+                    <b>收益：￥{{user.getmoney}}</b>
                 </p>
             </div>
         </header>
@@ -18,36 +18,39 @@
             <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">团队销售</p>
         </div>
         <ul class="team_member" v-if="table == 1">
-            <li>
-                <i><img src="../../assets/head_portrait2.png" alt=""></i>
+            <li v-for="(item,index) in team" @click="getDetail(item.user_id)">
+                <i><img :src="item.wechat_img" alt=""></i>
                 <div>
                     <p class="name">
-                        <b>张继生</b>
-                        <span>2018-10-22成为会员</span>
+                        <b>{{item.username}}</b>
+                        <span>{{$dayjs.unix(item.bind_time).format('YYYY-MM-DD')}}成为会员</span>
                     </p>
-                    <p>推广会员：8人 </p>
-                    <p>收益：￥800.00</p>
-                </div>
-            </li>
-            <li>
-                <i><img src="../../assets/head_portrait2.png" alt=""></i>
-                <div>
-                    <p class="name">
-                        <b>张继生</b>
-                        <span>2018-10-22成为会员</span>
-                    </p>
-                    <p>推广会员：8人 </p>
-                    <p>收益：￥800.00</p>
+                    <p>推广会员：{{item.count_nums}}人 </p>
+                    <p>收益：￥{{item.getmoney}}</p>
                 </div>
             </li>
         </ul>
         <div class="team_market" v-else>
             <div class="btns">
-                <p :class="market == 1 ? 'active' : ''" @click="marketChage(1)">PLUS (43)</p>
-                <p :class="market == 2 ? 'active' : ''" @click="marketChage(2)">商品 (43)</p>
+                <p :class="market == 1 ? 'active' : ''" @click="marketChage(1)">PLUS ({{plus_num}})</p>
+                <p :class="market == 2 ? 'active' : ''" @click="marketChage(2)">商品 ({{goods_num}})</p>
             </div>
             <ul>
-                <li>
+                <li v-for="item in teamSale">
+                    <i><img :src="$imgUrl+item.goods_img"></i>
+                    <div>
+                        <p>
+                            <span><img :src="item.wechat_img" alt=""></span>
+                            <a>{{item.username}}</a>
+                            <b v-if="item.get_status == 1">已结算</b>
+                            <b v-else>未结算</b>
+                        </p>
+                        <h3>{{item.goods_title}}</h3>
+                        <time>下单时间：{{$dayjs.unix(item.add_time).format('YYYY-MM-DD')}} </time>
+                        <em>收益：<strong>￥{{item.get_money}}</strong></em>
+                    </div>
+                </li>
+                <!--                 <li>
                     <i></i>
                     <div>
                         <p>
@@ -60,19 +63,7 @@
                         <em>收益：<strong>￥800</strong></em>
                     </div>
                 </li>
-                <li>
-                    <i></i>
-                    <div>
-                        <p>
-                            <span><img src="../../assets/head_portrait2.png" alt=""></span>
-                            <a>于红乐</a>
-                            <b class="col1">已结算</b>
-                        </p>
-                        <h3>游乐园亲子门票系列</h3>
-                        <time>下单时间：2019-02-12</time>
-                        <em>收益：<strong>￥800</strong></em>
-                    </div>
-                </li>
+ -->
             </ul>
         </div>
     </div>
@@ -83,7 +74,19 @@ export default {
     data() {
         return {
             table: 1,
-            market: 1
+            market: 1,
+            goods_type: 1,
+            user: '',
+            refer_orders: '',
+            team: '',
+            goods_num: '',
+            plus_num: '',
+            teamSale: '',
+            page: 1,
+            teamCurrSize: 0,
+            teamPageSize: 10,
+            teamSaleCurrSize: 0,
+            teamSalePageSize: 10,
         }
     },
     components: {},
@@ -91,18 +94,67 @@ export default {
         tabkeChage(num) {
             const that = this;
             that.table = num;
+            this.page = 1
+            if (num == 1) {
+                this.getTeam()
+            } else {
+                this.getTeamSale()
+            }
         },
         marketChage(num) {
             const that = this;
             that.market = num;
+            this.goods_type = num
+            this.getTeamSale()
+        },
+        //成员详情
+        async getDetail(id) {
+            this.$router.push({ name: "MemberDel", query: { id: id } })
         },
         //获取成员详情
         async getInfo() {
-            let res = await this.$getRequest('/store/MyTeamUserSale', { user_id: this.user_id })
+            let res = await this.$getRequest('/store/Level2', { user_id: this.user_id, page: this.page })
             this.user = res.data.data.user_info
-            this.list = res.data.data.order_list
             this.refer_orders = res.data.data.refer_orders
-        }
+        },
+        //获取团队
+        async getTeam() {
+            let res = await this.$getRequest('/store/MyTeam2', { user_id: this.user_id, page: this.page })
+            if (res.data.data.my_people) {
+                this.team = res.data.data.my_people;
+                this.teamCurrSize = res.data.data.my_people.length
+                this.teamPageSize = res.data.data.count
+            }
+        },
+        //获取团队更多
+        async getTeamMore() {
+            let res = await this.$getRequest('/store/MyTeam2', { user_id: this.user_id, page: this.page })
+            if (res.data.data.my_people) {
+                this.team = this.team.concat(res.data.data.my_people);
+                this.teamCurrSize = res.data.data.my_people.length
+            }
+        },
+        //获取团队销售
+        async getTeamSale() {
+            let res = await this.$getRequest('/store/MyTeamSale', { user_id: this.user_id, goods_type: this.goods_type, page: this.page })
+            this.goods_num = res.data.data.goods_num
+            this.plus_num = res.data.data.plus_num
+            if (res.data.data.list) {
+                this.teamSale = res.data.data.list;
+                this.teamSaleCurrSize = res.data.data.list.length
+                this.teamSalePageSize = res.data.data.count
+            }
+        },
+        //获取团队销售更多
+        async getTeamSaleMore() {
+            let res = await this.$getRequest('/store/MyTeamSale', { user_id: this.user_id, goods_type: this.goods_type, page: this.page })
+            if (res.data.data.list) {
+                this.teamSale = this.teamSale.concat(res.data.data.list);
+                this.teamSalecurrSize = res.data.data.list.length
+            }
+        },
+
+
     },
 
     // 创建前状态
@@ -112,7 +164,30 @@ export default {
     created() {
         document.title = "团队详情"
         document.body.style.background = "#fff";
+        this.user_id = this.$route.query.id
         this.getInfo()
+        this.getTeam()
+        this.getTeamSale()
+
+        window.onscroll = () => {
+            //变量scrollTop是滚动条滚动时，距离顶部的距离
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            //变量windowHeight是可视区的高度
+            var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            //变量scrollHeight是滚动条的总高度
+            var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+            //滚动条到底部的条件
+            if (scrollTop + windowHeight == scrollHeight) {
+                if (this.teamCurrSize >= this.teamPageSize) {
+                    this.page++;
+                    this.getTeamSaleMore()
+                }
+                if (this.teamSaleCurrSize >= this.teamSalePageSize) {
+                    this.page++;
+                    this.getTeamSaleMore()
+                }
+            }
+        }
 
     },
 

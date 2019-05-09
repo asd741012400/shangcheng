@@ -48,6 +48,9 @@
             <!-- 正常 -->
             <template v-else-if="item.ac_status == 1">
                 <div class="to_be_used" @click="goCardDetail(index)">
+                    <div class="sn">
+                        <p>卡号：{{item.card_sn}}</p>
+                    </div>
                     <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                     <div class="user">
                         <span><img :src="$imgUrl+item.head_img" alt=""></span>
@@ -330,7 +333,7 @@ export default {
             //变量scrollHeight是滚动条的总高度
             var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
             //滚动条到底部的条件
-            if (scrollTop + windowHeight == scrollHeight) {
+            if (scrollTop + windowHeight >= scrollHeight/2) {
                 if (this.currSize >= this.pageSize) {
                     this.page++;
                     this.getCardListMore()
@@ -407,6 +410,14 @@ export default {
         overflow: hidden;
         background: #fff;
         margin-bottom: .2rem;
+        position: relative;
+
+        .sn {
+            position: absolute;
+            left: .28rem;
+            top: .18rem;
+            color: #fff;
+        }
 
         i {
             overflow: hidden;

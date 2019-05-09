@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
-import {ENV,IMG_URL,API_URL} from './config/index.js'
+import {ENV,IMG_URL,API_URL,HOME_URL} from './config/index.js'
 
 
 //剪切板
@@ -48,6 +48,7 @@ import { Toast } from 'mint-ui';
 
 Vue.config.productionTip = false
 Vue.prototype.$imgUrl = IMG_URL;
+Vue.prototype.$HOME_URL = HOME_URL;
 Vue.prototype.$message = Toast;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;

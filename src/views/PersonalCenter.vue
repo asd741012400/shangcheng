@@ -19,7 +19,7 @@
                     <p>￥{{userInfo.history_money ||　'0'}}</p>
                     <a>历史收益</a>
                 </li>
-  <!--               <li>
+                <!--               <li>
                     <p>￥{{userInfo.mymoney ||　'0'}}</p>
                     <a>已提现</a>
                 </li> -->
@@ -149,23 +149,25 @@
         </div>
         <!-- 兑换成功后提示 -->
         <div class="pop_bg" v-if="popShow1">
-            <div class="pop">
+            <div class="pop" v-if="type == 'P'">
                 <p>恭喜你成为PLUS</p>
                 <em>你可以邀请好友获得奖励</em>
-                <!-- <time>到期时间：2018-5-6</time> -->
+                <time>到期时间：{{give}}</time>
                 <span @click="shareShowFn">邀请好友</span>
                 <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
-            <div class="pop" v-if="goods_count > 0">
-                <p>恭喜成功兑换{{goods_count}}件商品</p>
-                <!-- <time>到期时间：2018-5-6</time> -->
+            <div class="pop" v-if="type == 'G'">
+                <p>恭喜成功兑换{{give.goods_name}}件商品</p>
+                <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
+                <time v-else>到期时间：{{give.limit_etime}}</time>
                 <span @click="goOrder">前去查看</span>
                 <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
-            <div class="pop" v-if="card_count > 0">
-                <p>恭喜你获得卡券{{card_count}}张</p>
+            <div class="pop" v-if="type == 'C'">
+                <p>恭喜你获得卡券1张</p>
                 <em>前往激活即可使用</em>
-                <!-- <time>到期时间：2018-5-6</time> -->
+                <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
+                <time v-else>到期时间：{{give.limit_etime}}</time>
                 <span @click="goCardDetail">前往激活</span>
                 <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
@@ -180,6 +182,7 @@ export default {
     name: 'PersonalCenter',
     data() {
         return {
+            type: '',
             vip: 1,
             show: false,
             userInfo: {
@@ -188,6 +191,8 @@ export default {
                 status: 0
             },
             avatar: '',
+            cg_id: '',
+            give: '',
             card_count: 0,
             goods_count: 0,
             username: '',
@@ -212,6 +217,11 @@ export default {
                 return false
             }
         },
+        //有效期转换
+        toTime(t2) {
+            let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')
+            return day2
+        },
         shareShowFn() {
             this.$router.push({ name: 'VipPlus' })
         },
@@ -219,7 +229,7 @@ export default {
             this.$router.push({ name: 'Order' })
         },
         goCardDetail() {
-            this.$router.push({ name: 'MyCardBag' })
+            this.$router.push({ name: 'CardActivate', query: { id: this.cg_id } })
         },
         popShowFn() {
             this.popShow = true;
@@ -244,13 +254,20 @@ export default {
             let res = await this.$postRequest('/user/GetThings', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-                this.card_count = res.data.data.card_count.length || 0
-                this.goods_count = res.data.data.goods_count.length || 0
+
                 this.code = ''
+                this.type = res.data.data.type
+                this.give = res.data.data.data
+                if (this.type == 'P') {
+                    this.getUser()
+                }
+                if (this.type == 'C') {
+                    this.cg_id = res.data.data.cg_id
+                }
+
                 this.popShow = false;
                 this.popShow1 = true;
 
-                this.getUser()
             }
         },
         //更新用户身份
@@ -602,7 +619,7 @@ body {
             }
 
             span {
-                  width: .72rem;
+                width: .72rem;
                 overflow: hidden;
             }
         }

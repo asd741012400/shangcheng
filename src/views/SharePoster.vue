@@ -234,10 +234,10 @@ export default {
         this.type = this.$route.query.type
 
         if (this.type == 1) {
-            this.url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
+            this.url = this.$HOME_URL + '/#/CommodityDetails?share_id=' + this.user.user_id +
                 '&type=1&id=' + this.goods_id
         } else if (this.type == 3) {
-            this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+            this.url = this.$HOME_URL + '/#/CardDetails?share_id=' + this.user.user_id +
                 '&type=3&id=' + this.goods_id
         }
         this.wechat_img = this.user.wechat_img

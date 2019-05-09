@@ -82,19 +82,19 @@
                                 </li>
                             </ul>
                         </div>
-                                <div class="buyVip">
-            <template v-if="share_id &&　!user.user_id">
-                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
-            </template>
-            <template v-else-if="share_id &&　user.status < 1">
-                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
-            </template>
-            <template v-else-if="user.status >= 1">
-                <router-link :to="{name:'VipPlus'}">
-                    <van-button round block type="info">邀请好友赚 ￥100</van-button>
-                </router-link>
-            </template>
-        </div>
+                        <div class="buyVip">
+                            <template v-if="share_id &&　!user.user_id">
+                                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
+                            </template>
+                            <template v-else-if="share_id &&　user.status < 1">
+                                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
+                            </template>
+                            <template v-else-if="user.status >= 1">
+                                <router-link :to="{name:'VipPlus'}">
+                                    <van-button round block type="info">邀请好友赚 ￥{{money || 0}}</van-button>
+                                </router-link>
+                            </template>
+                        </div>
                         <BindPhone :show="show"></BindPhone>
                         <MyFooter></MyFooter>
                     </div>
@@ -117,6 +117,7 @@ export default {
                 status: 0
             },
             index: 0,
+            money: '',
             share_id: '',
             vip: [],
             currVip: {
@@ -147,6 +148,11 @@ export default {
                 this.show = true
             }
         },
+        //推广赚
+        async getMoney() {
+            let res = await this.$postRequest('/store/GetLevel', { user_id: this.user.user_id })
+            this.money = res.data.data
+        },
         goGoodsDetail(item) {
             this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
         },
@@ -161,7 +167,11 @@ export default {
         //获取所有分类
         async getAllCate() {
             let res = await this.$getRequest('/home/GetAllCate')
-            this.AllCate = res.data.data
+            this.AllCate = [{
+                c_id: 0,
+                c_name: "全部"
+            }]
+            this.AllCate = this.AllCate.concat(res.data.data);
             this.getGoodsList()
         },
         //获取所有权益
@@ -277,6 +287,7 @@ export default {
             this.share_id = has_share.query.share_id
         }
         this.getPlUS()
+        this.getMoney()
         this.getVipList()
         this.getAllCate()
 
@@ -358,6 +369,7 @@ export default {
         width: 100%;
     }
 }
+
 header {
     height: .6rem;
     display: flex;
@@ -429,7 +441,7 @@ header {
 
             .card {
                 width: 100%;
-                height: 150px;
+                height: auto;
                 border-radius: 10px;
             }
         }
@@ -655,15 +667,22 @@ header {
     background: #fff;
     transition: 300ms;
     padding: .2rem .1rem;
-    color:#333;
+    color: #333;
+    box-shadow: 0 7px 8px 0 rgba(7, 17, 27, 0.15);
+    margin-bottom: 10px;
+
     .tip {
-        margin-left:5px;
+        margin-left: 5px;
+        font-size: 0.3rem;
+        display: flex;
+        align-items: center;
+
         i {
-            display:inline-block;
+            display: inline-block;
             width: 2px;
             height: 2px;
-            padding:2px;
-            margin-right:8px;
+            padding: 2px;
+            margin-right: 8px;
             border-radius: 50%;
             background: #FFD524;
 
@@ -679,7 +698,6 @@ header {
 
 #swiper .swiper-container .swiper-wrapper .swiper-slide {
     width: 6.62rem;
-    height: 240px;
     border-radius: 10px;
     background-color: #fff;
 

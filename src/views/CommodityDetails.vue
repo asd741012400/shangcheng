@@ -44,7 +44,7 @@
                         <i>￥</i>
                         <a>{{cost_price}}</a>
                     </div>
-                    <b>非会员价￥{{limit_num}}</b>
+                    <b>非会员价￥{{goods_price}}</b>
                     <p>市场价<span>￥{{mkt_price}}</span></p>
                 </div>
                 <div v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</div>
@@ -54,7 +54,7 @@
                         <div class="footer-box">
                             <div class="left">
                                 <span class="price1">会员价￥{{vv.attr_vip_price}}</span>
-                                <span class="price2">￥{{vv.attr_price}}</span>
+                                <span class="price2">非会员价￥{{vv.attr_price}}</span>
                                 <!-- <del class="price3">￥{{mkt_price}}</del> -->
                             </div>
                             <div class="right">
@@ -658,15 +658,17 @@ export default {
 
             .select {
                 padding: 0.1rem .2rem;
+                background: #f6f6f6;
 
                 .select-item {
-                    margin-top: 5px;
+                    margin: 5px 0;
                     padding: 0.1rem .2rem;
                     display: flex;
                     flex-direction: column;
-                    border: 1px solid #ddd;
+                    // border: 1px solid #ddd;
                     width: 100%;
                     box-sizing: border-box;
+                    background: #fff;
 
                     &.active {
                         border: 1px solid red;
@@ -696,8 +698,8 @@ export default {
 
                         .price2 {
                             color: #666;
-                            font-size: .3rem;
-                            margin-right: 5px;
+                            font-size: .26rem;
+                            margin-right: 15px;
                         }
 
                         .price3 {
@@ -1128,6 +1130,4 @@ export default {
         }
     }
 }
-
-
 </style>

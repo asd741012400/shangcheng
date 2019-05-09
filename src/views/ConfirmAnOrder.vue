@@ -199,7 +199,7 @@ export default {
         },
 
         numChage(str) {
-            const that = this;
+            let that = this;
 
             if (str == "-") {
                 if (that.num <= 1) {
@@ -209,13 +209,13 @@ export default {
                 }
             } else {
 
-                if (that.num > this.limit_num) {
-                    this.$message('已到最大限购数量')
+                if (that.num >= that.limit_num) {
+                    that.$message('已到最大限购数量')
                     return false
                 }
 
-                if (that.num > this.store) {
-                    this.$message('库存不足')
+                if (that.num >= that.store) {
+                    that.$message('库存不足')
                     return false
                 }
 
