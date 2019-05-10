@@ -102,6 +102,39 @@
                                 </span>
                         </div>
                     </li>
+                    <li v-for="(item,index) in storeList" :key="index" v-if="index >= 2 && showMore">
+                        <div class="del">
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                <div class="tle">
+                                    <h4>{{item.business_name}}</h4>
+                                    <div>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                    </div>
+                                </div>
+                                <div class="timer">营业时间：{{item.sale_time}}、{{item.sale_time2}}</div>
+                                <div class="site">
+                                    <i><img src="../assets/icon_site.png" alt=""></i>
+                                    <p>地点：{{item.address}}</p>
+                                </div>
+                                <div class="tel"><span><img src="../assets/icon_tel.png" alt=""></span></div>
+                            </router-link>
+                        </div>
+                        <div class="advance">
+                            <span>
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                    <img src="../assets/icon_advance.png" alt="">
+                            </router-link>
+                                </span>
+                        </div>
+                    </li>
+                    <li class="more" v-if="storeList.length > 2" @click="handlwMore">
+                        <van-icon v-if="!showMore" name="arrow-down" />
+                        <van-icon v-else name="arrow-up" />
+                    </li>
                 </ul>
             </div>
             <div class="comment" id="comments">
@@ -227,6 +260,7 @@ export default {
             active: 1,
             table: 1,
             show: false,
+            showMore: false,
             isCollect: false,
             comments: [],
             storeList: [],
@@ -237,6 +271,9 @@ export default {
         Share
     },
     methods: {
+        handlwMore() {
+            this.showMore = !this.showMore
+        },
         changeAttr(index) {
             this.attrActive = index
             this.attr_id = this.GoodsDetail.goods_attr[index].attr_id
@@ -806,6 +843,17 @@ export default {
                     padding-left: .42rem;
                     margin-bottom: .1rem;
                     position: relative;
+
+                    &.more {
+                        display: flex;
+                        justify-content: center;
+                        background: #fff;
+
+                        .van-icon {
+                            font-size: .5rem;
+                            color: #666;
+                        }
+                    }
 
                     .del {
                         flex: 1;

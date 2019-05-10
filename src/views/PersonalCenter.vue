@@ -150,7 +150,7 @@
         <!-- 兑换成功后提示 -->
         <div class="pop_bg" v-if="popShow1">
             <div class="pop" v-if="type == 'P'">
-                <p>恭喜你成为PLUS</p>
+                <p>恭喜你成为PLUS会员</p>
                 <em>你可以邀请好友获得奖励</em>
                 <time>到期时间：{{give}}</time>
                 <span @click="shareShowFn">邀请好友</span>
@@ -168,7 +168,7 @@
                 <em>前往激活即可使用</em>
                 <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
                 <time v-else>到期时间：{{give.limit_etime}}</time>
-                <span @click="goCardDetail">前往激活</span>
+                <span @click="goCardDetail">立即激活</span>
                 <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
         </div>

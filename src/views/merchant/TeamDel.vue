@@ -9,7 +9,7 @@
         </h3>
                 <p>
                     <a>会员：{{refer_orders}}人</a>
-                    <b>收益：￥{{user.getmoney}}</b>
+                    <b>收益：￥{{user.history_money}}</b>
                 </p>
             </div>
         </header>
@@ -367,6 +367,13 @@ export default {
                     border-radius: 5px;
                     overflow: hidden;
                     background: #ccc;
+
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: 1.28rem;
+                        object-fit: cover
+                    }
                 }
 
                 div {

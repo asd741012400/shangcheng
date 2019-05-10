@@ -27,7 +27,7 @@
                         <a>已提现</a>
                     </li> -->
                     <li @click="goWidthdrew">
-                        <p>￥{{info.getmoney || '0.00'}}</p>
+                        <p>￥{{info.get_money || '0.00'}}</p>
                         <a>可提现</a>
                     </li>
                     <li>

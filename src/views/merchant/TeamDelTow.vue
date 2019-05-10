@@ -21,7 +21,7 @@
                 <div>
                     <p class="name">
                         <b>{{item.goods_title}}</b>
-                        <span v-if="item.get_status == 0">已结算</span>
+                        <span v-if="item.get_status == 1">已结算</span>
                         <span v-else>未结算</span>
                     </p>
                     <p>下单时间：{{$dayjs.unix(item.add_time).format('YYYY-MM-DD')}} </p>
@@ -40,15 +40,11 @@ export default {
             page: 1,
             user: {},
             team: {},
-            get_status: 0,
-            teamlist: [],
-            teamPage: 1,
-            teamCurrSize: 0,
-            teamPageSize: 10,           
-            teamSalelist: [],
-            teamSalePage: 1,
-            teamSaleCurrSize: 0,
-            teamSalePageSize: 10,
+            list: {},
+            get_status: 3,
+            currSize: 0,
+            pageSize: 10,
+
         }
     },
     components: {},
@@ -68,28 +64,21 @@ export default {
         },
         //获取推广金额
         async getMyTeamAmount() {
-            this.list = []
             let res = await this.$getRequest('/user/MyExtensionAmountAndNum', { user_id: this.user.user_id })
             this.team = res.data.data
         },
         //获取推广
         async getMyTeam() {
-            // this.list = []
             let res = await this.$getRequest('/user/MyExtension', { user_id: this.user.user_id, get_status: this.get_status, page: this.page })
-            if (res.data.data.list) {
-                this.list = res.data.data.list;
-                this.currSize = res.data.data.list.length
-                this.pageSize = res.data.data.count
-            }
+            this.list = res.data.data.list;
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
         },
         //获取更多推广
         async getMyTeamMore() {
             let res = await this.$getRequest('/user/MyExtension', { user_id: this.user.user_id, get_status: this.get_status, page: this.page })
-            if (res.data.data.list) {
-                this.list = this.list.concat(res.data.data.list);
-                this.currSize = res.data.data.list.length
-            }
-
+            this.list = this.list.concat(res.data.data.list);
+            this.currSize = res.data.data.list.length
         },
 
     },

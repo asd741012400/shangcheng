@@ -35,7 +35,7 @@
                         <div class="swiper-container">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide" v-for="(item,ii) in vip">
-                                    <span class="tip"><i></i><span>{{item.name}}</span></span>
+                                    <!-- <span class="tip"><i></i><span>{{item.name}}</span></span> -->
                                     <div class="detail" v-html="item.desc">
                                     </div>
                                 </div>
@@ -103,6 +103,8 @@
 import Swiper from 'swiper';
 import 'swiper/dist/css/swiper.css';
 import wx from 'weixin-js-sdk'
+import BScroll from 'better-scroll'
+
 
 export default {
     name: 'VipEquity',
@@ -132,6 +134,8 @@ export default {
             page: 1,
             currSize: 0,
             pageSize: 10,
+            mySwiper: '',
+            scroll: '',
         }
     },
     components: {},
@@ -183,6 +187,7 @@ export default {
         getVip(index) {
             this.currVip = this.vip[index]
             this.vipIndex = index
+            this.mySwiper.slideTo(index, 1000)
         },
 
         //获取分类下的商品
@@ -315,13 +320,24 @@ export default {
 
     // 挂载结束状态
     mounted() {
+        let wrapper = document.querySelector('.tab-box')
+        this.scroll = new BScroll(wrapper, {
+            startX: 0,
+            click: true,
+            scrollX: true,
+            // 忽略竖直方向的滚动
+            scrollY: false,
+            eventPassthrough: "vertical"
+        })
+        console.log(this.scroll);
+
         var _this = this
-        new Swiper('.swiper-container', {
+        this.mySwiper = new Swiper('.swiper-container', {
             direction: 'horizontal',
             loop: true,
             autoplay: 5000,
-            slidesPerView: 2,
-            spaceBetween: 0.3,
+            slidesPerView: 1.35,
+            // spaceBetween: 0.1,
             paginationClickable: true,
             centeredSlides: true,
             observer: true, //修改swiper自己或子元素时，自动初始化swiper
@@ -333,9 +349,14 @@ export default {
             on: {
                 slideChangeTransitionEnd: function() {
                     _this.vipIndex = this.realIndex;
+                    /*滑动到指定索引的导航节点，并将其显示在可视区*/
+                    _this.scroll.scrollToElement(document.querySelector('.tab-box li:nth-child(' + _this.vipIndex + ')'))
+                    _this.scroll.refresh()
                 }
             }
         });
+
+
     },
 
     // 更新前状态
@@ -412,6 +433,7 @@ header {
 .VipEquity {
     padding-bottom: 55px;
     height: 1000px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .top {
@@ -459,25 +481,33 @@ header {
     justify-content: center;
 
     img {
-        width: 160px;
+        width: 2.5rem;
     }
 }
 
 .tab-box {
     width: 100%;
     overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
 
     .tab {
         margin-top: 50px;
         white-space: nowrap;
         width: auto;
         box-sizing: border-box;
+        padding-left: .5rem;
 
         li {
             display: inline-block;
 
-            &.active {
-                border-bottom: 2px solid #7C5628;
+            &.active:after {
+                content: '';
+                display: block;
+                width: .5rem;
+                margin: 0 auto;
+                height: 2px;
+                background: #FFD524;
+                margin-top: -5px;
             }
 
             .item {
@@ -488,7 +518,7 @@ header {
                 padding: .2rem;
 
                 img {
-                    width: 55px;
+                    width: 1rem;
                 }
 
                 p {
@@ -508,6 +538,7 @@ header {
     width: auto;
     overflow-x: scroll;
     margin: .66rem .33rem 0 .55rem;
+    -webkit-overflow-scrolling: touch;
 
     li {
         display: inline-block;
@@ -543,6 +574,8 @@ header {
 
 .activity_list {
     ul {
+        -webkit-overflow-scrolling: touch;
+
         li {
             background: #fff;
             padding-top: .2rem;
@@ -661,15 +694,22 @@ header {
     height: 100%;
     position: static;
     background: none;
+    padding-right: 1.8rem;
 }
 
 #swiper .swiper-slide {
     background: #fff;
     transition: 300ms;
-    padding: .2rem .1rem;
+    // padding: .2rem .1rem;
     color: #333;
     box-shadow: 0 7px 8px 0 rgba(7, 17, 27, 0.15);
     margin-bottom: 10px;
+
+    .detail {
+        p {
+            margin: 0;
+        }
+    }
 
     .tip {
         margin-left: 5px;
@@ -694,6 +734,7 @@ header {
 
 #swiper .swiper-wrapper {
     position: static;
+    margin-left: -20px;
 }
 
 #swiper .swiper-container .swiper-wrapper .swiper-slide {

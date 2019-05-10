@@ -5,7 +5,7 @@
             <span>团队总人数</span>
         </header>
         <ul class="team_member">
-            <li v-for="item in list"  @click="getDetail(item.user_id)">
+            <li v-for="item in list" @click="getDetail(item.user_id)">
                 <i><img :src="item.wechat_img"></i>
                 <div>
                     <p class="name">
@@ -154,6 +154,13 @@ export default {
                 overflow: hidden;
                 border-radius: 50%;
                 background: #ccc;
+
+                img {
+                    display: block;
+                    width: 100%;
+                    height: 1.32rem;
+                    object-fit: cover
+                }
             }
 
             div {

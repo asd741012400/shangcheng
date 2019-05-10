@@ -153,6 +153,13 @@ export default {
                 overflow: hidden;
                 border-radius: 5px;
                 background: #ccc;
+
+                img {
+                    display: block;
+                    width: 100%;
+                    height: 1.28rem;
+                    object-fit: cover
+                }
             }
 
             div {

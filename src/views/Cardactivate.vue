@@ -242,6 +242,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .CardActivate {
+    padding-bottom:55px;
     header {
         height: 1rem;
         display: flex;
@@ -513,6 +514,7 @@ export default {
                 border-radius: 10px;
                 position: relative;
                 overflow: hidden;
+                z-index: 999;
 
                 .detail {
                     padding: 0.2rem .6rem;
@@ -576,7 +578,7 @@ export default {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    padding-top: .6rem;
+                    margin-top: .6rem;
 
                     a {
                         text-align: center;

@@ -491,12 +491,11 @@ export default {
         left: 0;
 
         .confirm_pop {
-            width:90%;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 1.02rem;
+            padding: 0 .8rem;
 
             .boxs {
                 background: #fff;

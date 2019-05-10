@@ -6,7 +6,8 @@
                 <img class="poster-img" ref="image" :src="imgUrl">
                 <div class="Poster" ref="imageDom">
                     <div class="name">
-                        <span><img :src="wechat_img +'?'+ new Date().getTime()"></span>
+                        <!-- <span><img :src="wechat_img +'?'+ new Date().getTime()"></span> -->
+                        <span><img :src="wechat_img"></span>
                         <b>{{user.username}}</b>
                     </div>
                     <div class="img"><img :src="poster_img" alt=""></div>
@@ -70,6 +71,7 @@ export default {
             instance: "",
             wechat_img: "",
             poster_img: "",
+            share_img: "",
             maskingShow: false,
         }
     },
@@ -115,7 +117,7 @@ export default {
                 wx.onMenuShareTimeline({
                     title: this.title, // 分享标题, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.imgUrl, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -129,7 +131,7 @@ export default {
                     title: this.title, // 分享标题, 请自行替换
                     desc: '', // 分享描述, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.imgUrl, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -174,16 +176,16 @@ export default {
                 this.price = res.data.data.goods_price
                 this.title = res.data.data.goods_name
                 this.desc = res.data.data.goods_info
-                // this.poster_img = res.data.data.dist_poster
-                this.poster_img = await this.toBase64(this.$imgUrl + res.data.data.dist_poster)
+                this.share_img = res.data.data.dist_poster || res.data.data.def_pic[0]
+                this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
             } else {
                 let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
                 this.goods = res.data.data
                 this.price = res.data.data.card_price
                 this.title = res.data.data.share_title
                 this.desc = res.data.data.share_desc
-                // this.poster_img = res.data.data.share_img
-                this.poster_img = await this.toBase64(this.$imgUrl + res.data.data.share_img)
+                this.share_img = res.data.data.share_img || res.data.data.def_pic[0]
+                this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
             }
 
             this.wxRegister()

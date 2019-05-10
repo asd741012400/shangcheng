@@ -407,6 +407,7 @@ export default {
                 white-space: nowrap;
                 width: auto;
                 overflow-x: scroll;
+                overflow-y:hidden;
                 -webkit-overflow-scrolling: touch;
 
                 li {

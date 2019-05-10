@@ -60,7 +60,7 @@ export default {
     data() {
         return {
             store: {},
-            thumb_img:'',
+            thumb_img: '',
             shop: {
                 thumb_img: '',
                 business_name: '',
@@ -76,7 +76,7 @@ export default {
             let business_id = this.$localstore.get('business_id') || this.$route.query.id
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
             this.store = res.data.data
-            this.thumb_img = this.store.thumb_img ||  this.store.business_img[0]
+            this.thumb_img = this.store.thumb_img || this.store.business_img[0]
         },
         //获取店铺信息 及核销信息
         async getShop() {
@@ -85,6 +85,18 @@ export default {
             this.shop = res.data.data.shopinfo
             this.today_num = res.data.data.cur_nums.nums
             this.total = res.data.data.all_nums.nums
+
+        },
+        //切换当前门店
+        async changeStore(item) {
+            let business_id = this.$localstore.get('business_id') || this.$route.query.id
+            let wx = this.$localstore.get('wx')
+            if (business_id) {
+                let res = await this.$getRequest('/business/changeStore', { union_id: wx.unionid, business_id: business_id })
+                if (res.data.code == 1) {
+                    this.$localstore.set('business_user', res.data.data)
+                }
+            }
 
         },
         sacnCode() {
@@ -133,6 +145,7 @@ export default {
         }
         this.getShop()
         this.getStore()
+        this.changeStore()
     },
 
     // 挂载前状态
