@@ -408,6 +408,10 @@ export default {
                 overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
 
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+
                 li {
                     background: #fff;
                     width: 5.6rem;
@@ -425,6 +429,13 @@ export default {
                             overflow: hidden;
                             display: block;
                             border-radius: 5px;
+
+                            img {
+                                display: block;
+                                width: 100%;
+                                height: 2.04rem;
+                                object-fit: cover
+                            }
                         }
 
                         div {
@@ -625,7 +636,10 @@ export default {
                         position: relative;
 
                         img {
+                            display: block;
+                            width: 100%;
                             height: 3rem;
+                            object-fit: cover
                         }
 
                         div {

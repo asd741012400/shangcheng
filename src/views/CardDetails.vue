@@ -555,13 +555,14 @@ export default {
                 padding-top: .2rem;
 
                 .vip_price {
+                    padding-left: 0.56rem;
                     width: 2.48rem;
                     background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                     border-radius: 0px 20px 20px 0px;
                     display: flex;
                     align-items: center;
                     height: .62rem;
-                    justify-content: center;
+                    // justify-content: center;
                     color: #fff;
 
                     em {
@@ -811,6 +812,15 @@ export default {
                                 background: #ccc;
                                 border-radius: 5px;
                                 position: relative;
+
+                                span {
+                                    img {
+                                        display: block;
+                                        width: 100%;
+                                        height: 3rem;
+                                        object-fit: cover
+                                    }
+                                }
 
                                 div {
                                     width: 2.48rem;

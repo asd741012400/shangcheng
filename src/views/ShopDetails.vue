@@ -7,20 +7,20 @@
         </header>
         <div class="shop_message">
             <div>
-                <a>营业时间：</a>
+                <a>营业时间</a>：
                 <p>
                     <span>{{shop.sale_time}}</span>
                     <span>{{shop.sale_time2}}</span>
                 </p>
             </div>
             <div>
-                <a>地址：</a>
+                <a>地址</a>：
                 <p>
                     <span>{{shop.address}}</span>
                 </p>
             </div>
             <div>
-                <a>电话：</a>
+                <a>电话</a>：
                 <p>
                     <span>{{shop.tel_phone}}</span>
                 </p>
@@ -166,8 +166,9 @@ export default {
             color: #535D70;
 
             a {
-                width: 2rem;
-                text-align: left;
+                width: 1.5rem;
+                text-align: justify;
+                text-align-last: justify;
             }
 
             p {

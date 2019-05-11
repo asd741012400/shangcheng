@@ -444,6 +444,7 @@ body {
 
                     a {
                         color: #fff;
+                        font-size: 0.24rem;
                     }
 
                     p {
@@ -608,19 +609,35 @@ body {
         li {
             display: flex;
             align-items: center;
+            justify-content: center;
             flex-direction: column;
-            padding-right: .6rem;
+            // padding-right: .6rem;
             text-align: center;
-            width: 16%;
+            flex: 0.20;
 
             a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
                 display: block;
                 width: 100%;
             }
 
             span {
-                width: .72rem;
-                overflow: hidden;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+
+                img {
+                    width: .72rem;
+                    height: .72rem;
+                }
+            }
+
+            p {
+                font-size: 0.24rem;
             }
         }
 
@@ -722,7 +739,7 @@ body {
                     background: #FF6666;
                     display: block;
                     margin: 0 auto;
-                    font-size:0.32rem;
+                    font-size: 0.32rem;
                 }
             }
         }

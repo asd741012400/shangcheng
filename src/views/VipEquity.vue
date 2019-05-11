@@ -508,6 +508,11 @@ export default {
         width: auto;
         box-sizing: border-box;
         padding-left: .5rem;
+        -webkit-overflow-scrolling: touch;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         li {
             display: inline-block;
@@ -552,6 +557,11 @@ export default {
     overflow-x: scroll;
     margin: .66rem .33rem 0 .55rem;
     -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
 
     li {
         display: inline-block;
