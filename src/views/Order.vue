@@ -36,7 +36,7 @@
                     <template v-else-if="item.order_status == 6">
                         <span>退款中</span>
                     </template>
-                    <template v-else-if="item.order_status == 1">
+                    <template v-else-if="item.order_status == 1 && item.order_type != 2">
                         <template v-if="item.is_use == 0">
                             <span>待使用</span>
                         </template>
@@ -163,10 +163,14 @@ export default {
     },
     computed: {
         order_status() {
+            console.log(this.active);
             switch (this.active) {
+                case 0:
+                    return status = ''
+                    break;
                 case 1:
                     return status = 0
-                    break;
+                    break;                    
                 case 2:
                     return status = 1
                     break;

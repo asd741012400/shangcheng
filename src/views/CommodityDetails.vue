@@ -163,7 +163,9 @@
                             </div>
                         </div>
                         <div class="grade">
-                            <van-rate v-model="item.star_level - 0" readonly />
+                            <span v-for="(item,index) in Number(item.star_level)"><img src="../assets/icon_enshrineA.png" alt=""></span>
+                            <span v-for="(item,index) in 5-Number(item.star_level)"><img src="../assets/icon_enshrineB.png" alt=""></span>
+                            <!-- <van-rate v-model="item.star_level - 0" readonly /> -->
                         </div>
                     </div>
                     <div class="text">{{item.content}}</div>
@@ -691,6 +693,7 @@ export default {
                 width: 1.34rem;
                 text-align: center;
                 border-radius: 15px;
+                font-size:0.24rem;
             }
 
             .select {
@@ -764,6 +767,7 @@ export default {
                 line-height: .8rem;
                 font-size: .28rem;
                 color: #515C6F;
+                font-weight: bold;
                 padding-left: .6rem;
                 border-bottom: 1px solid #f6f6f6;
             }

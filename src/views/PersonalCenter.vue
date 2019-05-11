@@ -722,6 +722,7 @@ body {
                     background: #FF6666;
                     display: block;
                     margin: 0 auto;
+                    font-size:0.32rem;
                 }
             }
         }

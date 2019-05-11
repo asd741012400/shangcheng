@@ -1,10 +1,10 @@
 <template>
     <div class="VipEquity">
-        <header>
+        <!--         <header>
             <div class="icon_return" @click="goBack"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">会员权益</div>
             <div class="add"></div>
-        </header>
+        </header> -->
         <!-- top -->
         <div class="top">
             <div class="top-box">
@@ -388,51 +388,56 @@ export default {
 
     .van-button--block {
         width: 100%;
-    }
-}
-
-header {
-    height: .6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto;
-    padding-top: .3rem;
-    padding-bottom: .2rem;
-    background: #FFFFFF;
-
-    // position: fixed;
-    // top: 0;
-    // left: 0;
-    // width: 100%;
-    .icon_return {
-        width: 1rem;
-        height: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        position: absolute;
-        left: .4rem;
-        z-index: 100;
 
         span {
-            overflow: hidden;
-            width: .27rem;
+            font-size: 0.32rem;
+            font-weight: bold;
         }
     }
-
-    .tel {
-        color: #515C6F;
-        font-weight: bold;
-        font-size: .32rem;
-        text-align: center;
-    }
-
 }
+
+// header {
+//     height: .6rem;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     margin: 0 auto;
+//     padding-top: .3rem;
+//     padding-bottom: .2rem;
+//     background: #FFFFFF;
+
+//     // position: fixed;
+//     // top: 0;
+//     // left: 0;
+//     // width: 100%;
+//     .icon_return {
+//         width: 1rem;
+//         height: 1rem;
+//         display: flex;
+//         align-items: center;
+//         justify-content: flex-start;
+//         position: absolute;
+//         left: .4rem;
+//         z-index: 100;
+
+//         span {
+//             overflow: hidden;
+//             width: .27rem;
+//         }
+//     }
+
+//     .tel {
+//         color: #515C6F;
+//         font-weight: bold;
+//         font-size: .32rem;
+//         text-align: center;
+//     }
+
+// }
 
 .VipEquity {
     padding-bottom: 55px;
-    height: 1000px;
+    min-height: 1200px;
     -webkit-overflow-scrolling: touch;
 }
 
@@ -440,14 +445,21 @@ header {
     position: relative;
 
     .top-box {
-        position: relative;
-        top: -44px;
+        // position: relative;
+        // top: -44px;
         z-index: -1;
         padding-bottom: 20px;
 
-        .center-box {
-            padding: .3rem .4rem;
+        >img {
             position: absolute;
+            top: -0.94rem;
+            z-index: -1;
+        }
+
+        .center-box {
+            padding: .1rem .4rem;
+            // position: absolute;
+            // top: 20px;
 
             .vip-icon {
                 display: flex;
@@ -456,7 +468,7 @@ header {
 
                 img {
                     position: relative;
-                    top: 30px;
+                    top: 0.4rem;
                     width: 1rem;
                 }
             }
@@ -472,16 +484,16 @@ header {
 
 .title {
     position: relative;
-    top: 40px;
-    margin-top: 30px;
+    top: 0.73rem;
+    margin-top: 0.5rem;
     width: 100%;
-    height: 60px;
+    // height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
 
     img {
-        width: 2.5rem;
+        width: 2.43rem;
     }
 }
 
@@ -499,6 +511,7 @@ header {
 
         li {
             display: inline-block;
+            margin-right: 0.1rem;
 
             &.active:after {
                 content: '';
@@ -519,14 +532,14 @@ header {
 
                 img {
                     width: 1rem;
+                    float: none;
                 }
 
                 p {
-                    color: #7C5628;
+                    font-size: 0.24rem;
+                    color: #6B400D;
                 }
             }
-
-
 
         }
 
@@ -555,8 +568,8 @@ header {
         }
 
         p {
-            color: #c1a06b;
-            font-size: .24rem;
+            font-size: 0.24rem;
+            color: #6B400D;
             padding-top: .1rem;
         }
     }
@@ -567,7 +580,7 @@ header {
         }
 
         p {
-            color: #ffe29f;
+            // color: #ffe29f;
         }
     }
 }
@@ -627,7 +640,8 @@ header {
 
                 p {
                     flex: 1;
-                    color: #515C6F;
+                    font-size: 0.24rem;
+                    color: #6B400D;
                     padding-left: .28rem;
                 }
 

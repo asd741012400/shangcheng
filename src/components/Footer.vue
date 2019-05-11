@@ -167,9 +167,10 @@ footer {
         }
     }
 
-    .active{
-        font-weight:bold;
+    .active {
+        font-weight: bold;
         font-size: 0.3rem;
+        color: #515C6F;
     }
 }
 </style>

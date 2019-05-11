@@ -5,8 +5,8 @@
                 <div class="header">
                     <div class="site"><i class="iconfont icon-alldizhi"></i></div>
                     <div class="search">
-                        <input type="text" @keyup.enter="searchGoods" v-model="keywords" placeholder="亲子卡">
                         <span @click="searchGoods"><img src="../assets/icon_search.png" alt=""></span>
+                        <input type="text" @keyup.enter="searchGoods" v-model="keywords" placeholder="亲子卡">
                     </div>
                     <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
                 </div>
@@ -63,27 +63,25 @@
             </h3>
             <ul>
                 <li class="vip_price" v-for="(item,index) in GoodsList" @click="goGoods(item)">
-                   
-                        <div class="img">
-                            <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
-                            <div>
-                                <p>会员价</p>
-                                <i>￥</i>
-                                <a>{{item.cost_price}}</a>
-                            </div>
+                    <div class="img">
+                        <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                        <div>
+                            <p>会员价</p>
+                            <i>￥</i>
+                            <a>{{item.cost_price}}</a>
                         </div>
-                        <div class="project">
-                            <p>{{item.goods_name}}</p>
-                            <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
-                            <!-- <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span> -->
-                        </div>
-                        <div class="price">
-                            <span>现价</span>
-                            <b>￥{{item.goods_price}}</b>
-                            <a>￥{{item.mkt_price}}</a>
-                        </div>
-                        <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
-
+                    </div>
+                    <div class="project">
+                        <p>{{item.goods_name}}</p>
+                        <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
+                        <!-- <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span> -->
+                    </div>
+                    <div class="price">
+                        <span>现价</span>
+                        <b>￥{{item.goods_price}}</b>
+                        <a>￥{{item.mkt_price}}</a>
+                    </div>
+                    <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                 </li>
             </ul>
         </div>
@@ -114,9 +112,9 @@ export default {
 
     },
     methods: {
-        goGoods(item){
-            if (item.store > 0) {                
-             this.$router.push({name:'CommodityDetails',query:{id:item.goods_id,type:1}});
+        goGoods(item) {
+            if (item.store > 0) {
+                this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } });
             }
         },
         goUrl(item) {
@@ -220,7 +218,7 @@ export default {
             //变量scrollHeight是滚动条的总高度
             var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
             //滚动条到底部的条件
-            if (scrollTop + windowHeight >= scrollHeight/2) {
+            if (scrollTop + windowHeight >= scrollHeight / 2) {
                 if (that.goodsListLength >= that.goodsListSum) {
                     that.pages++;
                     that.GoodsListPush()
@@ -306,7 +304,7 @@ export default {
 
                     span {
                         width: .22rem;
-                        padding: 0 .3rem;
+                        margin-right: 0.22rem;
                     }
 
                     input {
@@ -407,7 +405,7 @@ export default {
                 white-space: nowrap;
                 width: auto;
                 overflow-x: scroll;
-                overflow-y:hidden;
+                overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
 
                 li {
@@ -442,7 +440,6 @@ export default {
                             color: #fff;
 
 
-
                             p {
                                 font-size: .28rem;
                             }
@@ -466,7 +463,6 @@ export default {
                         p {
                             flex: 1;
                             color: #515C6F;
-                            padding-left: .28rem;
                             font-size: .3rem
                         }
 
@@ -683,6 +679,7 @@ export default {
                         padding-bottom: .4rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
+                        color: #515C6F;
 
                         span {
                             color: #515C6F;
@@ -693,6 +690,7 @@ export default {
                             font-size: .36rem;
                             padding-left: 2px;
                             padding-right: .2rem;
+
                         }
 
                         a {

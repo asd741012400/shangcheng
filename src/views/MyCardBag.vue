@@ -21,9 +21,9 @@
                             <p>{{item.card_name}}</p>
                             <!-- <span>剩余20天</span> -->
                         </div>
-                        <div class="btn" @click="confirmPopShow(index)">
+              <!--           <div class="btn" @click="confirmPopShow(index)">
                             <span>转赠</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </template>
@@ -457,15 +457,15 @@ export default {
                 align-items: flex-start;
                 flex: 1;
                 flex-direction: column;
-                justify-content: flex-start;
+                justify-content: flex-start;                
 
                 p {
-                    font-size: .24rem;
+                    font-size: .26rem;
                     color: #535D70;
                 }
 
                 span {
-                    font-size: .22rem;
+                    font-size: .26rem;
                     color: #FFB389;
                     padding-top: .1rem;
                 }
@@ -479,6 +479,7 @@ export default {
                 color: #fff;
                 background: #FF6666;
                 border-radius: 50px;
+                font-size:0.24rem;
 
                 a {
                     color: #fff;
@@ -582,6 +583,7 @@ export default {
                 color: #fff;
                 background: #FF6666;
                 border-radius: 50px;
+                font-size:0.24rem;
 
                 a {
                     color: #fff;
@@ -668,6 +670,8 @@ export default {
                     text-align: center;
                     font-weight: bold;
                     color: #fff;
+                    font-weight:bold;
+                    font-size:0.32rem;
                     border-radius: 50px;
                     background: #FF6666;
                     display: block;

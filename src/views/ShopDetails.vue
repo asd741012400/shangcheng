@@ -166,8 +166,8 @@ export default {
             color: #535D70;
 
             a {
-                width: 1.6rem;
-                text-align: right;
+                width: 2rem;
+                text-align: left;
             }
 
             p {

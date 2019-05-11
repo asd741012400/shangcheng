@@ -25,7 +25,7 @@
                 </div>
             </div>
         </header>
-        <div class="hint" @click="givePlus" v-if="user.status == 1">
+        <div class="hint" @click="givePlus" v-if="card.get_rights == 1">
             <p>尊敬的圈豆会员{{user.username}}，价值{{project_price}}元的游乐权益，您可免费领取</p>
         </div>
         <!-- <div class="card_project" v-if="card.get_rights == 1"> -->
@@ -280,12 +280,12 @@ export default {
                     justify-content: flex-start;
 
                     p {
-                        font-size: .24rem;
+                        font-size: .26rem;
                         color: #535D70;
                     }
 
                     span {
-                        font-size: .22rem;
+                        font-size: .26rem;
                         color: #FFB389;
                         padding-top: .1rem;
                         display: flex;

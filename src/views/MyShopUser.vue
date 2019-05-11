@@ -13,6 +13,8 @@
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
         </header>
         <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="invitation">
+        </div>
+        <div class="share">
             <p>
                 <span>立即开通</span>
                 <a>￥{{plus.price}}</a>
@@ -266,10 +268,16 @@ export default {
         overflow: hidden;
         display: flex;
         justify-content: center;
-        background-size: 92% 80%;
+        background-size: 90% auto;
+    }
+
+    .share {
+        display: flex;
+        justify-content: center;
 
         p {
-            margin-top: 3.9rem;
+            margin-top: -0.24rem;
+            // margin-top: 3.9rem;
             width: 3.84rem;
             height: .8rem;
             border-radius: 21px;
@@ -380,6 +388,7 @@ export default {
                     .price {
                         padding: .3rem .2rem;
                         display: flex;
+                        align-items: center;
                         justify-content: space-between;
 
                         b {
@@ -390,6 +399,7 @@ export default {
                         }
 
                         .btn {
+                            font-size: 0.24rem;
                             padding: 0.12rem 0.5rem;
                             color: #fff;
                             height: .8rem;

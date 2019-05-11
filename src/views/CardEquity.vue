@@ -418,12 +418,12 @@ export default {
                     justify-content: flex-start;
 
                     p {
-                        font-size: .24rem;
+                        font-size: .26rem;
                         color: #535D70;
                     }
 
                     span {
-                        font-size: .22rem;
+                        font-size: .26rem;
                         color: #FFB389;
                         padding-top: .1rem;
                     }
