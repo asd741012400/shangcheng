@@ -489,6 +489,7 @@ export default {
                     .price_div {
                         display: flex;
                         align-items: center;
+                        margin-top: 0.35rem;
 
                         b {
                             flex: 1;

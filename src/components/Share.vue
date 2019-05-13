@@ -4,7 +4,7 @@
             <div class="share_div" @click.stop>
                 <template v-if="money && userInfo.status > 0">
                     <h3><span>分享赚</span>{{money}}元</h3>
-                    <p>好友通过你的购买链接进行购买，你将获得至少<span>{{money}}</span>元的分享收益</p>
+                    <p>好友通过你的购买链接进行购买，你将获得至少<span>{{calcMoney(money)}}</span>元的分享收益</p>
                 </template>
                 <ul>
                     <li @click="maskingShowFn">
@@ -46,6 +46,7 @@ export default {
     name: 'Share',
     data() {
         return {
+            level: '',
             userInfo: {},
             // message: "123",
             shareShow: false,
@@ -69,6 +70,22 @@ export default {
     },
     components: {},
     methods: {
+        calcMoney(money) {
+            let userInfo = this.$localstore.get('wx_user')
+            switch (userInfo.level) {
+                case '1':
+                    return money * (Number(this.level.royalty1) / (Number(this.level.royalty1) + Number(this.level.royalty2) + Number(this.level.royalty3)))
+                    break;
+                case '2':
+                    return money * ((Number(this.level.royalty1) + Number(this.level.royalty2)) / (Number(this.level.royalty1) + Number(this.level.royalty2) + Number(this.level.royalty3)))
+                    break;
+                case '3':
+                    return money
+                    break;
+                default:
+                    return 0
+            }
+        },
         showPoster() {
             let userInfo = this.$localstore.get('wx_user')
             if (!userInfo) {
@@ -88,7 +105,6 @@ export default {
             this.shareShow = true;
         },
         copy(e) {
-            console.log(e.text);
             this.$message('复制成功，快去分享给好友吧！')
         },
         onError() {
@@ -103,6 +119,11 @@ export default {
         maskingHideFn() {
             this.maskingShow = false;
         },
+        //获取分销等级金额
+        async getLevel() {
+            let res = await this.$getRequest('/store/GoodsLevel')
+            this.level = res.data.data.goodsdist
+        },
     },
 
     // 创建前状态
@@ -114,6 +135,8 @@ export default {
         if (userInfo) {
             this.userInfo = userInfo
         }
+        this.getLevel()
+
     },
 
     // 挂载前状态

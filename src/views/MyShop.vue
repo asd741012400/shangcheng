@@ -43,16 +43,23 @@
                         <p>{{item.goods_name}}</p>
                         <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
                     </div>
-                    <div class="price">
-                        <div>
+                    <div class="share">
+                        <div class="price">
                             <span>现价</span>
-                            <b>￥{{item.goods_price}}</b>&nbsp;&nbsp;
-                            <del>￥{{item.mkt_price}}</del>
+                            <b>￥{{item.goods_price}}</b>
+                            <a>￥{{item.mkt_price}}</a>
                         </div>
-                        <div>
+                        <div class="right">
                             <span class="btn" @click.stop="shareWin(item)">分享赚 ￥{{item.dist_money}}</span>
                         </div>
                     </div>
+                    <!--                    <div class="price">
+                        <div class="left-box">
+                            <span>现价</span>
+                            <b>￥{{item.goods_price}}</b>&nbsp;
+                            <del>￥{{item.mkt_price}}</del>
+                        </div>
+                    </div> -->
                     <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                 </li>
             </ul>
@@ -343,7 +350,7 @@ export default {
         justify-content: center;
 
         p {
-            margin-top:-0.24rem;
+            margin-top: -0.24rem;
             // margin-top: 3.9rem;
             width: 3.84rem;
             height: .8rem;
@@ -452,47 +459,69 @@ export default {
                         }
                     }
 
-                    .price {
-                        padding: .3rem .2rem;
-                        display: flex;
-                        height: 1.06rem;
-                        align-items: center;
-                        justify-content: space-between;
-                        vertical-align:bottom;
+                    // .price {
+                    //     padding: .3rem .2rem;
+                    //     display: flex;
+                    //     height: 1.06rem;
+                    //     align-items: center;
+                    //     justify-content: space-between;
+                    //     vertical-align: bottom;
 
-                        b {
-                            font-weight: normal;
-                            font-size: .36rem;
-                            padding-left: 2px;
-                            padding-right: .2rem;
-                        }
+                    //     b {
+                    //         font-weight: normal;
+                    //         font-size: .36rem;
+                    //         padding-left: 2px;
+                    //         padding-right: .2rem;
+                    //     }
 
-                        .btn {
-                            font-size: 0.24rem;
-                            padding: 0.12rem 0.5rem;
-                            color: #fff;
-                            height: .8rem;
-                            background: #FF6666;
-                            border-radius: 50px;
-                            box-shadow: 0px 5px 10px rgba(255, 128, 128, 0.6);
-                            vertical-align:bottom;
-
-                        }
-                    }
+                    //     .btn {
+                    //         box-sizing: border-box;
+                    //         font-size: 0.24rem;
+                    //         padding: 0.12rem 0.5rem;
+                    //         color: #fff;
+                    //         height: .8rem;
+                    //         background: #FF6666;
+                    //         border-radius: 50px;
+                    //         box-shadow: 0px 5px 10px rgba(255, 128, 128, 0.6);
+                    //         vertical-align: bottom;
+                    //     }
+                    // }
 
                     .share {
                         display: flex;
+                        align-items: center;
+                        padding-bottom: .38rem;
+                        color: #515C6F;
+
+                        .right {
+                            display: flex;
+                            align-items: center;
+
+                            .btn {
+                                box-sizing: border-box;
+                                font-size: 0.24rem;
+                                padding: 0.12rem 0.5rem;
+                                color: #fff;
+                                // height: .8rem;
+                                background: #FF6666;
+                                border-radius: 50px;
+                                // box-shadow: 0px 5px 10px rgba(255, 128, 128, 0.6);
+                                background: linear-gradient(269deg, #ffb389 0%, #ff6666 100%);
+                                // vertical-align: bottom;
+                                margin-right: 0.2rem;
+                            }
+                        }
+
 
                         .price {
                             flex: 1;
                             display: flex;
-                            align-items: center;
-                            padding-bottom: .4rem;
+                            align-items: baseline;
+                            // padding-bottom: .4rem;
                             justify-content: flex-start;
                             padding-left: .46rem;
 
                             span {
-                                font-size: .28rem;
                                 color: #515C6F;
                             }
 
@@ -506,6 +535,8 @@ export default {
                             a {
                                 text-decoration: line-through;
                             }
+
+
                         }
 
                         p {

@@ -47,7 +47,7 @@
                     <!-- title -->
                     <div class="title" style="top:0">
                         <img src="@/assets/vip2.png">
-                </div>
+                    </div>
                         <ul class="tab-list" id="product">
                             <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
                                 <p>{{item.c_name}}</p>
@@ -321,15 +321,17 @@ export default {
     // 挂载结束状态
     mounted() {
         let wrapper = document.querySelector('.tab-box')
-        this.scroll = new BScroll(wrapper, {
-            startX: 0,
-            click: true,
-            scrollX: true,
-            // 忽略竖直方向的滚动
-            scrollY: false,
-            eventPassthrough: "vertical"
-        })
+        setTimeout(() => {
+            this.scroll = new BScroll(wrapper, {
+                startX: 0,
+                click: true,
+                scrollX: true,
+                // 忽略竖直方向的滚动
+                scrollY: false,
+                eventPassthrough: "vertical"
+            })
         console.log(this.scroll);
+        })
 
         var _this = this
         this.mySwiper = new Swiper('.swiper-container', {
@@ -350,7 +352,7 @@ export default {
                 slideChangeTransitionEnd: function() {
                     _this.vipIndex = this.realIndex;
                     /*滑动到指定索引的导航节点，并将其显示在可视区*/
-                    _this.scroll.scrollToElement(document.querySelector('.tab-box li:nth-child(' + _this.vipIndex + ')'))
+                    _this.scroll.scrollToElement(document.querySelector('.tab-box li:nth-child(' + _this.vipIndex + ')'), null, true, true)
                     _this.scroll.refresh()
                 }
             }
@@ -499,16 +501,19 @@ export default {
 
 .tab-box {
     width: 100%;
-    overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
 
     .tab {
+        width: 100%;
         margin-top: 50px;
         white-space: nowrap;
         width: auto;
         box-sizing: border-box;
         padding-left: .5rem;
         -webkit-overflow-scrolling: touch;
+        overflow-y: hidden;
+        overflow-x: auto;
 
         &::-webkit-scrollbar {
             display: none;
@@ -516,7 +521,7 @@ export default {
 
         li {
             display: inline-block;
-            margin-right: 0.1rem;
+            margin-right: 0.15rem;
 
             &.active:after {
                 content: '';
@@ -538,6 +543,7 @@ export default {
                 img {
                     width: 1rem;
                     float: none;
+                    margin-bottom: 0.1rem;
                 }
 
                 p {
@@ -553,7 +559,7 @@ export default {
 
 .tab-list {
     white-space: nowrap;
-    width: auto;
+    width: 100%;
     overflow-x: scroll;
     margin: .66rem .33rem 0 .55rem;
     -webkit-overflow-scrolling: touch;
@@ -569,6 +575,7 @@ export default {
         height: .6rem;
 
         span {
+            margin-top: 0.05rem;
             overflow: hidden;
             height: 2px;
             background-color: #ffe29f;
@@ -596,6 +603,8 @@ export default {
 }
 
 .activity_list {
+    margin-top: 0.2rem;
+
     ul {
         -webkit-overflow-scrolling: touch;
 
@@ -650,7 +659,6 @@ export default {
 
                 p {
                     flex: 1;
-                    font-size: 0.24rem;
                     color: #6B400D;
                     padding-left: .28rem;
                 }
@@ -665,16 +673,15 @@ export default {
                 display: flex;
 
                 .price {
-                    flex: 1;
                     display: flex;
-                    align-items: center;
+                    align-items: baseline;
                     padding-bottom: .4rem;
                     justify-content: flex-start;
                     padding-left: .46rem;
+                    color: #515C6F;
 
                     span {
                         color: #515C6F;
-                        font-size: .28rem;
                     }
 
                     b {
@@ -682,6 +689,7 @@ export default {
                         font-size: .36rem;
                         padding-left: 2px;
                         padding-right: .2rem;
+
                     }
 
                     a {

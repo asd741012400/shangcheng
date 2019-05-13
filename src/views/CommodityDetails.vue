@@ -149,16 +149,12 @@
                         <div class="user_message">
                             <i>
                                <template v-if="item.anonymous == 0">
-                                <img :src="$imgUrl+item.wechat_img" alt="" />
+                                <img :src="item.wechat_img" alt="" />
                                 </template>
                             </i>
                             <div class="user_name">
-                                <template v-if="item.anonymous == 1">
-                                    <p>匿名</p>
-                                </template>
-                                <template v-else>
-                                    <p>{{item.username}}</p>
-                                </template>
+                                <p v-if="item.anonymous == 1">匿名</p>
+                                <p v-else>{{item.user_name}}</p>
                                 <time>{{item.add_time}}</time>
                             </div>
                         </div>
@@ -169,9 +165,9 @@
                         </div>
                     </div>
                     <div class="text">{{item.content}}</div>
-                    <ul>
+                    <ul v-if="item.thumb[0] !== ''">
                         <li v-for="img in item.thumb">
-                            <span><img :src="img" alt=""></span>
+                            <span><img :src="$imgUrl+img" alt=""></span>
                         </li>
                     </ul>
                 </div>
@@ -640,7 +636,7 @@ export default {
                 padding-top: .2rem;
 
                 .vip_price {
-                    padding-left:0.56rem;
+                    padding-left: 0.56rem;
                     width: 2.48rem;
                     background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                     border-radius: 0px 20px 20px 0px;
@@ -694,7 +690,7 @@ export default {
                 width: 1.34rem;
                 text-align: center;
                 border-radius: 15px;
-                font-size:0.24rem;
+                font-size: 0.24rem;
             }
 
             .select {
@@ -703,7 +699,7 @@ export default {
 
                 .select-item {
                     margin: 5px 0;
-                    padding: 0.1rem .2rem;
+                    padding: 0.1rem .38rem;
                     display: flex;
                     flex-direction: column;
                     // border: 1px solid #ddd;
@@ -777,6 +773,7 @@ export default {
                 padding: 0.2rem .6rem;
                 background: #fff;
                 display: inherit;
+                opacity: 0.8;
 
                 p {
                     display: block;
@@ -789,7 +786,8 @@ export default {
 
 
                 img {
-                    margin: 5px 0;
+                    height: auto !important;
+                    // margin: 5px 0;
                 }
             }
 
@@ -833,6 +831,7 @@ export default {
                 line-height: .8rem;
                 font-size: .28rem;
                 color: #515C6F;
+                font-weight: bold;
                 padding-left: .6rem;
                 border-bottom: 1px solid #f6f6f6;
             }
@@ -894,12 +893,18 @@ export default {
 
                         .site {
                             display: flex;
-                            align-items: center;
+                            // align-items: center;
                             padding-bottom: .16rem;
 
                             i {
-                                overflow: hidden;
+                                display: inline-block;
+                                // overflow: hidden;
                                 width: .18rem;
+
+                                img {
+                                    display: block;
+                                    width: .18rem;
+                                }
                             }
 
                             p {
@@ -951,11 +956,15 @@ export default {
                 border-bottom: 1px solid #f6f6f6;
                 display: flex;
                 align-items: center;
+                font-size: .28rem;
+                color: #515C6F;
+                font-weight: bold;
 
                 p {
+                    flex: 1;
                     font-size: .28rem;
                     color: #515C6F;
-                    flex: 1;
+                    font-weight: bold;
                 }
 
                 a {
@@ -1062,7 +1071,7 @@ export default {
             background: #fff;
 
             .detail {
-                padding: 0.2rem .6rem;
+                padding: 0.2rem .3rem;
                 background: #fff;
                 display: inherit;
                 // margin-bottom: 3.5rem;
@@ -1075,16 +1084,19 @@ export default {
                     -webkit-margin-after: 1em;
                     -webkit-margin-start: 0px;
                     -webkit-margin-end: 0px;
+
+                    img {
+                        height: auto !important;
+                    }
                 }
 
-                img {
-                    margin: 5px 0;
-                }
             }
 
             h3 {
-                line-height: .8rem;
                 font-size: .28rem;
+                color: #515C6F;
+                font-weight: bold;
+                line-height: .8rem;
                 color: #515C6F;
                 padding-left: .6rem;
                 border-bottom: 1px solid #f6f6f6;

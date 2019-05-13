@@ -345,4 +345,14 @@ export default {
 
     }
 }
+
+.van-icon-star-o {
+    font-size: 0.36rem !important;
+    color: #CCCCCC !important;
+}
+.van-icon-star {
+    font-size: 0.36rem !important;
+    color: #FB4950 !important;
+}
+
 </style>

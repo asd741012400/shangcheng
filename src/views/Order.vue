@@ -37,15 +37,17 @@
                         <span>退款中</span>
                     </template>
                     <template v-else-if="item.order_status == 1 && item.order_type != 2">
-                        <template v-if="item.is_use == 0">
-                            <span>待使用</span>
-                        </template>
-                        <template v-else-if="item.is_comment == 0">
+                        <template v-if="item.is_comment == 0 && order_status == 3">
                             <span>待评价</span>
                         </template>
                         <template v-else>
-                            <span v-if="item.order_type == 1">已使用</span>
-                            <span v-else-if="item.order_type == 3">已激活</span>
+                            <template v-if="item.is_use == 0">
+                                <span>待使用</span>
+                            </template>
+                            <template v-else>
+                                <span v-if="item.order_type == 1">已使用</span>
+                                <span v-else-if="item.order_type == 3">已激活</span>
+                            </template>
                         </template>
                     </template>
                 </div>
@@ -163,14 +165,13 @@ export default {
     },
     computed: {
         order_status() {
-            console.log(this.active);
             switch (this.active) {
                 case 0:
                     return status = ''
                     break;
                 case 1:
                     return status = 0
-                    break;                    
+                    break;
                 case 2:
                     return status = 1
                     break;
@@ -242,6 +243,7 @@ export default {
         },
         //获取订单
         async getOrderList(index) {
+            this.page = 1
             this.orderList = []
             let res = await this.$getRequest('/order/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             this.orderList = res.data.data.list

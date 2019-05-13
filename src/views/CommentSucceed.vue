@@ -249,9 +249,13 @@ export default {
                 }
 
                 p {
+                    width:3rem;
                     font-size: .24rem;
                     color: #515C6F;
                     padding-top: .14rem;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
 
                 a {

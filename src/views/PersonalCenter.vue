@@ -10,7 +10,7 @@
                     <p>{{userInfo.username || username}}</p>
                     <div>
                         <a>会员到期：{{userInfo.over_time}}</a>
-                        <i v-if="overTime(userInfo.over_time)"><img src="../assets/vt_renew.png" alt=""></i>
+                        <i v-if="overTime(userInfo.over_time)" @click="BuyPlus"><img src="../assets/vt_renew.png" alt=""></i>
                     </div>
                 </div>
             </div>
@@ -243,6 +243,10 @@ export default {
         popHideFn1() {
             this.popShow1 = false;
             location.reload()
+        },
+        //续费Plus
+        async BuyPlus() {
+            this.$router.push({ name: 'VipOrder', query: { type: 2 } })
         },
         //兑换卡片商品权益
         async getcode() {
@@ -564,14 +568,16 @@ body {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding: .6rem .5rem;
+        padding: .6rem .25rem;
 
         li {
             display: flex;
             align-items: center;
+            justify-content: center;
             flex-direction: column;
-            padding-right: .6rem;
+            // padding-right: .6rem;
             text-align: center;
+            width: 20%;
 
             a {
                 display: flex;
@@ -580,13 +586,14 @@ body {
                 justify-content: center;
 
                 img {
-                    display: block;
                     width: .72rem;
+                    height: .72rem;
                 }
             }
 
             p {
                 color: #666;
+                font-size: 0.24rem;
             }
 
             span {
@@ -604,7 +611,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding: .6rem .5rem 2.8rem;
+        padding: .6rem .25rem 2.8rem;
 
         li {
             display: flex;
@@ -613,7 +620,7 @@ body {
             flex-direction: column;
             // padding-right: .6rem;
             text-align: center;
-            flex: 0.20;
+            width: 20%;
 
             a {
                 display: flex;

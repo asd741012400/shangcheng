@@ -447,8 +447,9 @@ export default {
                             display: flex;
                             align-items: center;
                             height: .62rem;
-                            justify-content: center;
+                            // justify-content: center;
                             color: #fff;
+                            padding-left: 0.2rem;
 
 
                             p {
@@ -604,7 +605,7 @@ export default {
 
                     .price {
                         display: flex;
-                        align-items: center;
+                        align-items: baseline;
                         height: 1.06rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
@@ -689,11 +690,12 @@ export default {
 
                     .price {
                         display: flex;
-                        align-items: center;
+                        align-items: baseline;
                         padding-bottom: .4rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
                         color: #515C6F;
+
 
                         span {
                             color: #515C6F;

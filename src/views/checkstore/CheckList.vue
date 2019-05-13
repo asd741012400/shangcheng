@@ -66,7 +66,7 @@ export default {
     components: {},
     methods: {
         toTime(time) {
-            return this.$dayjs.unix(time).format('YYYY-MM')
+            return this.$dayjs.unix(time).format('YYYY-MM-DD')
         },
         //开启时间选择器
         openPicker() {

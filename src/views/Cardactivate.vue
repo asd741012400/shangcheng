@@ -242,7 +242,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .CardActivate {
-    padding-bottom:55px;
+    padding-bottom: 55px;
+
     header {
         height: 1rem;
         display: flex;
@@ -354,7 +355,7 @@ export default {
         background: #EEEEEF;
         border-radius: 10px;
         padding: .4rem 0;
-        font-size:0.3rem;
+        font-size: 0.3rem;
 
         .box {
             display: flex;
@@ -508,6 +509,7 @@ export default {
             align-items: center;
             justify-content: center;
             padding: 0 1.02rem;
+            z-index: 999;
 
             .boxs {
                 background: #fff;
@@ -521,6 +523,7 @@ export default {
                     background: #fff;
                     max-height: 250px;
                     overflow-y: auto;
+                    opacity: 0.8;
                 }
 
                 h3 {

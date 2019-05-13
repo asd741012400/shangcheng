@@ -7,8 +7,8 @@
         </header>
         <div class="mian">
             <div class="vip_card">
-                  <img :src="$imgUrl+plus.photo" alt="">
-        <!--         <p>
+                <img :src="$imgUrl+plus.photo" alt="">
+                <!--         <p>
                     <span>累积为您节省：￥</span>
                     <a>{{plus.price}}</a>
                 </p> -->
@@ -81,7 +81,7 @@ export default {
                     var options = config;
                     that.$localstore.session.set('has_share', '')
                     // 支付成功后的操作
-                    options.success = async function() {          
+                    options.success = async function() {
                         that.$router.replace({
                             name: 'PaySucceed',
                             query: {
@@ -89,7 +89,7 @@ export default {
                                 goods_id: that.order.goods_id,
                                 type: that.order.order_type,
                             }
-                        })      
+                        })
                     };
 
                     //  取消支付的操作
@@ -184,7 +184,7 @@ export default {
         overflow: hidden;
 
         .vip_card {
-            height: 4.66rem;
+            // height: 4.66rem;
             // background: url('../assets/VipOrder_card.png') center/100% no-repeat;
             border-radius: 10px;
             margin: -20px auto;
@@ -196,8 +196,10 @@ export default {
             padding: 0.2rem;
             box-sizing: border-box;
 
-            img{
-                border-radius:10px;
+            img {
+                width: 100%;
+                height: 3.5rem;
+                border-radius: 10px;
             }
 
             p {

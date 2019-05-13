@@ -60,6 +60,7 @@ export default {
 <style lang="scss">
 #app {
     overflow-x: hidden;
+    font-family: Microsoft YaHei;
 }
 
 a,

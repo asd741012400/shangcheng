@@ -54,7 +54,7 @@ export default {
         let card = this.$localstore.get('usecard')
         this.card = card
         if (!card) {
-          this.$router.push({name:"Index"})
+            this.$router.push({ name: "Index" })
         }
 
     },
@@ -140,8 +140,8 @@ export default {
             align-items: center;
             height: 100%;
 
-            img{
-               height: 100%;  
+            img {
+                height: 100%;
             }
 
             i {
@@ -196,6 +196,8 @@ export default {
 
     .code {
         padding-top: .46rem;
+        padding-bottom: .30rem;
+        background: #fff;
 
         .code_img {
             display: flex;

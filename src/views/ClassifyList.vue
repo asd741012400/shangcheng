@@ -315,16 +315,15 @@ export default {
                     display: flex;
 
                     .price {
-                        flex: 1;
                         display: flex;
-                        align-items: center;
+                        align-items: baseline;
                         padding-bottom: .4rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
+                        color: #515C6F;
 
                         span {
                             color: #515C6F;
-                            font-size: .28rem;
                         }
 
                         b {
@@ -332,6 +331,7 @@ export default {
                             font-size: .36rem;
                             padding-left: 2px;
                             padding-right: .2rem;
+
                         }
 
                         a {

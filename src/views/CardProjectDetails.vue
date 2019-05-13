@@ -382,7 +382,7 @@ export default {
 
                         .site {
                             display: flex;
-                            align-items: center;
+                            // align-items: center;
                             padding-bottom: .16rem;
 
                             i {
@@ -437,6 +437,7 @@ export default {
         width: 100%;
         height: .8rem;
         background: transparent;
+        box-shadow:none;
 
         a {
             width: 5rem;

@@ -13,12 +13,8 @@
                                 </template>
                             </i>
                             <div class="user_name">
-                                <template v-if="item.anonymous == 1">
-                                    <p>匿名</p>
-                                </template>
-                                <template v-else>
-                                    <p>{{item.username}}</p>
-                                </template>
+                                <p v-if="item.anonymous == 1">匿名</p>
+                                <p v-else>{{item.user_name}}</p>
                                 <time>{{item.add_time}}</time>
                             </div>
                         </div>
@@ -29,7 +25,7 @@
                         </div>
                     </div>
                     <div class="text">{{item.content}}</div>
-                    <ul>
+                    <ul v-if="item.thumb[0] !== ''">
                         <li v-for="(img,ii) in item.thumb" @click="previewImg(item,ii)">
                             <span><img :src="$imgUrl+img" alt=""></span>
                         </li>

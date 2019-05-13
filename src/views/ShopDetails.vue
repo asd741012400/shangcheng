@@ -14,13 +14,13 @@
                 </p>
             </div>
             <div>
-                <a>地址</a>：
+                <a>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址</a>：
                 <p>
                     <span>{{shop.address}}</span>
                 </p>
             </div>
             <div>
-                <a>电话</a>：
+                <a>电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话</a>：
                 <p>
                     <span>{{shop.tel_phone}}</span>
                 </p>
@@ -166,14 +166,22 @@ export default {
             color: #535D70;
 
             a {
-                width: 1.5rem;
-                text-align: justify;
-                text-align-last: justify;
+                display: inline-block;
+                // width: 1.2rem;
+                // text-align: justify;
+                // text-align-last: justify;
+
+                &:after {
+                    // content: " ";
+                    // display: inline-block;
+                    // width: 100%;
+                }
             }
 
             p {
                 display: flex;
                 flex-direction: column;
+                vertical-align: bottom;
             }
         }
     }

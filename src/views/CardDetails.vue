@@ -70,12 +70,8 @@
                                 </template>
                             </i>
                             <div class="user_name">
-                                <template v-if="item.anonymous == 1">
-                                    <p>匿名</p>
-                                </template>
-                                <template v-else>
-                                    <p>{{item.username}}</p>
-                                </template>
+                                <p v-if="item.anonymous == 1">匿名</p>
+                                <p v-else>{{item.user_name}}</p>
                                 <time>{{item.add_time}}</time>
                             </div>
                         </div>
@@ -86,7 +82,7 @@
                         </div>
                     </div>
                     <div class="text">{{item.content}}</div>
-                    <ul>
+                    <ul v-if="item.thumb[0] !== ''">
                         <li v-for="img in item.thumb">
                             <span><img :src="$imgUrl+img" alt=""></span>
                         </li>
@@ -100,26 +96,20 @@
           </h3>
                 <div v-if="table == 1">
                     <ul>
-                        <li class="vip_price" v-for="item in projects" @click="goProject(item)">
+                        <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)">
                             <div class="img">
-                                <span><img :src="$imgUrl +item.thumb_img" alt="" /></span>
-                                <!--              <div>
-                                    <p>会员价</p>
-                                    <i>￥</i>
-                                    <a>{{item.project_price}}</a>
-                                </div> -->
-                            </div>
-                            <div class="project">
-                                <p>{{item.project_name}}</p>
-                                <!--            <span>报名　11/22</span> -->
+                                <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                                <div>
+                                    <p>价值</p>
+                                    <b>￥{{item.project_price}}</b>
+                                </div>
                             </div>
                             <div class="share">
                                 <div class="price">
-                                    <span>价值</span>
-                                    <b>￥{{item.project_price}}</b>
+                                    <span>{{item.project_name}}</span>
+                                    <a>畅&nbsp;&nbsp;玩</a>
                                 </div>
                                 <div class="right">
-                                    <span>畅玩</span>
                                     <b>多店通用</b>
                                 </div>
                             </div>
@@ -561,6 +551,7 @@ export default {
                     border-radius: 0px 20px 20px 0px;
                     display: flex;
                     align-items: center;
+                    // padding-left:0.15rem;
                     height: .62rem;
                     // justify-content: center;
                     color: #fff;
@@ -606,13 +597,16 @@ export default {
                 padding: 0.2rem .6rem;
                 background: #fff;
                 display: inherit;
+                opacity: 0.8;
 
                 img {
-                    margin: 5px 0;
+                    // margin: 5px 0;
+                    height: auto !important;
                 }
             }
 
             h3 {
+                font-weight: bold;
                 line-height: .8rem;
                 font-size: .28rem;
                 color: #515C6F;
@@ -657,6 +651,9 @@ export default {
             background: #fff;
 
             h3 {
+                font-size: .28rem;
+                color: #515C6F;
+                font-weight: bold;
                 height: .8rem;
                 padding-left: .6rem;
                 padding-right: .52rem;
@@ -665,6 +662,7 @@ export default {
                 align-items: center;
 
                 p {
+                    font-weight: bold;
                     font-size: .28rem;
                     color: #515C6F;
                     flex: 1;
@@ -776,6 +774,7 @@ export default {
             h3 {
                 font-size: .28rem;
                 color: #515C6F;
+                font-weight: bold;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -831,11 +830,17 @@ export default {
                                     display: flex;
                                     align-items: center;
                                     height: .62rem;
-                                    justify-content: center;
+                                    // justify-content: center;
                                     color: #fff;
+                                    padding-left: 0.28rem;
 
                                     p {
                                         font-size: .28rem;
+                                    }
+
+                                    b {
+                                        font-size: 0.40rem;
+                                        font-weight: normal;
                                     }
 
                                     i {
@@ -867,16 +872,20 @@ export default {
 
                             .share {
                                 display: flex;
+                                flex-direction: column;
 
                                 .price {
                                     flex: 1;
                                     display: flex;
                                     align-items: center;
                                     padding-bottom: .4rem;
-                                    justify-content: flex-start;
-                                    padding-left: .46rem;
+                                    justify-content: space-between;
+                                    margin-top: 0.35rem;
+                                    color: #515C6F;
 
                                     span {
+                                        padding-left: .46rem;
+                                        font-size: 0.28rem;
                                         color: #515C6F;
                                     }
 
@@ -888,23 +897,20 @@ export default {
                                     }
 
                                     a {
-                                        text-decoration: line-through;
+                                        color: #FF6666;
+                                        margin-right: 0.86rem;
+                                        font-size: 0.24rem;
                                     }
                                 }
 
                                 .right {
                                     display: flex;
-                                    flex-direction: column;
-                                    text-align: right;
-                                    margin-right: 10px;
-
-                                    span {
-                                        color: rgb(255, 102, 102)
-                                    }
-
-                                    b {
-                                        color: #666;
-                                    }
+                                    justify-content: flex-end;
+                                    margin-right: 0.76rem;
+                                    margin-top: -0.38rem;
+                                    margin-bottom: 0.40rem;
+                                    color: #515C6F;
+                                    font-size: 0.24rem;
                                 }
 
                                 p {

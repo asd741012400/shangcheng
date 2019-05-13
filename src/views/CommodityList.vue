@@ -34,7 +34,7 @@
                         <div class="grade">{{toTime(item.add_time)}}</div>
                     </div>
                     <div class="text">{{item.content}}</div>
-                    <ul>
+                    <ul v-if="strToArr(item.thumb)[0] !== ''">
                         <li v-for="(img,index) in strToArr(item.thumb)" @click="previewImg(item,index)">
                             <span><img :src="$imgUrl+img" alt=""></span>
                         </li>
@@ -130,6 +130,7 @@ export default {
         },
         async getList() {
             let user = this.$localstore.get('wx_user')
+
             let data = {
                 user_id: user.user_id,
                 status: this.commentState,

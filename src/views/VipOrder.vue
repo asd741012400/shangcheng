@@ -189,7 +189,7 @@ export default {
         overflow: hidden;
 
         .vip_card {
-            height: 4.66rem;
+            // height: 4.66rem;
             // background: url('../assets/VipOrder_card.png') center/100% no-repeat;
             border-radius: 10px;
             margin: -20px auto;
@@ -202,6 +202,8 @@ export default {
             box-sizing: border-box;
 
             img{
+                width:100%;
+                height:3.5rem;
                 border-radius:10px;
             }
 
