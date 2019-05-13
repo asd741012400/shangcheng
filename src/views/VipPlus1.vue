@@ -177,8 +177,7 @@ export default {
                 this.title = res.data.data.goods_name
                 this.desc = res.data.data.goods_info
                 this.share_img = res.data.data.dist_poster || res.data.data.def_pic[0]
-                // this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
-                this.poster_img = this.$imgUrl + this.share_img
+                this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
             } else {
                 let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
                 this.goods = res.data.data
@@ -186,8 +185,7 @@ export default {
                 this.title = res.data.data.share_title
                 this.desc = res.data.data.share_desc
                 this.share_img = res.data.data.share_img || res.data.data.def_pic[0]
-                // this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
-                this.poster_img = this.$imgUrl + this.share_img
+                this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
             }
 
             this.wxRegister()

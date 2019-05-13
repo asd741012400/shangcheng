@@ -41,6 +41,7 @@ import Collect from './views/Collect.vue' //收藏
 import error403 from './views/403.vue'
 import error404 from './views/404.vue'
 import VipPlus from './views/VipPlus.vue'
+import VipPlus1 from './views/VipPlus1.vue'
 import Demo from './views/Dome.vue'
 
 
@@ -89,12 +90,19 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index
+            component: Index,
+            // component: VipPlus1,
+            meta: {
+                // keepAlive: true // 需要被缓存
+            }
         },
         {
             path: '/Index',
             name: 'Index',
-            component: Index
+            component: Index,
+            meta: {
+                // keepAlive: true // 需要被缓存
+            }
         },
         {
             path: '/PersonalCenter',
@@ -251,7 +259,10 @@ let router = new Router({
         {
             path: '/VipEquity',
             name: 'VipEquity',
-            component: VipEquity
+            component: VipEquity,
+            meta: {
+                // keepAlive: true // 需要被缓存
+            }
         },
         {
             path: '/Order',
@@ -447,8 +458,8 @@ router.beforeEach((to, from, next) => {
             getRequest('/wechat/GetUserInfo', { union_id: union_id }).then(res => {
                 if (res.data.code == 1) {
                     localstore.set('wx_user', res.data.data)
-                }else{
-                	localstore.set('wx_user', '')
+                } else {
+                    localstore.set('wx_user', '')
                 }
             })
         }

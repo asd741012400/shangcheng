@@ -59,7 +59,8 @@ export default {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
-            this.poster_img = await this.toBase64(this.$imgUrl + this.plus.poster)
+            // this.poster_img = await this.toBase64(this.$imgUrl + this.plus.poster)
+            this.poster_img = this.$imgUrl + this.plus.poster
             this.wxRegister()
 
             //生成二维码

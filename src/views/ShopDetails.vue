@@ -167,14 +167,8 @@ export default {
 
             a {
                 display: inline-block;
-                // width: 1.2rem;
-                // text-align: justify;
-                // text-align-last: justify;
-
                 &:after {
-                    // content: " ";
-                    // display: inline-block;
-                    // width: 100%;
+
                 }
             }
 

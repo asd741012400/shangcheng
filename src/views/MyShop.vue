@@ -16,7 +16,7 @@
         </header>
         <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="invitation">
         </div>
-        <div class="share">
+        <div class="share" @click="invitation">
             <p>
                 <span>邀请好友赚</span>
                 <a>￥{{money || 0}}</a>
@@ -357,7 +357,7 @@ export default {
             border-radius: 21px;
             text-align: center;
             color: #fff;
-            font-size: .26rem;
+            font-size: .32rem;
             display: flex;
             background: #FF6666;
             align-items: center;
@@ -409,6 +409,14 @@ export default {
                         background: #ccc;
                         border-radius: 5px;
                         position: relative;
+
+                        img {
+                            display: block;
+                            width: 100%;
+                            height: 3rem;
+                            object-fit: cover;
+                            border-radius: .12rem;
+                        }
 
                         span {
                             overflow: hidden;

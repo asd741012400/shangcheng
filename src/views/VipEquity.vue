@@ -21,7 +21,7 @@
                 </div>
                     <!-- tab -->
                     <div class="tab-box">
-                        <ul class="tab">
+                        <ul class="tab" ref="tab">
                             <li :class="ii == vipIndex ? 'active' : ''" v-for="(item,ii) in vip" :key="ii" @click="getVip(ii)">
                                 <div class="item">
                                     <img :src="$imgUrl+item.thumb" alt="">
@@ -103,7 +103,6 @@
 import Swiper from 'swiper';
 import 'swiper/dist/css/swiper.css';
 import wx from 'weixin-js-sdk'
-import BScroll from 'better-scroll'
 
 
 export default {
@@ -188,6 +187,11 @@ export default {
             this.currVip = this.vip[index]
             this.vipIndex = index
             this.mySwiper.slideTo(index, 1000)
+            if (this.vipIndex > 3) {
+                this.$refs.tab.scrollLeft = 500;
+            } else {
+                this.$refs.tab.scrollLeft = 0;
+            }
         },
 
         //获取分类下的商品
@@ -320,18 +324,6 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        let wrapper = document.querySelector('.tab-box')
-        setTimeout(() => {
-            this.scroll = new BScroll(wrapper, {
-                startX: 0,
-                click: true,
-                scrollX: true,
-                // 忽略竖直方向的滚动
-                scrollY: false,
-                eventPassthrough: "vertical"
-            })
-        console.log(this.scroll);
-        })
 
         var _this = this
         this.mySwiper = new Swiper('.swiper-container', {
@@ -352,8 +344,11 @@ export default {
                 slideChangeTransitionEnd: function() {
                     _this.vipIndex = this.realIndex;
                     /*滑动到指定索引的导航节点，并将其显示在可视区*/
-                    _this.scroll.scrollToElement(document.querySelector('.tab-box li:nth-child(' + _this.vipIndex + ')'), null, true, true)
-                    _this.scroll.refresh()
+                    if (_this.vipIndex > 3) {
+                        _this.$refs.tab.scrollLeft = 500;
+                    } else {
+                        _this.$refs.tab.scrollLeft = 0;
+                    }
                 }
             }
         });
@@ -486,8 +481,8 @@ export default {
 
 .title {
     position: relative;
-    top: 0.73rem;
-    margin-top: 0.5rem;
+    // top: 0.73rem;
+    margin-top: 0.8rem;
     width: 100%;
     // height: 60px;
     display: flex;
@@ -506,7 +501,7 @@ export default {
 
     .tab {
         width: 100%;
-        margin-top: 50px;
+        margin-top: 0.4rem;
         white-space: nowrap;
         width: auto;
         box-sizing: border-box;
@@ -514,6 +509,7 @@ export default {
         -webkit-overflow-scrolling: touch;
         overflow-y: hidden;
         overflow-x: auto;
+        transition:.3s all;
 
         &::-webkit-scrollbar {
             display: none;
@@ -620,8 +616,13 @@ export default {
                 border-radius: 5px;
                 position: relative;
 
+
                 img {
+                    display: block;
+                    width: 100%;
                     height: 3rem;
+                    object-fit: cover;
+                    border-radius: .12rem;
                 }
 
                 div {
@@ -737,31 +738,6 @@ export default {
     box-shadow: 0 7px 8px 0 rgba(7, 17, 27, 0.15);
     margin-bottom: 10px;
 
-    .detail {
-        p {
-            margin: 0;
-        }
-    }
-
-    .tip {
-        margin-left: 5px;
-        font-size: 0.3rem;
-        display: flex;
-        align-items: center;
-
-        i {
-            display: inline-block;
-            width: 2px;
-            height: 2px;
-            padding: 2px;
-            margin-right: 8px;
-            border-radius: 50%;
-            background: #FFD524;
-
-        }
-
-    }
-
 }
 
 #swiper .swiper-wrapper {
@@ -770,7 +746,7 @@ export default {
 }
 
 #swiper .swiper-container .swiper-wrapper .swiper-slide {
-    width: 6.62rem;
+    // width: 6.62rem;
     border-radius: 10px;
     background-color: #fff;
 

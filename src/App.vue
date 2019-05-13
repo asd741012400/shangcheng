@@ -1,14 +1,20 @@
 <template>
     <div id="app">
-        <router-view />
-        <BindPhone :show="show" ref="bindPhone"></BindPhone>
+        <!-- <keep-alive> -->
+            <router-view>
+                <!-- 这里是会被缓存的视图组件 -->
+            </router-view>
+        <!-- </keep-alive> -->
+        <!-- <router-view v-if="!$route.meta.keepAlive"> -->
+            <!-- 这里是不被缓存的视图组件 -->
+        <!-- </router-view> -->
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            show: false
+
         }
     },
     components: {},
@@ -34,6 +40,7 @@ export default {
     // 创建完毕状态
     created() {
         document.body.style.background = "#000";
+        //每次进入自动计算用户金额
         this.check()
     },
 

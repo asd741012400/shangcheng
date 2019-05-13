@@ -14,10 +14,10 @@
                         <p>亲爱的<i style="color: red">{{user.username}}</i>，你的好友赠送你一张<i style="color: red">{{title}}</i>，请输入密码领取<i style="color: red">{{title}}</i></p>
                     </div>
                     <div class="agreement">
-                        <input class="song" v-model="value" placeholder="请输入转赠时设置的密码" />
+                        <input class="song" v-model="getCode" placeholder="请输入转赠时设置的密码" />
                     </div>
                     <div class="btn">
-                        <b @click="handleGive()">立即领取</b>
+                        <b @click="getCard()">立即领取</b>
                     </div>
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
@@ -35,6 +35,7 @@ export default {
             user_id: '',
             cdid: '',
             give_id: '',
+            value: '',
             exchange_id: '',
             title: '',
             getCode: '',
@@ -52,8 +53,8 @@ export default {
     },
     components: {},
     methods: {
-        goHome(){
-            this.$router.push({name:"Index"})
+        goHome() {
+            this.$router.push({ name: "MyCardBag" })
         },
         maskingHideFn() {
             this.maskingShow = false;
@@ -84,15 +85,16 @@ export default {
                 this.$message('兑换码不能为空！')
                 return false
             }
-            let data = { user_id: this.user_id,exchange_id:this.exchange_id,redeem_code: this.getCode }
+            let data = { user_id: this.user_id, give_id: this.give_id, password: this.getCode }
             let res = await this.$postRequest('/card/GetGiveCard', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
+                setTimeout(() => {
+                    this.$router.push({ name: "MyCardBag" })
+                }, 2000)
                 this.cardAddPop = false;
-                this.getCardList()
             }
         },
-
 
     },
 
@@ -508,12 +510,12 @@ export default {
                     align-items: center;
                     padding: .16rem .5rem 0 .4rem;
 
-                    input{
+                    input {
                         border: 1px solid #ccc;
                         padding: 0.1rem 0.2rem;
-                        border-radius:6px;
-                        width:100%;
-                        font-size:14px;
+                        border-radius: 6px;
+                        width: 100%;
+                        font-size: 14px;
                     }
 
                     span {

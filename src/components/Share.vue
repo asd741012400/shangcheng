@@ -3,7 +3,7 @@
         <div class="share_bg" v-if="shareShow" @click="shareHideFn">
             <div class="share_div" @click.stop>
                 <template v-if="money && userInfo.status > 0">
-                    <h3><span>分享赚</span>{{money}}元</h3>
+                    <h3><span>分享赚</span>{{calcMoney(money)}}元</h3>
                     <p>好友通过你的购买链接进行购买，你将获得至少<span>{{calcMoney(money)}}</span>元的分享收益</p>
                 </template>
                 <ul>

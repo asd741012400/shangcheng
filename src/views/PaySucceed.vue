@@ -59,7 +59,7 @@
                     <h3>转赠须知</h3>
                     <div class="detail" v-html="card.give_other"></div>
                     <div class="agreement">
-                        <input class="song" v-model="value" placeholder="请输入转赠密码" />
+                        <input class="song" v-model.number="value" placeholder="请输入转赠密码" />
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
@@ -102,12 +102,12 @@
         </div>
         <!-- 分享 -->
         <!-- 兑换券 -->
-        <Share ref="myShare"></Share>
+        <!-- <Share ref="myShare"></Share> -->
     </div>
 </template>
 <script>
 import wxapi from '@/lib/wx.js'
-import Share from '../components/Share'
+// import Share from '../components/Share'
 export default {
     name: 'PaySucceed',
     data() {
@@ -128,7 +128,7 @@ export default {
             order_type: 3
         }
     },
-    components: { Share },
+    components: {},
     methods: {
         toTime(t1, t2) {
             let day1 = this.$dayjs.unix(t1).format('YYYY-MM-DD')
@@ -180,7 +180,7 @@ export default {
             if (this.order_type == 3) {
                 this.cd_id = res.data.data.cd_id
                 this.cg_id = res.data.data.cg_id
-                this.getCard()
+                // this.getCard()
             }
 
         },
@@ -193,13 +193,15 @@ export default {
         async getCard() {
             let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
             this.card = res.data.data
-            this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.user_id + '&title=' + this.card.card_name
-            wxapi.wxRegister(this.wxRegCallback)
         },
         //赠送卡片
         async handleGive() {
             if (this.value == '') {
                 this.$message('转赠码不能为空！')
+                return false
+            }
+            if (!(/^\d+$/).test(this.value)) {
+                this.$message('转赠码只能为数字！')
                 return false
             }
             let data = {
@@ -212,6 +214,8 @@ export default {
                 this.$message('操作成功！');
                 this.confirmPop = false
                 this.maskingShow = true;
+                this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + res.data.data + '&title=' + this.order.goods_title
+                wxapi.wxRegister(this.wxRegCallback)
             } else {
                 this.$message(res.data.msg);
             }
@@ -224,9 +228,9 @@ export default {
         // 微信自定义分享到朋友圈
         wxShareTimeline() {
             let option = {
-                title: this.card.card_name, // 分享标题, 请自行替换
+                title: this.order.goods_title, // 分享标题, 请自行替换
                 link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
+                imgUrl: this.$imgUrl + this.order.goods_img, // 分享图标, 请自行替换，需要绝对路径
                 success: () => {
                     this.$router.replace({ name: 'MyCardBag' })
                 },
@@ -240,10 +244,10 @@ export default {
         // 微信自定义分享给朋友
         wxShareAppMessage() {
             let option = {
-                title: this.card.card_name, // 分享标题, 请自行替换
-                desc: '你的好友' + this.user.username + '赠送了你一张' + this.card.card_name + '卡片,快来领取吧！', // 分享描述, 请自行替换
+                title: this.order.goods_title, // 分享标题, 请自行替换
+                desc: '你的好友' + this.user.username + '赠送了你一张' + this.order.goods_title + '卡片,快来领取吧！', // 分享描述, 请自行替换
                 link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
+                imgUrl: this.$imgUrl + this.order.goods_img, // 分享图标, 请自行替换，需要绝对路径
                 success: () => {
                     this.$router.replace({ name: 'MyCardBag' })
                 },
@@ -583,6 +587,7 @@ export default {
                         background: #8A8A8A;
                         font-weight: bold;
                         line-height: 1.06rem;
+
                     }
 
                     b {

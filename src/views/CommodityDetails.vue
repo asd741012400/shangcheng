@@ -86,7 +86,15 @@
                                         <span><img src="../assets/icon_enshrineA.png" alt=""></span>
                                     </div>
                                 </div>
-                                <div class="timer">营业时间：{{item.sale_time}}、{{item.sale_time2}}</div>
+                                <div class="timer">
+                                    <!--                          <p>营业时间：{{item.sale_time}}</p>
+                                    <p>{{item.sale_time2}}</p> -->
+                                    <a>营业时间</a>：
+                                    <p>
+                                        <span>{{item.sale_time}}</span>
+                                        <span>{{item.sale_time2}}</span>
+                                    </p>
+                                </div>
                                 <div class="site">
                                     <i><img src="../assets/icon_site.png" alt=""></i>
                                     <p>地点：{{item.address}}</p>
@@ -115,7 +123,13 @@
                                         <span><img src="../assets/icon_enshrineA.png" alt=""></span>
                                     </div>
                                 </div>
-                                <div class="timer">营业时间：{{item.sale_time}}、{{item.sale_time2}}</div>
+                                <div class="timer">
+                                    <a>营业时间：</a>
+                                    <p>
+                                        <span>{{item.sale_time}}</span>
+                                        <span>{{item.sale_time2}}</span>
+                                    </p>
+                                </div>
                                 <div class="site">
                                     <i><img src="../assets/icon_site.png" alt=""></i>
                                     <p>地点：{{item.address}}</p>
@@ -885,10 +899,28 @@ export default {
                             }
                         }
 
+                        // .timer {
+                        //     font-size: .24rem;
+                        //     color: #999999;
+                        //     padding-top: .12rem;
+                        // }
                         .timer {
+                            display: flex;
+                            padding-top: .1rem;
                             font-size: .24rem;
                             color: #999999;
-                            padding-top: .12rem;
+
+                            a {
+                                width: 1.2rem;
+                                color: #999999;
+                                display: inline-block;
+                            }
+
+                            p {
+                                display: flex;
+                                flex-direction: column;
+                                vertical-align: bottom;
+                            }
                         }
 
                         .site {

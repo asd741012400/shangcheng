@@ -262,8 +262,13 @@ export default {
                     border-radius: 5px;
                     position: relative;
 
+
                     img {
+                        display: block;
+                        width: 100%;
                         height: 3rem;
+                        object-fit: cover;
+                        border-radius: .12rem;
                     }
 
                     div {

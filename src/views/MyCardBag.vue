@@ -21,7 +21,7 @@
                             <p>{{item.card_name}}</p>
                             <!-- <span>剩余20天</span> -->
                         </div>
-              <!--           <div class="btn" @click="confirmPopShow(index)">
+                        <!--           <div class="btn" @click="confirmPopShow(index)">
                             <span>转赠</span>
                         </div> -->
                     </div>
@@ -333,7 +333,7 @@ export default {
             //变量scrollHeight是滚动条的总高度
             var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
             //滚动条到底部的条件
-            if (scrollTop + windowHeight >= scrollHeight/2) {
+            if (scrollTop + windowHeight >= scrollHeight / 1.5) {
                 if (this.currSize >= this.pageSize) {
                     this.page++;
                     this.getCardListMore()
@@ -457,7 +457,7 @@ export default {
                 align-items: flex-start;
                 flex: 1;
                 flex-direction: column;
-                justify-content: flex-start;                
+                justify-content: flex-start;
 
                 p {
                     font-size: .26rem;
@@ -479,7 +479,7 @@ export default {
                 color: #fff;
                 background: #FF6666;
                 border-radius: 50px;
-                font-size:0.24rem;
+                font-size: 0.24rem;
 
                 a {
                     color: #fff;
@@ -522,6 +522,7 @@ export default {
                     left: .28rem;
                     top: .18rem;
                     color: #fff;
+                    font-size: .24rem;
                 }
 
                 em {
@@ -583,7 +584,7 @@ export default {
                 color: #fff;
                 background: #FF6666;
                 border-radius: 50px;
-                font-size:0.24rem;
+                font-size: 0.24rem;
 
                 a {
                     color: #fff;
@@ -670,8 +671,8 @@ export default {
                     text-align: center;
                     font-weight: bold;
                     color: #fff;
-                    font-weight:bold;
-                    font-size:0.32rem;
+                    font-weight: bold;
+                    font-size: 0.32rem;
                     border-radius: 50px;
                     background: #FF6666;
                     display: block;

@@ -217,13 +217,13 @@ export default {
             let res = await this.$getRequest('/business/ProjectCate')
             let arr = []
             this.actions = res.data.data
-            res.data.data.map(item=>{
-                arr.push({name:item.c_name})
+            res.data.data.map(item => {
+                arr.push({ name: item.c_name })
             })
-             this.types = arr
+            this.types = arr
         },
         async getList() {
-            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights,age:this.selectTypes.age,type:this.selectTypes.types }
+            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.selectTypes.age, type: this.selectTypes.types }
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = res.data.data.list
             this.total_num = res.data.data.total_num.use_num
@@ -660,6 +660,8 @@ export default {
         bottom: .2rem;
 
         span {
+            font-size: 0.32rem;
+            font-weight: bold;
             background: #FF6666;
             font-weight: bold;
             color: #fff;
