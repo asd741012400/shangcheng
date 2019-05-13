@@ -92,17 +92,11 @@ let router = new Router({
             name: 'Home',
             component: Index,
             // component: VipPlus1,
-            meta: {
-                // keepAlive: true // 需要被缓存
-            }
         },
         {
             path: '/Index',
             name: 'Index',
             component: Index,
-            meta: {
-                // keepAlive: true // 需要被缓存
-            }
         },
         {
             path: '/PersonalCenter',
@@ -260,9 +254,6 @@ let router = new Router({
             path: '/VipEquity',
             name: 'VipEquity',
             component: VipEquity,
-            meta: {
-                // keepAlive: true // 需要被缓存
-            }
         },
         {
             path: '/Order',
@@ -468,8 +459,6 @@ router.beforeEach((to, from, next) => {
             getAuth()
         }
     }
-
-
 
 
     //门店id存储

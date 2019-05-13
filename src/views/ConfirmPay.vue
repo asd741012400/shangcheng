@@ -105,7 +105,7 @@ export default {
             let that = this
             // that.$router.replace({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
-            let res = await this.$getRequest('/wechat/GetWxPay', { wechat_sn: this.order.wechat_sn })
+            let res = await this.$getRequest('/wechat/GetWxPay', { transaction_sn: this.order.transaction_sn })
             if (res.data.code == 1) {
                 let config = JSON.parse(res.data.data)
 

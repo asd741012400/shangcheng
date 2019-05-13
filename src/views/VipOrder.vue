@@ -201,10 +201,10 @@ export default {
             padding: 0.2rem;
             box-sizing: border-box;
 
-            img{
-                width:100%;
-                height:3.5rem;
-                border-radius:10px;
+            img {
+                width: 100%;
+                height: 3.5rem;
+                border-radius: 10px;
             }
 
             p {
@@ -269,14 +269,18 @@ export default {
             align-items: center;
             justify-content: flex-end;
             padding: 0 .4rem;
-            height: 1rem;
+            height: 1.2rem;
             background: #F6F6F6;
             font-size: .32rem;
 
             span {
                 width: .3rem;
                 height: .3rem;
-                overflow: hidden;
+
+                // overflow: hidden;
+                img {
+                    vertical-align: baseline;
+                }
             }
 
             p {

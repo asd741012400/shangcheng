@@ -11,93 +11,93 @@
                 <img src="@/assets/vip_top.png">
                 <div class="center-box">
                     <div class="vip-icon"><img src="@/assets/vip.png"></div>
-                        <img class="card" :src="$imgUrl+plus.photo">
+                    <img class="card" :src="$imgUrl+plus.photo">
                 </div>
+            </div>
+        </div>
+        <!-- title -->
+        <div class="title">
+            <img src="@/assets/vip1.png">
+        </div>
+        <!-- tab -->
+        <div class="tab-box">
+            <ul class="tab" ref="tab">
+                <li :class="ii == vipIndex ? 'active' : ''" v-for="(item,ii) in vip" :key="ii" @click="getVip(ii)">
+                    <div class="item">
+                        <img :src="$imgUrl+item.thumb" alt="">
+                        <p>{{item.name}}</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- swiper -->
+        <div class="detail" id="swiper">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" v-for="(item,ii) in vip">
+                        <!-- <span class="tip"><i></i><span>{{item.name}}</span></span> -->
+                        <div class="detail" v-html="item.desc">
+                        </div>
                     </div>
                 </div>
-                <!-- title -->
-                <div class="title">
-                    <img src="@/assets/vip1.png">
-                </div>
-                    <!-- tab -->
-                    <div class="tab-box">
-                        <ul class="tab" ref="tab">
-                            <li :class="ii == vipIndex ? 'active' : ''" v-for="(item,ii) in vip" :key="ii" @click="getVip(ii)">
-                                <div class="item">
-                                    <img :src="$imgUrl+item.thumb" alt="">
-                                    <p>{{item.name}}</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <!-- swiper -->
-                    <div class="detail" id="swiper">
-                        <div class="swiper-container">
-                            <div class="swiper-wrapper">
-                                <div class="swiper-slide" v-for="(item,ii) in vip">
-                                    <!-- <span class="tip"><i></i><span>{{item.name}}</span></span> -->
-                                    <div class="detail" v-html="item.desc">
-                                    </div>
-                                </div>
+                <!-- Add Pagination -->
+                <!-- <div class="swiper-pagination"></div> -->
+            </div>
+        </div>
+        <!-- title -->
+        <div class="title" style="top:0">
+            <img src="@/assets/vip2.png">
+        </div>
+        <ul class="tab-list" id="product">
+            <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
+                <p>{{item.c_name}}</p>
+                <span></span>
+            </li>
+        </ul>
+        <!-- 会员推荐 -->
+        <div class="activity_list">
+            <ul>
+                <li v-for="(item,index) in goodsList" :key="index">
+                    <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
+                        <div class="img">
+                            <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                            <div>
+                                <p>会员价</p>
+                                <i>￥</i>
+                                <a>{{item.cost_price}}</a>
                             </div>
-                            <!-- Add Pagination -->
-                            <!-- <div class="swiper-pagination"></div> -->
                         </div>
-                    </div>
-                    <!-- title -->
-                    <div class="title" style="top:0">
-                        <img src="@/assets/vip2.png">
-                    </div>
-                        <ul class="tab-list" id="product">
-                            <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
-                                <p>{{item.c_name}}</p>
-                                <span></span>
-                            </li>
-                        </ul>
-                        <!-- 会员推荐 -->
-                        <div class="activity_list">
-                            <ul>
-                                <li v-for="(item,index) in goodsList" :key="index">
-                                    <router-link :to="{name:'CommodityDetails',query:{id:item.goods_id,type:1}}">
-                                        <div class="img">
-                                            <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
-                                            <div>
-                                                <p>会员价</p>
-                                                <i>￥</i>
-                                                <a>{{item.cost_price}}</a>
-                                            </div>
-                                        </div>
-                                        <div class="project">
-                                            <p>{{item.goods_name}}</p>
-                                            <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
-                                        </div>
-                                        <div class="share">
-                                            <div class="price">
-                                                <span>现价</span>
-                                                <b>￥{{item.mkt_price}}</b>
-                                                <a>￥{{item.goods_price}}</a>
-                                            </div>
-                                        </div>
-                                    </router-link>
-                                </li>
-                            </ul>
+                        <div class="project">
+                            <p>{{item.goods_name}}</p>
+                            <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
                         </div>
-                        <div class="buyVip">
-                            <template v-if="share_id &&　!user.user_id">
-                                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
-                            </template>
-                            <template v-else-if="share_id &&　user.status < 1">
-                                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
-                            </template>
-                            <template v-else-if="user.status >= 1">
-                                <router-link :to="{name:'VipPlus'}">
-                                    <van-button round block type="info">邀请好友赚 ￥{{money || 0}}</van-button>
-                                </router-link>
-                            </template>
+                        <div class="share">
+                            <div class="price">
+                                <span>现价</span>
+                                <b>￥{{item.mkt_price}}</b>
+                                <a>￥{{item.goods_price}}</a>
+                            </div>
                         </div>
-                        <BindPhone :show="show"></BindPhone>
-                        <MyFooter></MyFooter>
-                    </div>
+                    </router-link>
+                </li>
+            </ul>
+        </div>
+        <div class="buyVip">
+            <template v-if="share_id &&　!user.user_id">
+                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
+            </template>
+            <template v-else-if="share_id &&　user.status < 1">
+                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
+            </template>
+            <template v-else-if="user.status >= 1">
+                <router-link :to="{name:'VipPlus'}">
+                    <van-button round block type="info">邀请好友赚 ￥{{money || 0}}</van-button>
+                </router-link>
+            </template>
+        </div>
+        <BindPhone :show="show"></BindPhone>
+        <MyFooter></MyFooter>
+    </div>
 </template>
 <script>
 import Swiper from 'swiper';
@@ -509,7 +509,7 @@ export default {
         -webkit-overflow-scrolling: touch;
         overflow-y: hidden;
         overflow-x: auto;
-        transition:.3s all;
+        transition: .3s all;
 
         &::-webkit-scrollbar {
             display: none;

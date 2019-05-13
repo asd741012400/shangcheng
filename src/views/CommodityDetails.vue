@@ -156,9 +156,9 @@
             <p>用户评价</p>
                           <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:1}}">
             查看全部 &gt;
-        </router-link>
+         </router-link>
           </h3>
-                <div class="user_comment" v-for="item in comments">
+                 <div class="user_comment" v-for="(item,index) in comments" v-if="index < 3">
                     <div class="user">
                         <div class="user_message">
                             <i>

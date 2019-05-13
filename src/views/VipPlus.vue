@@ -1,42 +1,78 @@
 <template>
-    <div class="VipPlus">
-        <img class="poster-img" ref="image" :src="imgUrl">
-        <div ref="imageDom" class="imageDom">
-            <div class="head_portrait"><img :src="avatar" alt=""></div>
-                <div class="code" id="qrcode">
-                </div>
-                <div class="img"><img :src="poster_img" alt=""></div>
-                </div>
-                <!--            <div class="masking" v-if="maskingShow">
-                    <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
-                    <div>
-                        <i><img src="../assets/share_img1.png" alt=""></i>
-                        <p>微信分享移到这里啦~</p>
+    <div class="SharePoster">
+        <div class="share_poster">
+            <i @click="$router.go(-1)"><img src="../assets/icon_close3.png" alt=""></i>
+            <!-- swiper -->
+            <div class="poster-warp" id="swiper">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" v-for="(item,index) in poster">
+                            <img class="poster-img" :id="'image'+index" ref="image" src="">
+                            <div ref="imageDom" :id="'imageDom'+index" class="imageDom">
+                                <div class="head_portrait"><img :src="wechat_img" alt=""></div>
+                                    <div class="code" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code">
+                                    </div>
+                                    <div class="img"><img :src="$imgUrl+item" alt=""></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div> -->
+                    <!--                         <div class="code">
+                            <div class="code_text">
+                                <h3>{{title}}</h3>
+                                <p><span>￥{{price}}</span></p>
+                            </div>
+                            <div class="code_img">
+                                <span id="qrcode"></span>
+                                <p>扫码开通PLUS会员</p>
+                            </div>
+                        </div>
+  
+                <ul class="share_type">
+                    <li @click="maskingShowFn">
+                        <span><img src="../assets/share_wx.png" alt=""></span>
+                        <p>微信</p>
+                    </li>
+                    <li @click="maskingShowFn">
+                        <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
+                        <p>朋友圈</p>
+                    </li>
+                    <li @click="saveImg()">
+                        <span><img src="../assets/share_download.png" alt=""></span>
+                        <p>保存图片</p>
+                    </li>
+                </ul> -->
+                </div>
             </div>
 </template>
 <script>
 import wx from 'weixin-js-sdk'
 import QRCode from 'qrcodejs2'
 import html2canvas from "html2canvas"
+// import Poster from '../components/Poster'
+import Swiper from 'swiper';
+import 'swiper/dist/css/swiper.css';
 
 export default {
     name: 'SharePoster',
     data() {
         return {
             user: {},
-            imgUrl: '',
+            url: '', //分享url
+            imgUrl: [],
             type: "",
             goods_id: "",
-            money: "",
-            plus: "",
+            goods: "",
             title: "",
             price: "",
-            avatar: "",
+            desc: "",
+            plus: "",
+            poster: "",
             instance: "",
             wechat_img: "",
             poster_img: "",
+            share_img: "",
             maskingShow: false,
         }
     },
@@ -50,91 +86,54 @@ export default {
         maskingHideFn() {
             this.maskingShow = false;
         },
-        async toBase64(img) {
-            let res = await this.$postRequest('/upload/Tobase64', { img: img })
-            return res.data.data
-        },
         //获取PlUS
         async getPlUS() {
             let id = this.$route.query.id
             let res = await this.$getRequest('/home/GetPlus')
             this.plus = res.data.data
-            // this.poster_img = await this.toBase64(this.$imgUrl + this.plus.poster)
+            this.poster = this.plus.poster.split(',')
             this.poster_img = this.$imgUrl + this.plus.poster
             this.wxRegister()
 
-            //生成二维码
-            let qrcode = new QRCode('qrcode', {
-                width: 80,
-                height: 80, // 高度
-                text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
-                    '&type=2', // 二维码内容
-                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-                // background: '#f0f',
-                // foreground: '#ff0'
-            })
-
-
-            //判断图片是否加载完成
-            let timer = setInterval(() => {
-                if (this.poster_img) {
-                    this.instance.close();
-                    this.$message('海报制作完成，长按海报分享给朋友吧！');
-                    this.getPoster()
-                    // this.maskingShow = true
-                    clearInterval(timer)
-                }
-            }, 100)
+            setTimeout(() => {
+                this.$nextTick(() => {
+                    let arr = this.$refs.qrcodes
+                    arr && arr.map((item, index) => {
+                        let qrcode = new QRCode(item.id, {
+                            width: 60,
+                            height: 60, // 高度  
+                            text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
+                                '&type=2', // 二维码内容
+                            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                            // background: '#f0f',  
+                            // foreground: '#ff0'  
+                        })
+                    })
+                    setTimeout(() => {
+                        this.getPoster()
+                    }, 1000)
+                })
+            }, 200)
         },
         //海报生成
-        getPoster() {
+        getPoster(index) {
             let that = this
-            html2canvas(that.$refs.imageDom, {
-                useCORS: true, //（图片跨域相关）
-                allowTaint: false
-            }).then((canvas) => {
-                // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
-                let dataURL = canvas.toDataURL("image/jpeg");
-                that.imgUrl = dataURL;
-            });
-        },
-        /**
-         *
-         * @param url 图片路径
-         * @param ext 图片格式
-         * @param callback 结果回调
-         */
-        getUrlBase64(url) {
-            var canvas = document.createElement("canvas"); //创建canvas DOM元素
-            var ctx = canvas.getContext("2d");
-            var img = new Image;
-            img.crossOrigin = 'Anonymous';
-            img.src = url + '?number=' + Math.random();
-            img.onload = function() {
-                canvas.height = 60; //指定画板的高度,自定义
-                canvas.width = 85; //指定画板的宽度，自定义
-                ctx.drawImage(img, 0, 0, 60, 85); //参数可自定义
-                var dataURL = canvas.toDataURL("image/png");
-                canvas = null;
-                return dataURL //回掉函数获取Base64编码
-            };
-        },
-        //base64转blob
-        base64ToBlob(code) {
-            let parts = code.split(';base64,');
-            let contentType = parts[0].split(':')[1];
-            let raw = window.atob(parts[1]);
-            let rawLength = raw.length;
-
-            let uInt8Array = new Uint8Array(rawLength);
-
-            for (let i = 0; i < rawLength; ++i) {
-                uInt8Array[i] = raw.charCodeAt(i);
-            }
-            return new Blob([uInt8Array], { type: contentType });
-        },
-        downloadImg() {
-            this.$refs.myPoster.clickGeneratePicture();
+            let arr = this.$refs.imageDom
+            arr && arr.map((item, index) => {
+                html2canvas(item, {
+                    useCORS: true, //（图片跨域相关）
+                    allowTaint: false
+                }).then((canvas) => {
+                    let dataURL = canvas.toDataURL("image/jpeg");
+                    document.querySelector(`#image${index}`).setAttribute('src', dataURL)
+                    document.querySelector('#' + item.id).style.display = 'none'
+                    document.querySelector(`#image${index}`).style.display = 'block'
+                });
+            })
+            setTimeout(() => {
+                this.instance.close();
+                this.$message('海报制作完成，长按海报分享给朋友吧！');
+            }, 1000)
         },
         // 用于微信JS-SDK回调
         async wxRegister() {
@@ -189,8 +188,12 @@ export default {
     beforeCreate() {},
 
     // 创建完毕状态
-    created() {
+    async created() {
         document.body.style.background = "#fff";
+        document.title = "PLUS会员"
+        this.user = this.$localstore.get('wx_user')
+        var url = this.user.wechat_img;
+        this.wechat_img = this.$imgUrl + '/wechat_image' + url.substring(23)
 
         this.instance = this.$message({
             message: '海报正在生成中。。。',
@@ -198,23 +201,11 @@ export default {
         });
 
         this.getPlUS()
-        let that = this
-        document.title = "PLUS会员"
-        this.user = this.$localstore.get('wx_user')
-        var url = this.user.wechat_img;
-        this.avatar = this.$imgUrl + '/wechat_image' + url.substring(23)
-
-        this.goods_id = this.$route.query.id
-        this.type = this.$route.query.type
 
     },
 
     watch: {
-        imgUrl(val, oldval) {
-            //监听到imgUrl有变化以后 说明新图片已经生成 隐藏DOM
-            this.$refs.imageDom.style.display = "none";
-            this.$refs.image.style.display = "block";
-        }
+
     },
 
     // 挂载前状态
@@ -222,6 +213,27 @@ export default {
 
     // 挂载结束状态
     mounted() {
+        var _this = this
+        this.mySwiper = new Swiper('.swiper-container', {
+            direction: 'horizontal',
+            loop: true,
+            autoplay: 5000,
+            slidesPerView: 1.35,
+            // spaceBetween: 0.1,
+            paginationClickable: true,
+            centeredSlides: true,
+            observer: true, //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: true, //修改swiper的父元素时，自动初始化swiper
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            on: {
+                slideChangeTransitionEnd: function() {
+                    _this.vipIndex = this.realIndex;
+                }
+            }
+        });
 
     },
 
@@ -242,56 +254,171 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.VipPlus {
-    position: fixed;
+.SharePoster {
     width: 100%;
     height: 100%;
+    background: linear-gradient(180deg, #ff6666 0%, #ffb389 100%);
+    // background: rgba(0, 0, 0, .5);
     top: 0;
     left: 0;
-    background: #000;
+    z-index: 9999;
 
-    .imageDom {
-        height: 100%;
-    }
-
-    .poster-img {
+    .share_poster {
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        display: none;
-    }
+        background: rgba(0, 0, 0, .5);
+        background: linear-gradient(180deg, #ff6666 0%, #ffb389 100%);
 
-    .head_portrait {
-        width: 1.5rem;
-        height: 1.5rem;
-        background: #fff;
-        border-radius: 50%;
-        right: .24rem;
-        position: absolute;
-        top: .24rem;
-        overflow: hidden;
-    }
+        i {
+            position: absolute;
+            right: .48rem;
+            top: .48rem;
+            overflow: hidden;
+            width: .49rem;
+        }
 
-    .code {
-        width: 2rem;
-        height: 2rem;
-        overflow: hidden;
-        position: absolute;
-        bottom: .8rem;
-        left: 50%;
-        margin-left: -1rem;
-    }
+        .share_poster_content {
+            // width: 5.36rem;
+            // margin: 1.36rem auto 0;
+            height: 9.54rem;
+        }
 
-    .img {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
+        .share_type {
+            width: 5.36rem;
+            margin: .44rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
 
-        img {
-            height: 100%;
+            li {
+                display: flex;
+                align-items: center;
+                flex-direction: column;
+
+                span {
+                    width: 1rem;
+                    overflow: hidden;
+                }
+
+                p {
+                    font-size: .24rem;
+                    color: #FFFFFF;
+                    padding-top: .14rem;
+                }
+            }
         }
     }
 }
 
+.Poster {
+    height: 100%;
+    background: linear-gradient(180deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
+
+    .name {
+        display: flex;
+        align-items: center;
+        padding: .28rem .18rem .14rem;
+
+        span {
+            width: 1rem;
+            height: 1rem;
+            overflow: hidden;
+            border: 4px solid #FF947B;
+            border-radius: 50%;
+            margin-left: .26rem;
+            display: block;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+        }
+
+        b {
+            font-size: .2rem;
+            color: #fff;
+            padding-left: .18rem;
+        }
+    }
+
+    .img {
+        overflow: hidden;
+        margin: 0 .18rem;
+        height: 5rem;
+        border-radius: 5px;
+    }
+
+    .code {
+        display: flex;
+        background: #fff;
+        align-items: center;
+        border-radius: 5px;
+        margin: .1rem .18rem 0;
+        overflow: hidden;
+        padding: .26rem .2rem .24rem .26rem;
+
+        .code_text {
+            flex: 1;
+
+            h3 {
+                font-size: .28rem;
+                font-weight: bold;
+                color: #515C6F;
+
+            }
+
+            a {
+                display: block;
+                width: 1.2rem;
+                height: .32rem;
+                line-height: .32rem;
+                text-align: center;
+                color: #FFB389;
+                border-radius: 15px;
+                border: 1px solid #FFB389;
+            }
+
+            p {
+                display: flex;
+                align-items: flex-end;
+                color: #FF6967;
+                padding-top: .2rem;
+
+                i {
+                    font-size: .2rem;
+                    font-weight: bold;
+                    font-style: normal;
+                }
+
+                span {
+                    font-size: .3rem;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .code_img {
+            width: 1.68rem;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+
+            span {
+                width: 1.38rem;
+                overflow: hidden;
+            }
+
+            p {
+                color: #515C6F;
+                font-size: .2rem;
+            }
+        }
+    }
+
+}
 
 .masking {
     position: fixed;
@@ -331,5 +458,85 @@ export default {
             top: 0;
         }
     }
+}
+
+
+.head_portrait {
+    width: 0.8rem;
+    height: 0.8rem;
+    background: #fff;
+    border-radius: 50%;
+    right: .36rem;
+    position: absolute;
+    top: .20rem;
+    overflow: hidden;
+}
+
+.code {
+    width: 1.6rem;
+    height: 1.6rem;
+    overflow: hidden;
+    position: absolute;
+    bottom: .5rem;
+    left: 50%;
+    margin-left: -0.8rem;
+}
+
+.img {
+    width: 100%;
+    height: 9rem;
+    overflow: hidden;
+
+    img {
+        height: 100%;
+    }
+}
+</style>
+<style lang="scss">
+.poster-img {
+    width: 100%;
+    height: 9rem;
+    display: none;
+}
+
+.imageDom {
+    // display: none;
+}
+.poster-warp{    
+    margin-top: 1.5rem;
+}
+#swiper .swiper-container {
+    width: 100%;
+    height: 100%;
+    position: static;
+    background: none;
+    padding-right: 1.8rem;
+}
+
+#swiper .swiper-slide {
+    // background: #fff;
+    transition: 300ms;
+    // padding: .2rem .1rem;
+    color: #333;
+    box-shadow: 0 7px 8px 0 rgba(7, 17, 27, 0.15);
+    margin-bottom: 10px;
+    background: none;
+
+}
+
+#swiper .swiper-wrapper {
+    position: static;
+    margin-left: -20px;
+}
+
+#swiper .swiper-container .swiper-wrapper .swiper-slide {
+    // width: 6.62rem;
+    border-radius: 10px;
+    // background-color: #fff;
+
+}
+
+#swiper .swiper-slide:not(.swiper-slide-active) {
+    transform: scale(0.8);
 }
 </style>
