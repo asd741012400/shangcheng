@@ -134,6 +134,7 @@ export default {
             this.list = res.data.data.goods_list
             this.currSize = res.data.data.goods_list.length
             this.pageSize = res.data.data.count
+            this.wxRegister()
         },
         async getInfoMore() {
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
@@ -185,6 +186,7 @@ export default {
 
                     }
                 })
+                // wx.showOptionmenu();
             })
 
         },
@@ -236,7 +238,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        this.wxRegister()
+        // this.wxRegister()
     },
 
     // 更新前状态

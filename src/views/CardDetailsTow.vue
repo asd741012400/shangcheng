@@ -208,6 +208,13 @@ export default {
                     overflow: hidden;
                     display: block;
 
+                    img {
+                        display: block;
+                        width: 100%;
+                        height: 2.4rem;
+                        object-fit: cover;
+                    }
+
                 }
 
                 div {

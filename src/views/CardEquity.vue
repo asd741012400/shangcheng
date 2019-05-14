@@ -33,7 +33,7 @@
         <div class="search">
             <p>
                 <i><img src="../assets/icon_shop.png" alt=""></i>
-                <b>可领取福利</b>
+                <b style="font-size:0.32rem;">可领取福利</b>
             </p>
             <div>
                 <i><img src="../assets/icon_search2.png" alt=""></i>

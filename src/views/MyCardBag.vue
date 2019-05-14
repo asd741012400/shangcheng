@@ -6,84 +6,85 @@
             <div class="add" @click="cardAddPopShow">添加</div>
         </header>
         <template v-for="(item,index) in cardList">
-            <!--  'ac_status 0 未激活 1已激活 2作废 -->
-            <template v-if="item.ac_status == 0">
-                <div class="to_activate card_commonality">
+            <!-- 是否过期 days < 0 过期 -->
+            <template v-if="item.days < 0">
+                <div class="expired card_commonality">
                     <div class="image">
                         <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                         <div>
                             <p>卡号：{{item.card_sn}}</p>
-                            <span @click="activeCard(index)">去激活</span>
+                            <span class="color_hei">已过期</span>
+                            <em><img src="../assets/icon_close.png" alt=""></em>
                         </div>
                     </div>
                     <div class="content">
                         <div class="text">
                             <p>{{item.card_name}}</p>
-                            <!-- <span>剩余20天</span> -->
+                            <!-- <span>剩余{{item.days}}天</span> -->
                         </div>
-                        <!--           <div class="btn" @click="confirmPopShow(index)">
+                    </div>
+                </div>
+            </template>
+            <template v-else>
+                <!--  'ac_status 0 未激活 1已激活 2作废 -->
+                <template v-if="item.ac_status == 0">
+                    <div class="to_activate card_commonality">
+                        <div class="image">
+                            <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
+                            <div>
+                                <p>卡号：{{item.card_sn}}</p>
+                                <span @click="activeCard(index)">去激活</span>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="text">
+                                <p>{{item.card_name}}</p>
+                                <span>剩余{{item.days}}天</span>
+                            </div>
+                            <!--           <div class="btn" @click="confirmPopShow(index)">
                             <span>转赠</span>
                         </div> -->
+                        </div>
                     </div>
-                </div>
-            </template>
-            <!-- 过期 -->
-            <template v-else-if="item.days < 0">
-                <div class="expired card_commonality">
-                    <div class="image">
-                        <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
-                        <div>
+                </template>
+                <template v-else-if="item.ac_status == 1">
+                    <div class="to_be_used" @click="goCardDetail(index)">
+                        <div class="sn">
                             <p>卡号：{{item.card_sn}}</p>
-                            <span class="color_hei">已过期</span>
-                            <em><img src="../assets/icon_close.png" alt=""></em>
                         </div>
-                    </div>
-                    <div class="content">
-                        <div class="text">
-                            <p>{{item.card_name}}</p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <!-- 正常 -->
-            <template v-else-if="item.ac_status == 1">
-                <div class="to_be_used" @click="goCardDetail(index)">
-                    <div class="sn">
-                        <p>卡号：{{item.card_sn}}</p>
-                    </div>
-                    <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
-                    <div class="user">
-                        <span><img :src="$imgUrl+item.head_img" alt=""></span>
-                        <p>{{item.child_name}}</p>
-                    </div>
-                    <div class="content">
-                        <div class="text">
-                            <p>{{item.card_name}}</p>
-                            <span>剩余{{item.days}}天</span>
-                        </div>
-                        <div class="btn">
-                            <span @click.stop="useCard(index)">去使用</span>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <!-- 过期 -->
-            <template v-else>
-                <div class="expired card_commonality">
-                    <div class="image">
                         <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
-                        <div>
-                            <p>卡号：{{item.card_sn}}</p>
-                            <span class="color_hei">已过期</span>
-                            <em><img src="../assets/icon_close.png" alt=""></em>
+                        <div class="user">
+                            <span><img :src="$imgUrl+item.head_img" alt=""></span>
+                            <p>{{item.child_name}}</p>
+                        </div>
+                        <div class="content">
+                            <div class="text">
+                                <p>{{item.card_name}}</p>
+                                <span>剩余{{item.days}}天</span>
+                            </div>
+                            <div class="btn">
+                                <span @click.stop="useCard(index)">去使用</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="content">
-                        <div class="text">
-                            <p>{{item.card_name}}</p>
+                </template>
+                <template v-else-if="item.ac_status == 2">
+                    <div class="expired card_commonality">
+                        <div class="image">
+                            <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
+                            <div>
+                                <p>卡号：{{item.card_sn}}</p>
+                                <span class="color_hei">已过期</span>
+                                <em><img src="../assets/icon_close.png" alt=""></em>
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="text">
+                                <p>{{item.card_name}}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </template>
             </template>
         </template>
         <!-- 兑换码 -->
@@ -413,7 +414,7 @@ export default {
         position: relative;
 
         .sn {
-            position: absolute;
+            position: absolute;                         
             left: .28rem;
             top: .18rem;
             color: #fff;
@@ -423,6 +424,13 @@ export default {
             overflow: hidden;
             display: block;
             height: 2.4rem;
+              
+            img {
+                display: block;
+                width: 100%;
+                height: 2.4rem;
+                object-fit: cover;
+            }
         }
 
         .user {
@@ -504,6 +512,13 @@ export default {
             i {
                 overflow: hidden;
                 display: block;
+
+                img {
+                    display: block;
+                    width: 100%;
+                    height: 2.4rem;
+                    object-fit: cover;
+                }
             }
 
             div {

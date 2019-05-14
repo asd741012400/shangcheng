@@ -180,7 +180,8 @@ export default {
             if (this.order_type == 3) {
                 this.cd_id = res.data.data.cd_id
                 this.cg_id = res.data.data.cg_id
-                // this.getCard()
+                this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
+                wxapi.wxRegister(this.wxRegCallback)
             }
 
         },
@@ -188,6 +189,7 @@ export default {
         async getOrder() {
             let res = await this.$getRequest('/order/getOrder', { id: this.order_id })
             this.order = res.data.data
+            this.getPay()
         },
         //获取卡片
         async getCard() {
@@ -214,8 +216,6 @@ export default {
                 this.$message('操作成功！');
                 this.confirmPop = false
                 this.maskingShow = true;
-                this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + res.data.data + '&title=' + this.order.goods_title
-                wxapi.wxRegister(this.wxRegCallback)
             } else {
                 this.$message(res.data.msg);
             }
@@ -274,7 +274,7 @@ export default {
         this.order_type = this.$route.query.type
         this.goods_id = this.$route.query.goods_id
         this.getOrder()
-        this.getPay()
+
     },
 
     // 挂载前状态

@@ -660,7 +660,6 @@ export default {
 
                 p {
                     flex: 1;
-                    color: #6B400D;
                     padding-left: .28rem;
                 }
 

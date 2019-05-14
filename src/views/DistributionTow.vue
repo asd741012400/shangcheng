@@ -238,7 +238,7 @@ export default {
                 font-style: normal;
                 position: absolute;
                 right: .3rem;
-                font-size: .24rem;
+                font-size: .32rem;
                 color: #fff;
                 top: .32rem;
             }

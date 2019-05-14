@@ -111,7 +111,7 @@ export default {
                     })
                     setTimeout(() => {
                         this.getPoster()
-                    }, 1000)
+                    }, 3000)
                 })
             }, 200)
         },
@@ -121,6 +121,7 @@ export default {
             let arr = this.$refs.imageDom
             arr && arr.map((item, index) => {
                 html2canvas(item, {
+                    scale: 2,
                     useCORS: true, //（图片跨域相关）
                     allowTaint: false
                 }).then((canvas) => {
@@ -162,7 +163,6 @@ export default {
                     },
                     cancel() {
                         // 用户取消分享后执行的回调函数
-
                     }
                 });
                 wx.onMenuShareAppMessage({
@@ -178,7 +178,13 @@ export default {
                         // 用户取消分享后执行的回调函数
 
                     }
-                })
+                });
+                //批量隐藏菜单
+                wx.hideOptionMenu();
+                // wx.showOptionMenu({ 
+                //     menuList: ['menuItem:share:appMessage','menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:openWithSafari','menuItem:share:facebook','menuItem:share:weiboApp']
+                // });
+
             })
 
         },
@@ -193,7 +199,8 @@ export default {
         document.title = "PLUS会员"
         this.user = this.$localstore.get('wx_user')
         var url = this.user.wechat_img;
-        this.wechat_img = this.$imgUrl + '/wechat_image' + url.substring(23)
+        this.wechat_img = 'http://' + window.location.host + '/upload/wechat_image' + url.substring(23)
+        // this.wechat_img = this.$imgUrl + '/wechat_image' + url.substring(23)
 
         this.instance = this.$message({
             message: '海报正在生成中。。。',
@@ -246,6 +253,9 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         this.instance.close();
+        wx.ready(() => {
+            wx.showOptionMenu();
+        })
     },
 
     // 销毁完成状态
@@ -502,9 +512,11 @@ export default {
 .imageDom {
     // display: none;
 }
-.poster-warp{    
+
+.poster-warp {
     margin-top: 1.5rem;
 }
+
 #swiper .swiper-container {
     width: 100%;
     height: 100%;
