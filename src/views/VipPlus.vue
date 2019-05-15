@@ -54,7 +54,6 @@ import html2canvas from "html2canvas"
 import Swiper from 'swiper';
 import 'swiper/dist/css/swiper.css';
 
-console.log(wx);
 
 export default {
     name: 'SharePoster',
