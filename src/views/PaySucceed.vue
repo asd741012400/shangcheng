@@ -499,7 +499,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 .8rem;
+            padding: 0 .4rem;
 
             .boxs {
                 background: #fff;
@@ -509,7 +509,7 @@ export default {
                 width: 95%;
 
                 .detail {
-                    padding: 0.2rem .6rem;
+                    padding: 0.2rem .3rem;
                     background: #fff;
                     max-height: 250px;
                     overflow-y: auto;
@@ -523,7 +523,7 @@ export default {
                 }
 
                 ul {
-                    padding: 0 .5rem 0 .4rem;
+                    padding: 0 .2rem 0 .1rem;
 
                     li {
                         padding-bottom: .2rem;

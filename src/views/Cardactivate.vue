@@ -116,8 +116,7 @@ export default {
             maxDate: new Date(),
             startDate: new Date('2000-01-01'),
             datePicker: false,
-            closeOnClickModalS: true,
-            agreementStuats: false,
+            agreementStuats: true,
             confirmPop: false,
             dateTime: ""
         }

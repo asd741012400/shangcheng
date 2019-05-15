@@ -6,13 +6,13 @@
             <div class="poster-warp" id="swiper">
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" v-for="(item,index) in poster">
+                        <div class="swiper-slide" :class="ready ? 'no-touch' : ''" v-for="(item,index) in poster">
                             <img class="poster-img" :id="'image'+index" ref="image" src="">
                             <div ref="imageDom" :id="'imageDom'+index" class="imageDom">
-                                <div class="head_portrait"><img class="no-touch" :src="wechat_img" alt=""></div>
+                                <div class="head_portrait"><img :src="wechat_img" alt=""></div>
                                     <div class="code" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code">
                                     </div>
-                                    <div class="img"><img class="no-touch" :src="$imgUrl+item" alt=""></div>
+                                    <div class="img"><img  :src="$imgUrl+item" alt=""></div>
                                     </div>
                                 </div>
                             </div>
@@ -74,6 +74,7 @@ export default {
             wechat_img: "",
             poster_img: "",
             share_img: "",
+            ready: true,
             maskingShow: false,
         }
     },
@@ -96,25 +97,24 @@ export default {
             this.poster_img = this.$imgUrl + this.plus.poster
             this.wxRegister()
 
-            setTimeout(() => {
-                this.$nextTick(() => {
-                    let arr = this.$refs.qrcodes
-                    arr && arr.map((item, index) => {
-                        let qrcode = new QRCode(item.id, {
-                            width: 160,
-                            height: 160, // 高度  
-                            text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
-                                '&type=2', // 二维码内容
-                            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                            // background: '#f0f',  
-                            // foreground: '#ff0'  
-                        })
+            this.$nextTick(() => {
+                let arr = this.$refs.qrcodes
+                arr && arr.map((item, index) => {
+                    let qrcode = new QRCode(item.id, {
+                        width: 300,
+                        height: 300, // 高度  
+                        text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
+                            '&type=2', // 二维码内容
+                        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                        // background: '#f0f',  
+                        // foreground: '#ff0'  
                     })
-                    setTimeout(() => {
-                        this.getPoster()
-                    }, 3000)
                 })
-            }, 200)
+                setTimeout(() => {
+                    this.getPoster()
+                }, 3000)
+            })
+
         },
         //海报生成
         getPoster(index) {
@@ -138,7 +138,7 @@ export default {
                         for (var i = 0; i < imgTotal; i++) {
                             img[i] = new Image()
                             img[i].src = mulitImg[i]
-                            img[i].onload = ()=> {
+                            img[i].onload = () => {
                                 //第i张图片加载完成
                                 flag++
                                 if (flag == imgTotal) {
@@ -146,6 +146,7 @@ export default {
                                     document.querySelector(`#image${index}`).style.display = 'block'
                                     //全部加载完成
                                     this.instance.close();
+                                    this.ready = false
                                     this.$message('海报制作完成，长按海报分享给朋友吧！');
                                 }
                             }

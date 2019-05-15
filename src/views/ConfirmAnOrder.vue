@@ -35,7 +35,7 @@
                 <b>使用优惠</b>
                 <span>国庆卷</span>
             </div> -->
-            <div class="message">
+            <div class="message" v-if="form_table.length > 0 && form_table[0]">
                 <ul>
                     <li v-if="is_inArrary('3')">
                         <label>孩子姓名</label>

@@ -10,7 +10,7 @@
                         <span><img :src="wechat_img"></span>
                         <b>{{user.username}}</b>
                     </div>
-                    <div class="img"><img :src="poster_img" alt=""></div>
+                    <div class="img" :class="ready ? 'no-touch' : ''"><img :src="poster_img" alt=""></div>
                         <!-- <div class="img"><img :src="$imgUrl +goods.share_img" alt=""></div> -->
                         <div class="code">
                             <div class="code_text">
@@ -72,6 +72,7 @@ export default {
             wechat_img: "",
             poster_img: "",
             share_img: "",
+            ready: true,
             maskingShow: false,
         }
     },
@@ -193,8 +194,8 @@ export default {
             this.wxRegister()
 
             let qrcode = new QRCode('qrcode', {
-                // width: 60,
-                // height: 60, // 高度
+                width: 260,
+                height: 260, // 高度
                 text: this.url, // 二维码内容
                 // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
                 // background: '#f0f',
@@ -203,14 +204,13 @@ export default {
 
 
             //判断图片是否加载完成
-            let timer = setInterval(() => {
-                if (this.poster_img) {
-                    this.instance.close();
-                    this.$message('海报制作完成，长按海报分享给朋友吧！');
+            let img = new Image()
+            img.src = this.poster_img
+            img.onload = () => {
+                setTimeout(() => {
                     this.getPoster()
-                    clearInterval(timer)
-                }
-            }, 100)
+                }, 1000)
+            }
         },
         //海报生成
         getPoster() {
@@ -222,6 +222,15 @@ export default {
                 // that.imgUrl = URL.createObjectURL(that.base64ToBlob(canvas.toDataURL()))
                 let dataURL = canvas.toDataURL("image/jpeg");
                 that.imgUrl = dataURL;
+                let img = new Image()
+                img.src = dataURL
+                img.onload = () => {
+                    this.instance.close();
+                    this.$message('海报制作完成，长按海报分享给朋友吧！');
+                    this.$refs.imageDom.style.display = "none";
+                    this.$refs.image.style.display = "block";
+                    this.ready = false
+                }
             });
         },
 
@@ -259,11 +268,7 @@ export default {
     },
 
     watch: {
-        imgUrl(val, oldval) {
-            //监听到imgUrl有变化以后 说明新图片已经生成 隐藏DOM
-            this.$refs.imageDom.style.display = "none";
-            this.$refs.image.style.display = "block";
-        }
+
     },
 
     // 挂载前状态
@@ -291,6 +296,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.no-touch {
+    //元素不能成为鼠标事件的target
+    pointer-events: none;
+    -webkit-pointer-events: none;
+    -ms-pointer-events: none;
+    -moz-pointer-events: none;
+}
+
 .SharePoster {
     width: 100%;
     height: 100%;
@@ -452,6 +465,11 @@ export default {
             span {
                 width: 1.38rem;
                 overflow: hidden;
+
+                img {
+                    width: 1.38rem !important;
+                    height: 1.38rem !important;
+                }
             }
 
             p {

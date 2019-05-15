@@ -218,6 +218,10 @@ export default {
                 this.$message('兑换码不能为空！')
                 return false
             }
+           if (this.getCode.substr(0,1) != 'C') {
+                this.$message('兑换码不正确！')
+                return false
+            }
             let data = { code: this.code, user_id: this.user.user_id }
             let res = await this.$postRequest('/user/GetThings', data)
             this.$message(res.data.msg);

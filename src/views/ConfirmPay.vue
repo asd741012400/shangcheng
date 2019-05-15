@@ -23,7 +23,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="message">
+            <div class="message" v-if="form_table.length > 0">
                 <h3>订单信息</h3>
                 <ul>
                     <li v-show="is_inArrary('3')">
@@ -121,14 +121,20 @@ export default {
                                 that.$localstore.session.set('has_share', '')
                             }
                         }
-                        that.$router.replace({
-                            name: 'PaySucceed',
-                            query: {
-                                id: that.order.order_id,
-                                goods_id: that.order.goods_id,
-                                type: that.order.order_type,
-                            }
-                        })
+                        if (that.order.order_type == 3) {
+                            that.$router.replace({
+                                name: 'MyCardBag'
+                            })
+                        } else {
+                            that.$router.replace({
+                                name: 'PaySucceed',
+                                query: {
+                                    id: that.order.order_id,
+                                    goods_id: that.order.goods_id,
+                                    type: that.order.order_type,
+                                }
+                            })
+                        }
                     };
 
                     //  取消支付的操作

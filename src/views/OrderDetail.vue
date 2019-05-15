@@ -227,8 +227,8 @@ export default {
                     let arr = this.$refs.qrcodes
                     arr && arr.map(item => {
                         let qrcode = new QRCode(item.id, {
-                            width: 60,
-                            height: 60, // 高度  
+                            width: 300,
+                            height: 300, // 高度  
                             text: item.dataset.code, // 二维码内容  
                             // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                             // background: '#f0f',  
@@ -464,6 +464,7 @@ export default {
 
             i {
                 width: 1rem;
+                height: 1rem;
                 overflow: hidden;
             }
         }
