@@ -223,14 +223,14 @@ export default {
         }
 
         .nav {
-            background: #3E3E3E;
+            background: #FBF9F2;
             margin-top: 1.7rem;
 
             ul {
                 display: flex;
                 align-items: center;
                 flex-wrap: wrap;
-                padding: 2.7rem .28rem .6rem;
+                padding: 2rem .28rem .4rem;
 
                 li {
                     display: flex;

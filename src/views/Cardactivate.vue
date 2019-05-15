@@ -45,11 +45,11 @@
             </div>
             <div class="user_date box">
                 <label>出生日期</label>
-                <div class="datePicker boxs">
-                    <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate" v-model="birthday">
-                    </mt-datetime-picker>
+                <div class="datePicker boxs" @click="openPicker">
+                    <!--                     <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate" v-model="birthday">
+                    </mt-datetime-picker> -->
                     <span>{{birthday}}</span>
-                    <p @click="openPicker"></p>
+                    <p></p>
                     <i><img src="../assets/icon_pull_down.png" alt=""></i>
                 </div>
             </div>
@@ -86,14 +86,19 @@
                 </div>
             </div>
         </div>
+        <van-popup v-model="datePicker" position="bottom" :overlay="false">
+            <van-datetime-picker v-model="startDate" type="date" :min-date="minDate" :maxDate="maxDate" @cancel="closeDatepicter" @confirm="handleConfirm" />
+        </van-popup>
     </div>
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
 import { postRequest } from '@/lib/axios'
-import Vue from "vue";
+// import Vue from "vue";
+import lrz from 'lrz'
 
-Vue.component(DatetimePicker.name, DatetimePicker);
+
+// Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
     name: 'CardActivate',
     data() {
@@ -107,6 +112,8 @@ export default {
             birthday: '2000-01-01',
             tel_phone: '',
             tall: '1m以下',
+            minDate: new Date('2000-01-01'),
+            maxDate: new Date(),
             startDate: new Date('2000-01-01'),
             datePicker: false,
             closeOnClickModalS: true,
@@ -134,41 +141,57 @@ export default {
                 return false;
             }
             const that = this;
-            var reader = new FileReader();
-            reader.readAsDataURL(fil);
-            reader.onload = function(event) {
-                let instance = that.$message({
-                    message: '图片正在上传中',
-                    duration: 30000
-                });
 
-                let url = event.target.result;
-                postRequest('/upload/UpBase64Image', { img: url })
-                    .then(res => {
-                        if (res.data.code == 1) {
-                            that.imgUrl = res.data.data
-                        } else {
-                            that.$message(res.data.msg);
-                        }
-                        instance.close();
-                    })
-                    .catch(function(error) {
-                        instance.close();
-                        console.log(error);
-                    });
-            }
+            // let instance = that.$message({
+            //     message: '图片正在上传中',
+            //     duration: 30000
+            // });
+
+            lrz(fil, {
+                    width: 200,
+                    quality: 0.6,
+                })
+                .then(function(rst) {
+                    postRequest('/upload/UpBase64Image', { img: rst.base64 })
+                        .then(res => {
+                            // that.$message(res.data.msg);
+                            if (res.data.code == 1) {
+                                that.imgUrl = res.data.data
+                            } else {
+                                that.$message(res.data.msg);
+                            }
+                            // instance.close();
+                        })
+                        .catch(function(error) {
+                            // instance.close();
+                            console.log(error);
+                        });
+                    //成功时执行
+
+                }).catch(function(error) {
+                    //失败时执行
+                    that.$message('图片上传失败');
+                }).always(function() {
+                    //不管成功或失败，都会执行
+                    // instance.close();
+                })
 
         },
         //开启时间选择器
         openPicker() {
-            this.$refs.picker.open()
+            this.datePicker = true
+            // this.$refs.picker.open()
         },
-
+        closeDatepicter() {
+            this.datePicker = false
+            // this.$refs.picker.open()
+        },
         //点击确定按钮
         handleConfirm(data) {
             let date = this.$dayjs(data).format('YYYY-MM-DD')
             this.birthday = date;
-            this.$refs.picker.close()
+            this.datePicker = false
+            // this.$refs.picker.close()
             event.stopPropagation()
         },
         confirmPopShow() {

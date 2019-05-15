@@ -94,7 +94,7 @@
                     <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input type="number" v-model.number="getCode">
+                        <input  v-model="getCode">
                         <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getCard">提 交</a>
@@ -109,7 +109,7 @@
                     <div class="detail" v-html="desc">
                     </div>
                     <div class="agreement">
-                        <input class="song" type="number" v-model.number="value" placeholder="请输入转赠密码" />
+                        <input class="song"  v-model="value" placeholder="请输入转赠密码" />
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
@@ -218,7 +218,7 @@ export default {
                 this.$message('兑换码不能为空！')
                 return false
             }
-            let data = { code: this.getCode }
+            let data = { code: this.code, user_id: this.user.user_id }
             let res = await this.$postRequest('/user/GetThings', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {

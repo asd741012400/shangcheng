@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                             <div class="project">
-                                <p>{{item.card_name}}</p>
+                                <p class="clip">{{item.card_name}}</p>
                             </div>
                         </router-link>
                     </li>
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                     <div class="project">
-                        <p>{{item.goods_name}}</p>
+                        <p class="clip">{{item.goods_name}}</p>
                         <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
                         <!-- <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span> -->
                     </div>
@@ -180,6 +180,7 @@ export default {
     created() {
         let userInfo = this.$localstore.get('wx_user')
         document.body.style.background = "#F6F6F6";
+        document.title = "圈豆商城"
         const that = this;
         that.$http.get('/home/getcardlist')
             .then(response => {
@@ -470,10 +471,11 @@ export default {
 
                     .project {
                         display: flex;
-                        padding: .3rem .2rem;
+                        padding: .3rem .2rem .1rem;
 
                         p {
                             flex: 1;
+                            width: 3rem;
                             color: #515C6F;
                             font-size: .3rem
                         }
@@ -641,7 +643,7 @@ export default {
                             width: 100%;
                             height: 3rem;
                             object-fit: cover;
-                            border-radius:.12rem;
+                            border-radius: .12rem;
                         }
 
                         div {
@@ -674,11 +676,12 @@ export default {
 
                     .project {
                         display: flex;
-                        padding: .3rem .2rem;
+                        padding: .3rem .2rem 0.1rem;
                         font-size: 0.3rem;
 
                         p {
                             flex: 1;
+                            width: 3rem;
                             color: #515C6F;
                             padding-left: .28rem;
                         }
@@ -692,7 +695,7 @@ export default {
                     .price {
                         display: flex;
                         align-items: baseline;
-                        padding-bottom: .4rem;
+                        padding-bottom: .2rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
                         color: #515C6F;

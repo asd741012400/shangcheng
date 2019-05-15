@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="project">
-                            <p>{{item.goods_name}}</p>
+                            <p class="clip">{{item.goods_name}}</p>
                             <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
                         </div>
                         <div class="share">
@@ -301,11 +301,12 @@ export default {
 
                 .project {
                     display: flex;
-                    padding: .3rem .2rem;
+                    padding: .3rem .2rem 0.1rem;
                     font-size: 0.3rem;
 
                     p {
                         flex: 1;
+                        width:3rem;
                         color: #515C6F;
                         padding-left: .28rem;
                     }
@@ -322,7 +323,7 @@ export default {
                     .price {
                         display: flex;
                         align-items: baseline;
-                        padding-bottom: .4rem;
+                        padding-bottom: .2rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
                         color: #515C6F;
@@ -336,7 +337,6 @@ export default {
                             font-size: .36rem;
                             padding-left: 2px;
                             padding-right: .2rem;
-
                         }
 
                         a {

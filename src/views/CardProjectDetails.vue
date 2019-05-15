@@ -430,7 +430,8 @@ export default {
         .shop_del {
             border-top: 10px solid #f6f6f6;
             background: #fff;
-            overflow: hidden;
+            margin-bottom:0.25rem;
+            // overflow: hidden;
 
             .detail {
                 padding: 0.2rem .6rem;

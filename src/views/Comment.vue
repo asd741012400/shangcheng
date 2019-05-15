@@ -38,6 +38,8 @@
 <script>
 // import { log } from 'util';
 import { postRequest } from '@/lib/axios'
+import lrz from 'lrz'
+
 export default {
     name: 'Comment',
     data() {
@@ -68,25 +70,56 @@ export default {
                 }
             }
 
+
             let imagesUrlArr = that.imagesUrl;
             var length = arr.length;
             for (let i = 0; i < length; i++) {
-                var reader = new FileReader();
-                reader.readAsDataURL(arr[i]);
-                reader.onload = async function(event) {
-                    let url = event.target.result;
-                    postRequest('/upload/UpBase64Image', { img: url })
-                        .then(res => {
-                            if (res.data.code == 1) {
-                                that.imagesUrl.push(res.data.data)
-                            } else {
-                                that.$message(res.data.msg);
-                            }
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        });
-                }
+                lrz(arr[i], {
+                        width: 300,
+                        quality: 0.8,
+                    })
+                    .then(function(rst) {
+                        postRequest('/upload/UpBase64Image', { img: rst.base64 })
+                            .then(res => {
+                                // that.$message(res.data.msg);
+                                if (res.data.code == 1) {
+                                    // that.imgUrl = res.data.data
+                                    that.imagesUrl.push(res.data.data)
+                                } else {
+                                    that.$message(res.data.msg);
+                                }
+                                // instance.close();
+                            })
+                            .catch(function(error) {
+                                // instance.close();
+                                console.log(error);
+                            });
+                        //成功时执行
+
+                    }).catch(function(error) {
+                        //失败时执行
+                        that.$message('图片上传失败');
+                    }).always(function() {
+                        //不管成功或失败，都会执行
+                        // instance.close();
+                    })
+
+                // var reader = new FileReader();
+                // reader.readAsDataURL(arr[i]);
+                // reader.onload = async function(event) {
+                //     let url = event.target.result;
+                //     postRequest('/upload/UpBase64Image', { img: url })
+                //         .then(res => {
+                //             if (res.data.code == 1) {
+                //                 that.imagesUrl.push(res.data.data)
+                //             } else {
+                //                 that.$message(res.data.msg);
+                //             }
+                //         })
+                //         .catch(function(error) {
+                //             console.log(error);
+                //         });
+                // }
             }
             that.imagesUrlLength = that.imagesUrl.length
         },
@@ -350,9 +383,9 @@ export default {
     font-size: 0.36rem !important;
     color: #CCCCCC !important;
 }
+
 .van-icon-star {
     font-size: 0.36rem !important;
     color: #FB4950 !important;
 }
-
 </style>

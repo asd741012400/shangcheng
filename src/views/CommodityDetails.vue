@@ -104,10 +104,10 @@
                         </div>
                         <div class="advance">
                             <span>
-                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
-                                    <img src="../assets/icon_advance.png" alt="">
-                            </router-link>
-                                </span>
+                                <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                        <img src="../assets/icon_advance.png" alt="">
+                                </router-link>
+                            </span>
                         </div>
                     </li>
                     <li v-for="(item,index) in storeList" :key="index" v-if="index >= 2 && showMore">
@@ -139,10 +139,10 @@
                         </div>
                         <div class="advance">
                             <span>
-                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
-                                    <img src="../assets/icon_advance.png" alt="">
-                            </router-link>
-                                </span>
+                                <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                        <img src="../assets/icon_advance.png" alt="">
+                                </router-link>
+                            </span>
                         </div>
                     </li>
                     <li class="more" v-if="storeList.length > 2" @click="handlwMore">
@@ -158,7 +158,7 @@
             查看全部 &gt;
          </router-link>
           </h3>
-                 <div class="user_comment" v-for="(item,index) in comments" v-if="index < 3">
+                <div class="user_comment" v-for="(item,index) in comments" v-if="index < 3">
                     <div class="user">
                         <div class="user_message">
                             <i>
@@ -245,7 +245,7 @@
             <!-- </div> -->
         </footer>
         <Share :goods-id="GoodsDetail.goods_id" type="1" :money="GoodsDetail.dist_money" :shareurl="url" ref="myShare"></Share>
-        <BindPhone :show="show" ref="bindPhone"></BindPhone>
+        <BindPhone :show="show" :id="id" :type="type" :attr="attr_id" ref="bindPhone"></BindPhone>
     </div>
 </template>
 <script>
@@ -276,6 +276,7 @@ export default {
             isCollect: false,
             comments: [],
             storeList: [],
+            type: '',
             id: '',
         }
     },
@@ -393,6 +394,7 @@ export default {
             let res = await this.$getRequest('/home/GetGoodsDetail', data)
             if (res.data.code == 1) {
                 this.GoodsDetail = res.data.data;
+                document.title = this.GoodsDetail.goods_name
                 this.cost_price = this.GoodsDetail.cost_price
                 this.goods_price = this.GoodsDetail.goods_price
                 this.mkt_price = this.GoodsDetail.mkt_price
@@ -481,6 +483,7 @@ export default {
             this.user = user
         }
         this.id = this.$route.query.id
+        this.type = this.$route.query.type
 
         this.url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
             '&type=1&id=' + this.id
@@ -506,7 +509,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        document.title = "圈豆商城"
+    },
 
     // 销毁完成状态
     destroyed() {}

@@ -9,10 +9,10 @@
                         <div class="swiper-slide" v-for="(item,index) in poster">
                             <img class="poster-img" :id="'image'+index" ref="image" src="">
                             <div ref="imageDom" :id="'imageDom'+index" class="imageDom">
-                                <div class="head_portrait"><img :src="wechat_img" alt=""></div>
+                                <div class="head_portrait"><img class="no-touch" :src="wechat_img" alt=""></div>
                                     <div class="code" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code">
                                     </div>
-                                    <div class="img"><img :src="$imgUrl+item" alt=""></div>
+                                    <div class="img"><img class="no-touch" :src="$imgUrl+item" alt=""></div>
                                     </div>
                                 </div>
                             </div>
@@ -53,6 +53,8 @@ import html2canvas from "html2canvas"
 // import Poster from '../components/Poster'
 import Swiper from 'swiper';
 import 'swiper/dist/css/swiper.css';
+
+console.log(wx);
 
 export default {
     name: 'SharePoster',
@@ -100,8 +102,8 @@ export default {
                     let arr = this.$refs.qrcodes
                     arr && arr.map((item, index) => {
                         let qrcode = new QRCode(item.id, {
-                            width: 60,
-                            height: 60, // 高度  
+                            width: 160,
+                            height: 160, // 高度  
                             text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
                                 '&type=2', // 二维码内容
                             // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
@@ -119,6 +121,10 @@ export default {
         getPoster(index) {
             let that = this
             let arr = this.$refs.imageDom
+            let img = []
+            let mulitImg = []
+
+            let flag = 0
             arr && arr.map((item, index) => {
                 html2canvas(item, {
                     scale: 2,
@@ -126,15 +132,29 @@ export default {
                     allowTaint: false
                 }).then((canvas) => {
                     let dataURL = canvas.toDataURL("image/jpeg");
+                    mulitImg.push(dataURL)
                     document.querySelector(`#image${index}`).setAttribute('src', dataURL)
-                    document.querySelector('#' + item.id).style.display = 'none'
-                    document.querySelector(`#image${index}`).style.display = 'block'
+                    if (mulitImg.length == arr.length) {
+                        let imgTotal = mulitImg.length;
+                        for (var i = 0; i < imgTotal; i++) {
+                            img[i] = new Image()
+                            img[i].src = mulitImg[i]
+                            img[i].onload = ()=> {
+                                //第i张图片加载完成
+                                flag++
+                                if (flag == imgTotal) {
+                                    document.querySelector('#' + item.id).style.display = 'none'
+                                    document.querySelector(`#image${index}`).style.display = 'block'
+                                    //全部加载完成
+                                    this.instance.close();
+                                    this.$message('海报制作完成，长按海报分享给朋友吧！');
+                                }
+                            }
+                        }
+                    }
                 });
             })
-            setTimeout(() => {
-                this.instance.close();
-                this.$message('海报制作完成，长按海报分享给朋友吧！');
-            }, 1000)
+
         },
         // 用于微信JS-SDK回调
         async wxRegister() {
@@ -354,12 +374,12 @@ export default {
         }
     }
 
-    .img {
-        overflow: hidden;
-        margin: 0 .18rem;
-        height: 5rem;
-        border-radius: 5px;
-    }
+    // .img {
+    //     overflow: hidden;
+    //     margin: 0 .18rem;
+    //     height: 5rem;
+    //     border-radius: 5px;
+    // }
 
     .code {
         display: flex;
@@ -492,20 +512,18 @@ export default {
     margin-left: -0.8rem;
 }
 
-.img {
-    width: 100%;
-    height: 9rem;
-    overflow: hidden;
-
-    img {
-        height: 100%;
-    }
+.no-touch {
+    //元素不能成为鼠标事件的target
+    pointer-events: none;
+    -webkit-pointer-events: none;
+    -ms-pointer-events: none;
+    -moz-pointer-events: none;
 }
 </style>
 <style lang="scss">
 .poster-img {
     width: 100%;
-    height: 9rem;
+    height: 8rem;
     display: none;
 }
 
@@ -531,9 +549,23 @@ export default {
     // padding: .2rem .1rem;
     color: #333;
     box-shadow: 0 7px 8px 0 rgba(7, 17, 27, 0.15);
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
     background: none;
 
+    /* overflow: hidden; */
+    // margin: 0 .18rem;
+    height: 8rem;
+    border-radius: 5px;
+
+    .img {
+        width: 100%;
+        height: 8rem;
+        // overflow: hidden;
+
+        img {
+            height: 100%;
+        }
+    }
 }
 
 #swiper .swiper-wrapper {

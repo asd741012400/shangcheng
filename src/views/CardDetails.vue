@@ -95,8 +95,8 @@
             <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">卡片详情</p>
           </h3>
                 <div v-if="table == 1">
-                    <ul>
-                        <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)">
+                    <ul class="shop">
+                        <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)" v-if="index<2">
                             <div class="img">
                                 <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                                 <div>
@@ -113,6 +113,28 @@
                                     <b>多店通用</b>
                                 </div>
                             </div>
+                        </li>
+                        <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)" v-if="index >= 2 && showMore">
+                            <div class="img">
+                                <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
+                                <div>
+                                    <p>价值</p>
+                                    <b>￥{{item.project_price}}</b>
+                                </div>
+                            </div>
+                            <div class="share">
+                                <div class="price">
+                                    <span>{{item.project_name}}</span>
+                                    <a>畅&nbsp;&nbsp;玩</a>
+                                </div>
+                                <div class="right">
+                                    <b>多店通用</b>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="more" v-if="projects.length > 2" @click="handlwMore">
+                            <van-icon v-if="!showMore" name="arrow-down" />
+                            <van-icon v-else name="arrow-up" />
                         </li>
                     </ul>
                 </div>
@@ -168,7 +190,7 @@
             <!-- </div> -->
         </footer>
         <Share :goods-id="CardDetail.card_id" type="3" :money="CardDetail.dist_money" :shareurl="url" ref="myShare"></Share>
-        <BindPhone :show="show" ref="bindPhone"></BindPhone>
+      <BindPhone :show="show" :id="id" :type="type" ref="bindPhone"></BindPhone>
     </div>
 </template>
 <script>
@@ -186,17 +208,22 @@ export default {
             table: 1,
             show: false,
             isCollect: false,
+            showMore: false,
             CardDetail: '',
             comments: [],
             projects: [],
             countDownNum: 0,
             countDownArr: "",
             id: '',
+            type: '',
             url: '',
         }
     },
     components: { Share },
     methods: {
+        handlwMore() {
+            this.showMore = !this.showMore
+        },
         goProject(item) {
             this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: this.id } })
         },
@@ -254,7 +281,6 @@ export default {
                 query: {
                     id: that.id,
                     order_type: 3,
-                    arrival: "CardDetails",
                 }
             });
         },
@@ -291,6 +317,7 @@ export default {
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
+                document.title = this.CardDetail.card_name
                 this.isCollect = Boolean(res.data.data.is_coolect);
                 if (this.CardDetail.is_dist == 1) {
                     this.wxRegister()
@@ -371,6 +398,7 @@ export default {
             this.user = user
         }
         this.id = this.$route.query.id
+        this.type = this.$route.query.type
         this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
             '&type=3&id=' + this.$route.query.id
 
@@ -394,7 +422,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        document.title = "圈豆商城"
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -537,6 +567,8 @@ export default {
                 color: #515C6F;
                 font-weight: bold;
             }
+
+
 
             .price {
                 display: flex;
@@ -769,7 +801,7 @@ export default {
         .shop_del {
             border-top: 10px solid #f6f6f6;
             background: #fff;
-            margin-bottom: 2.5rem;
+            // margin-bottom: 2.5rem;
 
             h3 {
                 font-size: .28rem;
@@ -798,7 +830,23 @@ export default {
             }
 
             div {
+
+                .shop {
+                    .more {
+                        display: flex;
+                        justify-content: center;
+                        background: #fff;
+                        padding: 0.12rem 0;
+
+                        .van-icon {
+                            font-size: .5rem;
+                            color: #666;
+                        }
+                    }
+                }
+
                 ul {
+
                     li {
                         background: #fff;
                         padding-top: .2rem;

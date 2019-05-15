@@ -2,13 +2,12 @@
     <div>
         <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
             <van-cell-group>
-                <mt-field v-model="phone" label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
-                <mt-field v-model="sms" label="验证码" placeholder="请输入验证码"></mt-field>
-                <van-row>
-                    <van-col offset="12" span="12" style="margin-bottom: 10px;">
-                        <van-button :disabled="disabled" size="small" type="primary" @click.stop="sendSMS">{{msg}}</van-button>
-                    </van-col>
-                </van-row>
+                <van-cell-group>
+                    <van-field v-model="phone" label="手机号" type="tel" placeholder="请输入手机号" />
+                    <van-field v-model="sms" center clearable label="验证码" placeholder="请输入验证码">
+                        <van-button :disabled="disabled" slot="button" size="small" type="primary" @click.stop="sendSMS">{{msg}}</van-button>
+                    </van-field>
+                </van-cell-group>
             </van-cell-group>
         </van-dialog>
     </div>
@@ -19,7 +18,8 @@ export default {
         return {
             // show: '',
             phone: '',
-            msg: '请求验证码',
+            // msg: '请求验证码',
+            msg: '验证码',
             sms: '',
             disabled: false,
         }
@@ -27,7 +27,16 @@ export default {
     props: {
         show: {
             default: false
-        }
+        },
+        id: {
+            default: ''
+        },
+        type: {
+            default: ''
+        },
+        attr: {
+            default: ''
+        },
     },
     components: {},
     methods: {
@@ -39,7 +48,8 @@ export default {
                 var num = 60
                 var timer = setInterval(() => {
                     num--
-                    this.msg = num + '秒后重新获取'
+                    // this.msg = num + '秒后重新获取'
+                    this.msg = num + '秒'
                     this.disabled = true
                     if (num === 0) {
                         this.disabled = false
@@ -57,14 +67,25 @@ export default {
         },
         //关闭填写手机号
         async beforeCloseModel(action, done) {
+
             let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 this.$localstore.set('wx_user', res.data.data)
                 this.show = false
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1000)
+
+                this.$router.push({
+                    path: 'ConfirmAnOrder',
+                    query: {
+                        id: this.id,
+                        order_type: this.type,
+                        attr_id: this.attr
+                    }
+                })
+
+                // setTimeout(() => {
+                //     window.location.reload()
+                // }, 1000)
                 done()
             } else {
                 this.$notify(res.data.msg);
@@ -103,6 +124,10 @@ export default {
 }
 </script>
 <style lang="scss">
+.van-field__control {
+    font-size: 0.24rem;
+}
+
 footer {
     position: fixed;
     bottom: 0;

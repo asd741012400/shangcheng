@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <div class="project">
-                        <p>{{item.goods_name}}</p>
+                        <p class="clip">{{item.goods_name}}</p>
                         <span>已售　{{item.sale_num}}/{{parseInt(item.store)}}</span>
                     </div>
                     <div class="share">
