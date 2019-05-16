@@ -90,7 +90,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index,
+            component: Login,
             // component: VipPlus1,
         },
         {
@@ -435,13 +435,15 @@ router.beforeEach((to, from, next) => {
             if (res.data.code == 1) {
                 localstore.set('wx_user', res.data.data.user)
                 localstore.set('wx', res.data.data.wx)
-                let from_url = localstore.get('from_url')
-                if (from_url) {
-                    localstore.remove('from_url')
-                    if (from_url.length > 2) {
-                        window.location.href = '/#' + from_url
-                    }
-                }
+                union_id = res.data.data.wx.unionid
+                // let from_url = localstore.get('from_url')
+                // if (from_url) {
+                //     localstore.remove('from_url')
+                //     if (from_url.length > 2) {
+                //         window.location.href = '/#' + from_url
+                //     }
+                // }
+                bindUser(union_id)
             }
         })
     } else {
@@ -451,6 +453,7 @@ router.beforeEach((to, from, next) => {
                     localstore.set('wx_user', res.data.data)
                 } else {
                     localstore.set('wx_user', '')
+                    getAuth()
                 }
             })
         }
@@ -468,15 +471,9 @@ router.beforeEach((to, from, next) => {
     }
 
     //用户关系绑定
-    let has_share = localstore.session.get('has_share')
-    if (has_share && has_share.query.share_id) {
-        let data = {
-            share_id: has_share.query.share_id,
-            union_id: union_id
-        }
-        getRequest('/user/Recommend', data)
-    }
-
+    bindUser(union_id)
+    //每次进入自动计算用户金额
+    // AutoCount(union_id)
 
     next()
 })
@@ -485,13 +482,34 @@ router.beforeEach((to, from, next) => {
 
 export default router
 
+//用户关系绑定
+function bindUser(union_id) {
+    let has_share = localstore.session.get('has_share')
+    if (has_share && has_share.query.share_id) {
+        let data = {
+            share_id: has_share.query.share_id,
+            union_id: union_id
+        }
+        getRequest('/user/Recommend', data)
+    }
+}
+
+//每次进入自动计算用户金额
+function AutoCount(union_id) {
+    if (union_id) {
+        getRequest('/home/AutoCount', { union_id: union_id })
+    }
+}
+
+
 //微信授权
 function getAuth() {
-    let url = 'http://' + window.location.host;
+    // let url = 'http://' + window.location.host;
+    let url = encodeURIComponent(window.location.href);
     let hash = window.location.href.split('#')[1];
 
     //存储来源地址 用于授权返回
-    localstore.set('from_url', hash)
+    // localstore.set('from_url', hash)s
     //微信授权
     postRequest('/wechat/check', { url: url }).then(res => {
         window.location.href = res.data

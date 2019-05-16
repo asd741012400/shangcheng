@@ -20,7 +20,7 @@
                     <div class="content">
                         <div class="text">
                             <p>{{item.card_name}}</p>
-                            <!-- <span>剩余{{item.days}}天</span> -->
+                            <span>剩余{{item.days}}天</span>
                         </div>
                     </div>
                 </div>

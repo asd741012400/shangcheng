@@ -190,7 +190,7 @@
             <!-- </div> -->
         </footer>
         <Share :goods-id="CardDetail.card_id" type="3" :money="CardDetail.dist_money" :shareurl="url" ref="myShare"></Share>
-      <BindPhone :show="show" :id="id" :type="type" ref="bindPhone"></BindPhone>
+        <BindPhone :show="show" :id="id" :type="type" ref="bindPhone"></BindPhone>
     </div>
 </template>
 <script>
@@ -210,6 +210,7 @@ export default {
             isCollect: false,
             showMore: false,
             CardDetail: '',
+            timeSatrt: '',
             comments: [],
             projects: [],
             countDownNum: 0,
@@ -275,6 +276,10 @@ export default {
                 return false
             }
 
+            if (this.timeSatrt < 3) {
+                return false
+            }
+
             const that = this;
             that.$router.push({
                 name: "ConfirmAnOrder",
@@ -287,7 +292,7 @@ export default {
         //定时器判断 商品是否截止销售
         timer() {
             let that = this
-            setInterval(() => {
+            this.timeSatrt = setInterval(() => {
                 let start_time = this.$dayjs().isBefore(this.$dayjs(this.CardDetail.sale_stime).format('YYYY/MM/DD HH:mm:ss'));
                 if (start_time) {
                     that.cardDetailsState = 5
@@ -322,7 +327,6 @@ export default {
                 if (this.CardDetail.is_dist == 1) {
                     this.wxRegister()
                 }
-
                 this.timer()
             }
         },
@@ -397,6 +401,7 @@ export default {
         if (user) {
             this.user = user
         }
+        this.timeSatrt = 0
         this.id = this.$route.query.id
         this.type = this.$route.query.type
         this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +

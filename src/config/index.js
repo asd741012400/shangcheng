@@ -7,4 +7,5 @@ export const API_URL = ENV == true ? 'http://quandouapi.qinzinianka.com' : 'http
 //图片地址
 export const IMG_URL = ENV == true ? 'http://quandou.qinzinianka.com/upload' : 'http://quandou.qinzinianka.com/upload'
 //商城端
-export const HOME_URL = ENV == true ? 'http://quandou.qinzinianka.com' : ''
+export const HOME_URL = ENV == true ? 'http://quandou.qinzinianka.com' :  'http://yuou.shizuyx.com'
+

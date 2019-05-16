@@ -122,6 +122,7 @@ export default {
                             }
                         }
                         if (that.order.order_type == 3) {
+                            await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
                             that.$router.replace({
                                 name: 'MyCardBag'
                             })

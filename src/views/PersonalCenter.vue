@@ -288,6 +288,15 @@ export default {
                 this.mobile = res.data.data
             }
         },
+        //每次进入自动计算用户金额
+        async check(index) {
+            let user = this.$localstore.get('wx_user')
+            let union_id = ''
+            if (user && user.union_id) {
+                union_id = user.union_id
+            }
+            let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
+        },
     },
 
     // 创建前状态
@@ -304,6 +313,8 @@ export default {
         }
 
         this.getMobile()
+        //每次进入自动计算用户金额
+        this.check()
     },
 
     // 挂载前状态

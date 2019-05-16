@@ -175,7 +175,9 @@ export default {
             if (this.order_type == 2) {
                 this.give_goods = res.data.data.goods_count
                 this.give_cards = res.data.data.card_count
-                this.PlusPop = true
+                if (!this.$validatenull(this.give_goods) || !this.$validatenull(this.give_cards)) {
+                    this.PlusPop = true
+                }
             }
             if (this.order_type == 3) {
                 this.cd_id = res.data.data.cd_id
@@ -183,7 +185,6 @@ export default {
                 this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
                 wxapi.wxRegister(this.wxRegCallback)
             }
-
         },
         //获取订单
         async getOrder() {

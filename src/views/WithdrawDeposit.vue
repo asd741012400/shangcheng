@@ -19,6 +19,14 @@
                 <b><img src="../assets/PersonalCenter_headerBg4.png" alt="" srcset=""></b>
             </div>
         </div>
+        <div class="withdraw_deposit_wx">
+            <i><img src="../assets/icon_wx.png" alt="" srcset=""></i>
+            <p>提现到微信钱包</p>
+        </div>
+        <span v-if="status" class="withdraw_deposit_btn false">审核中</span>
+        <span v-if="can" class="withdraw_deposit_btn" @click="handleWidthdrew">申请提现</span>
+
+
 <!--         <div class="withdraw_deposit_money">
             <div class="withdraw_deposit_money_content">
                 <div>
@@ -33,11 +41,9 @@
                 </div>
             </div>
         </div> -->
-        <div class="withdraw_deposit_wx">
-            <i><img src="../assets/icon_wx.png" alt="" srcset=""></i>
-            <p>提现到微信钱包</p>
-        </div>
-        <span class="withdraw_deposit_btn" @click="handleWidthdrew">申请提现</span>
+
+
+
     </div>
 </template>
 <script>
@@ -45,6 +51,8 @@ export default {
     name: 'WithdrawDeposit',
     data() {
         return {
+            status: false,
+            can: false,
             userInfo: {},
         }
     },
@@ -59,7 +67,17 @@ export default {
                   this.$router.go(-1)
                },2000)
             }
-        }
+        },
+        //查看是否有提现申请
+        async getWidthdrew() {
+            let res = await this.$postRequest('/user/GetWidthdrewStatus', { user_id: this.userInfo.user_id })
+            if (res.data.code == 1) {
+                this.status = true
+            }else{                
+                this.can = true
+            }
+        },
+
     },
 
     // 创建前状态
@@ -72,6 +90,7 @@ export default {
         if (userInfo) {
             this.userInfo = userInfo
         }
+        this.getWidthdrew()
     },
 
     // 挂载前状态
@@ -267,7 +286,12 @@ export default {
         font-weight: bold;
         border-radius: 50px;
         font-size: .32rem;
+        &.false{
+            background: #ccc;
+        }
     }
+
+
 
 }
 </style>

@@ -95,20 +95,29 @@ export default {
             this.plus = res.data.data
             this.poster = this.plus.poster.split(',')
             this.poster_img = this.$imgUrl + this.plus.poster
-            this.wxRegister()
 
             this.$nextTick(() => {
                 let arr = this.$refs.qrcodes
                 arr && arr.map((item, index) => {
-                    let qrcode = new QRCode(item.id, {
-                        width: 300,
-                        height: 300, // 高度  
-                        text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
-                            '&type=2', // 二维码内容
-                        // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                        // background: '#f0f',  
-                        // foreground: '#ff0'  
-                    })
+                    let u = navigator.userAgent;
+                    let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+                    if (isAndroid) {
+                        let qrcode = new QRCode(item.id, {
+                            // width: 300,
+                            // height: 300, // 高度  
+                            text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
+                                '&type=2', // 二维码内容
+                            render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                        })
+                    } else {
+                        let qrcode = new QRCode(item.id, {
+                            width: 300,
+                            height: 300, // 高度  
+                            text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
+                                '&type=2', // 二维码内容
+                            render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                        })
+                    }
                 })
                 setTimeout(() => {
                     this.getPoster()
@@ -120,40 +129,39 @@ export default {
         getPoster(index) {
             let that = this
             let arr = this.$refs.imageDom
-            let img = []
             let mulitImg = []
 
             let flag = 0
             arr && arr.map((item, index) => {
                 html2canvas(item, {
                     scale: 2,
+                    dpi: window.devicePixelRatio,
                     useCORS: true, //（图片跨域相关）
                     allowTaint: false
                 }).then((canvas) => {
                     let dataURL = canvas.toDataURL("image/jpeg");
-                    mulitImg.push(dataURL)
                     document.querySelector(`#image${index}`).setAttribute('src', dataURL)
-                    if (mulitImg.length == arr.length) {
-                        let imgTotal = mulitImg.length;
-                        for (var i = 0; i < imgTotal; i++) {
-                            img[i] = new Image()
-                            img[i].src = mulitImg[i]
-                            img[i].onload = () => {
-                                //第i张图片加载完成
-                                flag++
-                                if (flag == imgTotal) {
-                                    document.querySelector('#' + item.id).style.display = 'none'
-                                    document.querySelector(`#image${index}`).style.display = 'block'
-                                    //全部加载完成
-                                    this.instance.close();
-                                    this.ready = false
-                                    this.$message('海报制作完成，长按海报分享给朋友吧！');
-                                }
-                            }
-                        }
+                    let img = new Image()
+                    img.src = dataURL
+                    img.onload = () => {
+                        mulitImg.push(dataURL)
+                        document.querySelector(`#imageDom${index}`).style.display = 'none'
+                        document.querySelector(`#image${index}`).style.display = 'block'
                     }
                 });
             })
+
+            let timer = setInterval(() => {
+                let imgTotal = mulitImg.length;
+                if (imgTotal == arr.length) {
+                    //全部加载完成
+                    this.instance.close();
+                    this.ready = false
+                    clearInterval(timer)
+                    this.$message('海报制作完成，长按海报分享给朋友吧！');
+                }
+            }, 50)
+
 
         },
         // 用于微信JS-SDK回调
@@ -170,8 +178,8 @@ export default {
                 jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
             })
             wx.ready(() => {
-                let url = this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
-                    '&type=2'
+                let url = encodeURIComponent(this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
+                    '&type=2')
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.plus.title, // 分享标题, 请自行替换
@@ -200,7 +208,7 @@ export default {
                     }
                 });
                 //批量隐藏菜单
-                wx.hideOptionMenu();
+                // wx.hideOptionMenu();
                 // wx.showOptionMenu({ 
                 //     menuList: ['menuItem:share:appMessage','menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:openWithSafari','menuItem:share:facebook','menuItem:share:weiboApp']
                 // });
@@ -240,6 +248,8 @@ export default {
 
     // 挂载结束状态
     mounted() {
+        this.wxRegister()
+        
         var _this = this
         this.mySwiper = new Swiper('.swiper-container', {
             direction: 'horizontal',
@@ -273,9 +283,9 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         this.instance.close();
-        wx.ready(() => {
-            wx.showOptionMenu();
-        })
+        // wx.ready(() => {
+        //     wx.showOptionMenu();
+        // })
     },
 
     // 销毁完成状态
@@ -510,6 +520,11 @@ export default {
     bottom: .5rem;
     left: 50%;
     margin-left: -0.8rem;
+
+    img {
+        width: 1.6rem !important;
+        height: 1.6rem !important;
+    }
 }
 
 .no-touch {
@@ -564,6 +579,21 @@ export default {
 
         img {
             height: 100%;
+        }
+    }
+
+    .code {
+        width: 1.6rem;
+        height: 1.6rem;
+        overflow: hidden;
+        position: absolute;
+        bottom: .5rem;
+        left: 50%;
+        margin-left: -0.8rem;
+
+        img {
+            width: 1.6rem !important;
+            height: 1.6rem !important;
         }
     }
 }

@@ -57,7 +57,7 @@ export default {
             plus: {},
             vip: [],
             confirmPop: false,
-            agreementState: false
+            agreementState: true
         }
     },
     components: {},
@@ -274,11 +274,12 @@ export default {
             font-size: .32rem;
 
             span {
-                width: .3rem;
-                height: .3rem;
-
+                width: .34rem;
+                height: .34rem;
                 // overflow: hidden;
                 img {
+                    width: .34rem;
+                    height: .34rem;
                     vertical-align: baseline;
                 }
             }

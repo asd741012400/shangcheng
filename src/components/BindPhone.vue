@@ -53,7 +53,8 @@ export default {
                     this.disabled = true
                     if (num === 0) {
                         this.disabled = false
-                        this.msg = '获取验证码'
+                        // this.msg = '获取验证码'
+                        this.msg = '验证码'
                         clearInterval(timer)
                     }
                 }, 1000)
@@ -67,21 +68,23 @@ export default {
         },
         //关闭填写手机号
         async beforeCloseModel(action, done) {
-
             let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 this.$localstore.set('wx_user', res.data.data)
                 this.show = false
-
-                this.$router.push({
-                    path: 'ConfirmAnOrder',
-                    query: {
-                        id: this.id,
-                        order_type: this.type,
-                        attr_id: this.attr
-                    }
-                })
+                if (this.type == 2) {
+                    this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+                } else {
+                    this.$router.push({
+                        path: 'ConfirmAnOrder',
+                        query: {
+                            id: this.id,
+                            order_type: this.type,
+                            attr_id: this.attr
+                        }
+                    })
+                }
 
                 // setTimeout(() => {
                 //     window.location.reload()

@@ -20,7 +20,8 @@ export default {
     data() {
         return {
             phone: '',
-            msg: '请求验证码',
+            // msg: '请求验证码',
+            msg: '验证码',
             sms: '',
             disabled: false,
         }
@@ -36,11 +37,13 @@ export default {
                 var num = 60
                 var timer = setInterval(() => {
                     num--
-                    this.msg = num + '秒后重新获取'
+                    // this.msg = num + '秒后重新获取'
+                    this.msg = num + '秒'
                     this.disabled = true
                     if (num === 0) {
                         this.disabled = false
-                        this.msg = '获取验证码'
+                        // this.msg = '获取验证码'
+                        this.msg = '验证码'
                         clearInterval(timer)
                     }
                 }, 1000)

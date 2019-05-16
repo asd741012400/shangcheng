@@ -92,7 +92,7 @@
         </ul>
         <!-- 核销信息 -->
         <div class="timer" v-if="order.order_status == 1 && type == 1">
-            <div class="timer_top" v-for="(item,index) in goods_cancle">
+            <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="index<3">
                 <p>
                     <a>
                     <b>{{item.cancle_code}}</b>
@@ -102,6 +102,21 @@
                     <time v-if="item.cancle_status == 1">核销时间：{{toDate(item.cancle_time)}}</time>
                 </p>
                 <i @click="previewImg(index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code"><!-- <img src="../assets/code.png" alt=""> --></i>
+            </div>
+            <div class="timer_top" v-for="(item,index) in goods_cancle" v-show="index >= 3 && showMore">
+                <p>
+                    <a>
+                    <b>{{item.cancle_code}}</b>
+                    <span v-if="item.cancle_status == 1"> 已核销</span>
+                    <span v-else> 未核销</span>
+                  </a>
+                    <time v-if="item.cancle_status == 1">核销时间：{{toDate(item.cancle_time)}}</time>
+                </p>
+                <i @click="previewImg(index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code"><!-- <img src="../assets/code.png" alt=""> --></i>
+            </div>
+            <div class="timer_top more" v-if="goods_cancle.length > 2" @click="handlwMore">
+                <van-icon v-if="!showMore" name="arrow-down" />
+                <van-icon v-else name="arrow-up" />
             </div>
         </div>
         <!-- 用户信息 -->
@@ -154,6 +169,7 @@ export default {
         return {
             state: 1, //1待使用 2代付款 3付款成功 4退款
             groupPurchaseState: true, //团购
+            showMore: false,
             id: '',
             type: '',
             order: '',
@@ -167,6 +183,9 @@ export default {
     },
     components: {},
     methods: {
+        handlwMore() {
+            this.showMore = !this.showMore
+        },
         //预览核销码
         previewImg(index) {
             let arr = this.$refs.qrcodes
@@ -230,7 +249,7 @@ export default {
                             width: 300,
                             height: 300, // 高度  
                             text: item.dataset.code, // 二维码内容  
-                            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
+                            render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
                             // background: '#f0f',  
                             // foreground: '#ff0'  
                         })
@@ -253,8 +272,6 @@ export default {
         this.type = this.$route.query.type
         this.getOrder()
         this.getOrderDetail()
-
-
     },
 
     // 挂载前状态
@@ -401,12 +418,12 @@ export default {
                         justify-content: space-between;
 
                         .text-hide {
-                            display:block;
+                            display: block;
                             width: 0.2rem;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             white-space: nowrap;
-                            color:#999;
+                            color: #999;
                         }
 
                         a {
@@ -427,6 +444,18 @@ export default {
                     }
                 }
             }
+        }
+    }
+
+
+    .more {
+        display: flex;
+        justify-content: center;
+        background: #fff;
+
+        .van-icon {
+            font-size: .5rem;
+            color: #666;
         }
     }
 

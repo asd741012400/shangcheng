@@ -234,7 +234,7 @@ export default {
                         background: none;
                         font-size: .28rem;
                         font-weight: bold;
-                        width: 1.2rem;
+                        // width: 1.2rem;
                         color: #fff;
                     }
 

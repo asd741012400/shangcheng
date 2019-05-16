@@ -339,6 +339,10 @@ export default {
                 return false
             }
 
+            // if (this.timeSatrt < 3) {
+            //     return false
+            // }
+
             // if (this.limit_num == 0) {
             //     this.$message('当前限购0件!');
             //     return false;
@@ -482,6 +486,7 @@ export default {
         if (user) {
             this.user = user
         }
+        this.timeSatrt = 0
         this.id = this.$route.query.id
         this.type = this.$route.query.type
 

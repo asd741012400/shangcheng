@@ -33,7 +33,7 @@
             <div class="shop">
                 <h3>使用门店</h3>
                 <ul>
-                    <li v-for="(item,index) in storeList" :key="index">
+                    <li v-for="(item,index) in storeList" :key="index" v-if="index<2">
                         <div class="del">
                             <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                 <div class="tle">
@@ -60,13 +60,52 @@
                                 </div>
                             </router-link>
                         </div>
-                        <!--                   <div class="advance">
+                        <!--                                           <div class="advance">
                             <span>
                             <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                     <img src="../assets/icon_advance.png" alt="">
                             </router-link>
                                 </span>
                         </div> -->
+                    </li>
+                    <li v-for="(item,index) in storeList" :key="index" v-if="index >= 2 && showMore">
+                        <div class="del">
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                <div class="tle">
+                                    <h4>{{item.business_name}}</h4>
+                                    <div>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                    </div>
+                                </div>
+                                <div class="timer">
+                                    <!-- 营业时间：{{item.sale_time}}、{{item.sale_time2}} -->
+                                    <a>营业时间：</a>
+                                    <p>
+                                        <span>{{item.sale_time}}</span>
+                                        <span>{{item.sale_time2}}</span>
+                                    </p>
+                                </div>
+                                <div class="site">
+                                    <i><img src="../assets/icon_site.png" alt=""></i>
+                                    <p>地点：{{item.address}}</p>
+                                </div>
+                            </router-link>
+                        </div>
+                        <!--                                           <div class="advance">
+                            <span>
+                            <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                    <img src="../assets/icon_advance.png" alt="">
+                            </router-link>
+                                </span>
+                        </div> -->
+                    </li>
+                    <li class="more" v-if="storeList.length > 2" @click="handlwMore">
+                        <van-icon v-if="!showMore" name="arrow-down" />
+                        <van-icon v-else name="arrow-up" />
                     </li>
                 </ul>
             </div>
@@ -112,6 +151,7 @@ export default {
         return {
             cardDetailsState: 4,
             state: false,
+            showMore: false,
             user: '',
             info: '',
             imgList: '',
@@ -124,6 +164,9 @@ export default {
     },
     components: {},
     methods: {
+        handlwMore() {
+            this.showMore = !this.showMore
+        },
         goTel(tel) {
             window.location.href = 'tel://' + tel;
         },
@@ -355,6 +398,17 @@ export default {
                     margin-bottom: .1rem;
                     position: relative;
 
+                    &.more {
+                        display: flex;
+                        justify-content: center;
+                        background: #fff;
+
+                        .van-icon {
+                            font-size: .5rem;
+                            color: #666;
+                        }
+                    }
+
                     .del {
                         flex: 1;
                         padding-top: .32rem;
@@ -430,7 +484,7 @@ export default {
         .shop_del {
             border-top: 10px solid #f6f6f6;
             background: #fff;
-            margin-bottom:0.25rem;
+            margin-bottom: 0.25rem;
             // overflow: hidden;
 
             .detail {

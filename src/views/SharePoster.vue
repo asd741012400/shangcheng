@@ -19,7 +19,7 @@
                                 <p><span>￥{{price}}</span></p>
                             </div>
                             <div class="code_img">
-                                <span id="qrcode"></span>
+                                <span  id="qrcode"></span>
                                 <p>扫码立享批发价</p>
                             </div>
                         </div>
@@ -193,14 +193,23 @@ export default {
 
             this.wxRegister()
 
-            let qrcode = new QRCode('qrcode', {
-                width: 260,
-                height: 260, // 高度
-                text: this.url, // 二维码内容
-                // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-                // background: '#f0f',
-                // foreground: '#ff0'
-            })
+            let u = navigator.userAgent;
+            let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+            if (isAndroid) {
+                let qrcode = new QRCode('qrcode', {
+                    // width: 260,
+                    // height: 260, // 高度
+                    text: this.url, // 二维码内容
+                    render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+                })
+            } else {
+                let qrcode = new QRCode('qrcode', {
+                    width: 260,
+                    height: 260, // 高度
+                    text: this.url, // 二维码内容
+                    render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
+                })
+            }
 
 
             //判断图片是否加载完成

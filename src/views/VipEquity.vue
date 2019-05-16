@@ -95,7 +95,7 @@
                                 </router-link>
                             </template>
                         </div>
-                        <BindPhone :show="show"></BindPhone>
+                        <BindPhone :show="show" :type="type" ref="bindPhone"></BindPhone>
                         <MyFooter></MyFooter>
                     </div>
 </template>
@@ -110,6 +110,7 @@ export default {
     data() {
         return {
             active: 1,
+            type: 2,
             show: false,
             firstEnter: false,
             user: {

@@ -8,6 +8,7 @@ import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
 import {ENV,IMG_URL,API_URL,HOME_URL} from './config/index.js'
+import {validatenull} from './config/util.js'
 
 
 //剪切板
@@ -47,6 +48,7 @@ if (!ENV) {
 import { Toast } from 'mint-ui'; 
 
 Vue.config.productionTip = false
+Vue.prototype.$validatenull = validatenull;
 Vue.prototype.$imgUrl = IMG_URL;
 Vue.prototype.$HOME_URL = HOME_URL;
 Vue.prototype.$message = Toast;
