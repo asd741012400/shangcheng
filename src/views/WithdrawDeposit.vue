@@ -25,9 +25,7 @@
         </div>
         <span v-if="status" class="withdraw_deposit_btn false">审核中</span>
         <span v-if="can" class="withdraw_deposit_btn" @click="handleWidthdrew">申请提现</span>
-
-
-<!--         <div class="withdraw_deposit_money">
+        <!--         <div class="withdraw_deposit_money">
             <div class="withdraw_deposit_money_content">
                 <div>
                     <span>提现金额</span>
@@ -41,9 +39,6 @@
                 </div>
             </div>
         </div> -->
-
-
-
     </div>
 </template>
 <script>
@@ -63,9 +58,8 @@ export default {
             let res = await this.$postRequest('/user/ApplyWidthdrew', { user_id: this.userInfo.user_id })
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-               setTimeout(()=>{
-                  this.$router.go(-1)
-               },2000)
+                this.can = false
+                this.getWidthdrew()
             }
         },
         //查看是否有提现申请
@@ -73,7 +67,7 @@ export default {
             let res = await this.$postRequest('/user/GetWidthdrewStatus', { user_id: this.userInfo.user_id })
             if (res.data.code == 1) {
                 this.status = true
-            }else{                
+            } else {
                 this.can = true
             }
         },
@@ -286,7 +280,8 @@ export default {
         font-weight: bold;
         border-radius: 50px;
         font-size: .32rem;
-        &.false{
+
+        &.false {
             background: #ccc;
         }
     }

@@ -77,14 +77,25 @@ export default {
         },
         //获取PlUS
         async getOrder() {
-            let id = this.$route.query.id
-            let res = await this.$getRequest('/home/GetPlus')
-            this.plus = res.data.data
+            let plus = this.$localstore.session.get('plus')
+            if (plus) {
+                this.plus = plus
+            } else {
+                let res = await this.$getRequest('/home/GetPlus')
+                this.plus = res.data.data
+                this.$localstore.session('plus', this.plus)
+            }
         },
         //获取所有权益
         async getVipList() {
-            let res = await this.$getRequest('/plus/PlusEquityList')
-            this.vip = res.data.data
+            let vip = this.$localstore.session.get('vip')
+            if (vip) {
+                this.vip = vip
+            } else {
+                let res = await this.$getRequest('/plus/PlusEquityList')
+                this.vip = res.data.data
+                this.$localstore.session('vip', this.vip)
+            }
         },
         //添加订单
         async addOrder() {
@@ -276,6 +287,7 @@ export default {
             span {
                 width: .34rem;
                 height: .34rem;
+
                 // overflow: hidden;
                 img {
                     width: .34rem;

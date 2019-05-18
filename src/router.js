@@ -90,8 +90,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Login,
-            // component: VipPlus1,
+            component: Index,
         },
         {
             path: '/Index',

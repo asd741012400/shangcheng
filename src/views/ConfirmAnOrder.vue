@@ -167,11 +167,10 @@ export default {
                 }
             }
 
-
             if (!this.goods) {
-                this.$message("数据未加载完，请耐心等待或刷新页面");
                 return false;
             }
+            
             let WxAuth = this.$localstore.get('wx_user')
             let postData = {
                 order_type: this.$route.query.order_type,

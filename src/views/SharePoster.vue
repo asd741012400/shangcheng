@@ -19,7 +19,7 @@
                                 <p><span>￥{{price}}</span></p>
                             </div>
                             <div class="code_img">
-                                <span  id="qrcode"></span>
+                                <span><img src="" id="qrcode"></span>
                                 <p>扫码立享批发价</p>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
 </template>
 <script>
 import wx from 'weixin-js-sdk'
-import QRCode from 'qrcodejs2'
+import QRCode from 'qrcode'
 import html2canvas from "html2canvas"
 // import Poster from '../components/Poster'
 
@@ -193,33 +193,33 @@ export default {
 
             this.wxRegister()
 
-            let u = navigator.userAgent;
-            let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
-            if (isAndroid) {
-                let qrcode = new QRCode('qrcode', {
-                    // width: 260,
-                    // height: 260, // 高度
-                    text: this.url, // 二维码内容
-                    render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-                })
-            } else {
-                let qrcode = new QRCode('qrcode', {
-                    width: 260,
-                    height: 260, // 高度
-                    text: this.url, // 二维码内容
-                    render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）
-                })
+            var opts = {
+                width: 300,
+                height: 300,
+                errorCorrectionLevel: 'H',
+                type: 'image/png',
+                margin: 0
             }
+            QRCode.toDataURL(this.url, opts)
+                .then(url => {
+                    let img = new Image()
+                    img.src = url
+                    img.onload = () => {
+                        document.getElementById('qrcode').setAttribute("src", url)
+                        //判断图片是否加载完成
+                        let img = new Image()
+                        img.src = this.poster_img
+                        img.onload = () => {
+                            setTimeout(() => {
+                                this.getPoster()
+                            }, 1000)
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error(err)
+                })
 
-
-            //判断图片是否加载完成
-            let img = new Image()
-            img.src = this.poster_img
-            img.onload = () => {
-                setTimeout(() => {
-                    this.getPoster()
-                }, 1000)
-            }
         },
         //海报生成
         getPoster() {

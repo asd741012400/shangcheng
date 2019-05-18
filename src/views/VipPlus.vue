@@ -10,47 +10,22 @@
                             <img class="poster-img" :id="'image'+index" ref="image" src="">
                             <div ref="imageDom" :id="'imageDom'+index" class="imageDom">
                                 <div class="head_portrait"><img :src="wechat_img" alt=""></div>
-                                    <div class="code" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code">
+                                    <div class="code">
+                                        <img :id="'qrcode'+index" ref="qrcodes"  src="" alt="" />
                                     </div>
-                                    <div class="img"><img  :src="$imgUrl+item" alt=""></div>
+                                        <div class="img"><img  :src="$imgUrl+item" alt=""></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!--                         <div class="code">
-                            <div class="code_text">
-                                <h3>{{title}}</h3>
-                                <p><span>￥{{price}}</span></p>
-                            </div>
-                            <div class="code_img">
-                                <span id="qrcode"></span>
-                                <p>扫码开通PLUS会员</p>
-                            </div>
-                        </div>
-  
-                <ul class="share_type">
-                    <li @click="maskingShowFn">
-                        <span><img src="../assets/share_wx.png" alt=""></span>
-                        <p>微信</p>
-                    </li>
-                    <li @click="maskingShowFn">
-                        <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
-                        <p>朋友圈</p>
-                    </li>
-                    <li @click="saveImg()">
-                        <span><img src="../assets/share_download.png" alt=""></span>
-                        <p>保存图片</p>
-                    </li>
-                </ul> -->
                 </div>
-            </div>
 </template>
 <script>
 import wx from 'weixin-js-sdk'
-import QRCode from 'qrcodejs2'
+import QRCode from 'qrcode'
 import html2canvas from "html2canvas"
-// import Poster from '../components/Poster'
 import Swiper from 'swiper';
 import 'swiper/dist/css/swiper.css';
 
@@ -91,37 +66,53 @@ export default {
         //获取PlUS
         async getPlUS() {
             let id = this.$route.query.id
-            let res = await this.$getRequest('/home/GetPlus')
-            this.plus = res.data.data
+            let plus = this.$localstore.session.get('plus')
+            if (plus) {
+                this.plus = plus
+            } else {
+                let res = await this.$getRequest('/home/GetPlus')
+                this.plus = res.data.data
+                this.$localstore.session('plus', this.plus)
+            }
             this.poster = this.plus.poster.split(',')
             this.poster_img = this.$imgUrl + this.plus.poster
 
             this.$nextTick(() => {
+                let new_arr = []
                 let arr = this.$refs.qrcodes
                 arr && arr.map((item, index) => {
-                    let u = navigator.userAgent;
-                    let isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
-                    if (isAndroid) {
-                        let qrcode = new QRCode(item.id, {
-                            // width: 300,
-                            // height: 300, // 高度  
-                            text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
-                                '&type=2', // 二维码内容
-                            render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                        })
-                    } else {
-                        let qrcode = new QRCode(item.id, {
-                            width: 300,
-                            height: 300, // 高度  
-                            text: this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
-                                '&type=2', // 二维码内容
-                            render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                        })
+
+                    var opts = {
+                        width: 300,
+                        height: 300,
+                        errorCorrectionLevel: 'H',
+                        type: 'image/png',
+                        margin: 0
                     }
+                    QRCode.toDataURL(this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
+                            '&type=2', opts)
+                        .then(url => {
+                            let img = new Image()
+                            img.src = url
+                            img.onload = () => {
+                                new_arr.push(url)
+                                document.getElementById(item.id).setAttribute("src", url)
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err)
+                        })
+
                 })
-                setTimeout(() => {
-                    this.getPoster()
-                }, 3000)
+
+                let timer = setInterval(() => {
+                    if (new_arr.length == arr.length) {
+                        clearInterval(timer)
+                        setTimeout(() => {
+                            this.getPoster()
+                        }, 1000)
+                    }
+                }, 50)
             })
 
         },
@@ -249,12 +240,12 @@ export default {
     // 挂载结束状态
     mounted() {
         this.wxRegister()
-        
+
         var _this = this
         this.mySwiper = new Swiper('.swiper-container', {
             direction: 'horizontal',
-            loop: true,
-            autoplay: 5000,
+            // loop: true,
+            // autoplay: 5000,
             slidesPerView: 1.35,
             // spaceBetween: 0.1,
             paginationClickable: true,

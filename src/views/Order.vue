@@ -98,7 +98,7 @@
                                     <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1 && item.is_use ==0 && item.order_status == 1 && item.pay_type == 1">
                                         <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
                                     </template>
-                                    <van-button v-if="item.order_type == 1" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                                    <van-button v-if="item.order_type == 1 && item.is_use == 0" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
                                     <template v-if="item.is_use == 0">
                                         <van-button v-if="item.order_type == 3" type="info" size="small" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                     </template>
@@ -120,7 +120,7 @@
                                 <template v-if="item.goods_info.is_roll == 1 && item.order_type == 1 && item.is_use ==0 && item.order_status == 1  && item.pay_type == 1">
                                     <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
                                 </template>
-                                <van-button v-if="item.order_type == 1" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                                <van-button v-if="item.order_type == 1 && item.is_use == 0" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
                                 <template v-if="item.is_use == 0">
                                     <van-button v-if="item.order_type == 3" type="info" size="small" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                 </template>
@@ -243,6 +243,7 @@ export default {
         },
         //获取订单
         async getOrderList(index) {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             this.page = 1
             this.orderList = []
             let res = await this.$getRequest('/order/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
@@ -251,16 +252,18 @@ export default {
                 this.currSize = res.data.data.list.length
             }
             this.pageSize = res.data.data.count
+            this.$Indicator.close();
         },
-
         //获取更多订单
         async getOrderListMore(cid) {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/order/UserOrder', { user_id: this.user_id, order_status: this.order_status, page: this.page })
             let data = res.data.data.list
             this.orderList = this.orderList.concat(data);
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
             }
+            this.$Indicator.close();
         },
 
         //评价订单

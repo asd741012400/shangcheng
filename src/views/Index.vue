@@ -127,24 +127,47 @@ export default {
         },
         //获取banner
         async getBanner() {
-            let res = await this.$getRequest('/home/getad')
-            this.banner = res.data.data
+            let banner = this.$localstore.session.get('banner')
+            if (banner) {
+                this.banner = banner
+            } else {
+                let res = await this.$getRequest('/home/getad')
+                this.banner = res.data.data
+                this.$localstore.session('banner', res.data.data)
+            }
         },
         //获取商品列表
         async getGoodsList() {
-            let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
-            const resData = res.data.data
-            this.GoodsList = resData.list
-            this.goodsListLength = resData.list.length;
-            this.goodsListSum = resData.count;
-        },
+            let GoodsList = this.$localstore.session.get('GoodsList')
+            let goodsListLength = this.$localstore.session.get('goodsListLength')
+            let goodsListSum = this.$localstore.session.get('goodsListSum')
 
+            if (GoodsList && goodsListLength && goodsListSum) {
+                this.GoodsList = GoodsList
+                this.goodsListLength = goodsListLength
+                this.goodsListSum = goodsListSum
+            } else {
+                let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
+                const resData = res.data.data
+                this.GoodsList = resData.list
+                this.goodsListLength = resData.list.length;
+                this.goodsListSum = resData.count;
+                this.$localstore.session('GoodsList', resData.list)
+                this.$localstore.session('goodsListLength', resData.list.length)
+                this.$localstore.session('goodsListSum', resData.count)
+            }
+
+
+        },
+        //更多商品
         async GoodsListPush() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             const resData = res.data.data
             this.GoodsList = this.GoodsList.concat(resData.list);
             this.goodsListLength = resData.list.length;
             this.goodsListSum = resData.count;
+            this.$Indicator.close();
         },
         cardlistSkip(id) {
             const that = this;
@@ -170,7 +193,17 @@ export default {
                     this.$notify('未找到相关商品，请重新输入！');
                 }
             }
-        }
+        },
+        //每次进入自动计算用户金额
+        async check(index) {
+            let user = this.$localstore.get('wx_user')
+            let union_id = ''
+            if (user && user.union_id) {
+                union_id = user.union_id
+            }
+            let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
+        },
+
     },
 
     // 创建前状态
@@ -182,34 +215,52 @@ export default {
         document.body.style.background = "#F6F6F6";
         document.title = "圈豆商城"
         const that = this;
-        that.$http.get('/home/getcardlist')
-            .then(response => {
-                var data = JSON.parse(JSON.stringify(response.data))
-                if (data.code == 1) {
-                    const resData = data.data;
-                    that.Cardlist = resData;
-                }
 
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
+        //卡片列表
+        let Cardlist = that.$localstore.session.get('Cardlist')
+        if (Cardlist) {
+            that.Cardlist = Cardlist
+        } else {
+            that.$http.get('/home/getcardlist')
+                .then(response => {
+                    var data = JSON.parse(JSON.stringify(response.data))
+                    if (data.code == 1) {
+                        const resData = data.data;
+                        that.Cardlist = resData;
+                        that.$localstore.session('Cardlist', resData)
+                    }
 
-        that.$http.get('/home/GetNavList')
-            .then(response => {
-                var data = JSON.parse(JSON.stringify(response.data))
-                if (data.code == 1) {
-                    const resData = data.data;
-                    that.NavList = resData;
-                }
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
 
-            })
-            .catch(function(error) {
-                console.log(error);
-            });
+        //导航列表
+        let NavList = that.$localstore.session.get('NavList')
+        if (NavList) {
+            that.NavList = NavList
+        } else {
+            that.$http.get('/home/GetNavList')
+                .then(response => {
+                    var data = JSON.parse(JSON.stringify(response.data))
+                    if (data.code == 1) {
+                        const resData = data.data;
+                        that.NavList = resData;
+                        that.$localstore.session('NavList', resData)
+                    }
+
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }
+
 
         this.getBanner()
         this.getGoodsList()
+        //每次进入自动计算用户金额
+        this.check()
 
         window.onscroll = function() {
             //变量scrollTop是滚动条滚动时，距离顶部的距离

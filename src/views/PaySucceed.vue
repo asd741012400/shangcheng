@@ -171,20 +171,21 @@ export default {
         },
         //获取支付成功后回调
         async getPay() {
-            let res = await this.$getRequest('/order/PaySuccess', { id: this.order_id })
+            let data = this.$localstore.session.get('PaySucceed')
             if (this.order_type == 2) {
-                this.give_goods = res.data.data.goods_count
-                this.give_cards = res.data.data.card_count
+                this.give_goods = data.goods_count
+                this.give_cards = data.card_count
                 if (!this.$validatenull(this.give_goods) || !this.$validatenull(this.give_cards)) {
                     this.PlusPop = true
                 }
             }
             if (this.order_type == 3) {
-                this.cd_id = res.data.data.cd_id
-                this.cg_id = res.data.data.cg_id
+                this.cd_id = data.cd_id
+                this.cg_id = data.cg_id
                 this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
                 wxapi.wxRegister(this.wxRegCallback)
             }
+            this.$localstore.remove('PaySucceed')
         },
         //获取订单
         async getOrder() {

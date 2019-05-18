@@ -60,18 +60,27 @@ export default {
 
         //获取所有分类
         async getAllCate() {
-            const id = this.$route.query.id;
-            let res = await this.$getRequest('home/GetAllCate')
-            let resData = res.data.data
-            this.AllCate = [{
-                c_id: 0,
-                c_name: "全部"
-            }]
-            this.AllCate = this.AllCate.concat(resData);
+            //导航列表
+            let NavList = this.$localstore.session.get('NavList')
+            let AllCate = this.$localstore.session.get('AllCate')
+            if (NavList && AllCate) {
+                this.AllCate = AllCate
+            } else {
+                const id = this.$route.query.id;
+                let res = await this.$getRequest('home/GetAllCate')
+                let resData = res.data.data
+                this.AllCate = [{
+                    c_id: 0,
+                    c_name: "全部"
+                }]
+                this.AllCate = this.AllCate.concat(resData);
+                this.$localstore.session('AllCate', this.AllCate)
+            }
         },
 
         //获取分类下的商品
         async getGoodsList(index) {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             this.goodsList = []
             if (index) {
                 var id = this.AllCate[index].c_id
@@ -84,14 +93,17 @@ export default {
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
             }
+            this.$Indicator.close();
         },
 
         //获取更多商品
         async getGoodsListMore(cid) {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('home/GetGoodsListByCid', { cid: cid, page: this.page })
             let data = res.data.data.list
             this.goodsList = this.goodsList.concat(data);
             this.currSize = res.data.data.list.length
+            this.$Indicator.close();
         },
 
 
@@ -306,7 +318,7 @@ export default {
 
                     p {
                         flex: 1;
-                        width:3rem;
+                        width: 3rem;
                         color: #515C6F;
                         padding-left: .28rem;
                     }

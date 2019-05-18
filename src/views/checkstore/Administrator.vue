@@ -36,14 +36,14 @@ export default {
         //获取门店信息
         async getStore() {
             let WxAuth = this.$localstore.get('business_user')
-            let business_id = this.$localstore.get('business_id') || WxAuth.business_id
+            let business_id = this.business_id || WxAuth.business_id
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: business_id })
             this.store = res.data.data
             this.thumb_img = this.store.thumb_img || this.store.business_img[0]
         },
         //检测是否注册过
         async checkAuth() {
-            let business_id = this.$localstore.get('business_id') || this.business_id
+            let business_id = this.business_id
             let WxAuth = this.$localstore.get('business_user')
             if (!WxAuth && !business_id) {
                 this.$router.push({ name: 'error403' })
@@ -63,11 +63,10 @@ export default {
 
         //注册
         async register() {
-            let business_id = this.$localstore.get('business_id')
             let wx = this.$localstore.get('wx')
             let User = this.$localstore.get('wx_user')
             let data = {
-                business_id: this.business_id || business_id,
+                business_id: this.business_id,
                 open_id: wx.openid,
                 union_id: wx.unionid,
                 nickname: wx.nickname,
@@ -93,11 +92,7 @@ export default {
     created() {
         document.title = "核销端"
         document.body.style.background = "#f0f0f0";
-        let business_id = this.$route.query.business_id
-        if (business_id) {
-            this.business_id = business_id
-            this.$localstore.set('business_id', business_id)
-        }
+        this.business_id = this.$route.query.business_id
         this.checkAuth()
         this.getStore()
     },
@@ -107,10 +102,9 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        let business_id = this.$route.query.business_id
-        if (business_id) {
-            this.business_id = business_id
-            this.$localstore.set('business_id', business_id)
+        this.business_id = this.$route.query.business_id
+        if (this.business_id) {
+            this.$localstore.set('business_id', this.business_id)
         }
     },
 
@@ -121,7 +115,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+
+    },
 
     // 销毁完成状态
     destroyed() {}

@@ -13,13 +13,14 @@
                     <!-- <sub>{{card.age}}岁</sub> -->
                 </div>
                 <span>{{card.tel_phone}}</span>
-                <!-- <a>申请修改</a> -->
+                <a v-if="!status" href="javascript:;" @click="apply">申请修改</a>
+                <a v-else-if="status == 1" href="javascript:;">待审核</a>
             </div>
             <b><img src="../assets/PersonalCenter_headerBg3.png" alt="" srcset=""></b>
         </div>
         <div class="code">
             <div class="code_img">
-                <i id="qrcode"><!-- <img src="../assets/code.png" alt=""> --></i>
+                <i><img id="qrcode" src="" alt=""></i>
                 <p>消费时请出示二维码进行核销</p>
             </div>
             <div class="code_text">
@@ -30,17 +31,26 @@
     </div>
 </template>
 <script>
-import QRCode from 'qrcodejs2'
+import QRCode from 'qrcode'
+
 export default {
     name: 'UseCard',
     data() {
         return {
-            card: {}
+            card: {},
+            status: 0,
         }
     },
     components: {},
     methods: {
-
+        //申请修改资料
+        async apply() {
+            let res = await this.$postRequest('/card/UpdateCard', { cd_id: this.card.cdid })
+            this.$message(res.data.msg);
+            if (res.data.code == 1) {
+                this.status = 1
+            }
+        }
     },
 
     // 创建前状态
@@ -53,6 +63,7 @@ export default {
         document.body.style.background = "#F6F6F6";
         let card = this.$localstore.get('usecard')
         this.card = card
+        this.status = card.update_status
         if (!card) {
             this.$router.push({ name: "Index" })
         }
@@ -64,14 +75,25 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        let qrcode = new QRCode('qrcode', {
-            width: 60,
-            height: 60, // 高度  
-            text: this.card.cancle_code, // 二维码内容  
-            // render: 'canvas' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-            // background: '#f0f',  
-            // foreground: '#ff0'  
-        })
+
+        var opts = {
+            width: 300,
+            height: 300,
+            errorCorrectionLevel: 'H',
+            type: 'image/png',
+            margin: 0
+        }
+        QRCode.toDataURL(this.card.cancle_code, opts)
+            .then(url => {
+                let img = new Image()
+                img.src = url
+                img.onload = () => {
+                    document.getElementById('qrcode').setAttribute("src", url)
+                }
+            })
+            .catch(err => {
+                console.error(err)
+            })
     },
 
     // 更新前状态
@@ -139,6 +161,8 @@ export default {
             justify-content: center;
             align-items: center;
             height: 100%;
+            position: relative;
+            z-index: 999;
 
             img {
                 height: 100%;
@@ -181,7 +205,7 @@ export default {
 
             a {
                 font-size: .24rem;
-                color: #515C6F;
+                color: #FFEEBE;
             }
         }
 

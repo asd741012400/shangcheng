@@ -1,6 +1,6 @@
 import axios from 'axios'
 import localStore from 'store2'
-import {IMG_URL,API_URL} from '../config/index.js'
+import { IMG_URL, API_URL } from '../config/index.js'
 
 //默认配置地址
 axios.defaults.baseURL = API_URL
@@ -8,14 +8,12 @@ axios.defaults.baseURL = API_URL
 
 //axios:请求拦截器
 axios.interceptors.request.use(function(config) {
-    
     return config;
 });
 
 
 // http 响应response 拦截器
 axios.interceptors.response.use(response => {
-
     return response;
 }, error => {
 
@@ -85,14 +83,14 @@ export const postRequest = (url, params) => {
         url: url,
         data: params,
         transformRequest: [function(data) {
-          let ret = '';
-          for (let it in data) {
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
-          }
-          return ret;
+            let ret = '';
+            for (let it in data) {
+                ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&';
+            }
+            return ret;
         }],
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded',
         }
     });
 };

@@ -33,7 +33,7 @@
         <div class="search">
             <p>
                 <i><img src="../assets/icon_shop.png" alt=""></i>
-                <b style="font-size:0.32rem;">可领取福利</b>
+                <b style="font-size:0.26rem;">可领取福利</b>
             </p>
             <div>
                 <i><img src="../assets/icon_search2.png" alt=""></i>
@@ -473,9 +473,9 @@ export default {
             }
 
             b {
-                font-size: .32rem;
+                font-size: .26rem;
                 color: #515C6F;
-                padding-left: .12rem;
+                padding-left: .06rem;
             }
         }
 
@@ -610,15 +610,16 @@ export default {
                         }
 
                         p {
-                            font-size: .3rem;
+                            font-size: .24rem;
                             color: #999999;
                         }
 
                         em {
                             font-style: normal;
-                            display: block;
-                            width: 1.54rem;
+                            display: inline-block;
+                            // width: 1.54rem;
                             height: .34rem;
+                            padding:0.03rem 0.08rem;
                             line-height: .34rem;
                             border: 1px solid #FFB389;
                             color: #FFB389;

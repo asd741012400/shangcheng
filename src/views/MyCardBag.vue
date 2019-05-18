@@ -94,7 +94,7 @@
                     <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input  v-model="getCode">
+                        <input v-model="getCode">
                         <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getCard">提 交</a>
@@ -109,7 +109,7 @@
                     <div class="detail" v-html="desc">
                     </div>
                     <div class="agreement">
-                        <input class="song"  v-model="value" placeholder="请输入转赠密码" />
+                        <input class="song" v-model="value" placeholder="请输入转赠密码" />
                     </div>
                     <div class="btn">
                         <a @click="confirmPopHide">取 消</a>
@@ -186,7 +186,7 @@ export default {
         activeCard(index) {
             let card = this.cardList[index]
             this.$localstore.set('usecard', card)
-            this.$router.push({ name: 'CardActivate', query: { id: card.cgid } })
+            this.$router.push({ name: 'CardActivate', query: { id: card.cgid, 'status': card.update_status } })
         },
         //转赠
         confirmPopShow(index) {
@@ -218,7 +218,7 @@ export default {
                 this.$message('兑换码不能为空！')
                 return false
             }
-           if (this.getCode.substr(0,1) != 'C') {
+            if (this.getCode.substr(0, 1) != 'C') {
                 this.$message('兑换码不正确！')
                 return false
             }
@@ -263,6 +263,7 @@ export default {
         },
         //获取卡包
         async getCardList(index) {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             this.cardList = []
             let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
             if (res.data.data.list) {
@@ -270,14 +271,16 @@ export default {
                 this.currSize = res.data.data.list.length
                 this.pageSize = res.data.data.count
             }
-
+            this.$Indicator.close();
         },
         //获取更多卡包
         async getCardListMore() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
             let data = res.data.data.list
             this.cardList = this.cardList.concat(data);
             this.currSize = res.data.data.list.length
+            this.$Indicator.close();
         },
         // 用于微信JS-SDK回调
         wxRegCallback() {
@@ -418,7 +421,7 @@ export default {
         position: relative;
 
         .sn {
-            position: absolute;                         
+            position: absolute;
             left: .28rem;
             top: .18rem;
             color: #fff;
@@ -428,7 +431,7 @@ export default {
             overflow: hidden;
             display: block;
             height: 2.4rem;
-              
+
             img {
                 display: block;
                 width: 100%;

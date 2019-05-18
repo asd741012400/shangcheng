@@ -58,14 +58,25 @@ export default {
         },
         //获取PlUS
         async getPlus() {
-            let id = this.$route.query.id
-            let res = await this.$getRequest('/home/GetPlus')
-            this.plus = res.data.data
+            let plus = this.$localstore.session.get('plus')
+            if (plus) {
+                this.plus = plus
+            } else {
+                let res = await this.$getRequest('/home/GetPlus')
+                this.plus = res.data.data
+                this.$localstore.session('plus', this.plus)
+            }
         },
         //获取所有权益
         async getVipList() {
-            let res = await this.$getRequest('/plus/PlusEquityList')
-            this.vip = res.data.data
+            let vip = this.$localstore.session.get('vip')
+            if (vip) {
+                this.vip = vip
+            } else {
+                let res = await this.$getRequest('/plus/PlusEquityList')
+                this.vip = res.data.data
+                this.$localstore.session('vip', this.vip)
+            }
         },
         //支付
         async payOrder() {
@@ -82,14 +93,20 @@ export default {
                     that.$localstore.session.set('has_share', '')
                     // 支付成功后的操作
                     options.success = async function() {
-                        that.$router.replace({
-                            name: 'PaySucceed',
-                            query: {
-                                id: that.order.order_id,
-                                goods_id: that.order.goods_id,
-                                type: that.order.order_type,
-                            }
-                        })
+                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        if (res.data.code == 1) {
+                            that.$localstore.session('PaySucceed', res.data.data)
+                            that.$router.replace({
+                                name: 'PaySucceed',
+                                query: {
+                                    id: that.order.order_id,
+                                    goods_id: that.order.goods_id,
+                                    type: that.order.order_type,
+                                }
+                            })
+                        } else {
+                            that.$message(res.data.msg)
+                        }                    
                     };
 
                     //  取消支付的操作

@@ -20,9 +20,11 @@ Vue.use(VueClipboard)
 //注册全局组件
 Vue.component('MyFooter', resolve => { require(['@/components/Footer'], resolve) }) //footer
 Vue.component('BindPhone', resolve => { require(['@/components/BindPhone'], resolve) }) //footer
+Vue.component('loadMore', resolve => { require(['@/components/loadMore'], resolve) }) //footer
 
 //ui库
 import Mint from 'mint-ui';
+import { Indicator } from 'mint-ui';
 import 'mint-ui/lib/style.css'
 Vue.use(Mint);
 
@@ -52,6 +54,7 @@ Vue.prototype.$validatenull = validatenull;
 Vue.prototype.$imgUrl = IMG_URL;
 Vue.prototype.$HOME_URL = HOME_URL;
 Vue.prototype.$message = Toast;
+Vue.prototype.$Indicator = Indicator;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;
 Vue.prototype.$http = axios;

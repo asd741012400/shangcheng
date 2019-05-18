@@ -47,7 +47,7 @@
                     <!-- title -->
                     <div class="title" style="top:0">
                         <img src="@/assets/vip2.png">
-        </div>
+                    </div>
                         <ul class="tab-list" id="product">
                             <li :class="ii == index ? 'active' : ''" v-for="(item,ii) in AllCate" :key="ii" @click="getGoodsList(ii)">
                                 <p>{{item.c_name}}</p>
@@ -170,18 +170,33 @@ export default {
         },
         //获取所有分类
         async getAllCate() {
-            let res = await this.$getRequest('/home/GetAllCate')
-            this.AllCate = [{
-                c_id: 0,
-                c_name: "全部"
-            }]
-            this.AllCate = this.AllCate.concat(res.data.data);
+            let NavList = this.$localstore.session.get('NavList')
+            let AllCate = this.$localstore.session.get('AllCate')
+            if (NavList && AllCate) {
+                this.AllCate = AllCate
+            } else {
+                const id = this.$route.query.id;
+                let res = await this.$getRequest('home/GetAllCate')
+                let resData = res.data.data
+                this.AllCate = [{
+                    c_id: 0,
+                    c_name: "全部"
+                }]
+                this.AllCate = this.AllCate.concat(resData);
+                this.$localstore.session('AllCate', this.AllCate)
+            }
             this.getGoodsList()
         },
         //获取所有权益
         async getVipList() {
-            let res = await this.$getRequest('/plus/PlusEquityList')
-            this.vip = res.data.data
+            let vip = this.$localstore.session.get('vip')
+            if (vip) {
+                this.vip = vip
+            } else {
+                let res = await this.$getRequest('/plus/PlusEquityList')
+                this.vip = res.data.data
+                this.$localstore.session('vip', this.vip)
+            }
             this.currVip = this.vip[0]
         },
         getVip(index) {
@@ -194,9 +209,9 @@ export default {
                 this.$refs.tab.scrollLeft = 0;
             }
         },
-
         //获取分类下的商品
         async getGoodsList(index) {
+            // this.$Indicator.open({ spinnerType: 'fading-circle' });
             if (index) {
                 this.index = index
             } else {
@@ -214,22 +229,29 @@ export default {
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
             }
+            // this.$Indicator.close();
         },
         //获取更多商品
         async getGoodsListMore(cid) {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/plus/PlusGoods', { cid: cid, page: this.page })
             let data = res.data.data.list
             this.goodsList = this.goodsList.concat(data);
             this.currSize = res.data.data.list.length
+            this.$Indicator.close();
         },
-
         //获取PlUS
         async getPlUS() {
-            let id = this.$route.query.id
-            let res = await this.$getRequest('/home/GetPlus')
-            this.plus = res.data.data
             if (this.user.status > 0) {
                 this.wxRegister()
+            }
+            let plus = this.$localstore.session.get('plus')
+            if (plus) {
+                this.plus = plus
+            } else {
+                let res = await this.$getRequest('/home/GetPlus')
+                this.plus = res.data.data
+                this.$localstore.session('plus', this.plus)
             }
         },
         // 用于微信JS-SDK回调
@@ -279,6 +301,15 @@ export default {
             })
 
         },
+        //每次进入自动计算用户金额
+        async check(index) {
+            let user = this.$localstore.get('wx_user')
+            let union_id = ''
+            if (user && user.union_id) {
+                union_id = user.union_id
+            }
+            let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
+        },
     },
 
     // 创建前状态
@@ -300,6 +331,8 @@ export default {
         this.getMoney()
         this.getVipList()
         this.getAllCate()
+        //每次进入自动计算用户金额
+        this.check()
 
 
         window.onscroll = () => {

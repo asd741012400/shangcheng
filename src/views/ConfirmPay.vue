@@ -103,6 +103,11 @@ export default {
         //支付
         async payOrder() {
             let that = this
+
+            if (!this.order) {
+                return false;
+            }
+
             // that.$router.replace({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { transaction_sn: this.order.transaction_sn })
@@ -121,12 +126,10 @@ export default {
                                 that.$localstore.session.set('has_share', '')
                             }
                         }
-                        if (that.order.order_type == 3) {
-                            await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                            that.$router.replace({
-                                name: 'MyCardBag'
-                            })
-                        } else {
+
+                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        if (res.data.code == 1) {
+                            that.$localstore.session('PaySucceed', res.data.data)
                             that.$router.replace({
                                 name: 'PaySucceed',
                                 query: {
@@ -135,7 +138,10 @@ export default {
                                     type: that.order.order_type,
                                 }
                             })
+                        } else {
+                            that.$message(res.data.msg)
                         }
+
                     };
 
                     //  取消支付的操作

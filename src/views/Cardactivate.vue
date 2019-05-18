@@ -118,6 +118,7 @@ export default {
             datePicker: false,
             agreementStuats: true,
             confirmPop: false,
+            status: '',
             dateTime: ""
         }
     },
@@ -214,10 +215,17 @@ export default {
                 tel_phone: this.tel_phone,
                 sex: this.sex,
                 tall: this.tall,
+                cd_id: this.$route.query.id,
                 head_img: this.imgUrl
             }
 
-            let res = await this.$postRequest('/card/ActivityCard', data)
+            let res = ''
+            if (status == 2) {
+                res = await this.$postRequest('/card/ActivityUpdateCard', data)
+            } else {
+                res = await this.$postRequest('/card/ActivityCard', data)
+            }
+
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 setTimeout(() => {
@@ -237,6 +245,7 @@ export default {
         document.body.style.background = '#fff'
         let card = this.$localstore.get('usecard')
         this.card = card
+        this.status = this.$route.query.update_status
         // if (!card) {
         //     this.$router.push({ name: "Index" })
         // }

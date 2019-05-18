@@ -389,11 +389,12 @@ export default {
                         that.GoodsDetailsState = 1
                     }
                 }
-
+                this.$Indicator.close();
             }, 1000)
         },
         //获取详情
         async getDetail() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let data = { id: this.$route.query.id, user_id: this.user.user_id }
             let res = await this.$getRequest('/home/GetGoodsDetail', data)
             if (res.data.code == 1) {
@@ -410,7 +411,6 @@ export default {
                     this.goods_price = this.GoodsDetail.goods_attr[0].attr_price
                     this.limit_num = this.GoodsDetail.goods_attr[0].attr_limit_num
                 }
-
 
                 this.isCollect = Boolean(res.data.data.is_coolect);
                 this.wxRegister()

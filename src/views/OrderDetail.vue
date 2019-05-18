@@ -50,17 +50,17 @@
                 </template>
             </template>
         </div>
-        <!--         <div class="header" v-else-if="order.order_status == 0">
+        <!--  <div class="header" v-else-if="order.order_status == 0">
             <p>待付款</p>
             <span>订单还有1天00:00:00取消</span>
         </div> -->
-        <!--         <div class="header" v-else-if="order.order_status == 1">
+        <!--  <div class="header" v-else-if="order.order_status == 1">
             <template v-if="goods_info.limit_type == 2">
                 <p>付款成功</p>
                 <span>下单时间2019-02-02</span>
             </template>
         </div> -->
-        <!--         <div class="header" v-else-if="order.order_status == 4">
+        <!--  <div class="header" v-else-if="order.order_status == 4">
             <p>退款申请中</p>
             <span>您的退款正在申请</span>
         </div> -->
@@ -101,7 +101,8 @@
                   </a>
                     <time v-if="item.cancle_status == 1">核销时间：{{toDate(item.cancle_time)}}</time>
                 </p>
-                <i @click="previewImg(index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code"><!-- <img src="../assets/code.png" alt=""> --></i>
+                <!-- <i @click="previewImg(index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code"><img src="../assets/code.png" alt=""></i> -->
+                <i><img @click="previewImg('qrcode'+index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code" src="" alt=""></i>
             </div>
             <div class="timer_top" v-for="(item,index) in goods_cancle" v-show="index >= 3 && showMore">
                 <p>
@@ -112,7 +113,7 @@
                   </a>
                     <time v-if="item.cancle_status == 1">核销时间：{{toDate(item.cancle_time)}}</time>
                 </p>
-                <i @click="previewImg(index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code"><!-- <img src="../assets/code.png" alt=""> --></i>
+                <i><img @click="previewImg('qrcode'+index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code" src="" alt=""></i>
             </div>
             <div class="timer_top more" v-if="goods_cancle.length > 2" @click="handlwMore">
                 <van-icon v-if="!showMore" name="arrow-down" />
@@ -125,7 +126,7 @@
             <!-- <p v-if="order.play_time">游玩时间：{{order.play_time}}</p> -->
             <p v-if="order.tel_phone">监护人电话：{{order.tel_phone}}</p>
         </div>
-        <!--         <div class="group_purchase" v-if="groupPurchaseState">
+        <!-- <div class="group_purchase" v-if="groupPurchaseState">
             <div class="imgs">
                 <span>团长</span>
                 <p>
@@ -161,7 +162,8 @@
     </div>
 </template>
 <script>
-import QRCode from 'qrcodejs2'
+// import QRCode from 'qrcodejs2'
+import QRCode from 'qrcode'
 
 export default {
     name: 'OrderDetail',
@@ -187,10 +189,10 @@ export default {
             this.showMore = !this.showMore
         },
         //预览核销码
-        previewImg(index) {
-            let arr = this.$refs.qrcodes
+        previewImg(obj) {
+            let url = document.getElementById(obj).getAttribute("src")
             this.images = []
-            this.images.push(arr[index].children[1].src)
+            this.images.push(url)
             this.show = true
         },
         //支付
@@ -239,27 +241,38 @@ export default {
         },
         //获取订单详情
         async getOrderDetail() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/order/getOrder', { id: this.id })
             this.order = res.data.data
             setTimeout(() => {
                 this.$nextTick(() => {
                     let arr = this.$refs.qrcodes
                     arr && arr.map(item => {
-                        let qrcode = new QRCode(item.id, {
+
+                        var opts = {
                             width: 300,
-                            height: 300, // 高度  
-                            text: item.dataset.code, // 二维码内容  
-                            render: 'table' // 设置渲染方式（有两种方式 table和canvas，默认是canvas）  
-                            // background: '#f0f',  
-                            // foreground: '#ff0'  
-                        })
+                            height: 300,    
+                            errorCorrectionLevel: 'H',
+                            type: 'image/png',
+                            margin: 0
+                        }
+                        QRCode.toDataURL(item.dataset.code, opts)
+                            .then(url => {
+                                let img = new Image()
+                                img.src = url
+                                img.onload = () => {
+                                    document.getElementById(item.id).setAttribute("src", url)
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err)
+                            })
+
                     })
                 })
             }, 200)
-
+            this.$Indicator.close();
         }
-
-
     },
 
     // 创建前状态

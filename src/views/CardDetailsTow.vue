@@ -470,7 +470,7 @@ export default {
                         height: 1.3rem;
 
                         p {
-                            font-size: .3rem;
+                            font-size: .24rem;
                             color: #999999;
                         }
 
@@ -485,9 +485,10 @@ export default {
 
                         em {
                             font-style: normal;
-                            display: block;
-                            width: 1.54rem;
+                            display: inline-block;
+                            // width: 1.54rem;
                             height: .34rem;
+                            padding: 0.03rem 0.08rem;
                             line-height: .34rem;
                             border: 1px solid #FFB389;
                             color: #FFB389;

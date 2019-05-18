@@ -313,11 +313,12 @@ export default {
                         that.cardDetailsState = 1
                     }
                 }
-
+                this.$Indicator.close();
             }, 1000)
         },
         //获取卡片详情
         async getDetail() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let data = { id: this.$route.query.id }
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
