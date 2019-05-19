@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-import wxapi from '@/lib/wx.js'
+// import wxapi from '@/lib/wx.js'
 
 export default {
     name: 'GiveCard',

@@ -63,6 +63,7 @@
                     <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                 </li>
             </ul>
+            <loadMore ref="loadMore"></loadMore>
         </div>
         <div class="click_share" v-show="userInfo.user_id == storeInfo.user_id">
             <div @click="shareShowFn">
@@ -129,33 +130,29 @@ export default {
             this.money = res.data.data
         },
         async getInfo() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
+            if (this.$refs.loadMore) {
+                this.$refs.loadMore.hideTip()
+            }
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
             this.storeInfo = res.data.data.user_info
             this.list = res.data.data.goods_list
             this.currSize = res.data.data.goods_list.length
             this.pageSize = res.data.data.count
             this.wxRegister()
+            this.$Indicator.close();
         },
         async getInfoMore() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
             this.storeInfo = res.data.data.user_info
             this.list = this.list.concat(res.data.data.goods_list);
             this.currSize = res.data.data.goods_list.length
             this.pageSize = res.data.data.count
+            this.$Indicator.close();
         },
         // 用于微信JS-SDK回调
         async wxRegister() {
-            //获取微信jssdk
-            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
-            let config = res.data.data
-            wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: config.appId, // 必填，公众号的唯一标识
-                timestamp: config.timestamp, // 必填，生成签名的时间戳
-                nonceStr: config.nonceStr, // 必填，生成签名的随机串
-                signature: config.signature, // 必填，签名
-                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
-            })
             wx.ready(() => {
 
                 //微信分享到朋友圈
@@ -228,6 +225,9 @@ export default {
                 if (this.currSize >= this.pageSize) {
                     this.page++;
                     this.getInfoMore()
+                    this.$refs.loadMore.hideTip()
+                } else {
+                    this.$refs.loadMore.showTip()
                 }
             }
         }
@@ -248,7 +248,10 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        this.$refs.loadMore.hideTip()
+          window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -425,7 +428,7 @@ export default {
                         }
 
                         div {
-                            width: 2.48rem;
+                            // width: 2.48rem;
                             background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                             border-radius: 0px 20px 20px 0px;
                             position: absolute;
@@ -433,8 +436,9 @@ export default {
                             display: flex;
                             align-items: center;
                             height: .62rem;
-                            justify-content: center;
+                            // justify-content: center;
                             color: #fff;
+                            padding: 0 0.3rem 0 0.28rem;
 
                             p {
                                 font-size: .28rem;

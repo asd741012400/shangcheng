@@ -84,6 +84,7 @@
                     <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                 </li>
             </ul>
+            <loadMore ref="loadMore"></loadMore>
         </div>
         <MyFooter></MyFooter>
     </div>
@@ -103,8 +104,8 @@ export default {
             NavList: [],
             pages: 1,
             GoodsList: [],
-            goodsListSum: 0,
-            goodsListLength: 0,
+            currSize: 0,
+            pageSize: 10,
             show: false,
         }
     },
@@ -139,22 +140,22 @@ export default {
         //获取商品列表
         async getGoodsList() {
             let GoodsList = this.$localstore.session.get('GoodsList')
-            let goodsListLength = this.$localstore.session.get('goodsListLength')
-            let goodsListSum = this.$localstore.session.get('goodsListSum')
+            let currSize = this.$localstore.session.get('currSize')
+            let pageSize = this.$localstore.session.get('pageSize')
 
-            if (GoodsList && goodsListLength && goodsListSum) {
+            if (GoodsList && currSize && pageSize) {
                 this.GoodsList = GoodsList
-                this.goodsListLength = goodsListLength
-                this.goodsListSum = goodsListSum
+                this.currSize = currSize
+                this.pageSize = pageSize
             } else {
                 let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
                 const resData = res.data.data
                 this.GoodsList = resData.list
-                this.goodsListLength = resData.list.length;
-                this.goodsListSum = resData.count;
+                this.currSize = resData.list.length;
+                this.pageSize = resData.count;
                 this.$localstore.session('GoodsList', resData.list)
-                this.$localstore.session('goodsListLength', resData.list.length)
-                this.$localstore.session('goodsListSum', resData.count)
+                this.$localstore.session('currSize', resData.list.length)
+                this.$localstore.session('pageSize', resData.count)
             }
 
 
@@ -165,9 +166,14 @@ export default {
             let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             const resData = res.data.data
             this.GoodsList = this.GoodsList.concat(resData.list);
-            this.goodsListLength = resData.list.length;
-            this.goodsListSum = resData.count;
+            this.currSize = resData.list.length;
+            this.pageSize = resData.count;
             this.$Indicator.close();
+            if (this.currSize >= this.pageSize) {
+                this.$refs.loadMore.hideTip()
+            } else {
+                this.$refs.loadMore.showTip()
+            }
         },
         cardlistSkip(id) {
             const that = this;
@@ -184,10 +190,10 @@ export default {
             let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             if (res.data.code == 1) {
                 const resData = res.data.data
-                this.goodsListLength = resData.list.length;
-                if (this.goodsListLength > 0) {
+                this.currSize = resData.list.length;
+                if (this.currSize > 0) {
                     this.GoodsList = resData.list
-                    this.goodsListSum = resData.count;
+                    this.pageSize = resData.count;
                     document.getElementById("goods").scrollIntoView();
                 } else {
                     this.$notify('未找到相关商品，请重新输入！');
@@ -203,6 +209,26 @@ export default {
             }
             let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
         },
+        //清除缓存
+        clearCahe() {
+            let num = 0
+            let timer = setInterval(() => {
+                let plus = this.$localstore.session.get('plus')
+                let banner = this.$localstore.session.get('banner')
+                let NavList = this.$localstore.session.get('NavList')
+                let Cardlist = this.$localstore.session.get('Cardlist')
+                let GoodsList = this.$localstore.session.get('GoodsList')
+                if (!this.$validatenull(banner) || !this.$validatenull(NavList) || !this.$validatenull(Cardlist) || !this.$validatenull(GoodsList) || !this.$validatenull(plus)) {
+                    this.$localstore.session.remove('banner')
+                    this.$localstore.session.remove('NavList')
+                    this.$localstore.session.remove('Cardlist')
+                    this.$localstore.session.remove('GoodsList')
+                    this.$localstore.session.remove('plus')
+                } else {
+                    clearInterval(timer)
+                }
+            }, 1000 * 60 * 2)
+        }
 
     },
 
@@ -258,9 +284,10 @@ export default {
 
 
         this.getBanner()
+        this.clearCahe()
         this.getGoodsList()
         //每次进入自动计算用户金额
-        this.check()
+        // this.check()
 
         window.onscroll = function() {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
@@ -271,7 +298,7 @@ export default {
             var scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
             //滚动条到底部的条件
             if (scrollTop + windowHeight == scrollHeight) {
-                if (that.goodsListLength >= that.goodsListSum) {
+                if (that.currSize >= that.pageSize) {
                     that.pages++;
                     that.GoodsListPush()
                 }
@@ -309,7 +336,10 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        this.$refs.loadMore.hideTip()
+        window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -542,7 +572,7 @@ export default {
 
     .activity_list {
         padding-top: .6rem;
-        padding-bottom: 1.8rem;
+        padding-bottom: 2.1rem;
 
         h3 {
             display: flex;
@@ -698,7 +728,7 @@ export default {
                         }
 
                         div {
-                            width: 2.48rem;
+                            // width: 2.48rem;
                             background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                             border-radius: 0px 20px 20px 0px;
                             position: absolute;
@@ -706,8 +736,9 @@ export default {
                             display: flex;
                             align-items: center;
                             height: .62rem;
-                            justify-content: center;
+                            // justify-content: center;
                             color: #fff;
+                            padding: 0 0.3rem 0 0.28rem;
 
                             p {
                                 font-size: .28rem;

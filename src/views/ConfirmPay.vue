@@ -61,7 +61,7 @@
 </template>
 <script>
 import wx from 'weixin-js-sdk' //微信sdk依赖
-import wxapi from '@/lib/wx.js'
+// import wxapi from '@/lib/wx.js'
 
 export default {
     name: 'ConfirmPay',
@@ -169,7 +169,7 @@ export default {
     // 创建完毕状态 
     created() {
         this.getOrder()
-        wxapi.wxRegister() //微信config注册
+        // wxapi.wxRegister() //微信config注册
         document.body.style.background = "#F6F6F6";
     },
 

@@ -59,7 +59,7 @@
         </div>
         <div class="project_list">
             <ul>
-                <li v-for="(item,index) in list" :key="index">
+                <li v-for="(item,index) in list" :key="index" :class="!$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime) ? 'li_color' : ''">
                     <div class="image">
                         <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
                         <p>库存<span>{{item.store}}</span></p>
@@ -71,14 +71,17 @@
                         </h3>
                         <div class="text_div">
                             <div class="text-clip">{{item.project_dsc}}</div>
-                            <p style="margin: 5px 0;">有效期：{{item.limit_stime}}至{{item.limit_etime}}</p>
+                            <p style="margin: 5px 0;" v-if="$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime)">{{$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime)}}</p>
+                            <p style="margin: 5px 0;" v-else>已过期</p>
                             <em v-if="item.is_deduct == 2">消耗1次权益</em>
                             <em v-else>免费</em>
                         </div>
                         <div class="price_div" style="margin-top: 15px;">
                             <b>价值￥{{item.project_price}}</b>
-                            <a v-if="item.is_deduct == 2" @click="getPlus(item)">领 取</a>
-                            <a v-else @click="getPlus(item)">免费领取</a>
+                            <template v-if="$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime)">
+                                <a v-if="item.is_deduct == 2" @click="getPlus(item)">领 取</a>
+                                <a v-else @click="getPlus(item)">免费领取</a>
+                            </template>
                         </div>
                     </div>
                 </li>
@@ -89,7 +92,7 @@
     </div>
 </template>
 <script>
-import QRCode from 'qrcodejs2'
+import QRCode from 'qrcode'
 import { Actionsheet } from 'vant';
 
 export default {
@@ -297,7 +300,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+          window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -532,6 +537,43 @@ export default {
         padding-bottom: 1rem;
 
         ul {
+
+            li.li_color {
+                .image {
+                    img {
+                        -webkit-filter: grayscale(1);
+                        /* Webkit */
+                        filter: gray;
+                        /* IE6-9 */
+                        filter: grayscale(1);
+                        /* W3C */
+                    }
+
+                }
+
+                .text-clip {
+                    color: #999999;
+                }
+
+                .text {
+                    h3 {
+                        span {
+                            color: #999999;
+                        }
+
+                        b {
+                            color: #999999;
+                        }
+                    }
+
+                    .price_div {
+                        b {
+                            color: #999999;
+                        }
+                    }
+                }
+            }
+
             li {
                 display: flex;
                 padding: .44rem .45rem .8rem;
@@ -619,7 +661,7 @@ export default {
                             display: inline-block;
                             // width: 1.54rem;
                             height: .34rem;
-                            padding:0.03rem 0.08rem;
+                            padding: 0.03rem 0.08rem;
                             line-height: .34rem;
                             border: 1px solid #FFB389;
                             color: #FFB389;

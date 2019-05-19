@@ -57,7 +57,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        
+    },
 
     // 销毁完成状态
     destroyed() {}

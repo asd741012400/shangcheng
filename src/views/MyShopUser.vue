@@ -12,12 +12,12 @@
             </div>
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
         </header>
-        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="invitation">
+        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="BuyPlus">
         </div>
-        <div class="share">
+        <div class="share" @click="BuyPlus">
             <p>
                 <span>立即开通</span>
-                <a>￥{{plus.price}}</a>
+                <a>￥{{plus.sale_price}}</a>
             </p>
         </div>
         <div class="activity_list">
@@ -51,7 +51,9 @@
                     <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
                 </li>
             </ul>
+            <loadMore ref="loadMore"></loadMore>
         </div>
+        <BindPhone :type="type" ref="bindPhone"></BindPhone>
     </div>
 </template>
 <script>
@@ -61,6 +63,7 @@ export default {
         return {
             user: {},
             plus: {},
+            type: 2,
             user_id: '',
             url: '',
             plus: '',
@@ -98,32 +101,55 @@ export default {
                 }
             });
         },
+        //购买Plus
+        async BuyPlus() {
+            let WxAuth = this.$localstore.get('wx_user')
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: WxAuth.union_id })
+            if (res.data.code == 1 && res.data.data.tel_phone) {
+                this.userInfo = res.data.data
+                this.$localstore.set('wx_user', this.userInfo)
+                this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+            } else {
+                this.$refs.bindPhone.showBind(true)
+            }
+        },
         async getUser() {
             let res = await this.$getRequest('/wechat/GetUser', { uid: this.share_id })
             this.user = res.data.data
         },
         //获取PlUS
         async getPlUS() {
-            let id = this.$route.query.id
-            let res = await this.$getRequest('/home/GetPlus')
-            this.plus = res.data.data
+            if (this.user.status > 0) {
+                this.wxRegister()
+            }
+            let plus = this.$localstore.session.get('plus')
+            if (plus) {
+                this.plus = plus
+            } else {
+                let res = await this.$getRequest('/home/GetPlus')
+                this.plus = res.data.data
+                this.$localstore.session('plus', this.plus)
+            }
         },
         async getInfo() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
             this.storeInfo = res.data.data.user_info
             this.list = res.data.data.goods_list
             this.currSize = res.data.data.goods_list.length
             this.pageSize = res.data.data.count
+            this.$Indicator.close();
         },
 
         async getInfoMore() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
             this.storeInfo = res.data.data.user_info
             this.list = this.list.concat(res.data.data.goods_list);
             this.currSize = res.data.data.goods_list.length
             this.pageSize = res.data.data.count
+            this.$Indicator.close();
         },
-
     },
 
     // 创建前状态
@@ -152,6 +178,9 @@ export default {
                 if (this.currSize >= this.pageSize) {
                     this.page++;
                     this.getInfoMore()
+                    this.$refs.loadMore.hideTip()
+                } else {
+                    this.$refs.loadMore.showTip()
                 }
             }
         }
@@ -172,7 +201,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -336,12 +367,20 @@ export default {
                         border-radius: 5px;
                         position: relative;
 
+                        img {
+                            display: block;
+                            width: 100%;
+                            height: 3rem;
+                            object-fit: cover;
+                            border-radius: .12rem;
+                        }
+
                         span {
                             overflow: hidden;
                         }
 
                         div {
-                            width: 2.48rem;
+                            // width: 2.48rem;
                             background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                             border-radius: 0px 20px 20px 0px;
                             position: absolute;
@@ -349,8 +388,9 @@ export default {
                             display: flex;
                             align-items: center;
                             height: .62rem;
-                            justify-content: center;
+                            // justify-content: center;
                             color: #fff;
+                            padding: 0 0.3rem 0 0.28rem;
 
                             p {
                                 font-size: .28rem;

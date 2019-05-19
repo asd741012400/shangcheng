@@ -145,7 +145,7 @@
                             </span>
                         </div>
                     </li>
-                    <li class="more" v-if="storeList.length > 2" @click="handlwMore">
+                    <li class="more" v-if="!$validatenull(storeList) && storeList.length > 2" @click="handlwMore">
                         <van-icon v-if="!showMore" name="arrow-down" />
                         <van-icon v-else name="arrow-up" />
                     </li>
@@ -189,6 +189,9 @@
             <div class="shop_del" id="details">
                 <h3>商品详情</h3>
                 <div class="detail" v-html="GoodsDetail.goods_info">
+                </div>
+                <div v-if="GoodsDetail.goods_info" style="text-align: center;margin: 5px 0;background: #fff;">
+                    <p>没有更多了</p>
                 </div>
             </div>
         </div>
@@ -245,7 +248,7 @@
             <!-- </div> -->
         </footer>
         <Share :goods-id="GoodsDetail.goods_id" type="1" :money="GoodsDetail.dist_money" :shareurl="url" ref="myShare"></Share>
-        <BindPhone :show="show" :id="id" :type="type" :attr="attr_id" ref="bindPhone"></BindPhone>
+        <BindPhone :id="id" :type="type" :attr="attr_id" ref="bindPhone"></BindPhone>
     </div>
 </template>
 <script>
@@ -331,7 +334,7 @@ export default {
         async ConfirmAnOrderPage() {
             let WxAuth = this.$localstore.get('wx_user')
             if (!WxAuth.tel_phone) {
-                this.show = true
+                this.$refs.bindPhone.showBind(true)
                 return false
             }
 
@@ -349,7 +352,7 @@ export default {
             // }
 
             if (!this.attr_id) {
-                if (this.GoodsDetail.goods_attr.length > 0) {
+                if (!this.$validatenull(this.GoodsDetail.goods_attr) && this.GoodsDetail.goods_attr.length > 0) {
                     this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
                 }
             }
@@ -369,28 +372,33 @@ export default {
         timer() {
             let that = this
             setInterval(() => {
-                let start_time = this.$dayjs().isBefore(this.$dayjs(this.GoodsDetail.sale_stime).format('YYYY/MM/DD HH:mm:ss'));
-                if (start_time) {
-                    that.GoodsDetailsState = 5
-                }
-                let end_time = this.$dayjs().isAfter(this.$dayjs(this.GoodsDetail.sale_etime).format('YYYY/MM/DD HH:mm:ss'));
-                if (end_time) {
-                    that.GoodsDetailsState = 6
-                }
-
-                if (!start_time && !end_time) {
-                    if (that.GoodsDetail.store == 0) {
-                        that.GoodsDetailsState = 2
-                    } else if (that.GoodsDetail.is_online == 0) {
-                        that.GoodsDetailsState = 3
-                    } else if (that.GoodsDetail.is_vip == 1 && that.user.status == 0) {
-                        that.GoodsDetailsState = 4
-                    } else {
-                        that.GoodsDetailsState = 1
-                    }
-                }
+                this.calcStatus()
                 this.$Indicator.close();
             }, 1000)
+        },
+        //计算状态
+        calcStatus() {
+            let that = this
+            let start_time = this.$dayjs().isBefore(this.$dayjs(this.GoodsDetail.sale_stime).format('YYYY/MM/DD HH:mm:ss'));
+            if (start_time) {
+                that.GoodsDetailsState = 5
+            }
+            let end_time = this.$dayjs().isAfter(this.$dayjs(this.GoodsDetail.sale_etime).format('YYYY/MM/DD HH:mm:ss'));
+            if (end_time) {
+                that.GoodsDetailsState = 6
+            }
+
+            if (!start_time && !end_time) {
+                if (that.GoodsDetail.store == 0) {
+                    that.GoodsDetailsState = 2
+                } else if (that.GoodsDetail.is_online == 0) {
+                    that.GoodsDetailsState = 3
+                } else if (that.GoodsDetail.is_vip == 1 && that.user.status == 0) {
+                    that.GoodsDetailsState = 4
+                } else {
+                    that.GoodsDetailsState = 1
+                }
+            }
         },
         //获取详情
         async getDetail() {
@@ -399,13 +407,14 @@ export default {
             let res = await this.$getRequest('/home/GetGoodsDetail', data)
             if (res.data.code == 1) {
                 this.GoodsDetail = res.data.data;
+                this.calcStatus()
                 document.title = this.GoodsDetail.goods_name
                 this.cost_price = this.GoodsDetail.cost_price
                 this.goods_price = this.GoodsDetail.goods_price
                 this.mkt_price = this.GoodsDetail.mkt_price
                 this.limit_num = this.GoodsDetail.limit_num
 
-                if (this.GoodsDetail.goods_attr.length > 0) {
+                if (!this.$validatenull(this.GoodsDetail.goods_attr) && this.GoodsDetail.goods_attr.length > 0) {
                     this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
                     this.cost_price = this.GoodsDetail.goods_attr[0].attr_vip_price
                     this.goods_price = this.GoodsDetail.goods_attr[0].attr_price
@@ -430,24 +439,15 @@ export default {
 
         // 用于微信JS-SDK回调
         async wxRegister() {
-            //获取微信jssdk
-            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
-            let config = res.data.data
-            wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: config.appId, // 必填，公众号的唯一标识
-                timestamp: config.timestamp, // 必填，生成签名的时间戳
-                nonceStr: config.nonceStr, // 必填，生成签名的随机串
-                signature: config.signature, // 必填，签名
-                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
-            })
+
             wx.ready(() => {
+                let img = this.GoodsDetail.dist_poster || this.GoodsDetail.def_pic[0]
 
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.GoodsDetail.goods_name, // 分享标题, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.$imgUrl + this.GoodsDetail.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.$imgUrl + img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -457,11 +457,13 @@ export default {
 
                     }
                 });
+
+                var text = this.GoodsDetail.goods_info.replace(/<[^<>]+>/g, "");
                 wx.onMenuShareAppMessage({
                     title: this.GoodsDetail.goods_name, // 分享标题, 请自行替换
-                    desc: this.GoodsDetail.goods_info, // 分享描述, 请自行替换
+                    desc: text, // 分享描述, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.$imgUrl + this.GoodsDetail.dist_poster, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.$imgUrl + img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -661,14 +663,16 @@ export default {
 
                 .vip_price {
                     padding-left: 0.56rem;
-                    width: 2.48rem;
+                    // width: 2.48rem;
                     background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                     border-radius: 0px 20px 20px 0px;
                     display: flex;
                     align-items: center;
+                    // padding-left:0.15rem;
                     height: .62rem;
-                    // justify-content: center;
+                    justify-content: center;
                     color: #fff;
+                    padding-right: 0.2rem;
 
                     em {
                         font-size: .28rem;
@@ -921,7 +925,7 @@ export default {
                             color: #999999;
 
                             a {
-                                width: 1.2rem;
+                                // width: 1.2rem;
                                 color: #999999;
                                 display: inline-block;
                             }

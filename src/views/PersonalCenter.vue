@@ -23,11 +23,9 @@
                     <p>￥{{userInfo.mymoney ||　'0'}}</p>
                     <a>已提现</a>
                 </li> -->
-                <li>
-                    <router-link :to="{name:'WithdrawDeposit'}">
-                        <p>￥{{userInfo.getmoney ||　'0'}}</p>
-                        <a>可提现</a>
-                    </router-link>
+                <li @click="goWithdrawDeposit">
+                    <p>￥{{userInfo.getmoney ||　'0'}}</p>
+                    <a>可提现</a>
                 </li>
                 <li>
                     <p>￥{{userInfo.freeze_money ||　'0'}}</p>
@@ -149,32 +147,38 @@
         </div>
         <!-- 兑换成功后提示 -->
         <div class="pop_bg" v-if="popShow1">
-            <div class="pop" v-if="type == 'P'">
+            <div class="pop pop1" v-if="type == 'P'">
                 <p>恭喜你成为PLUS会员</p>
-                <em>你可以邀请好友获得奖励</em>
-                <time>到期时间：{{give}}</time>
-                <span @click="shareShowFn">邀请好友</span>
-                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                <time class="time1">到期时间：{{give}}</time>
+                <p>我们为你准备了一份惊喜好礼</p>
+                <div class="img">
+                    <img src="../assets/gift.png">
+                </div>
+                    <div class="footer-box">
+                        <span class="btn1" @click="sharePlus">邀请好友赚100</span>
+                        <span class="btn2" @click="goMyCardBag">收下并前往</span>
+                    </div>
+                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                </div>
+                <div class="pop" v-if="type == 'G'">
+                    <p>恭喜成功兑换{{give.goods_name}}</p>
+                    <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
+                    <time v-else>到期时间：{{give.limit_etime}}</time>
+                    <span @click="goOrder">前去查看</span>
+                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                </div>
+                <div class="pop" v-if="type == 'C'">
+                    <p>恭喜你获得卡券1张</p>
+                    <em>前往激活即可使用</em>
+                    <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
+                    <time v-else>到期时间：{{give.limit_etime}}</time>
+                    <span @click="activeCard">立即激活</span>
+                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                </div>
             </div>
-            <div class="pop" v-if="type == 'G'">
-                <p>恭喜成功兑换{{give.goods_name}}件商品</p>
-                <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
-                <time v-else>到期时间：{{give.limit_etime}}</time>
-                <span @click="goOrder">前去查看</span>
-                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
-            <div class="pop" v-if="type == 'C'">
-                <p>恭喜你获得卡券1张</p>
-                <em>前往激活即可使用</em>
-                <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
-                <time v-else>到期时间：{{give.limit_etime}}</time>
-                <span @click="goCardDetail">立即激活</span>
-                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
-            </div>
+            <Share ref="myShare"></Share>
+            <BindPhone :show="show"></BindPhone>
         </div>
-        <Share ref="myShare"></Share>
-        <BindPhone :show="show"></BindPhone>
-    </div>
 </template>
 <script>
 import Share from '../components/Share'
@@ -222,13 +226,17 @@ export default {
             let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')
             return day2
         },
-        shareShowFn() {
+        goMyCardBag() {
+            this.$router.replace({ name: 'MyCardBag' })
+        },
+        sharePlus() {
             this.$router.push({ name: 'VipPlus' })
         },
         goOrder() {
             this.$router.push({ name: 'Order' })
         },
-        goCardDetail() {
+        //激活卡片
+        activeCard() {
             this.$router.push({ name: 'CardActivate', query: { id: this.cg_id } })
         },
         popShowFn() {
@@ -243,6 +251,10 @@ export default {
         popHideFn1() {
             this.popShow1 = false;
             location.reload()
+        },
+        //提现
+        goWithdrawDeposit() {
+            this.$router.push({ name: 'WithdrawDeposit' })
         },
         //续费Plus
         async BuyPlus() {
@@ -314,7 +326,7 @@ export default {
 
         this.getMobile()
         //每次进入自动计算用户金额
-        this.check()
+        // this.check()
     },
 
     // 挂载前状态
@@ -763,6 +775,10 @@ body {
         }
     }
 
+    .time1 {
+        margin: 0.2rem 0;
+    }
+
     .pop_bg {
         position: fixed;
         width: 100%;
@@ -774,6 +790,10 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+
+        .footer-box {
+            display: flex;
+        }
 
         .pop {
             background: #fff;
@@ -828,6 +848,29 @@ body {
                 margin: .26rem auto 0;
             }
 
+        }
+
+        .pop1 {
+            width: 6rem;
+
+            .img {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 3.2rem;
+                    height: 3.2rem
+                }
+            }
+
+            .btn1 {
+                background: #fff;
+                color: red;
+                border: 1px solid #FF6666;
+                box-sizing: border-box;
+                margin-right: 0.1rem;
+            }
         }
     }
 

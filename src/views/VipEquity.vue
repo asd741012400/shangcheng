@@ -18,7 +18,7 @@
                 <!-- title -->
                 <div class="title">
                     <img src="@/assets/vip1.png">
-        </div>
+              </div>
                     <!-- tab -->
                     <div class="tab-box">
                         <ul class="tab" ref="tab">
@@ -81,6 +81,7 @@
                                     </router-link>
                                 </li>
                             </ul>
+                            <loadMore ref="loadMore"></loadMore>
                         </div>
                         <div class="buyVip">
                             <template v-if="share_id &&　!user.user_id">
@@ -95,7 +96,7 @@
                                 </router-link>
                             </template>
                         </div>
-                        <BindPhone :show="show" :type="type" ref="bindPhone"></BindPhone>
+                        <BindPhone :type="type" ref="bindPhone"></BindPhone>
                         <MyFooter></MyFooter>
                     </div>
 </template>
@@ -149,7 +150,7 @@ export default {
                 this.$localstore.set('wx_user', this.userInfo)
                 this.$router.push({ name: 'VipOrder', query: { type: 2 } })
             } else {
-                this.show = true
+                this.$refs.bindPhone.showBind(true)
             }
         },
         //推广赚
@@ -211,7 +212,7 @@ export default {
         },
         //获取分类下的商品
         async getGoodsList(index) {
-            // this.$Indicator.open({ spinnerType: 'fading-circle' });
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             if (index) {
                 this.index = index
             } else {
@@ -226,10 +227,9 @@ export default {
             this.cid = id
             let res = await this.$getRequest('/plus/PlusGoods', { cid: id, page: this.page })
             this.goodsList = res.data.data.list
-            if (res.data.data.list) {
-                this.currSize = res.data.data.list.length
-            }
-            // this.$Indicator.close();
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
+            this.$Indicator.close();
         },
         //获取更多商品
         async getGoodsListMore(cid) {
@@ -238,6 +238,11 @@ export default {
             let data = res.data.data.list
             this.goodsList = this.goodsList.concat(data);
             this.currSize = res.data.data.list.length
+            if (this.currSize >= this.pageSize) {
+                this.$refs.loadMore.hideTip()
+            } else {
+                this.$refs.loadMore.showTip()
+            }
             this.$Indicator.close();
         },
         //获取PlUS
@@ -256,17 +261,6 @@ export default {
         },
         // 用于微信JS-SDK回调
         async wxRegister() {
-            //获取微信jssdk
-            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
-            let config = res.data.data
-            wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: config.appId, // 必填，公众号的唯一标识
-                timestamp: config.timestamp, // 必填，生成签名的时间戳
-                nonceStr: config.nonceStr, // 必填，生成签名的随机串
-                signature: config.signature, // 必填，签名
-                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
-            })
             wx.ready(() => {
                 let url = 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
                     '&type=2'
@@ -335,6 +329,14 @@ export default {
         this.check()
 
 
+    },
+
+    // 挂载前状态
+    beforeMount() {},
+
+    // 挂载结束状态
+    mounted() {
+
         window.onscroll = () => {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -350,14 +352,6 @@ export default {
                 }
             }
         }
-
-    },
-
-    // 挂载前状态
-    beforeMount() {},
-
-    // 挂载结束状态
-    mounted() {
 
         var _this = this
         this.mySwiper = new Swiper('.swiper-container', {
@@ -397,7 +391,10 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        this.$refs.loadMore.hideTip()
+        window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -634,6 +631,7 @@ export default {
 
 .activity_list {
     margin-top: 0.2rem;
+    padding-bottom: 0.6rem;
 
     ul {
         -webkit-overflow-scrolling: touch;
@@ -660,7 +658,7 @@ export default {
                 }
 
                 div {
-                    width: 2.48rem;
+                    // width: 2.48rem;
                     background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                     border-radius: 0px 20px 20px 0px;
                     position: absolute;
@@ -668,8 +666,9 @@ export default {
                     display: flex;
                     align-items: center;
                     height: .62rem;
-                    justify-content: center;
+                    // justify-content: center;
                     color: #fff;
+                    padding: 0 0.3rem 0 0.28rem;
 
                     p {
                         font-size: .28rem;

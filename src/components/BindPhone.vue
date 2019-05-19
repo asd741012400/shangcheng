@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-dialog v-model="show" title="手机号绑定" :before-close="beforeCloseModel">
+        <van-dialog v-model="status" show-cancel-button title="手机号绑定" @cancel="hideBind" :before-close="beforeClose" @confirm="submit">
             <van-cell-group>
                 <van-cell-group>
                     <van-field v-model="phone" label="手机号" type="tel" placeholder="请输入手机号" />
@@ -16,7 +16,7 @@
 export default {
     data() {
         return {
-            // show: '',
+            status: false,
             phone: '',
             // msg: '请求验证码',
             msg: '验证码',
@@ -25,9 +25,6 @@ export default {
         }
     },
     props: {
-        show: {
-            default: false
-        },
         id: {
             default: ''
         },
@@ -37,6 +34,9 @@ export default {
         attr: {
             default: ''
         },
+    },
+    computed: {
+
     },
     components: {},
     methods: {
@@ -60,19 +60,20 @@ export default {
                 }, 1000)
             }
         },
-        showBind() {
-            this.show = false;
+        showBind(val) {
+            this.status = val;
         },
         hideBind() {
-            this.show = false;
+            this.status = false;
         },
-        //关闭填写手机号
-        async beforeCloseModel(action, done) {
+        //提交
+        async submit() {
+            this.status = true
             let WxAuth = this.$localstore.get('wx_user')
             let res = await this.$postRequest('/user/saveMobile', { union_id: WxAuth.union_id, phone: this.phone, sms: this.sms })
             if (res.data.code == 1) {
                 this.$localstore.set('wx_user', res.data.data)
-                this.show = false
+                this.status = false
                 if (this.type == 2) {
                     this.$router.push({ name: 'VipOrder', query: { type: 2 } })
                 } else {
@@ -85,14 +86,15 @@ export default {
                         }
                     })
                 }
-
-                // setTimeout(() => {
-                //     window.location.reload()
-                // }, 1000)
-                done()
             } else {
                 this.$notify(res.data.msg);
+            }
+        },
+        async beforeClose(action, done) {
+            if (action == 'confirm') {
                 done(false)
+            } else {
+                done()
             }
         },
 
@@ -128,7 +130,7 @@ export default {
 </script>
 <style lang="scss">
 .van-field__control {
-    font-size: 0.24rem;
+    font-size: 0.32rem;
 }
 
 footer {

@@ -37,6 +37,7 @@
                     </router-link>
                 </li>
             </ul>
+            <loadMore ref="loadMore"></loadMore>
         </div>
     </div>
 </template>
@@ -80,6 +81,9 @@ export default {
 
         //获取分类下的商品
         async getGoodsList(index) {
+            if (this.$refs.loadMore) {
+                this.$refs.loadMore.hideTip()
+            }
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             this.goodsList = []
             if (index) {
@@ -90,9 +94,9 @@ export default {
             this.cid = id
             let res = await this.$getRequest('home/GetGoodsListByCid', { cid: id, page: this.page })
             this.goodsList = res.data.data.list
-            if (res.data.data.list) {
-                this.currSize = res.data.data.list.length
-            }
+            // if (res.data.data.list) {
+            this.currSize = res.data.data.list.length
+            // }
             this.$Indicator.close();
         },
 
@@ -104,11 +108,12 @@ export default {
             this.goodsList = this.goodsList.concat(data);
             this.currSize = res.data.data.list.length
             this.$Indicator.close();
+            if (this.currSize >= this.pageSize) {
+                this.$refs.loadMore.hideTip()
+            } else {
+                this.$refs.loadMore.showTip()
+            }
         },
-
-
-
-
     },
 
     // 创建前状态
@@ -169,7 +174,10 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        this.$refs.loadMore.hideTip()
+          window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -284,7 +292,7 @@ export default {
                     }
 
                     div {
-                        width: 2.48rem;
+                        // width: 2.48rem;
                         background: linear-gradient(269deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
                         border-radius: 0px 20px 20px 0px;
                         position: absolute;
@@ -292,8 +300,9 @@ export default {
                         display: flex;
                         align-items: center;
                         height: .62rem;
-                        justify-content: center;
+                        // justify-content: center;
                         color: #fff;
+                        padding: 0 0.3rem 0 0.28rem;
 
                         p {
                             font-size: .28rem;

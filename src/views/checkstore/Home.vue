@@ -53,7 +53,7 @@
 </template>
 <script>
 import wx from 'weixin-js-sdk'
-import wxapi from '@/lib/wx.js'
+// import wxapi from '@/lib/wx.js'
 
 export default {
     name: 'Home',
@@ -154,7 +154,7 @@ export default {
     // 挂载结束状态
     mounted() {
         // 用于微信JS-SDK回调    
-        wxapi.wxRegister()
+        // wxapi.wxRegister()
     },
 
     // 更新前状态

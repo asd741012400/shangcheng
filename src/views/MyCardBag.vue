@@ -7,7 +7,7 @@
         </header>
         <template v-for="(item,index) in cardList">
             <!-- 是否过期 days < 0 过期 -->
-            <template v-if="item.days < 0">
+            <template v-if="item.days <= 0">
                 <div class="expired card_commonality">
                     <div class="image">
                         <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
@@ -20,7 +20,8 @@
                     <div class="content">
                         <div class="text">
                             <p>{{item.card_name}}</p>
-                            <span>剩余{{item.days}}天</span>
+                            <span v-if="item.days > 0">剩余{{item.days}}天</span>
+                            <span v-else>已过期</span>
                         </div>
                     </div>
                 </div>
@@ -94,11 +95,22 @@
                     <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input v-model="getCode">
+                        <input v-model="code">
                         <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getCard">提 交</a>
                 </div>
+            </div>
+        </div>
+        <!-- 兑换成功后提示 -->
+        <div class="pop_bg" v-if="popShow1">
+            <div class="pop" v-if="type == 'C'">
+                <p>恭喜你获得卡券1张</p>
+                <em>前往激活即可使用</em>
+                <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
+                <time v-else>到期时间：{{give.limit_etime}}</time>
+                <span @click="goActiveCard">立即激活</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
         </div>
         <!-- 转赠须知 -->
@@ -129,34 +141,47 @@
             </div>
         </div>
         <!-- 分享 -->
+        <loadMore ref="loadMore"></loadMore>
     </div>
 </template>
 <script>
-import wxapi from '@/lib/wx.js'
+// import wxapi from '@/lib/wx.js'
+import wx from 'weixin-js-sdk'
 
 export default {
     name: 'MyCardBag',
     data() {
         return {
+            timer: '',
             user_id: '',
             cdid: '',
+            code: '',
+            type: '',
             value: '',
             getCode: '',
             share_url: '',
             cardList: [],
             page: 1,
+            cg_id: '',
             desc: '',
             user: {},
             card: {},
+            give: {},
             currSize: 0,
             pageSize: 10,
             confirmPop: false,
+            popShow1: false,
             maskingShow: false,
             cardAddPop: false
         }
     },
     components: {},
     methods: {
+        //有效期转换
+        toTime(t2) {
+            let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')
+            return day2
+        },
         //删除卡片
         async delCard(item) {
             this.$dialog.alert({
@@ -174,6 +199,9 @@ export default {
 
             });
         },
+        popHideFn1() {
+            this.popShow1 = false;
+        },
         maskingHideFn() {
             this.maskingShow = false;
         },
@@ -181,6 +209,10 @@ export default {
             let card = this.cardList[index]
             this.$localstore.set('usecard', card)
             this.$router.push({ name: 'UseCard' })
+        },
+        //激活
+        goActiveCard() {
+            this.$router.push({ name: 'CardActivate', query: { id: this.cg_id, 'status': 0 } })
         },
         //激活
         activeCard(index) {
@@ -194,7 +226,7 @@ export default {
             this.cdid = this.cardList[index].cdid
             this.card = this.cardList[index]
             this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.user_id + '&title=' + this.card.card_name
-            wxapi.wxRegister(this.wxRegCallback)
+            this.wxRegCallback()
             this.confirmPop = true
         },
         confirmPopHide() {
@@ -214,11 +246,11 @@ export default {
         },
         //领取卡片
         async getCard() {
-            if (this.getCode == '') {
+            if (this.code == '') {
                 this.$message('兑换码不能为空！')
                 return false
             }
-            if (this.getCode.substr(0, 1) != 'C') {
+            if (this.code.substr(0, 1) != 'C') {
                 this.$message('兑换码不正确！')
                 return false
             }
@@ -226,8 +258,14 @@ export default {
             let res = await this.$postRequest('/user/GetThings', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-                this.code == ''
+                this.code = ''
+                this.type = res.data.data.type
+                this.give = res.data.data.data
+                if (this.type == 'C') {
+                    this.cg_id = res.data.data.cg_id
+                }
                 this.cardAddPop = false;
+                this.popShow1 = true;
                 this.getCardList()
             }
         },
@@ -261,17 +299,52 @@ export default {
             }
 
         },
+        // 计算过期时间
+        calcTime() {
+            this.cardList.map(item => {
+                if (item.limit_type == 1) {
+                    let time = this.$calcTime(item.limit_type, item.ac_time, item.limit_days, item.limit_stime, item.limit_etime)
+                    if (!time) {
+                        return item.days = 0
+                    }
+                } else {
+                    let time = this.$calcTime2(item.limit_type, item.limit_days, item.limit_stime, item.limit_etime)
+                    if (!time) {
+                        return item.days = 0
+                    }
+                }
+            })
+            this.timer = setInterval(() => {
+                this.cardList.map(item => {
+                    if (item.limit_type == 1) {
+                        let time = this.$calcTime(item.limit_type, item.ac_time, item.limit_days, item.limit_stime, item.limit_etime)
+                        if (!time) {
+                            return item.days = 0
+                        }
+                    } else {
+                        let time = this.$calcTime2(item.limit_type, item.limit_days, item.limit_stime, item.limit_etime)
+                        if (!time) {
+                            return item.days = 0
+                        }
+                    }
+                })
+            }, 1000)
+        },
         //获取卡包
         async getCardList(index) {
+            if (this.$refs.loadMore) {
+                this.$refs.loadMore.hideTip()
+            }
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             this.cardList = []
             let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
-            if (res.data.data.list) {
-                this.cardList = res.data.data.list
-                this.currSize = res.data.data.list.length
-                this.pageSize = res.data.data.count
-            }
+            // if (res.data.data.list) {
+            this.cardList = res.data.data.list
+            this.currSize = res.data.data.list.length
+            this.pageSize = res.data.data.count
+            // }
             this.$Indicator.close();
+            this.calcTime()
         },
         //获取更多卡包
         async getCardListMore() {
@@ -281,44 +354,47 @@ export default {
             this.cardList = this.cardList.concat(data);
             this.currSize = res.data.data.list.length
             this.$Indicator.close();
+            this.calcTime()
+
+            if (this.currSize >= this.pageSize) {
+                this.$refs.loadMore.hideTip()
+            } else {
+                this.$refs.loadMore.showTip()
+            }
         },
         // 用于微信JS-SDK回调
         wxRegCallback() {
-            this.wxShareTimeline()
-            this.wxShareAppMessage()
-        },
-        // 微信自定义分享到朋友圈
-        wxShareTimeline() {
-            let option = {
-                title: this.card.card_name, // 分享标题, 请自行替换
-                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareTimeline(option)
-        },
-        // 微信自定义分享给朋友
-        wxShareAppMessage() {
-            let option = {
-                title: this.card.card_name, // 分享标题, 请自行替换
-                desc: '你的好友' + this.user.username + '赠送了你一张' + this.card.card_name + '卡片,快来领取吧！', // 分享描述, 请自行替换
-                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    // alert('分享成功')
-                },
-                error: () => {
-                    // alert('已取消分享')
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareAppMessage(option)
+            wx.ready(() => {
+                //微信分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: this.card.card_name, // 分享标题, 请自行替换
+                    link: this.share_url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: this.card.card_name, // 分享标题, 请自行替换
+                    desc: '你的好友' + this.user.username + '赠送了你一张' + this.card.card_name + '卡片,快来领取吧！', // 分享描述, 请自行替换
+                    link: this.share_url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.card.thumb_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                })
+            })
         },
     },
 
@@ -365,7 +441,11 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        clearInterval(this.timer)
+        this.$refs.loadMore.hideTip()
+          window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -834,8 +914,78 @@ export default {
         }
     }
 
+    .pop_bg {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha: 0.3);
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .pop {
+            background: #fff;
+            border-radius: 10px;
+            width: 5rem;
+            position: relative;
+            margin-top: 5px;
+            padding: .4rem .3rem .54rem;
+
+            i {
+                position: absolute;
+                width: .48rem;
+                height: .48rem;
+                overflow: hidden;
+                display: block;
+                right: .24rem;
+                top: .24rem;
+            }
+
+            p {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+            }
+
+            em {
+                font-size: .4rem;
+                color: #FF6666;
+                text-align: center;
+                display: block;
+                font-style: normal;
+            }
+
+            time {
+                font-size: .32rem;
+                color: #515C6F;
+                text-align: center;
+                display: block;
+            }
+
+            span {
+                display: block;
+                width: 3.7rem;
+                background: #FF6666;
+                border-radius: 50px;
+                text-align: center;
+                line-height: .8rem;
+                height: .8rem;
+                color: #fff;
+                font-weight: bold;
+                font-size: .32rem;
+                margin: .26rem auto 0;
+            }
+
+        }
+    }
+
 
 }
+
+
 
 .masking {
     position: fixed;

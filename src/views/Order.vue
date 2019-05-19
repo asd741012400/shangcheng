@@ -15,6 +15,8 @@
         <ul class="goods_list">
             <li v-for="(item,index) in orderList">
                 <div class="top">
+                    <!-- 判断是否过期 -->
+                    <!-- <template v-if="$calcTime(item.card_info.limit_type,item.pay_time,item.card_info.limit_days,item.card_info.limit_stime,item.card_info.limit_etime)"> -->
                     <template v-if="item.order_status == 200">
                         <span>已撤销</span>
                     </template>
@@ -50,6 +52,7 @@
                             </template>
                         </template>
                     </template>
+                    <!-- </template> -->
                 </div>
                 <div class="mid">
                     <div class="img-box" @click="getOrder(item.order_id,item.order_type)">
@@ -59,20 +62,24 @@
                             <div class="clip title">{{item.goods_title}}</div>
                             <template v-if="item.order_status == 1">
                                 <template v-if="item.order_type == 1">
-                                    <template v-if="item.goods_info.limit_type == 2">
+                                    <div class="limit-time" v-if="!$calcTime(item.goods_info.limit_type,item.pay_time,item.goods_info.limit_days,item.goods_info.limit_stime,item.goods_info.limit_etime)">已过期</div>
+                                    <div class="limit-time" v-else>{{$calcTime(item.goods_info.limit_type,item.pay_time,item.goods_info.limit_days,item.goods_info.limit_stime,item.goods_info.limit_etime)}}</div>
+                                    <!--                 <template v-if="item.goods_info.limit_type == 2">
                                         <div class="limit-time">{{toTime(item.pay_time,item.goods_info.limit_days)}}</div>
                                     </template>
                                     <template v-else>
                                         <div class="limit-time">有效期 {{item.goods_info.limit_stime}} 至 {{item.goods_info.limit_etime}}</div>
-                                    </template>
+                                    </template> -->
                                 </template>
                                 <template v-if="item.order_type == 3">
-                                    <template v-if="item.card_info.limit_type == 2">
+                                    <div class="limit-time" v-if="!$calcTime(item.card_info.limit_type,item.pay_time,item.card_info.limit_days,item.card_info.limit_stime,item.card_info.limit_etime)">已过期</div>
+                                    <div class="limit-time" v-else>{{$calcTime(item.card_info.limit_type,item.pay_time,item.card_info.limit_days,item.card_info.limit_stime,item.card_info.limit_etime)}}</div>
+                                    <!--                  <template v-if="item.card_info.limit_type == 2">
                                         <div class="limit-time">{{toTime(item.pay_time,item.card_info.limit_days)}}</div>
                                     </template>
                                     <template v-else>
                                         <div class="limit-time">有效期 {{item.card_info.limit_stime}} 至 {{item.card_info.limit_etime}}</div>
-                                    </template>
+                                    </template> -->
                                 </template>
                             </template>
                         </div>
@@ -86,6 +93,8 @@
                             <span style="font-size:0.3rem;font-weight:700">合计 ￥{{item.total_amount}}</span>
                         </div>
                         <div class="footer">
+                            <!-- 判断是否过期 -->
+                            <!-- <template v-if="$calcTime(item.card_info.limit_type,item.pay_time,item.card_info.limit_days,item.card_info.limit_stime,item.card_info.limit_etime)"> -->
                             <!-- 全部 -->
                             <!-- order_status`'订单状态 0:未支付;1:订单完成;2:订单超时 3分单退款 4:已退款 5已使用 6 退款中 200:用户取消订单 201:后台取消订单;', -->
                             <template v-if="active == 0">
@@ -140,10 +149,12 @@
                             <!-- <van-button type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button> -->
                             <!--                     <van-button type="info" size="small" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             <van-button type="info" size="small">激活使用</van-button> -->
+                            <!-- </template> -->
                         </div>
                     </div>
             </li>
         </ul>
+        <loadMore ref="loadMore"></loadMore>
     </div>
 </template>
 <script>
@@ -243,6 +254,9 @@ export default {
         },
         //获取订单
         async getOrderList(index) {
+            if (this.$refs.loadMore) {
+                this.$refs.loadMore.hideTip()
+            }
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             this.page = 1
             this.orderList = []
@@ -251,8 +265,8 @@ export default {
             if (res.data.data.list) {
                 this.currSize = res.data.data.list.length
             }
-            this.pageSize = res.data.data.count
             this.$Indicator.close();
+            this.pageSize = res.data.data.count
         },
         //获取更多订单
         async getOrderListMore(cid) {
@@ -264,6 +278,11 @@ export default {
                 this.currSize = res.data.data.list.length
             }
             this.$Indicator.close();
+            if (this.currSize >= this.pageSize) {
+                this.$refs.loadMore.hideTip()
+            } else {
+                this.$refs.loadMore.showTip()
+            }
         },
 
         //评价订单
@@ -323,7 +342,10 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        this.$refs.loadMore.hideTip()
+          window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}

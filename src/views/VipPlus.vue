@@ -7,7 +7,7 @@
                 <div class="swiper-container">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide" :class="ready ? 'no-touch' : ''" v-for="(item,index) in poster">
-                            <img class="poster-img" :id="'image'+index" ref="image" src="">
+                            <img class="poster-img" style="width:100%;" :id="'image'+index" ref="image" src="">
                             <div ref="imageDom" :id="'imageDom'+index" class="imageDom">
                                 <div class="head_portrait"><img :src="wechat_img" alt=""></div>
                                     <div class="code">
@@ -74,6 +74,8 @@ export default {
                 this.plus = res.data.data
                 this.$localstore.session('plus', this.plus)
             }
+            this.wxRegister()
+
             this.poster = this.plus.poster.split(',')
             this.poster_img = this.$imgUrl + this.plus.poster
 
@@ -136,8 +138,8 @@ export default {
                     img.src = dataURL
                     img.onload = () => {
                         mulitImg.push(dataURL)
-                        document.querySelector(`#imageDom${index}`).style.display = 'none'
-                        document.querySelector(`#image${index}`).style.display = 'block'
+                        // document.querySelector(`#imageDom${index}`).style.display = 'none'
+                        // document.querySelector(`#image${index}`).style.display = 'block'
                     }
                 });
             })
@@ -145,6 +147,14 @@ export default {
             let timer = setInterval(() => {
                 let imgTotal = mulitImg.length;
                 if (imgTotal == arr.length) {
+
+                    //隐藏原来的图片 显示海报图
+                    arr && arr.map((item, index) => {
+                        document.querySelector(`#imageDom${index}`).style.display = 'none'
+                        document.querySelector(`#image${index}`).style.display = 'block'
+                    })
+
+
                     //全部加载完成
                     this.instance.close();
                     this.ready = false
@@ -156,39 +166,28 @@ export default {
 
         },
         // 用于微信JS-SDK回调
-        async wxRegister() {
-            //获取微信jssdk
-            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
-            let config = res.data.data
-            wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: config.appId, // 必填，公众号的唯一标识
-                timestamp: config.timestamp, // 必填，生成签名的时间戳
-                nonceStr: config.nonceStr, // 必填，生成签名的随机串
-                signature: config.signature, // 必填，签名
-                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
-            })
+        wxRegister() {
             wx.ready(() => {
-                let url = encodeURIComponent(this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
-                    '&type=2')
+                let url = this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id + '&type=2'
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.plus.title, // 分享标题, 请自行替换
                     link: url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.poster_img, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
                     },
                     cancel() {
                         // 用户取消分享后执行的回调函数
+
                     }
                 });
                 wx.onMenuShareAppMessage({
                     title: this.plus.title, // 分享标题, 请自行替换
                     desc: this.plus.desc, // 分享描述, 请自行替换
                     link: url, // 分享链接，根据自身项目决定是否需要split
-                    imgUrl: this.poster_img, // 分享图标, 请自行替换，需要绝对路径
+                    imgUrl: this.$imgUrl + this.plus.thumb, // 分享图标, 请自行替换，需要绝对路径
                     success() {
                         // 用户成功分享后执行的回调函数
 
@@ -197,12 +196,7 @@ export default {
                         // 用户取消分享后执行的回调函数
 
                     }
-                });
-                //批量隐藏菜单
-                // wx.hideOptionMenu();
-                // wx.showOptionMenu({ 
-                //     menuList: ['menuItem:share:appMessage','menuItem:share:timeline', 'menuItem:share:qq', 'menuItem:share:QZone', 'menuItem:openWithSafari','menuItem:share:facebook','menuItem:share:weiboApp']
-                // });
+                })
 
             })
 
@@ -239,8 +233,6 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        this.wxRegister()
-
         var _this = this
         this.mySwiper = new Swiper('.swiper-container', {
             direction: 'horizontal',
@@ -529,7 +521,7 @@ export default {
 <style lang="scss">
 .poster-img {
     width: 100%;
-    height: 8rem;
+    // height: 8rem;
     display: none;
 }
 
@@ -560,16 +552,17 @@ export default {
 
     /* overflow: hidden; */
     // margin: 0 .18rem;
-    height: 8rem;
+    // height: 8rem;
     border-radius: 5px;
 
     .img {
         width: 100%;
-        height: 8rem;
+        // height: 8rem;
         // overflow: hidden;
 
         img {
-            height: 100%;
+            width: 100%;
+            // height: 100%;
         }
     }
 
@@ -578,7 +571,7 @@ export default {
         height: 1.6rem;
         overflow: hidden;
         position: absolute;
-        bottom: .5rem;
+        bottom: .6rem;
         left: 50%;
         margin-left: -0.8rem;
 

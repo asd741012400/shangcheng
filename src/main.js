@@ -7,8 +7,8 @@ import dayjs from 'dayjs'
 import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
-import {ENV,IMG_URL,API_URL,HOME_URL} from './config/index.js'
-import {validatenull} from './config/util.js'
+import { ENV, IMG_URL, API_URL, HOME_URL } from './config/index.js'
+import { validatenull, calcTime,calcTime2 } from './config/util.js'
 
 
 //剪切板
@@ -36,18 +36,18 @@ import { Dialog } from 'vant';
 Vue.use(Dialog);
 
 
-import {CountDown} from 'vue-ydui/dist/lib.rem/countdown';
+import { CountDown } from 'vue-ydui/dist/lib.rem/countdown';
 Vue.component(CountDown.name, CountDown);
 
 
 //移动端调试
 import Vconsole from 'vconsole';
-if (!ENV) {	
-	const vConsole = new Vconsole();
-	Vue.use(vConsole)
+if (!ENV) {
+    const vConsole = new Vconsole();
+    Vue.use(vConsole)
 }
 
-import { Toast } from 'mint-ui'; 
+import { Toast } from 'mint-ui';
 
 Vue.config.productionTip = false
 Vue.prototype.$validatenull = validatenull;
@@ -57,6 +57,8 @@ Vue.prototype.$message = Toast;
 Vue.prototype.$Indicator = Indicator;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;
+Vue.prototype.$calcTime = calcTime;
+Vue.prototype.$calcTime2 = calcTime2;
 Vue.prototype.$http = axios;
 Vue.prototype.$common = common;
 
@@ -64,8 +66,8 @@ Vue.prototype.$getRequest = getRequest;
 Vue.prototype.$postRequest = postRequest;
 
 new Vue({
-  router,
-  store,
-  axios,
-  render: h => h(App)
+    router,
+    store,
+    axios,
+    render: h => h(App)
 }).$mount('#app')

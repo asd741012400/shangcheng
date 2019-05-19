@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import { ENV, IMG_URL } from './config/index.js'
+import localstore from 'store2' //本地存储
+import { getRequest, postRequest } from './lib/axios'
+import wxapi from '@/lib/wx.js'
 
 //前台商城
 import Index from './views/Index.vue'
@@ -77,8 +80,7 @@ import StoreList from './views/checkstore/StoreList.vue' //提现记录
 // import Appointment from './views/checkstore/Appointment.vue' //预约记录
 
 
-import localstore from 'store2' //本地存储
-import { getRequest, postRequest } from './lib/axios'
+
 
 
 Vue.use(Router)
@@ -472,14 +474,53 @@ router.beforeEach((to, from, next) => {
     //用户关系绑定
     bindUser(union_id)
     //每次进入自动计算用户金额
-    // AutoCount(union_id)
+    AutoCount(union_id)
+    //海报图预加载
+    getPlUS()
 
     next()
 })
 
 
+router.afterEach((to, from) => {
+    wxapi.wxRegister() //微信config注册
+})
 
 export default router
+
+//海报图预加载
+function getPlUS() {
+    let plus = localstore.session.get('plus')
+    if (!plus) {
+        //获取PlUS
+        getRequest('/home/GetPlus').then(res => {
+            if (res.data.code == 1) {
+                localstore.session('plus', res.data.data)
+                //海报图预加载
+                let imgArr = res.data.data.poster.split(',')
+                imgArr.map((item) => {
+                    if (!item) {
+                        return false
+                    }
+                    let img = new Image()
+                    img.src = IMG_URL + item
+                    img.onload = () => {}
+                })
+            }
+        })
+    } else {
+        let imgArr = plus.poster.split(',')
+        imgArr.map((item) => {
+            if (!item) {
+                return false
+            }
+            let img = new Image()
+            img.src = IMG_URL + item
+            img.onload = () => {}
+        })
+    }
+}
+
 
 //用户关系绑定
 function bindUser(union_id) {

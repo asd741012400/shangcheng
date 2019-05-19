@@ -50,7 +50,8 @@
                                 <div class="text-clip">
                                     {{vv.project_dsc}}
                                 </div>
-                                <p style="margin-top: 5px;">有效期：{{vv.limit_stime}}至{{vv.limit_etime}}</p>
+                                <p style="margin-top: 5px;" v-if="$calcTime(vv.limit_type,vv.add_time,vv.limit_days,vv.limit_stime,vv.limit_etime)">{{$calcTime(vv.limit_type,vv.add_time,vv.limit_days,vv.limit_stime,vv.limit_etime)}}</p>
+                                <p style="margin-top: 5px;" v-else>已过期</p>
                             </div>
                             <div class="price_div">
                                 <b>价值￥{{vv.project_price}}</b>
@@ -156,7 +157,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+          window.onscroll = null
+    },
 
     // 销毁完成状态
     destroyed() {}

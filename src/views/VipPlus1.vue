@@ -18,7 +18,7 @@
 </template>
 <script>
 import wx from 'weixin-js-sdk'
-import QRCode from 'qrcodejs2'
+import QRCode from 'qrcode'
 import html2canvas from "html2canvas"
 
 export default {

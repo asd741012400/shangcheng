@@ -22,7 +22,7 @@
                         <p>￥{{info.history_money || '0.00'}}</p>
                         <a>历史收益</a>
                     </li>
-      <!--               <li>
+                    <!--               <li>
                         <p>￥{{info.mymoney ||　'0.00'}}</p>
                         <a>已提现</a>
                     </li> -->
@@ -118,7 +118,16 @@ export default {
             } else if (this.user.level == 3) {
                 this.$router.push({ name: 'MyTeamTow' })
             }
-        }
+        },
+        //每次进入自动计算用户金额
+        async check(index) {
+            let user = this.$localstore.get('wx_user')
+            let union_id = ''
+            if (user && user.union_id) {
+                union_id = user.union_id
+            }
+            let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
+        },
     },
 
     // 创建前状态
@@ -132,6 +141,7 @@ export default {
         if (!user) {
             this.$router.push({ name: 'Login' })
         }
+        // this.check()
         this.getInfo()
     },
 

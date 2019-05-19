@@ -1,25 +1,24 @@
 <template>
-    <div class="load-more">
-    
+    <div v-if="show" class="load-more">
+        <p>没有更多了</p>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-    
+            show: false
         }
     },
-    props: {
-        show: {
-            default: false
-        },
-
-    },
+    props: {},
     components: {},
     methods: {
-
-
+        showTip() {
+            this.show = true
+        },
+        hideTip() {
+            this.show = false
+        }
     },
 
     // 创建前状态
@@ -51,8 +50,8 @@ export default {
 }
 </script>
 <style lang="scss">
-
-.load-more{
+.load-more {
+    margin: 5px 0;
     text-align: center;
 }
 </style>

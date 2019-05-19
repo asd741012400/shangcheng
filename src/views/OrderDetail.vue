@@ -6,46 +6,54 @@
             <div class="add"></div>
         </header>
         <div class="header">
-            <template v-if="order.order_status == 200">
-                <p>已撤销</p>
+            <template v-if="!orderStatus">
+                <p>已过期</p>
             </template>
-            <template v-else-if="order.order_status == 0">
-                <p>待付款</p>
-            </template>
-            <template v-else-if="order.order_status == 2">
-                <p>订单超时</p>
-            </template>
-            <template v-else-if="order.order_status == 3">
-                <p>分单退款</p>
-            </template>
-            <template v-else-if="order.order_status == 4">
-                <p>已退款</p>
-            </template>
-            <template v-else-if="order.order_status == 5">
-                <p>已使用</p>
-            </template>
-            <template v-else-if="order.order_status == 6">
-                <p>退款申请中</p>
-            </template>
-            <template v-else-if="order.order_status == 1">
-                <template v-if="order.is_comment == 0">
-                    <p>待评价</p>
+            <template v-else>
+                <template v-if="order.order_status == 200">
+                    <p>已撤销</p>
                 </template>
-                <template v-else-if="order.is_use == 0">
-                    <p>待使用</p>
+                <template v-else-if="order.order_status == 0">
+                    <p>待付款</p>
                 </template>
-                <template v-else>
-                    <p v-if="order.order_type == 1">已使用</p>
-                    <p v-else-if="order.order_type == 3">已激活</p>
+                <template v-else-if="order.order_status == 2">
+                    <p>订单超时</p>
                 </template>
-            </template>
-            <template v-if="order.order_status == 1">
-                <template v-if="type ==1 || type == 3">
+                <template v-else-if="order.order_status == 3">
+                    <p>分单退款</p>
+                </template>
+                <template v-else-if="order.order_status == 4">
+                    <p>已退款</p>
+                </template>
+                <template v-else-if="order.order_status == 5">
+                    <p>已使用</p>
+                </template>
+                <template v-else-if="order.order_status == 6">
+                    <p>退款申请中</p>
+                </template>
+                <template v-else-if="order.order_status == 1">
+                    <template v-if="order.is_comment == 0">
+                        <p>待评价</p>
+                    </template>
+                    <template v-else-if="order.is_use == 0">
+                        <p>待使用</p>
+                    </template>
+                    <template v-else>
+                        <p v-if="order.order_type == 1">已使用</p>
+                        <p v-else-if="order.order_type == 3">已激活</p>
+                    </template>
+                </template>
+                <template v-if="order.order_status == 1">
+                    <template v-if="type ==1 || type == 3">
+                        <!-- <div class="limit-time" v-if="!$calcTime(goods_info.limit_type,order.pay_time,goods_info.limit_days,goods_info.limit_stime,goods_info.limit_etime)">已过期</div> -->
+                        <div class="limit-time">{{$calcTime(goods_info.limit_type,order.pay_time,goods_info.limit_days,goods_info.limit_stime,goods_info.limit_etime,3)}}</div>
+                        <!-- 
                     <template v-if="goods_info.limit_type == 2">
                         {{toTime(order.pay_time,goods_info.limit_days)}} 到期
                     </template>
                     <template v-else>
                         <span>{{goods_info.limit_etime}}到期</span>
+                    </template> -->
                     </template>
                 </template>
             </template>
@@ -79,11 +87,13 @@
                             <i>x{{order.order_num}}</i>
                         </p>
                         <div class="btn">
-                            <template v-if="order.order_status == 0">
-                                <van-button type="primary" size="mini" @click.stop="payOrder(order.order_id)">去付款</van-button>
-                            </template>
-                            <template v-else-if="order.order_status == 1">
-                                <van-button v-if="order.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(order.order_id,order.order_type,order.goods_id)">去评价</van-button>
+                            <template v-if="orderStatus">
+                                <template v-if="order.order_status == 0">
+                                    <van-button type="primary" size="mini" @click.stop="payOrder(order.order_id)">去付款</van-button>
+                                </template>
+                                <template v-else-if="order.order_status == 1">
+                                    <van-button v-if="order.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(order.order_id,order.order_type,order.goods_id)">去评价</van-button>
+                                </template>
                             </template>
                         </div>
                     </div>
@@ -162,7 +172,6 @@
     </div>
 </template>
 <script>
-// import QRCode from 'qrcodejs2'
 import QRCode from 'qrcode'
 
 export default {
@@ -170,6 +179,7 @@ export default {
     data() {
         return {
             state: 1, //1待使用 2代付款 3付款成功 4退款
+            orderStatus: true, //订单状态
             groupPurchaseState: true, //团购
             showMore: false,
             id: '',
@@ -238,12 +248,10 @@ export default {
             let res = await this.$getRequest('/order/OrderDetail', { order_id: id })
             this.goods_info = res.data.data.goods_info
             this.goods_cancle = res.data.data.goods_cancle
-        },
-        //获取订单详情
-        async getOrderDetail() {
-            this.$Indicator.open({ spinnerType: 'fading-circle' });
-            let res = await this.$getRequest('/order/getOrder', { id: this.id })
-            this.order = res.data.data
+
+            //计算过期时间
+            this.orderStatus = this.$calcTime(this.goods_info.limit_type, this.order.pay_time, this.goods_info.limit_days, this.goods_info.limit_stime, this.goods_info.limit_etime)
+
             setTimeout(() => {
                 this.$nextTick(() => {
                     let arr = this.$refs.qrcodes
@@ -251,7 +259,7 @@ export default {
 
                         var opts = {
                             width: 300,
-                            height: 300,    
+                            height: 300,
                             errorCorrectionLevel: 'H',
                             type: 'image/png',
                             margin: 0
@@ -270,7 +278,15 @@ export default {
 
                     })
                 })
-            }, 200)
+            }, 50)
+        },
+
+        //获取订单详情
+        async getOrderDetail() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
+            let res = await this.$getRequest('/order/getOrder', { id: this.id })
+            this.getOrder()
+            this.order = res.data.data
             this.$Indicator.close();
         }
     },
@@ -283,7 +299,6 @@ export default {
         document.body.style.background = "#F6F6F6";
         this.id = this.$route.query.id
         this.type = this.$route.query.type
-        this.getOrder()
         this.getOrderDetail()
     },
 
@@ -354,7 +369,7 @@ export default {
 
     .header {
         height: 1.4rem;
-        padding: 0 1rem;
+        padding: 0 0.6rem;
         background: #FF6C5F;
         display: flex;
         align-items: center;

@@ -37,7 +37,7 @@
 </template>
 <script>
 import wx from 'weixin-js-sdk' //微信sdk依赖
-import wxapi from '@/lib/wx.js'
+// import wxapi from '@/lib/wx.js'
 
 export default {
     name: 'VipOrderBuy',
@@ -142,7 +142,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        wxapi.wxRegister() //微信config注册
+        // wxapi.wxRegister() //微信config注册
     },
 
     // 更新前状态

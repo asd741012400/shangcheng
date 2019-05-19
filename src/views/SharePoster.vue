@@ -102,17 +102,7 @@ export default {
         },
         // 用于微信JS-SDK回调
         async wxRegister() {
-            //获取微信jssdk
-            let res = await this.$getRequest('/wechat/GetWxJSSDK', { url: window.location.href })
-            let config = res.data.data
-            wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: config.appId, // 必填，公众号的唯一标识
-                timestamp: config.timestamp, // 必填，生成签名的时间戳
-                nonceStr: config.nonceStr, // 必填，生成签名的随机串
-                signature: config.signature, // 必填，签名
-                jsApiList: config.jsApiList // 必填，需要使用的JS接口列表
-            })
+
             wx.ready(() => {
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
@@ -128,9 +118,10 @@ export default {
 
                     }
                 });
+                var text = this.desc && this.desc.replace(/<[^<>]+>/g, "");
                 wx.onMenuShareAppMessage({
                     title: this.title, // 分享标题, 请自行替换
-                    desc: '', // 分享描述, 请自行替换
+                    desc: text, // 分享描述, 请自行替换
                     link: this.url, // 分享链接，根据自身项目决定是否需要split
                     imgUrl: this.$imgUrl + this.share_img, // 分享图标, 请自行替换，需要绝对路径
                     success() {
@@ -176,7 +167,7 @@ export default {
                 this.goods = res.data.data
                 this.price = res.data.data.goods_price
                 this.title = res.data.data.goods_name
-                this.desc = res.data.data.goods_info
+                this.desc = res.data.data.goods_info  || ''
                 this.share_img = res.data.data.dist_poster || res.data.data.def_pic[0]
                 // this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
                 this.poster_img = this.$imgUrl + this.share_img
@@ -184,8 +175,8 @@ export default {
                 let res = await this.$getRequest('/home/GetCardDetail', { id: this.goods_id })
                 this.goods = res.data.data
                 this.price = res.data.data.card_price
-                this.title = res.data.data.share_title
-                this.desc = res.data.data.share_desc
+                this.title = res.data.data.share_title || res.data.data.card_name
+                this.desc = res.data.data.share_desc || ''
                 this.share_img = res.data.data.share_img || res.data.data.def_pic[0]
                 // this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
                 this.poster_img = this.$imgUrl + this.share_img

@@ -32,7 +32,7 @@
             <div class="vip_succeed_text">恭喜你获得属于自己的专属海报邀请好友成为会员再赚￥100</div>
             <div class="btn">
                 <div class="continue" @click="goHome">继续逛逛</div>
-                <div class="employ" @click="shareShowFn">领取海报分享赚￥100</div>
+                <div class="employ" @click="sharePlus">领取海报分享赚￥100</div>
             </div>
         </div>
         <div class="card" v-else-if="order_type == 3">
@@ -48,7 +48,7 @@
             </div>
             <div class="btns">
                 <div class="continue" @click="goHome">继续逛逛</div>
-                <div class="turn" @click="confirmPopShow">转赠好友</div>
+                <!-- <div class="turn" @click="confirmPopShow">转赠好友</div> -->
                 <div class="activate" @click.stop="activeCard(index)">前去激活</div>
             </div>
         </div>
@@ -70,48 +70,65 @@
             </div>
         </div>
         <!-- 转赠须知 -->
-        <!-- 兑换券 -->
-        <div class="confirm_pop_bg" v-if="PlusPop">
-            <div class="confirm_pop">
-                <div class="boxs">
-                    <h3>PLUS专享</h3>
-                    <div class="detail">
-                        <div class="give-box" v-for="item in give_goods" @click="getAll">
-                            <img :src="$imgUrl+item.thumb_img" alt="">
-                            <h4>{{item.goods_name}}</h4>
-                        </div>
-                        <div class="give-box" v-for="item in give_cards" @click="goMyCardBag">
-                            <img :src="$imgUrl+item.thumb_img" alt="">
-                            <h4>{{item.card_name}}</h4>
-                        </div>
+        <!-- 兑换成功后提示 -->
+        <div class="pop_bg" v-if="popShow1">
+            <div class="pop pop1" v-if="type == 'P'">
+                <p>恭喜你成为PLUS会员</p>
+                <!-- <em>你可以邀请好友获得奖励</em> -->
+                <time class="time1">到期时间：{{toTime()}}</time>
+                <p>我们为你准备了一份惊喜好礼</p>
+                <div class="img">
+                    <img src="../assets/gift.png">
+                </div>
+                    <div class="footer-box">
+                        <span class="btn1" @click="sharePlus">邀请好友赚100</span>
+                        <span class="btn2" @click="goMyCardBag">收下并前往</span>
                     </div>
-                    <div class="btn">
-                        <b @click="getAll">收下并前往</b>
-                    </div>
-                    <div class="colse" @click="confirmPlusPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
+                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
                 </div>
             </div>
-        </div>
-        <!-- 分享 -->
-        <div class="masking" v-if="maskingShow">
-            <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
-            <div>
-                <i><img src="../assets/share_img1.png" alt=""></i>
-                <p>点击上方分享此卡片给好友吧,让好友领取吧~</p>
+            <!-- 兑换券 -->
+            <div class="confirm_pop_bg" v-if="PlusPop">
+                <div class="confirm_pop">
+                    <div class="boxs">
+                        <h3>PLUS专享</h3>
+                        <div class="detail">
+                            <div class="give-box" v-for="item in give_goods" @click="getAll">
+                                <img :src="$imgUrl+item.thumb_img" alt="">
+                                <h4>{{item.goods_name}}</h4>
+                            </div>
+                            <div class="give-box" v-for="item in give_cards" @click="goMyCardBag">
+                                <img :src="$imgUrl+item.thumb_img" alt="">
+                                <h4>{{item.card_name}}</h4>
+                            </div>
+                        </div>
+                        <div class="btn">
+                            <b @click="getAll">收下并前往</b>
+                        </div>
+                        <div class="colse" @click="confirmPlusPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
+                    </div>
+                </div>
             </div>
+            <!-- 分享 -->
+            <div class="masking" v-if="maskingShow">
+                <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>
+                <div>
+                    <i><img src="../assets/share_img1.png" alt=""></i>
+                    <p>点击上方分享此卡片给好友吧,让好友领取吧~</p>
+                </div>
+            </div>
+            <!-- 分享 -->
+            <!-- 兑换券 -->
         </div>
-        <!-- 分享 -->
-        <!-- 兑换券 -->
-        <!-- <Share ref="myShare"></Share> -->
-    </div>
 </template>
 <script>
-import wxapi from '@/lib/wx.js'
-// import Share from '../components/Share'
+import wx from 'weixin-js-sdk'
+
 export default {
     name: 'PaySucceed',
     data() {
         return {
+            type: 'P',
             cd_id: '',
             cg_id: '',
             goods_id: '',
@@ -123,6 +140,7 @@ export default {
             user: {},
             order: {},
             PlusPop: false,
+            popShow1: false,
             maskingShow: false,
             confirmPop: false,
             order_type: 3
@@ -130,16 +148,20 @@ export default {
     },
     components: {},
     methods: {
-        toTime(t1, t2) {
-            let day1 = this.$dayjs.unix(t1).format('YYYY-MM-DD')
-            let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')
+        toTime() {
+            let plus = this.$localstore.session.get('plus')
+            let day1 = this.$dayjs().format('YYYY-MM-DD')
+            let day2 = this.$dayjs(day1).add(plus.day, 'day').format('YYYY-MM-DD')
             return day2
+        },
+        popHideFn1() {
+            this.popShow1 = false;
+        },
+        sharePlus() {
+            this.$router.push({ name: 'VipPlus' })
         },
         getAll() {
             this.$router.replace({ name: 'Order' })
-        },
-        shareShowFn() {
-            this.$router.replace({ name: 'VipPlus' })
         },
         goHome() {
             this.$router.replace({ name: 'Index' })
@@ -175,15 +197,20 @@ export default {
             if (this.order_type == 2) {
                 this.give_goods = data.goods_count
                 this.give_cards = data.card_count
-                if (!this.$validatenull(this.give_goods) || !this.$validatenull(this.give_cards)) {
+                if (!this.$validatenull(this.give_goods) && !this.$validatenull(this.give_cards)) {
                     this.PlusPop = true
+                } else {
+                    if (!this.$validatenull(this.give_cards)) {
+                        this.popShow1 = true
+                    }
                 }
             }
             if (this.order_type == 3) {
                 this.cd_id = data.cd_id
                 this.cg_id = data.cg_id
                 this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
-                wxapi.wxRegister(this.wxRegCallback)
+
+                this.wxRegCallback()
             }
             this.$localstore.remove('PaySucceed')
         },
@@ -224,41 +251,37 @@ export default {
         },
         // 用于微信JS-SDK回调
         wxRegCallback() {
-            this.wxShareTimeline()
-            this.wxShareAppMessage()
-        },
-        // 微信自定义分享到朋友圈
-        wxShareTimeline() {
-            let option = {
-                title: this.order.goods_title, // 分享标题, 请自行替换
-                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.order.goods_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    this.$router.replace({ name: 'MyCardBag' })
-                },
-                error: () => {
-                    this.$router.replace({ name: 'MyCardBag' })
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareTimeline(option)
-        },
-        // 微信自定义分享给朋友
-        wxShareAppMessage() {
-            let option = {
-                title: this.order.goods_title, // 分享标题, 请自行替换
-                desc: '你的好友' + this.user.username + '赠送了你一张' + this.order.goods_title + '卡片,快来领取吧！', // 分享描述, 请自行替换
-                link: this.share_url, // 分享链接，根据自身项目决定是否需要split
-                imgUrl: this.$imgUrl + this.order.goods_img, // 分享图标, 请自行替换，需要绝对路径
-                success: () => {
-                    this.$router.replace({ name: 'MyCardBag' })
-                },
-                error: () => {
-                    this.$router.replace({ name: 'MyCardBag' })
-                }
-            }
-            // 将配置注入通用方法
-            wxapi.ShareAppMessage(option)
+               wx.ready(() => {
+                //微信分享到朋友圈
+                wx.onMenuShareTimeline({
+                    title: this.order.goods_title, // 分享标题, 请自行替换
+                    link: this.share_url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.order.goods_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                });
+
+                wx.onMenuShareAppMessage({
+                    title: this.order.goods_title, // 分享标题, 请自行替换
+                    desc: '你的好友' + this.user.username + '赠送了你一张' + this.order.goods_title + '卡片,快来领取吧！', // 分享描述, 请自行替换
+                    link: this.share_url, // 分享链接，根据自身项目决定是否需要split
+                    imgUrl: this.$imgUrl + this.order.goods_img, // 分享图标, 请自行替换，需要绝对路径
+                    success() {
+                        // 用户成功分享后执行的回调函数
+
+                    },
+                    cancel() {
+                        // 用户取消分享后执行的回调函数
+
+                    }
+                })
+            })
         },
 
     },
@@ -621,25 +644,28 @@ export default {
     }
 
     .pop_bg {
-        // position: fixed;
+        position: fixed;
         width: 100%;
         height: 100%;
-        // background: rgba($color: #000000, $alpha: 0.3);
+        background: rgba($color: #000000, $alpha: 0.3);
         top: 0;
         left: 0;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        flex-direction: column;
+
+        .footer-box {
+            display: flex;
+        }
 
         .pop {
             background: #fff;
             border-radius: 10px;
-            width: 4rem;
-            margin-bottom: 5px;
+            width: 5rem;
             position: relative;
-            padding: .94rem .3rem .54rem;
-            border: 1px solid #eee;
+            margin-top: 5px;
+            padding: .4rem .3rem .54rem;
 
             i {
                 position: absolute;
@@ -686,6 +712,33 @@ export default {
                 margin: .26rem auto 0;
             }
 
+        }
+
+        .time1 {
+            margin: 0.2rem 0;
+        }
+
+        .pop1 {
+            width: 6rem;
+
+            .img {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                img {
+                    width: 3.2rem;
+                    height: 3.2rem
+                }
+            }
+
+            .btn1 {
+                background: #fff;
+                color: red;
+                border: 1px solid #FF6666;
+                box-sizing: border-box;
+                margin-right: 0.1rem;
+            }
         }
     }
 

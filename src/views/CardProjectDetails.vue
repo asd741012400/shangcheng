@@ -154,8 +154,8 @@ export default {
             showMore: false,
             user: '',
             info: '',
-            imgList: '',
-            storeList: '',
+            imgList: [],
+            storeList: [],
             card: '',
             type: '',
             card_id: '',
@@ -178,20 +178,22 @@ export default {
             let data = { project_id: this.project_id }
             let res = await this.$getRequest('/home/GetCardProjectDetail', data)
             this.info = res.data.data
-            this.imgList = this.info.def_pic.split(',')
+            if (this.info.def_pic) {
+                this.imgList = this.info.def_pic.split(',')
+            }
         },
         //获取门店
         async getStore() {
             let res = await this.$getRequest('/home/GetProjectStore', { project_id: this.project_id })
-            this.storeList = res.data.data;
+            if (res.data.data) {
+                this.storeList = res.data.data
+            }
         },
         //获取卡片详情
         async getCardDetail() {
             let data = { id: this.card_id }
             let res = await this.$getRequest('/home/GetCardDetail', data)
             this.card = res.data.data;
-
-
             let start_time = this.$dayjs().isBefore(this.$dayjs(this.card.sale_stime).format('YYYY/MM/DD HH:mm:ss'));
             if (start_time) {
                 this.cardDetailsState = 5
@@ -448,7 +450,7 @@ export default {
                             color: #999999;
 
                             a {
-                                width: 1.2rem;
+                                // width: 1.2rem;
                                 color: #999999;
                                 display: inline-block;
                             }
