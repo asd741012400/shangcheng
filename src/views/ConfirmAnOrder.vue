@@ -170,7 +170,7 @@ export default {
             if (!this.goods) {
                 return false;
             }
-            
+
             let WxAuth = this.$localstore.get('wx_user')
             let postData = {
                 order_type: this.$route.query.order_type,
@@ -308,11 +308,9 @@ export default {
             if (has_share.query.id == this.id && has_share.query.type == this.type) {
                 this.share_id = has_share.query.share_id
             }
-
-            if (has_share.query.type == 4) {
-                this.share_id = has_share.query.share_id
-            }
-
+        }
+        if (has_share.query.type == 4) {
+            this.share_id = has_share.query.share_id
         }
         this.getCard()
     },

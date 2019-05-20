@@ -84,16 +84,15 @@
                             <loadMore ref="loadMore"></loadMore>
                         </div>
                         <div class="buyVip">
-                            <template v-if="share_id &&　!user.user_id">
-                                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
-                            </template>
-                            <template v-else-if="share_id &&　user.status < 1">
-                                <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
-                            </template>
-                            <template v-else-if="user.status >= 1">
+                            <template v-if="user.status >= 1">
                                 <router-link :to="{name:'VipPlus'}">
                                     <van-button round block type="info">邀请好友赚 ￥{{money || 0}}</van-button>
                                 </router-link>
+                            </template>
+                            <template v-else>
+                                <template v-if="share_id">
+                                    <van-button round block type="info" @click="BuyPlus">立即开通 ￥{{plus.sale_price}}</van-button>
+                                </template>
                             </template>
                         </div>
                         <BindPhone :type="type" ref="bindPhone"></BindPhone>

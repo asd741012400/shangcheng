@@ -1,7 +1,7 @@
 <template>
     <div class="MyShop">
         <header>
-            <div class="return" @click="goHome"><span><img src="../assets/icon_return_w.png" alt=""></span></div>
+            <!-- <div class="return" @click="goHome"><span><img src="../assets/icon_return_w.png" alt=""></span></div> -->
             <div class="shop_message">
                 <span><img class="avatar" :src="user.wechat_img" alt="" srcset=""></span>
                 <div>

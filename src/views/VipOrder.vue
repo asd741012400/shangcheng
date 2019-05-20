@@ -134,6 +134,10 @@ export default {
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
             this.share_id = has_share.query.share_id
         }
+        if (has_share.query.type == 4) {
+            this.share_id = has_share.query.share_id
+        }
+
         this.getOrder()
         this.getVipList()
     },
