@@ -131,6 +131,7 @@ export default {
                 this.$localstore.session('plus', this.plus)
             }
         },
+        //获取店铺商品
         async getInfo() {
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
@@ -140,7 +141,7 @@ export default {
             this.pageSize = res.data.data.count
             this.$Indicator.close();
         },
-
+        //获取店铺商品更多
         async getInfoMore() {
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })

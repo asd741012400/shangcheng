@@ -59,6 +59,7 @@ export default {
         maskingHideFn() {
             this.maskingShow = false;
         },
+        //使用卡片
         useCard(index) {
             let card = this.cardList[index]
             this.$localstore.set('usecard', card)

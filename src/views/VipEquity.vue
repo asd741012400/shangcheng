@@ -200,6 +200,7 @@ export default {
             }
             this.currVip = this.vip[0]
         },
+        //获取当前权益
         getVip(index) {
             this.currVip = this.vip[index]
             this.vipIndex = index

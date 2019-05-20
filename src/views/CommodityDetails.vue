@@ -290,6 +290,7 @@ export default {
         handlwMore() {
             this.showMore = !this.showMore
         },
+        //切换规格选择
         changeAttr(index) {
             this.attrActive = index
             this.attr_id = this.GoodsDetail.goods_attr[index].attr_id
@@ -310,6 +311,7 @@ export default {
         goHome() {
             this.$router.push({ name: 'Index' })
         },
+        //切换顶部导航
         handleActive(index) {
             this.active = index
             if (index == 1) {

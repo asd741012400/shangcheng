@@ -51,10 +51,12 @@ export default {
             let num = date1.diff(date2, 'year')
             return num
         },
+        //选择核销项目
         changeSelect(index) {
             this.active = index
             this.product = this.cardInfo.pro_list[index]
         },
+        //提交核销信息
         async submit() {
             this.disable = true
             let userInfo = this.$localstore.get('business_user')

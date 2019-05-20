@@ -50,9 +50,11 @@ export default {
     },
     components: {},
     methods: {
+        //时间转换
         toTime(time) {
             return this.$dayjs.unix(time).format('YYYY-MM-DD')
-        },
+        },      
+        //tab切换  
         tabkeChage(num) {
             const that = this;
             that.table = num;

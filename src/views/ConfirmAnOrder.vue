@@ -196,7 +196,7 @@ export default {
                 this.$router.replace({ name: 'ConfirmPay', query: { id: res.data.data } })
             }
         },
-
+        //加减商品
         numChage(str) {
             let that = this;
 
@@ -308,6 +308,11 @@ export default {
             if (has_share.query.id == this.id && has_share.query.type == this.type) {
                 this.share_id = has_share.query.share_id
             }
+
+            if (has_share.query.type == 4) {
+                this.share_id = has_share.query.share_id
+            }
+
         }
         this.getCard()
     },

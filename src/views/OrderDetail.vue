@@ -234,6 +234,7 @@ export default {
                 }
             });
         },
+        //日期转换
         toDate(time) {
             return this.$dayjs.unix(time).format('YYYY-MM-DD')
         },

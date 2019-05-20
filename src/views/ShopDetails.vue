@@ -82,6 +82,7 @@ export default {
             })
             this.images = arr
         },
+        //图片预览
         previewImg(index) {
             this.index = index
             this.show = true

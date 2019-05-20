@@ -96,6 +96,7 @@ export default {
             this.total_money = res.data.data.total_money
 
         },
+        //获取提现记录更多
         async getListMore() {
             let data = {
                 user_id: this.user.user_id,
@@ -106,7 +107,7 @@ export default {
             this.data.list = this.data.list.concat(res.data.data.list);
             this.currSize = res.data.data.list.length
         },
-
+        //提现详情
         async getDetail(id) {
             this.$router.push({ name: "WithdrawDepositDel", query: { id: id } })
         }

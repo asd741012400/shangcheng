@@ -226,9 +226,11 @@ export default {
             let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')
             return day2
         },
+        //我的卡包
         goMyCardBag() {
             this.$router.replace({ name: 'MyCardBag' })
         },
+        //分享plus
         sharePlus() {
             this.$router.push({ name: 'VipPlus' })
         },

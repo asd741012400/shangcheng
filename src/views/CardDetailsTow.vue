@@ -82,13 +82,16 @@ export default {
     },
     components: {},
     methods: {
+        //项目详情
         goProject(item) {
 
             this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: item.c_detail_id, type: 1 } })
         },
+        //卡片权益
         givePlus() {
             this.$router.push({ name: "CardEquity" })
         },
+        //使用卡片
         useCard() {
             this.$router.push({ name: 'UseCard' })
         },
@@ -97,6 +100,7 @@ export default {
             this.list = res.data.data.list
             this.project_price = res.data.data.project_price
         },
+        //项目列表
         async getListMore() {
             let data = {
                 user_id: user.user_id,

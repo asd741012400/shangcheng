@@ -129,6 +129,7 @@ export default {
             let res = await this.$postRequest('/store/GetLevel', { user_id: this.user_id })
             this.money = res.data.data
         },
+        //获取店铺商品
         async getInfo() {
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             if (this.$refs.loadMore) {
@@ -142,6 +143,7 @@ export default {
             this.wxRegister()
             this.$Indicator.close();
         },
+        //获取店铺商品更多
         async getInfoMore() {
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             let res = await this.$getRequest('/store/MyStore', { user_id: this.user_id, page: this.page })
@@ -204,11 +206,8 @@ export default {
             this.$router.push({ name: 'Index' })
         }
 
-        this.url = 'http://' + window.location.host + '/#/MyShopUser?share_id=' + this.userInfo.user_id
-        if (HOME_URL) {
-            this.url = HOME_URL + '/#/MyShopUser?share_id=' + this.userInfo.user_id
-        }
-
+        this.url = this.$HOME_URL + '/#/MyShopUser?share_id=' + this.userInfo.user_id + '&type=4'
+        
 
         this.getInfo()
         this.getPlUS()
@@ -250,7 +249,7 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         this.$refs.loadMore.hideTip()
-          window.onscroll = null
+        window.onscroll = null
     },
 
     // 销毁完成状态

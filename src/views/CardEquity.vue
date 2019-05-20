@@ -124,6 +124,7 @@ export default {
         Actionsheet
     },
     methods: {
+        //切换下拉
         onSelect(item, index) {
             const that = this;
             that.show = false;
@@ -139,6 +140,7 @@ export default {
             this.getList()
 
         },
+        //项目详情
         goProject(item) {
             this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: 1, type: 1 } })
         },
@@ -213,6 +215,7 @@ export default {
             }
 
         },
+        //使用卡片
         useCard() {
             this.$router.push({ name: 'UseCard' })
         },
@@ -225,6 +228,7 @@ export default {
             })
             this.types = arr
         },
+        //项目列表
         async getList() {
             let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.selectTypes.age, type: this.selectTypes.types }
             let res = await this.$getRequest('/card/GetProjectList', data)
@@ -232,7 +236,7 @@ export default {
             this.total_num = res.data.data.total_num.use_num
             this.project_price = res.data.data.project_price
         },
-
+        //项目列表更多
         async getListMore() {
             let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights }
             let res = await this.$getRequest('/card/GetProjectList', data)
@@ -301,7 +305,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-          window.onscroll = null
+        window.onscroll = null
     },
 
     // 销毁完成状态

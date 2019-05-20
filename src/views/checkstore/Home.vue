@@ -99,6 +99,7 @@ export default {
             }
 
         },
+        //扫码核销
         sacnCode() {
             wx.ready(() => {
                 wx.scanQRCode({ // 微信扫一扫接口

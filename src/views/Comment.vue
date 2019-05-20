@@ -53,6 +53,7 @@ export default {
     },
     components: {},
     methods: {
+        //图片上传
         handleInputChange(ev) {
             const that = this;
             if (this.imagesUrl.length >= 5) {
@@ -123,6 +124,7 @@ export default {
             }
             that.imagesUrlLength = that.imagesUrl.length
         },
+        //删除图片
         removeImages(index) {
             const that = this;
             that.imagesUrl.splice(index, 1)

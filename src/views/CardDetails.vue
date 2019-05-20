@@ -225,9 +225,11 @@ export default {
         handlwMore() {
             this.showMore = !this.showMore
         },
+        //查看项目
         goProject(item) {
             this.$router.push({ name: 'CardProjectDetails', query: { project_id: item.project_id, card_id: this.id } })
         },
+        //收藏商品
         async collectGoods() {
             let data = {
                 user_id: this.user.user_id,
@@ -243,6 +245,7 @@ export default {
         goPlus() {
             this.$router.push({ name: 'VipEquity' })
         },
+        //切换顶部导航
         handleActive(index) {
             this.active = index
             if (index == 1) {

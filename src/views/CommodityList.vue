@@ -90,6 +90,7 @@ export default {
         getOrder(id, type) {
             this.$router.push({ name: 'OrderDetail', query: { id: id, type: type } })
         },
+        //预览图片
         previewImg(item, index) {
             this.images = []
             let arr = this.strToArr(item.thumb)
@@ -128,6 +129,7 @@ export default {
             this.list = []
             this.getList()
         },
+        //获取评论
         async getList() {
             let user = this.$localstore.get('wx_user')
 
@@ -146,6 +148,7 @@ export default {
             this.currSize = res.data.data.list.length
             this.pageSize = res.data.data.count
         },
+        //获取评论更多
         async getListMore() {
             let data = {
                 user_id: user.user_id,
@@ -206,7 +209,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-          window.onscroll = null
+        window.onscroll = null
     },
 
     // 销毁完成状态

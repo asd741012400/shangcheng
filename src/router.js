@@ -45,7 +45,6 @@ import error403 from './views/403.vue'
 import error404 from './views/404.vue'
 import VipPlus from './views/VipPlus.vue'
 import VipPlus1 from './views/VipPlus1.vue'
-import Demo from './views/Dome.vue'
 
 
 
@@ -81,8 +80,6 @@ import StoreList from './views/checkstore/StoreList.vue' //提现记录
 
 
 
-
-
 Vue.use(Router)
 
 
@@ -92,7 +89,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index,
+            component: Login,
         },
         {
             path: '/Index',

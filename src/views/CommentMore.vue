@@ -66,6 +66,7 @@ export default {
         onClose() {
             this.show = false
         },
+        //预览图片
         previewImg(item, index) {
             this.images = []
             let arr = item.thumb

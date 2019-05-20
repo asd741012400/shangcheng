@@ -66,13 +66,16 @@ export default {
     },
     components: {},
     methods: {
+        //去体现
         goWidthdrew() {
             this.$router.push({ name: 'WithdrawDeposit' })
         },
+        //获取店铺信息
         async getInfo() {
             let res = await this.$getRequest('/store/StoreHome', { user_id: this.user.user_id })
             this.info = res.data.data
         },
+        //我的团队
         goTeam() {
             if (this.user.level == 2) {
                 this.$router.push({ name: 'Generalize' })

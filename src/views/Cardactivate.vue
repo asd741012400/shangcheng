@@ -134,6 +134,7 @@ export default {
         getTall(tall) {
             this.tall = tall
         },
+        //上传头像
         handleInputChange(ev) {
             let fil = document.getElementById('upload-ele').files[0];
             if (fil.size > 5 * 1024 * 1024) {

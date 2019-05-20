@@ -54,7 +54,7 @@
                         </div>
                     </li>
                 </ul>
-         <!--        <div class="empty" v-if="empty">
+                <!--        <div class="empty" v-if="empty">
                     <span @click="delCollectAll">清空失效商品</span>
                 </div> -->
             </van-tab>
@@ -100,7 +100,7 @@ export default {
         async delCollectAll(id) {
 
         },
-
+        //收藏列表
         async getList() {
             if (this.active == 1) {
                 this.status = 0
@@ -120,6 +120,7 @@ export default {
             }
 
         },
+        //收藏列表更多
         async getListMore() {
             let data = {
                 user_id: this.user.user_id,
@@ -178,7 +179,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-          window.onscroll = null
+        window.onscroll = null
     },
 
     // 销毁完成状态

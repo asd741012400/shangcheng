@@ -157,18 +157,22 @@ export default {
         popHideFn1() {
             this.popShow1 = false;
         },
+        //分享plus
         sharePlus() {
             this.$router.push({ name: 'VipPlus' })
         },
         getAll() {
             this.$router.replace({ name: 'Order' })
         },
+        //去主页
         goHome() {
             this.$router.replace({ name: 'Index' })
         },
+        //去我的卡包
         goMyCardBag() {
             this.$router.replace({ name: 'MyCardBag' })
         },
+        //去订单
         goOrder() {
             this.$router.replace({ name: 'OrderDetail', query: { "id": this.order_id, "type": 1 } })
         },

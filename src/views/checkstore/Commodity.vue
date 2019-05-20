@@ -17,6 +17,7 @@ export default {
     },
     components: {},
     methods: {
+        //提交商品核销
         async submit() {
             console.log(this.productInfo);
             let userInfo = this.$localstore.get('business_user')
