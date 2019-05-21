@@ -45,7 +45,7 @@
                         <i>￥</i>
                         <a>{{CardDetail.cost_price}}</a>
                     </div>
-                    <b>非会员价￥{{CardDetail.card_price}}</b>
+                    <b>现价￥{{CardDetail.card_price}}</b>
                     <p>市场价<span>￥{{CardDetail.mkt_price}}</span></p>
                 </div>
             </div>
@@ -431,7 +431,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-        document.title = "圈豆商城"
+        document.title = "测试商城"
     },
 
     // 销毁完成状态
@@ -598,26 +598,26 @@ export default {
                     padding-right: 0.2rem;
 
                     em {
-                        font-size: .28rem;
+                        font-size: .30rem;
                         font-style: normal;
                     }
 
                     i {
-                        font-size: .32rem;
+                        font-size: .30rem;
                         font-style: normal;
                     }
 
                     a {
                         color: #fff;
-                        font-size: .4rem;
+                        font-size: .30rem;
                     }
                 }
 
                 b {
                     font-weight: normal;
                     color: #515C6F;
-                    font-size: .28rem;
-                    padding: 0 .28rem;
+                    font-size: .26rem;
+                    padding: 0 .26rem;
                 }
 
                 p {

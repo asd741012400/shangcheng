@@ -44,8 +44,6 @@ import Collect from './views/Collect.vue' //收藏
 import error403 from './views/403.vue'
 import error404 from './views/404.vue'
 import VipPlus from './views/VipPlus.vue'
-import VipPlus1 from './views/VipPlus1.vue'
-
 
 
 //分销商城
@@ -79,7 +77,6 @@ import StoreList from './views/checkstore/StoreList.vue' //提现记录
 // import Appointment from './views/checkstore/Appointment.vue' //预约记录
 
 
-
 Vue.use(Router)
 
 
@@ -89,7 +86,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index,
+            component: Login,
         },
         {
             path: '/Index',

@@ -203,10 +203,24 @@ export default {
         },
         //提交
         async submit() {
+
+            if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.child_name)) {
+                this.$message('真实姓名填写有误');
+                return false;
+            }
+
+
+            if (!(/^1(3|4|5|7|8)\d{9}$/.test(this.tel_phone))) {
+                this.$message("手机号码有误，请重填");
+                return false;
+            }
+
+
             if (!this.agreementStuats) {
                 this.$message('你未同意激活协议！');
                 return false;
             }
+
             let userInfo = this.$localstore.get('wx_user')
             let data = {
                 user_id: userInfo.user_id,
@@ -230,7 +244,7 @@ export default {
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 setTimeout(() => {
-                    this.$router.push({ name: "MyCardBag" })
+                    this.$router.replace({ name: "MyCardBag" })
                 }, 2000);
             }
 
@@ -534,6 +548,7 @@ export default {
         background: rgba($color: #000000, $alpha:0.24);
         top: 0;
         left: 0;
+        z-index: 999;
 
         .confirm_pop {
             height: 100%;
@@ -541,6 +556,7 @@ export default {
             align-items: center;
             justify-content: center;
             padding: 0 1.02rem;
+            position: relative;
             z-index: 999;
 
             .boxs {
@@ -548,6 +564,7 @@ export default {
                 border-radius: 10px;
                 position: relative;
                 overflow: hidden;
+                position: relative;
                 z-index: 999;
 
                 .detail {

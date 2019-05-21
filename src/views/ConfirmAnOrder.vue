@@ -309,7 +309,7 @@ export default {
                 this.share_id = has_share.query.share_id
             }
         }
-        if (has_share.query.type == 4) {
+        if (has_share && has_share.query.type == 4) {
             this.share_id = has_share.query.share_id
         }
         this.getCard()
@@ -353,7 +353,7 @@ export default {
         padding-top: .3rem;
         padding-bottom: .2rem;
         background: #f6f6f6;
-        position: relative;
+        // position: relative;
 
         .icon_return {
             width: 1rem;
@@ -589,6 +589,7 @@ export default {
         bottom: 0;
         width: 100%;
         background: #fff;
+        z-index: 999;
 
         span {
             flex: 1;

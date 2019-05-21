@@ -42,7 +42,7 @@
         </div>
         <div class="address">
             <div>
-                <p><span><img src="../assets/btn_navigation.png" alt=""></span></p>
+                <p @click="goAddress"><span><img src="../assets/btn_navigation.png" alt=""></span></p>
                 <p>
                     <a :href="'tel:'+shop.tel_phone">
                         <span><img src="../assets/btn_relation.png" alt=""></span>
@@ -55,10 +55,13 @@
     </div>
 </template>
 <script>
+import VueJsonp from 'vue-jsonp'
+
 export default {
     name: 'ShopDetails',
     data() {
         return {
+            instance: '',
             shop: {},
             show: false,
             index: 1,
@@ -72,6 +75,38 @@ export default {
         },
         onClose() {
             this.show = false
+        },
+        //跳转地图
+        goAddress() {
+            if (!this.shop && !this.shop.address) {
+                return false
+            }
+            this.instance = this.$message({
+                message: '地图正在获取中，请耐心等待。。。',
+                duration: 3000
+            });
+            let data = {
+                output: 'jsonp',
+                callback: 'function1',
+                address: this.shop.address,
+                key: 'QPGBZ-LJFCX-AAG4W-TD3HL-VTJR3-ZUB3K'
+            }
+            let url = 'https://apis.map.qq.com/ws/geocoder/v1/'
+
+            this.$jsonp(url, data).then(res => {
+                if (res.status < 1) {
+                    this.instance.close();
+                    let map = `https://apis.map.qq.com/tools/poimarker?type=1&keyword=${res.result.title}&center=${res.result.location.lat},${res.result.location.lng}&radius=100&key=QPGBZ-LJFCX-AAG4W-TD3HL-VTJR3-ZUB3K&referer=myapp`
+                    window.location.href = map
+                } else {
+                    this.instance.close();
+                    this.$message('未查找到该地址！');
+                }
+                // Success.
+            }).catch(err => {
+                this.instance.close();
+                // Failed.
+            })
         },
         //获取门店
         async getShop() {
@@ -113,7 +148,11 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        if (this.instance) {
+            this.instance.close();
+        }
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -168,9 +207,8 @@ export default {
 
             a {
                 display: inline-block;
-                &:after {
 
-                }
+                &:after {}
             }
 
             p {

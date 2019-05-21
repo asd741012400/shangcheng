@@ -239,7 +239,7 @@ export default {
     created() {
         let userInfo = this.$localstore.get('wx_user')
         document.body.style.background = "#F6F6F6";
-        document.title = "圈豆商城"
+        document.title = "测试商城"
         const that = this;
 
         //卡片列表

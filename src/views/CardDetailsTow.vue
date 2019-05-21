@@ -33,9 +33,12 @@
             <h3>权益项目</h3>
             <ul>
                 <template v-for="(item,index) in list">
-                    <h2 v-if="item[0].rule_group_name"><b></b><span>{{item[0].rule_group_name}}<!-- （使用其中一项，则另外几项失效） --></span></h2>
-                    <!-- <h2 v-else><b></b><span></span></h2> -->
-                    <li class="padding" v-for="(vv,ii) in list[index]" :class="vv.project_cancle_status == 2 ? 'li_color' : ''">
+                    <h2 v-if="item[0].rule_group_name"><b></b>
+                        <span v-if="item[0].rule_group_name == '一选一'">规则项目</span>
+                        <span v-else>{{item[0].rule_group_name}}</span>
+                    </h2>
+                    <h2 v-else><b></b><span>权益领取</span></h2>
+                    <li class="padding" v-for="(vv,ii) in item" :class="vv.project_cancle_status == 2 ? 'li_color' : ''">   
                         <div class="image">
                             <i><img :src="$imgUrl+vv.thumb_img" alt=""></i>
                             <p v-if="vv.project_cancle_status == 2 || vv.use_status == 1"><span>失效</span></p>
@@ -254,7 +257,7 @@ export default {
                 display: flex;
                 padding-left: .4rem;
                 height: .6rem;
-                position: relative;
+                position: relative;  
 
                 span {
                     width: .88rem;
@@ -396,7 +399,7 @@ export default {
 
             .padding {
                 display: flex;
-                padding: .44rem .45rem .8rem;
+                padding: 0rem .45rem .4rem;
                 background: #fff;
                 border-bottom: 1px solid #F6F6F6;
 

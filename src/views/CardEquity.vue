@@ -37,7 +37,7 @@
             </p>
             <div>
                 <i><img src="../assets/icon_search2.png" alt=""></i>
-                <input type="text">
+                <input type="text" v-model="search" @keyup.enter="getList">
             </div>
         </div>
         <div class="project_select">
@@ -79,8 +79,13 @@
                         <div class="price_div" style="margin-top: 15px;">
                             <b>价值￥{{item.project_price}}</b>
                             <template v-if="$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime)">
-                                <a v-if="item.is_deduct == 2" @click="getPlus(item)">领 取</a>
-                                <a v-else @click="getPlus(item)">免费领取</a>
+                                <template v-if="item.project_cancle_status == 3 || item.project_cancle_status == 4">
+                                    <a class="gray" href="javascript:;">已领取</a>
+                                </template>
+                                <template v-else>
+                                    <a v-if="item.is_deduct == 2" @click="getPlus(item)">领 取</a>
+                                    <a v-else @click="getPlus(item)">免费领取</a>
+                                </template>
                             </template>
                         </div>
                     </div>
@@ -101,10 +106,12 @@ export default {
         return {
             distance: false,
             types: false,
+            search: '',
+            age: '',
+            cid: '',
             user: {},
             card: {},
             list: [],
-            age: false,
             total_num: 0,
             page: 1,
             currSize: 0,
@@ -132,8 +139,10 @@ export default {
                 that.selectTypes.distance = item.name;
             } else if (that.actionsIndex == 2) {
                 that.selectTypes.types = item.name;
+                that.cid = item.value;
             } else if (that.actionsIndex == 3) {
                 that.selectTypes.age = item.name;
+                that.age = item.value;
             }
 
             // 接口请求
@@ -170,16 +179,20 @@ export default {
                     that.show = true;
             } else if (num == 3) {
                 that.actions = [{
-                            name: '全部'
+                            name: '全部',
+                            value: ''
                         },
                         {
                             name: '0-3岁',
+                            value: '0-3'
                         },
                         {
                             name: '6-12岁',
+                            value: '6-12'
                         },
                         {
                             name: '12岁以上',
+                            value: '12'
                         }
                     ],
                     that.show = true;
@@ -221,16 +234,19 @@ export default {
         },
         async getType() {
             let res = await this.$getRequest('/business/ProjectCate')
-            let arr = []
+            let arr = [{
+                name: '全部',
+                value: ''
+            }]
             this.actions = res.data.data
             res.data.data.map(item => {
-                arr.push({ name: item.c_name })
+                arr.push({ name: item.c_name, value: item.c_id })
             })
             this.types = arr
         },
         //项目列表
         async getList() {
-            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.selectTypes.age, type: this.selectTypes.types }
+            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = res.data.data.list
             this.total_num = res.data.data.total_num.use_num
@@ -676,6 +692,10 @@ export default {
                     .price_div {
                         display: flex;
                         align-items: center;
+
+                        .gray {
+                            background: #ddd;
+                        }
 
                         b {
                             flex: 1;

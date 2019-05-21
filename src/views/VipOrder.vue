@@ -103,6 +103,10 @@ export default {
                 this.$message('你未同意会员协议！')
                 return false
             }
+           if (!this.plus) {
+                return false;
+            }
+            
             let WxAuth = this.$localstore.get('wx_user')
             let postData = {
                 order_type: 2,
@@ -134,7 +138,7 @@ export default {
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
             this.share_id = has_share.query.share_id
         }
-        if (has_share.query.type == 4) {
+        if (has_share && has_share.query.type == 4) {
             this.share_id = has_share.query.share_id
         }
 
@@ -172,7 +176,7 @@ export default {
         margin: 0 auto;
         padding-top: .3rem;
         padding-bottom: .2rem;
-        position: relative;
+        // position: relative;
         background: #F6F6F6;
 
         .icon_return {

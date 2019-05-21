@@ -81,6 +81,9 @@ export default {
         //支付
         async payOrder() {
             let that = this
+            if (!this.order) {
+                return false;
+            }
             // that.$router.replace({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
             //获取微信支付
             let res = await this.$getRequest('/wechat/GetWxPay', { transaction_sn: this.order.transaction_sn })
@@ -106,7 +109,7 @@ export default {
                             })
                         } else {
                             that.$message(res.data.msg)
-                        }                    
+                        }
                     };
 
                     //  取消支付的操作

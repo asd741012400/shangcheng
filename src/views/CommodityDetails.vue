@@ -44,7 +44,7 @@
                         <i>￥</i>
                         <a>{{cost_price}}</a>
                     </div>
-                    <b>非会员价￥{{goods_price}}</b>
+                    <b>现价￥{{goods_price}}</b>
                     <p>市场价<span>￥{{mkt_price}}</span></p>
                 </div>
                 <div v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</div>
@@ -54,7 +54,7 @@
                         <div class="footer-box">
                             <div class="left">
                                 <span class="price1">会员价￥{{vv.attr_vip_price}}</span>
-                                <span class="price2">非会员价￥{{vv.attr_price}}</span>
+                                <span class="price2">现价￥{{vv.attr_price}}</span>
                                 <!-- <del class="price3">￥{{mkt_price}}</del> -->
                             </div>
                             <div class="right">
@@ -519,7 +519,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-        document.title = "圈豆商城"
+        document.title = "测试商城"
     },
 
     // 销毁完成状态
@@ -677,26 +677,26 @@ export default {
                     padding-right: 0.2rem;
 
                     em {
-                        font-size: .28rem;
+                        font-size: .30rem;
                         font-style: normal;
                     }
 
                     i {
-                        font-size: .32rem;
+                        font-size: .30rem;
                         font-style: normal;
                     }
 
                     a {
                         color: #fff;
-                        font-size: .4rem;
+                        font-size: .30rem;
                     }
                 }
 
                 b {
                     font-weight: normal;
                     color: #515C6F;
-                    font-size: .28rem;
-                    padding: 0 .28rem;
+                    font-size: .26rem;
+                    padding: 0 .26rem;
                 }
 
                 p {

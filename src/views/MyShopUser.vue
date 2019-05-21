@@ -12,9 +12,9 @@
             </div>
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
         </header>
-        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="BuyPlus">
+        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}">
         </div>
-        <div class="share" @click="BuyPlus">
+        <div class="share" @click="BuyPlus" v-if="!userInfo || userInfo.status == 0">
             <p>
                 <span>立即开通</span>
                 <a>￥{{plus.sale_price}}</a>
@@ -68,6 +68,7 @@ export default {
             url: '',
             plus: '',
             page: 1,
+            userInfo: '',
             storeInfo: {},
             list: [],
             show: false,
@@ -159,6 +160,10 @@ export default {
     // 创建完毕状态 
     created() {
         document.body.style.background = "#F6F6F6";
+        let userInfo = this.$localstore.get('wx_user')
+        if (userInfo) {
+            this.userInfo = userInfo
+        }
         this.share_id = this.$route.query.share_id
         if (!this.share_id) {
             this.$router.push({ name: 'Index' })

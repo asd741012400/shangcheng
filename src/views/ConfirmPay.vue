@@ -364,6 +364,7 @@ export default {
         bottom: 0;
         width: 100%;
         background: #fff;
+        z-index: 999;
 
         span {
             flex: 1;
