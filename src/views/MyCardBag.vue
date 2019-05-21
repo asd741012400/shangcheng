@@ -338,11 +338,11 @@ export default {
             this.$Indicator.open({ spinnerType: 'fading-circle' });
             this.cardList = []
             let res = await this.$getRequest('card/GetMyCardList', { user_id: this.user_id, page: this.page })
-            // if (res.data.data.list) {
-            this.cardList = res.data.data.list
-            this.currSize = res.data.data.list.length
+            if (res.data.data.list) {
+                this.cardList = res.data.data.list
+                this.currSize = res.data.data.list.length
+            }
             this.pageSize = res.data.data.count
-            // }
             this.$Indicator.close();
             this.calcTime()
         },
@@ -444,7 +444,7 @@ export default {
     beforeDestroy() {
         clearInterval(this.timer)
         this.$refs.loadMore.hideTip()
-          window.onscroll = null
+        window.onscroll = null
     },
 
     // 销毁完成状态
