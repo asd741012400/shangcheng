@@ -702,6 +702,7 @@ export default {
         width: 100%;
         height: 100%;
         background: rgba($color: #000000, $alpha: .5);
+        z-index: 99;
 
         .card_add {
             width: 100%;

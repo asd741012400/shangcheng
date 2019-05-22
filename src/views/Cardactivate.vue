@@ -548,7 +548,7 @@ export default {
         background: rgba($color: #000000, $alpha:0.24);
         top: 0;
         left: 0;
-        z-index: 999;
+        z-index: 77;
 
         .confirm_pop {
             height: 100%;
@@ -557,7 +557,7 @@ export default {
             justify-content: center;
             padding: 0 1.02rem;
             position: relative;
-            z-index: 999;
+            z-index: 99;
 
             .boxs {
                 background: #fff;
@@ -669,6 +669,20 @@ export default {
         }
     }
 }
+.van-popup {
+    position: fixed;
+    z-index:99;
+}
+
+.van-picker__toolbar {
+    position: relative;
+    z-index: 99;
+}
+
+.van-picker__columns{
+    overflow:hidden;
+}
+
 </style>
 <style>
 .el-message-box {

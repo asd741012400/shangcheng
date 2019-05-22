@@ -158,14 +158,14 @@
                         <span class="btn1" @click="sharePlus">邀请好友赚100</span>
                         <span class="btn2" @click="goMyCardBag">收下并前往</span>
                     </div>
-                    <i @click.stop="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
                 </div>
                 <div class="pop" v-if="type == 'G'">
                     <p>恭喜成功兑换{{give.goods_name}}</p>
                     <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
                     <time v-else>到期时间：{{give.limit_etime}}</time>
                     <span @click="goOrder">前去查看</span>
-                    <i @click.stop="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
                 </div>
                 <div class="pop" v-if="type == 'C'">
                     <p>恭喜你获得卡券1张</p>
@@ -173,7 +173,7 @@
                     <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
                     <time v-else>到期时间：{{give.limit_etime}}</time>
                     <span @click="activeCard">立即激活</span>
-                    <i @click.stop="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
                 </div>
             </div>
             <Share ref="myShare"></Share>
@@ -697,6 +697,7 @@ body {
     width: 100%;
     height: 100%;
     background: rgba($color: #000000, $alpha: .5);
+    z-index: 77;
 
     .card_add {
         width: 100%;
@@ -704,6 +705,7 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
+        z-index: 88;
 
         div {
             background: #fff;
@@ -793,6 +795,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    z-index: 88;
 
     .footer-box {
         display: flex;
