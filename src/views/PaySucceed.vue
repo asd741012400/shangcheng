@@ -201,13 +201,13 @@ export default {
             if (this.order_type == 2) {
                 this.give_goods = data.goods_count
                 this.give_cards = data.card_count
-                if (!this.$validatenull(this.give_goods) && !this.$validatenull(this.give_cards)) {
-                    this.PlusPop = true
-                } else {
+                // if (!this.$validatenull(this.give_goods) && !this.$validatenull(this.give_cards)) {
+                //     this.PlusPop = true
+                // } else {
                     if (!this.$validatenull(this.give_cards)) {
                         this.popShow1 = true
                     }
-                }
+                // }
             }
             if (this.order_type == 3) {
                 this.cd_id = data.cd_id
@@ -661,6 +661,8 @@ export default {
 
         .footer-box {
             display: flex;
+            position:relative;
+            z-index:999;
         }
 
         .pop {
@@ -668,6 +670,7 @@ export default {
             border-radius: 10px;
             width: 5rem;
             position: relative;
+            z-index:999;
             margin-top: 5px;
             padding: .4rem .3rem .54rem;
 

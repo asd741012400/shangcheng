@@ -31,7 +31,11 @@
             <div class="user_name box">
                 <label>孩子姓名</label>
                 <div class="boxs">
-                    <input type="text" v-model="child_name">
+                    <!-- <van-cell-group> -->
+                        <van-field v-model="child_name" />
+                    <!-- </van-cell-group> -->
+                    <!-- <van-field v-model="child_name" placeholder="" /> -->
+                    <!-- <input type="text" v-model="child_name"> -->
                 </div>
             </div>
             <div class="user_sex box">
@@ -669,18 +673,11 @@ export default {
         }
     }
 }
-.van-popup {
-    position: fixed;
-    z-index:99;
-}
-
-.van-picker__toolbar {
-    position: relative;
-    z-index: 99;
-}
-
-.van-picker__columns{
-    overflow:hidden;
+.van-cell {
+    font-size: inherit;
+    line-height: .7rem;
+    height: .7rem;
+    padding: 0;
 }
 
 </style>

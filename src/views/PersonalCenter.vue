@@ -799,6 +799,8 @@ body {
 
     .footer-box {
         display: flex;
+        position: relative;
+        z-index: 999;
     }
 
     .pop {
@@ -806,6 +808,7 @@ body {
         border-radius: 10px;
         width: 5rem;
         position: relative;
+        z-index:999;
         margin-top: 5px;
         padding: .4rem .3rem .54rem;
         overflow: hidden;
