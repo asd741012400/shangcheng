@@ -158,14 +158,14 @@
                         <span class="btn1" @click="sharePlus">邀请好友赚100</span>
                         <span class="btn2" @click="goMyCardBag">收下并前往</span>
                     </div>
-                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                    <i @click.stop="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
                 </div>
                 <div class="pop" v-if="type == 'G'">
                     <p>恭喜成功兑换{{give.goods_name}}</p>
                     <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
                     <time v-else>到期时间：{{give.limit_etime}}</time>
                     <span @click="goOrder">前去查看</span>
-                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                    <i @click.stop="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
                 </div>
                 <div class="pop" v-if="type == 'C'">
                     <p>恭喜你获得卡券1张</p>
@@ -173,7 +173,7 @@
                     <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
                     <time v-else>到期时间：{{give.limit_etime}}</time>
                     <span @click="activeCard">立即激活</span>
-                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                    <i @click.stop="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
                 </div>
             </div>
             <Share ref="myShare"></Share>
@@ -688,193 +688,195 @@ body {
         border-radius: 50%;
     }
 
+}
 
-    .card_add_pop {
-        position: fixed;
-        top: 0;
-        left: 0;
+.card_add_pop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: #000000, $alpha: .5);
+
+    .card_add {
         width: 100%;
         height: 100%;
-        background: rgba($color: #000000, $alpha: .5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-        .card_add {
-            width: 100%;
-            height: 100%;
+        div {
+            background: #fff;
+            border-radius: 10px;
+            width: 6.32rem;
+            position: relative;
+            padding-bottom: .74rem;
+
+            span {
+                width: 1rem;
+                height: 1rem;
+                display: flex;
+                justify-content: flex-end;
+                position: absolute;
+                top: .24rem;
+                right: .24rem;
+
+                em {
+                    width: .49rem;
+                    height: .49rem;
+                    overflow: hidden;
+                    border-radius: 50%;
+                }
+            }
+
+            h3 {
+                font-size: .32rem;
+                color: #515C6F;
+                text-align: center;
+                padding-top: 1rem;
+            }
+
+            p {
+                width: 5.26rem;
+                height: .82rem;
+                display: flex;
+                align-items: center;
+                margin: .28rem auto .46rem;
+                background: #EEEEEF;
+                border-radius: 5px;
+
+                input {
+                    flex: 1;
+                    outline: medium;
+                    height: 100%;
+                    background: none;
+                    padding-left: .3rem;
+                }
+
+                i {
+                    width: .36rem;
+                    height: .36rem;
+                    overflow: hidden;
+                    margin-right: .26rem;
+                }
+            }
+
+            a {
+                width: 3.7rem;
+                height: .8rem;
+                line-height: .8rem;
+                text-align: center;
+                font-weight: bold;
+                color: #fff;
+                border-radius: 50px;
+                background: #FF6666;
+                display: block;
+                margin: 0 auto;
+                font-size: 0.32rem;
+            }
+        }
+    }
+}
+
+.time1 {
+    margin: 0.2rem 0;
+}
+
+.pop_bg {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba($color: #000000, $alpha: 0.3);
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .footer-box {
+        display: flex;
+    }
+
+    .pop {
+        background: #fff;
+        border-radius: 10px;
+        width: 5rem;
+        position: relative;
+        margin-top: 5px;
+        padding: .4rem .3rem .54rem;
+        overflow: hidden;
+
+        i {
+            position: absolute;
+            width: .48rem;
+            height: .48rem;
+            overflow: hidden;
+            display: block;
+            right: .24rem;
+            top: .24rem;
+        }
+
+        p {
+            font-size: .4rem;
+            color: #FF6666;
+            text-align: center;
+        }
+
+        em {
+            font-size: .4rem;
+            color: #FF6666;
+            text-align: center;
+            display: block;
+            font-style: normal;
+        }
+
+        time {
+            font-size: .32rem;
+            color: #515C6F;
+            text-align: center;
+            display: block;
+        }
+
+        span {
+            display: block;
+            // width: 3.7rem;
+            background: #FF6666;
+            padding: 0 10px;
+            border-radius: 50px;
+            text-align: center;
+            line-height: .8rem;
+            height: .8rem;
+            color: #fff;
+            font-weight: bold;
+            font-size: .32rem;
+            margin: .26rem auto 0;
+            position: relative;
+        }
+
+    }
+
+    .pop1 {
+        width: 6rem;
+
+        .img {
             display: flex;
             align-items: center;
             justify-content: center;
 
-            div {
-                background: #fff;
-                border-radius: 10px;
-                width: 6.32rem;
-                position: relative;
-                padding-bottom: .74rem;
-
-                span {
-                    width: 1rem;
-                    height: 1rem;
-                    display: flex;
-                    justify-content: flex-end;
-                    position: absolute;
-                    top: .24rem;
-                    right: .24rem;
-
-                    em {
-                        width: .49rem;
-                        height: .49rem;
-                        overflow: hidden;
-                        border-radius: 50%;
-                    }
-                }
-
-                h3 {
-                    font-size: .32rem;
-                    color: #515C6F;
-                    text-align: center;
-                    padding-top: 1rem;
-                }
-
-                p {
-                    width: 5.26rem;
-                    height: .82rem;
-                    display: flex;
-                    align-items: center;
-                    margin: .28rem auto .46rem;
-                    background: #EEEEEF;
-                    border-radius: 5px;
-
-                    input {
-                        flex: 1;
-                        outline: medium;
-                        height: 100%;
-                        background: none;
-                        padding-left: .3rem;
-                    }
-
-                    i {
-                        width: .36rem;
-                        height: .36rem;
-                        overflow: hidden;
-                        margin-right: .26rem;
-                    }
-                }
-
-                a {
-                    width: 3.7rem;
-                    height: .8rem;
-                    line-height: .8rem;
-                    text-align: center;
-                    font-weight: bold;
-                    color: #fff;
-                    border-radius: 50px;
-                    background: #FF6666;
-                    display: block;
-                    margin: 0 auto;
-                    font-size: 0.32rem;
-                }
+            img {
+                width: 3.2rem;
+                height: 3.2rem
             }
         }
-    }
 
-    .time1 {
-        margin: 0.2rem 0;
-    }
-
-    .pop_bg {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: rgba($color: #000000, $alpha: 0.3);
-        top: 0;
-        left: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        .footer-box {
-            display: flex;
-        }
-
-        .pop {
+        .btn1 {
             background: #fff;
-            border-radius: 10px;
-            width: 5rem;
-            position: relative;
-            margin-top: 5px;
-            padding: .4rem .3rem .54rem;
-
-            i {
-                position: absolute;
-                width: .48rem;
-                height: .48rem;
-                overflow: hidden;
-                display: block;
-                right: .24rem;
-                top: .24rem;
-            }
-
-            p {
-                font-size: .4rem;
-                color: #FF6666;
-                text-align: center;
-            }
-
-            em {
-                font-size: .4rem;
-                color: #FF6666;
-                text-align: center;
-                display: block;
-                font-style: normal;
-            }
-
-            time {
-                font-size: .32rem;
-                color: #515C6F;
-                text-align: center;
-                display: block;
-            }
-
-            span {
-                display: block;
-                width: 3.7rem;
-                background: #FF6666;
-                border-radius: 50px;
-                text-align: center;
-                line-height: .8rem;
-                height: .8rem;
-                color: #fff;
-                font-weight: bold;
-                font-size: .32rem;
-                margin: .26rem auto 0;
-            }
-
-        }
-
-        .pop1 {
-            width: 6rem;
-
-            .img {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-
-                img {
-                    width: 3.2rem;
-                    height: 3.2rem
-                }
-            }
-
-            .btn1 {
-                background: #fff;
-                color: red;
-                border: 1px solid #FF6666;
-                box-sizing: border-box;
-                margin-right: 0.1rem;
-            }
+            color: red;
+            border: 1px solid #FF6666;
+            box-sizing: border-box;
+            margin-right: 0.1rem;
         }
     }
-
 }
 </style>

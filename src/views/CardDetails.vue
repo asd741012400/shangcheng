@@ -334,9 +334,9 @@ export default {
                 this.calcStatus()
                 document.title = this.CardDetail.card_name
                 this.isCollect = Boolean(res.data.data.is_coolect);
-                if (this.CardDetail.is_dist == 1) {
+                // if (this.CardDetail.is_dist == 1) {
                     this.wxRegister()
-                }
+                // }
                 this.timer()
             }
         },
@@ -407,7 +407,7 @@ export default {
         this.timeSatrt = 0
         this.id = this.$route.query.id
         this.type = this.$route.query.type
-        this.url = 'http://' + window.location.host + '/#/CardDetails?share_id=' + this.user.user_id +
+        this.url = this.$HOME_URL + '/#/CardDetails?share_id=' + this.user.user_id +
             '&type=3&id=' + this.$route.query.id
 
         this.getComment()

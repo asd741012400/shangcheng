@@ -494,7 +494,7 @@ export default {
         this.id = this.$route.query.id
         this.type = this.$route.query.type
 
-        this.url = 'http://' + window.location.host + '/#/CommodityDetails?share_id=' + this.user.user_id +
+        this.url = this.$HOME_URL + '/#/CommodityDetails?share_id=' + this.user.user_id +
             '&type=1&id=' + this.id
 
         this.getDetail()
