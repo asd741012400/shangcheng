@@ -18,6 +18,10 @@ import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
 
 
+// import FastClick from 'fastclick'; // 引入插件
+// FastClick.attach(document.body); // 使用 fastclick
+
+
 // 引入全局组件
 //注册全局组件
 Vue.component('MyFooter', resolve => { require(['@/components/Footer'], resolve) }) //footer
