@@ -96,6 +96,7 @@ export default {
             this.goodsList = res.data.data.list
             // if (res.data.data.list) {
             this.currSize = res.data.data.list.length
+            console.log(this.currSize);
             // }
             this.$Indicator.close();
         },
@@ -140,6 +141,16 @@ export default {
             }
         }, 300)
 
+
+
+
+    },
+
+    // 挂载前状态
+    beforeMount() {},
+
+    // 挂载结束状态
+    mounted() {
         window.onscroll = () => {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -150,21 +161,12 @@ export default {
             //滚动条到底部的条件
             if (scrollTop + windowHeight == scrollHeight) {
                 if (this.currSize >= this.pageSize) {
+                    console.log(1111111111);
                     this.page++;
                     this.getGoodsListMore(this.cid)
                 }
             }
         }
-
-
-    },
-
-    // 挂载前状态
-    beforeMount() {},
-
-    // 挂载结束状态
-    mounted() {
-
     },
 
     // 更新前状态
@@ -176,7 +178,7 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         this.$refs.loadMore.hideTip()
-          window.onscroll = null
+          // window.onscroll = null
     },
 
     // 销毁完成状态

@@ -246,17 +246,18 @@ export default {
         },
         //项目列表
         async getList() {
-            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
+            let data = {page:this.page, cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = res.data.data.list
-            this.total_num = res.data.data.total_num.use_num
+            this.currSize = res.data.data.list.length
+            this.pageSize = 10
             this.project_price = res.data.data.project_price
         },
         //项目列表更多
         async getListMore() {
-            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights }
+            let data = {page:this.page,  cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
             let res = await this.$getRequest('/card/GetProjectList', data)
-            this.data.list = this.data.list.concat(res.data.data.list);
+            this.list = this.list.concat(res.data.data.list);
             this.currSize = res.data.data.list.length
         },
     },

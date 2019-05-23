@@ -289,6 +289,16 @@ export default {
         //每次进入自动计算用户金额
         // this.check()
 
+
+
+    },
+
+    // 挂载前状态
+    beforeMount() {},
+
+    // 挂载结束状态
+    mounted() {
+        const that = this;
         window.onscroll = function() {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -305,13 +315,7 @@ export default {
             }
         }
 
-    },
 
-    // 挂载前状态
-    beforeMount() {},
-
-    // 挂载结束状态
-    mounted() {
         new Swiper('.swiper-container', {
             paginationClickable: true,
             observer: true, //修改swiper自己或子元素时，自动初始化swiper

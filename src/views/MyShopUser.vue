@@ -20,6 +20,14 @@
                 <a>￥{{plus.sale_price}}</a>
             </p>
         </div>
+
+        <div class="share" @click="invitation" v-if="userInfo.user_id == share_id  || userInfo.status == 0">
+            <p>
+                <span>邀请好友赚</span>
+                <a>￥{{money || 0}}</a>
+            </p>
+        </div>
+
         <div class="activity_list">
             <h3>
         <span>
@@ -69,6 +77,7 @@ export default {
             plus: '',
             page: 1,
             userInfo: '',
+            share_id: '',
             storeInfo: {},
             list: [],
             show: false,
@@ -87,7 +96,7 @@ export default {
             this.$router.push({ name: "Index" })
         },
         invitation() {
-            this.$router.push({ name: "VipEquity", query: { 'share_id': this.share_id } })
+            this.$router.push({ name: "VipPlus" })
         },
         shareShowFn() {
             this.$refs.myShare.shareShowFn();

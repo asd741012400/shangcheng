@@ -26,7 +26,7 @@
                         <span>{{$dayjs.unix(item.bind_time).format('YYYY-MM-DD')}}成为会员</span>
                     </p>
                     <p>推广会员：{{item.count_nums}}人 </p>
-                    <p>收益：￥{{item.getmoney}}</p>
+                    <p>收益：￥{{item.total_money}}</p>
                 </div>
             </li>
         </ul>

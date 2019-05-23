@@ -101,7 +101,9 @@
             </li>
         </ul>
         <!-- 核销信息 -->
-        <div class="timer" v-if="order.order_status == 1 && type == 1">
+        <!-- <div class="timer" v-if="order.order_status == 1 && type == 1"> -->
+        <div class="timer"  v-if="type == 1">
+            <!-- <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="item.cancle_status != 2"> -->
             <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="index<3">
                 <p>
                     <a>
@@ -249,6 +251,10 @@ export default {
             let res = await this.$getRequest('/order/OrderDetail', { order_id: id })
             this.goods_info = res.data.data.goods_info
             this.goods_cancle = res.data.data.goods_cancle
+
+             this.goods_cancle.filter(item =>{
+                return item.cancle_status !=2
+             })
 
             //计算过期时间
             this.orderStatus = this.$calcTime(this.goods_info.limit_type, this.order.pay_time, this.goods_info.limit_days, this.goods_info.limit_stime, this.goods_info.limit_etime)

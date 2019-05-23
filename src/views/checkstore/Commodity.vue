@@ -25,8 +25,8 @@ export default {
                 code: this.checkInfo.cancle_code,
                 admin_id: userInfo.user_id,
                 shop_id: userInfo.business_id,
-                project_id: this.productInfo.project_id,
-                cp_id: this.productInfo.cp_id
+                project_id: '',
+                cp_id: ''
             }
             let res = await this.$postRequest('/cancle/CancleCode', data)
             if (res.data.code == 1) {

@@ -193,6 +193,8 @@ export default {
         },
         //点击确定按钮
         handleConfirm(data) {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+
             let date = this.$dayjs(data).format('YYYY-MM-DD')
             this.birthday = date;
             this.datePicker = false
@@ -200,6 +202,7 @@ export default {
             event.stopPropagation()
         },
         confirmPopShow() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.confirmPop = true
         },
         confirmPopHide() {
@@ -207,6 +210,7 @@ export default {
         },
         //提交
         async submit() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
 
             if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.child_name)) {
                 this.$message('真实姓名填写有误');

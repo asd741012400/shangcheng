@@ -19,7 +19,7 @@
                     <p>￥{{userInfo.history_money ||　'0'}}</p>
                     <a>历史收益</a>
                 </li>
-                <!--               <li>
+                <!-- <li>
                     <p>￥{{userInfo.mymoney ||　'0'}}</p>
                     <a>已提现</a>
                 </li> -->
@@ -228,7 +228,7 @@ export default {
         },
         //我的卡包
         goMyCardBag() {
-            this.$router.replace({ name: 'MyCardBag' })
+            this.$router.push({ name: 'MyCardBag' })
         },
         //分享plus
         sharePlus() {
@@ -272,6 +272,7 @@ export default {
             let res = await this.$postRequest('/user/GetThings', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
+                document.body.scrollTop = document.documentElement.scrollTop = 0;
 
                 this.code = ''
                 this.type = res.data.data.type

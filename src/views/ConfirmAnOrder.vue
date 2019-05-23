@@ -141,6 +141,9 @@ export default {
 
         //添加订单
         async addOrder() {
+
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            
             if (!this.userInfo.tel_phone) {
                 this.show = true
                 return false
