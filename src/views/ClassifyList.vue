@@ -81,6 +81,7 @@ export default {
 
         //获取分类下的商品
         async getGoodsList(index) {
+            this.page = 1
             if (this.$refs.loadMore) {
                 this.$refs.loadMore.hideTip()
             }

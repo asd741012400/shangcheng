@@ -184,6 +184,7 @@ export default {
         },
         //开启时间选择器
         openPicker() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.datePicker = true
             // this.$refs.picker.open()
         },
@@ -193,7 +194,7 @@ export default {
         },
         //点击确定按钮
         handleConfirm(data) {
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            // document.body.scrollTop = document.documentElement.scrollTop = 0;
 
             let date = this.$dayjs(data).format('YYYY-MM-DD')
             this.birthday = date;
@@ -202,16 +203,6 @@ export default {
             event.stopPropagation()
         },
         confirmPopShow() {
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
-            this.confirmPop = true
-        },
-        confirmPopHide() {
-            this.confirmPop = false
-        },
-        //提交
-        async submit() {
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
-
             if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.child_name)) {
                 this.$message('真实姓名填写有误');
                 return false;
@@ -228,6 +219,16 @@ export default {
                 this.$message('你未同意激活协议！');
                 return false;
             }
+
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+            this.confirmPop = true
+        },
+        confirmPopHide() {
+            this.confirmPop = false
+        },
+        //提交
+        async submit() {
+            // document.body.scrollTop = document.documentElement.scrollTop = 0;
 
             let userInfo = this.$localstore.get('wx_user')
             let data = {
@@ -684,8 +685,21 @@ export default {
     padding: 0;
 }
 
+
+
 </style>
 <style>
+
+.van-picker .van-picker__toolbar {
+    height: 0.99rem;
+    line-height: 0.99rem;
+}
+
+.van-picker .van-picker__cancel, .van-picker .van-picker__confirm {
+    box-sizing: border-box;
+    width: 2rem;
+    text-align: center;
+}
 .el-message-box {
     width: 80%;
 }

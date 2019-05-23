@@ -246,7 +246,7 @@ export default {
         },
         //项目列表
         async getList() {
-            let data = {page:this.page, cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
+            let data = {cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = res.data.data.list
             this.currSize = res.data.data.list.length
@@ -255,7 +255,7 @@ export default {
         },
         //项目列表更多
         async getListMore() {
-            let data = {page:this.page,  cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
+            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = this.list.concat(res.data.data.list);
             this.currSize = res.data.data.list.length
@@ -292,7 +292,7 @@ export default {
             if (scrollTop + windowHeight == scrollHeight) {
                 if (this.currSize >= this.pageSize) {
                     this.page++;
-                    this.getListMore()
+                    // this.getListMore()
                 }
             }
         }

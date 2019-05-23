@@ -127,20 +127,42 @@ export default {
                             }
                         }
 
-                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        if (res.data.code == 1) {
-                            that.$localstore.session('PaySucceed', res.data.data)
-                            that.$router.replace({
-                                name: 'PaySucceed',
-                                query: {
-                                    id: that.order.order_id,
-                                    goods_id: that.order.goods_id,
-                                    type: that.order.order_type,
-                                }
-                            })
-                        } else {
-                            that.$message(res.data.msg)
-                        }
+
+                        let timer = setInterval(async () => {
+                            console.log(11111111111111);
+                            let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                            if (res.data.code == 1) {
+                                       console.log(2222222222222);
+                                clearInterval(timer)
+                                that.$localstore.session('PaySucceed', res.data.data)
+                                that.$router.replace({
+                                    name: 'PaySucceed',
+                                    query: {
+                                        id: that.order.order_id,
+                                        goods_id: that.order.goods_id,
+                                        type: that.order.order_type,
+                                    }
+                                })
+                            } else {
+                                // that.$message(res.data.msg)
+                                clearInterval(timer)
+                            }
+                        }, 30)
+
+                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        // if (res.data.code == 1) {
+                        //     that.$localstore.session('PaySucceed', res.data.data)
+                        //     that.$router.replace({
+                        //         name: 'PaySucceed',
+                        //         query: {
+                        //             id: that.order.order_id,
+                        //             goods_id: that.order.goods_id,
+                        //             type: that.order.order_type,
+                        //         }
+                        //     })
+                        // } else {
+                        //     that.$message(res.data.msg)
+                        // }
 
                     };
 
