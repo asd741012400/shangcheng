@@ -6,7 +6,7 @@
                     <div class="site"><i class="iconfont icon-alldizhi"></i></div>
                     <div class="search">
                         <span @click="searchGoods"><img src="../assets/icon_search.png" alt=""></span>
-                        <input type="text" @keyup.enter="searchGoods" v-model="keywords" placeholder="亲子卡">
+                        <input type="text" @keyup.enter="searchGoods" @blur="searchGoods" v-model="keywords" placeholder="亲子卡">
                     </div>
                     <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
                 </div>

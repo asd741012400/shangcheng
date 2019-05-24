@@ -138,7 +138,7 @@
                     <span class="close" @click="popHideFn"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input v-model="code" type="text">
+                        <input v-model="code" type="text" @blur="goTop">
                         <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getcode">提 交</a>
@@ -209,6 +209,10 @@ export default {
     },
     components: { Share },
     methods: {
+        //兼容性处理
+        goTop() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        },
         //是否到过期时间
         overTime(day) {
             let now = this.$dayjs().format('YYYY-MM-DD')
@@ -809,7 +813,7 @@ body {
         border-radius: 10px;
         width: 5rem;
         position: relative;
-        z-index:999;
+        z-index: 999;
         margin-top: 5px;
         padding: .4rem .3rem .54rem;
         overflow: hidden;

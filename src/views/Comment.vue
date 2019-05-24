@@ -71,6 +71,10 @@ export default {
                 }
             }
 
+            let instance = that.$message({
+                message: '图片正在上传中',
+                duration: 5000
+            });
 
             let imagesUrlArr = that.imagesUrl;
             var length = arr.length;
@@ -102,7 +106,7 @@ export default {
                         that.$message('图片上传失败');
                     }).always(function() {
                         //不管成功或失败，都会执行
-                        // instance.close();
+                        instance.close();
                     })
 
                 // var reader = new FileReader();
@@ -172,7 +176,7 @@ export default {
             let res = await this.$postRequest('/comment/AddComments', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
-                this.$router.push({ name: 'CommentSucceed' })
+                this.$router.replace({ name: 'CommentSucceed' })
             }
         }
 

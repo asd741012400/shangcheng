@@ -1,3 +1,6 @@
+import 'babel-polyfill'
+import 'classlist-polyfill'
+
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -16,10 +19,6 @@ Vue.use(VueJsonp)
 //剪切板
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
-
-
-// import FastClick from 'fastclick'; // 引入插件
-// FastClick.attach(document.body); // 使用 fastclick
 
 
 // 引入全局组件

@@ -458,7 +458,6 @@ router.beforeEach((to, from, next) => {
         }
     }
 
-
     //门店id存储
     let business_id = getParamString('business_id');
     if (business_id) {

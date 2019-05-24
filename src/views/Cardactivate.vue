@@ -32,7 +32,7 @@
                 <label>孩子姓名</label>
                 <div class="boxs">
                     <!-- <van-cell-group> -->
-                        <van-field v-model="child_name" />
+                    <van-field v-model="child_name" @blur="goTop" />
                     <!-- </van-cell-group> -->
                     <!-- <van-field v-model="child_name" placeholder="" /> -->
                     <!-- <input type="text" v-model="child_name"> -->
@@ -49,11 +49,11 @@
             </div>
             <div class="user_date box">
                 <label>出生日期</label>
-                <div class="datePicker boxs" @click="openPicker">
-                    <!--                     <mt-datetime-picker type="date" ref="picker" year-format="{value} 年" month-format="{value} 月" date-format="{value} 日" @confirm="handleConfirm" :startDate="startDate" v-model="birthday">
-                    </mt-datetime-picker> -->
+                <div class="datePicker boxs">
+                    <mt-datetime-picker type="date" ref="picker" year-format="{value}" month-format="{value}" date-format="{value}" @confirm="handleConfirm" :startDate="startDate" :endDate="endDate"  v-model="birthday" @click.native="closeDatepicter">
+                    </mt-datetime-picker>
                     <span>{{birthday}}</span>
-                    <p></p>
+                    <p @click="openPicker"></p>
                     <i><img src="../assets/icon_pull_down.png" alt=""></i>
                 </div>
             </div>
@@ -90,19 +90,18 @@
                 </div>
             </div>
         </div>
-        <van-popup v-model="datePicker" position="bottom" :overlay="false">
+        <!--        <van-popup v-model="datePicker" position="bottom" :overlay="false">
             <van-datetime-picker v-model="startDate" type="date" :min-date="minDate" :maxDate="maxDate" @cancel="closeDatepicter" @confirm="handleConfirm" />
-        </van-popup>
+        </van-popup> -->
     </div>
 </template>
 <script>
 import { DatetimePicker } from 'mint-ui';
 import { postRequest } from '@/lib/axios'
-// import Vue from "vue";
+import Vue from "vue";
 import lrz from 'lrz'
+Vue.component(DatetimePicker.name, DatetimePicker);
 
-
-// Vue.component(DatetimePicker.name, DatetimePicker);
 export default {
     name: 'CardActivate',
     data() {
@@ -116,9 +115,8 @@ export default {
             birthday: '2000-01-01',
             tel_phone: '',
             tall: '1m以下',
-            minDate: new Date('2000-01-01'),
-            maxDate: new Date(),
             startDate: new Date('2000-01-01'),
+            endDate: new Date(date),
             datePicker: false,
             agreementStuats: true,
             confirmPop: false,
@@ -128,6 +126,10 @@ export default {
     },
     components: {},
     methods: {
+        //兼容性处理
+        goTop() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        },
         changeSex() {
             if (this.sex == 1) {
                 this.sex == 2
@@ -147,10 +149,10 @@ export default {
             }
             const that = this;
 
-            // let instance = that.$message({
-            //     message: '图片正在上传中',
-            //     duration: 30000
-            // });
+            let instance = that.$message({
+                message: '图片正在上传中',
+                duration: 5000
+            });
 
             lrz(fil, {
                     width: 200,
@@ -165,11 +167,10 @@ export default {
                             } else {
                                 that.$message(res.data.msg);
                             }
-                            // instance.close();
+                            instance.close();
                         })
                         .catch(function(error) {
-                            // instance.close();
-                            console.log(error);
+                            instance.close();
                         });
                     //成功时执行
 
@@ -185,40 +186,44 @@ export default {
         //开启时间选择器
         openPicker() {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
-            this.datePicker = true
-            // this.$refs.picker.open()
+            // this.datePicker = true
+            this.$refs.picker.open()
         },
         closeDatepicter() {
-            this.datePicker = false
-            // this.$refs.picker.open()
+            let date = this.$dayjs(this.birthday).format('YYYY-MM-DD')
+            this.birthday = date
         },
         //点击确定按钮
         handleConfirm(data) {
-            // document.body.scrollTop = document.documentElement.scrollTop = 0;
-
             let date = this.$dayjs(data).format('YYYY-MM-DD')
             this.birthday = date;
-            this.datePicker = false
+            this.$refs.picker.close()
+
+            // event.stopPropagation()
+            // document.body.scrollTop = document.documentElement.scrollTop = 0;
+            // let date = this.$dayjs(data).format('YYYY-MM-DD')
+            // this.birthday = date;
+            // this.datePicker = false
             // this.$refs.picker.close()
-            event.stopPropagation()
+            // event.stopPropagation()
         },
         confirmPopShow() {
+            if (!this.imgUrl) {
+                this.$message('头像未上传！');
+                return false;
+            }
+
             if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.child_name)) {
                 this.$message('真实姓名填写有误');
                 return false;
             }
 
 
-            if (!(/^1(3|4|5|7|8)\d{9}$/.test(this.tel_phone))) {
+            if (!(/^1(3|4|5|6|9|7|8)\d{9}$/.test(this.tel_phone))) {
                 this.$message("手机号码有误，请重填");
                 return false;
             }
 
-
-            if (!this.agreementStuats) {
-                this.$message('你未同意激活协议！');
-                return false;
-            }
 
             document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.confirmPop = true
@@ -229,6 +234,11 @@ export default {
         //提交
         async submit() {
             // document.body.scrollTop = document.documentElement.scrollTop = 0;
+
+            if (!this.agreementStuats) {
+                this.$message('你未同意激活协议！');
+                return false;
+            }
 
             let userInfo = this.$localstore.get('wx_user')
             let data = {
@@ -432,10 +442,10 @@ export default {
                 height: .7rem;
                 padding: 0 .16rem;
 
-
                 input {
                     height: 100%;
                     width: 100%;
+                    font-size: 0.24rem;
                 }
             }
         }
@@ -678,28 +688,27 @@ export default {
         }
     }
 }
+
 .van-cell {
     font-size: inherit;
     line-height: .7rem;
     height: .7rem;
     padding: 0;
 }
-
-
-
 </style>
 <style>
-
 .van-picker .van-picker__toolbar {
     height: 0.99rem;
     line-height: 0.99rem;
 }
 
-.van-picker .van-picker__cancel, .van-picker .van-picker__confirm {
+.van-picker .van-picker__cancel,
+.van-picker .van-picker__confirm {
     box-sizing: border-box;
     width: 2rem;
     text-align: center;
 }
+
 .el-message-box {
     width: 80%;
 }

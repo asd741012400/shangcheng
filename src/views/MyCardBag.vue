@@ -95,7 +95,7 @@
                     <span class="close" @click="cardAddPopHide"><em><img src="../assets/icon_close.png" alt=""></em></span>
                     <h3>兑换码</h3>
                     <p>
-                        <input v-model="code">
+                        <input v-model="code" @blur="goTop">
                         <!-- <i><img src="../assets/icon_close2.png" alt=""></i> -->
                     </p>
                     <a @click="getCard">提 交</a>
@@ -177,6 +177,10 @@ export default {
     },
     components: {},
     methods: {
+        //兼容性处理
+        goTop() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        },
         //有效期转换
         toTime(t2) {
             let day2 = this.$dayjs().add(t2, 'day').format('YYYY-MM-DD')

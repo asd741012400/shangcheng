@@ -39,15 +39,15 @@
                 <ul>
                     <li v-if="is_inArrary('3')">
                         <label>孩子姓名</label>
-                        <p><input type="text" v-model="real_name" placeholder="请输入姓名"></p>
+                        <p><input type="text" v-model="real_name" placeholder="请输入姓名" @blur="goTop"></p>
                     </li>
                     <li v-if="is_inArrary('4')">
                         <label>监护人手机号</label>
-                        <p><input type="text" v-model="tel" placeholder="请输入正确的手机号码"></p>
+                        <p><input type="text" v-model="tel" placeholder="请输入正确的手机号码" @blur="goTop"></p>
                     </li>
                     <li v-if="is_inArrary('1')">
                         <label>监护人身份证</label>
-                        <p><input type="text" v-model="card_ID" placeholder="请输入正确的身份证号码"></p>
+                        <p><input type="text" v-model="card_ID" placeholder="请输入正确的身份证号码" @blur="goTop"></p>
                     </li>
                     <li v-if="is_inArrary('2')">
                         <label>游玩日期</label>
@@ -119,6 +119,10 @@ export default {
 
     },
     methods: {
+        //兼容性处理
+        goTop() {
+            document.body.scrollTop = document.documentElement.scrollTop = 0;
+        },
         is_inArrary(num) {
             if (this.form_table.indexOf(num) > -1) {
                 return true
@@ -143,7 +147,7 @@ export default {
         async addOrder() {
 
             document.body.scrollTop = document.documentElement.scrollTop = 0;
-            
+
             if (!this.userInfo.tel_phone) {
                 this.show = true
                 return false
@@ -164,7 +168,7 @@ export default {
                 }
             }
             if (this.form_table.indexOf('4') > -1) {
-                if (!(/^1(3|4|5|7|8)\d{9}$/.test(this.tel))) {
+                if (!(/^1(3|4|5|6|9|7|8)\d{9}$/.test(this.tel))) {
                     this.$message("手机号码有误，请重填");
                     return false;
                 }
@@ -193,11 +197,21 @@ export default {
                 total_amount: this.total,
                 card_ID: this.card_ID,
             }
+
+            let instance = this.$message({
+                message: '正在提交订单中,请耐心等待。。。。',
+                duration: 5000
+            });
+
             let res = await this.$postRequest('/order/AddOrder', postData)
             this.$message(res.data.msg)
             if (res.data.code == 1) {
                 this.$router.replace({ name: 'ConfirmPay', query: { id: res.data.data } })
+                instance.close();
+            } else {
+                instance.close();
             }
+
         },
         //加减商品
         numChage(str) {

@@ -262,8 +262,9 @@ export default {
         // 用于微信JS-SDK回调
         async wxRegister() {
             wx.ready(() => {
-                let url = 'http://' + window.location.host + '/#/VipEquity?share_id=' + this.user.user_id +
+                let url = this.$HOME_URL + '/#/VipEquity?share_id=' + this.user.user_id +
                     '&type=2'
+                url = this.$HOME_URL + '/redirect.html?app3Redirect=' + encodeURIComponent(url)
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.plus.title, // 分享标题, 请自行替换

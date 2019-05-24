@@ -14,20 +14,22 @@
         </header>
         <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}">
         </div>
-        <div class="share" @click="BuyPlus" v-if="!userInfo || userInfo.status == 0">
-            <p>
-                <span>立即开通</span>
-                <a>￥{{plus.sale_price}}</a>
-            </p>
-        </div>
-
-        <div class="share" @click="invitation" v-if="userInfo.user_id == share_id  || userInfo.status == 0">
-            <p>
-                <span>邀请好友赚</span>
-                <a>￥{{money || 0}}</a>
-            </p>
-        </div>
-
+        <template v-if="!userInfo || userInfo.status == 0">
+            <div class="share" @click="BuyPlus">
+                <p>
+                    <span>立即开通</span>
+                    <a>￥{{plus.sale_price}}</a>
+                </p>
+            </div>
+        </template>
+        <template v-else-if="userInfo.user_id == share_id  || userInfo.status == 1">
+            <div class="share" @click="invitation" v-if="">
+                <p>
+                    <span>邀请好友赚</span>
+                    <a>￥{{money || 0}}</a>
+                </p>
+            </div>
+        </template>
         <div class="activity_list">
             <h3>
         <span>

@@ -249,8 +249,10 @@ export default {
         handleActive(index) {
             this.active = index
             if (index == 1) {
+                this.table = 1
                 document.getElementById("goods").scrollIntoView();
             } else if (index == 2) {
+                this.table = 1
                 document.getElementById("comments").scrollIntoView();
             } else {
                 this.table = 2
@@ -335,7 +337,7 @@ export default {
                 document.title = this.CardDetail.card_name
                 this.isCollect = Boolean(res.data.data.is_coolect);
                 // if (this.CardDetail.is_dist == 1) {
-                    this.wxRegister()
+                this.wxRegister()
                 // }
                 this.timer()
             }
@@ -355,6 +357,11 @@ export default {
         // 用于微信JS-SDK回调
         async wxRegister() {
             wx.ready(() => {
+                this.url = this.$HOME_URL + '/#/CardDetails?share_id=' + this.user.user_id +
+                    '&type=3&id=' + this.$route.query.id
+
+                this.url = this.$HOME_URL + '/redirect.html?app3Redirect=' + encodeURIComponent(this.url)
+
                 let img = this.CardDetail.dist_poster || this.CardDetail.def_pic[0]
 
                 //微信分享到朋友圈
@@ -407,8 +414,6 @@ export default {
         this.timeSatrt = 0
         this.id = this.$route.query.id
         this.type = this.$route.query.type
-        this.url = this.$HOME_URL + '/#/CardDetails?share_id=' + this.user.user_id +
-            '&type=3&id=' + this.$route.query.id
 
         this.getComment()
         this.getDetail()

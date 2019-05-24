@@ -30,16 +30,21 @@
         </div>
         <!-- <div class="card_project" v-if="card.get_rights == 1"> -->
         <div class="card_project">
-            <h3>权益项目</h3>
+            <h3>卡片项目</h3>
             <ul>
                 <template v-for="(item,index) in list">
                     <h2 v-if="item[0].rule_group_name"><b></b>
                         <span v-if="item[0].rule_group_name == '一选一'">规则项目</span>
                         <span v-else>{{item[0].rule_group_name}}</span>
                     </h2>
-                    <h2 v-else><b></b><span>权益领取</span></h2>
-                    <li class="padding" v-for="(vv,ii) in item" :class="vv.project_cancle_status == 2 ? 'li_color' : ''">   
-                        <div class="image">
+                    <h2 v-else>
+                        <b></b>
+                       <span v-if="item[0].card_pro_id">卡内项目</span>
+                       <span v-else>权益领取</span>
+                    </h2>
+                    <li class="padding" v-for="(vv,ii) in item" :class="(vv.project_cancle_status == 2) || (vv.project_cancle_status ==1 &&　vv.project_num　==　0) ? 'li_color' : ''">
+                        <!-- <li class="padding" v-for="(vv,ii) in item" :class="vv.project_cancle_status == 1 ? 'li_color' : ''"> -->
+                        <div  class="image" @click="goProject(vv)">
                             <i><img :src="$imgUrl+vv.thumb_img" alt=""></i>
                             <p v-if="vv.project_cancle_status == 2 || vv.use_status == 1"><span>失效</span></p>
                         </div>
@@ -47,7 +52,14 @@
                             <h4>
                           <span>{{vv.project_name}}</span>
                           <b class="col2" v-if="vv.num_status == 1">无限畅玩</b>
-                          <b class="col2" v-else-if="vv.project_cancle_status != 2">剩余{{vv.project_num || 0}}次</b>
+                          <b class="col2" v-else-if="vv.project_cancle_status != 2">
+                            <template  v-if="vv.project_num > 0">                                
+                                剩余{{vv.project_num}}次
+                            </template>
+                            <template  v-else>
+                                使用完
+                            </template>
+                      </b>
                         </h4>
                             <div class="text_div">
                                 <div class="text-clip">
@@ -165,7 +177,7 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-          window.onscroll = null
+        window.onscroll = null
     },
 
     // 销毁完成状态
@@ -257,7 +269,7 @@ export default {
                 display: flex;
                 padding-left: .4rem;
                 height: .6rem;
-                position: relative;  
+                position: relative;
 
                 span {
                     width: .88rem;
@@ -373,7 +385,7 @@ export default {
             line-height: 1.04rem;
             font-size: .32rem;
             color: #515C6F;
-            margin-top: .4rem;
+            // margin-top: .4rem;
 
             b {
                 padding-left: .45rem;
@@ -397,9 +409,35 @@ export default {
                 padding: 0;
             }
 
+            .li_color {
+                .image {
+                    -webkit-filter: grayscale(1);
+                    filter: gray;
+                    filter: grayscale(1);
+                }
+
+                .text {
+                    h4 {
+                        span {
+                            color: #999999;
+                        }
+
+                        b {
+                            color: #999999;
+                        }
+                    }
+
+                    .price_div {
+                        b {
+                            color: #999999;
+                        }
+                    }
+                }
+            }
+
             .padding {
                 display: flex;
-                padding: 0rem .45rem .4rem;
+                padding: 0.3rem .45rem .4rem;
                 background: #fff;
                 border-bottom: 1px solid #F6F6F6;
 
@@ -530,25 +568,6 @@ export default {
                 }
             }
 
-            li.li_color {
-                .text {
-                    h4 {
-                        span {
-                            color: #999999;
-                        }
-
-                        b {
-                            color: #999999;
-                        }
-                    }
-
-                    .price_div {
-                        b {
-                            color: #999999;
-                        }
-                    }
-                }
-            }
         }
     }
 

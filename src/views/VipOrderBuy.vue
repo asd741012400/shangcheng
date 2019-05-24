@@ -93,10 +93,9 @@ export default {
                 wx.ready(function() {
                     // 这里获取到PHP生成签名参数包，注意是JSON格式
                     var options = config;
-                    that.$localstore.session.set('has_share', '')
                     // 支付成功后的操作
                     options.success = () => {
-
+                    that.$localstore.session.set('has_share', '')
 
                         let timer = setInterval(async () => {
                             console.log(33333333333);
@@ -120,8 +119,6 @@ export default {
                             }
 
                         }, 30)
-
-
 
                         // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
                         // if (res.data.code == 1) {

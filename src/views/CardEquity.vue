@@ -36,8 +36,8 @@
                 <b style="font-size:0.26rem;">可领取福利</b>
             </p>
             <div>
-                <i><img src="../assets/icon_search2.png" alt=""></i>
-                <input type="text" v-model="search" @keyup.enter="getList">
+                <i @click="getList"><img src="../assets/icon_search2.png" alt=""></i>
+                <input type="text" v-model="search" @keyup.enter="getList" @blur="getList">
             </div>
         </div>
         <div class="project_select">
@@ -60,7 +60,7 @@
         <div class="project_list">
             <ul>
                 <li v-for="(item,index) in list" :key="index" :class="!$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime) ? 'li_color' : ''">
-                    <div class="image">
+                    <div class="image" @click="goProject(item)">
                         <i><img :src="$imgUrl+item.thumb_img" alt=""></i>
                         <p>库存<span>{{item.store}}</span></p>
                     </div>
@@ -246,9 +246,10 @@ export default {
         },
         //项目列表
         async getList() {
-            let data = {cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
+            let data = { cd_id: this.card.cdid, get_rights: this.card.get_rights, age: this.age, search: this.search, type: this.cid }
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = res.data.data.list
+            this.total_num = res.data.data.total_num.use_num
             this.currSize = res.data.data.list.length
             this.pageSize = 10
             this.project_price = res.data.data.project_price
@@ -259,6 +260,7 @@ export default {
             let res = await this.$getRequest('/card/GetProjectList', data)
             this.list = this.list.concat(res.data.data.list);
             this.currSize = res.data.data.list.length
+            this.total_num = res.data.data.total_num.use_num
         },
     },
 
