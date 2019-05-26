@@ -97,7 +97,6 @@ export default {
             this.goodsList = res.data.data.list
             // if (res.data.data.list) {
             this.currSize = res.data.data.list.length
-            console.log(this.currSize);
             // }
             this.$Indicator.close();
         },

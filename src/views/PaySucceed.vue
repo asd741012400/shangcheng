@@ -212,7 +212,7 @@ export default {
             if (this.order_type == 3) {
                 this.cd_id = data.cd_id
                 this.cg_id = data.cg_id
-                this.share_url = 'http://' + window.location.host + '/#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
+                this.share_url = this.$HOME_URL + '/?#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
 
                 this.wxRegCallback()
             }

@@ -443,10 +443,10 @@ export default {
         async wxRegister() {
 
             wx.ready(() => {
-                this.url = this.$HOME_URL + '/#/CommodityDetails?share_id=' + this.user.user_id +
+                this.url = this.$HOME_URL + '/?#/CommodityDetails?share_id=' + this.user.user_id +
                     '&type=1&id=' + this.id
                 let img = this.GoodsDetail.dist_poster || this.GoodsDetail.def_pic[0]
-                this.url = this.$HOME_URL + '/redirect.html?app3Redirect=' + encodeURIComponent(this.url)
+                // this.url = this.$HOME_URL + '/redirect.html?app3Redirect=' + encodeURIComponent(this.url)
 
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({

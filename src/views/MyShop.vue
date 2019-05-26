@@ -206,7 +206,7 @@ export default {
             this.$router.push({ name: 'Index' })
         }
 
-        this.url = this.$HOME_URL + '/#/MyShopUser?share_id=' + this.userInfo.user_id + '&type=4'
+        this.url = this.$HOME_URL + '/?#/MyShopUser?share_id=' + this.userInfo.user_id + '&type=4'
         
 
         this.getInfo()

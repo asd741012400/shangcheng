@@ -357,10 +357,10 @@ export default {
         // 用于微信JS-SDK回调
         async wxRegister() {
             wx.ready(() => {
-                this.url = this.$HOME_URL + '/#/CardDetails?share_id=' + this.user.user_id +
+                this.url = this.$HOME_URL + '/?#/CardDetails?share_id=' + this.user.user_id +
                     '&type=3&id=' + this.$route.query.id
 
-                this.url = this.$HOME_URL + '/redirect.html?app3Redirect=' + encodeURIComponent(this.url)
+                // this.url = this.$HOME_URL + '/redirect.html?app3Redirect=' + encodeURIComponent(this.url)
 
                 let img = this.CardDetail.dist_poster || this.CardDetail.def_pic[0]
 
