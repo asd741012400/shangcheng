@@ -280,6 +280,7 @@ export default {
         let card = this.$localstore.get('usecard')
         this.card = card
         this.status = this.$route.query.update_status
+        document.title = "卡片激活"
         // if (!card) {
         //     this.$router.push({ name: "Index" })
         // }

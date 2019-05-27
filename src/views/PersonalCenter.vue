@@ -95,12 +95,12 @@
             </div>
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
-            <!--             <li>
+            <li>
                 <router-link :to="{name:'Collect'}">
                     <span><img src="../assets/icon_collect.png" alt=""></span>
                     <p>我的收藏</p>
                 </router-link>
-            </li> -->
+            </li>
             <li>
                 <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_card_bag2.png" alt=""></span>
@@ -451,7 +451,7 @@ body {
 
                         a {
                             color: #fff;
-                            font-size: .3rem;
+                            font-size: .26rem;
                         }
 
                         i {
@@ -512,7 +512,7 @@ body {
 
     .order {
         .order_tel {
-            padding: .5rem .4rem .32rem .6rem;
+            padding: .1rem .4rem;
             border-bottom: 1px solid #f1f1f1;
             display: flex;
 
@@ -522,9 +522,16 @@ body {
                 align-items: center;
 
                 span {
-                    width: .34rem;
+                    display: block;
+                    width: .26rem;
                     overflow: hidden;
                     margin-right: .16rem;
+
+                    img {
+                        width: 100%;
+                        // width: .28rem;
+                        // height: .28rem;
+                    }
                 }
 
                 p {
@@ -544,7 +551,7 @@ body {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: .4rem .42rem .64rem;
+            padding: .22rem .4rem;
 
             li {
                 width: .9rem;
@@ -558,8 +565,14 @@ body {
                 span {
                     display: block;
                     margin-top: 2px;
-                    overflow: hidden;
+                    // overflow: hidden;
                     margin-bottom: .08rem;
+
+                    img {
+                        // width:100%;
+                        width: 0.6rem;
+                        height: 0.6rem;
+                    }
                 }
             }
         }
@@ -641,7 +654,8 @@ body {
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding: .6rem .25rem 2.8rem;
+        padding: .4rem .25rem 2.8rem;
+        // padding: .22rem .4rem;
 
         li {
             display: flex;

@@ -1,10 +1,10 @@
 <template>
     <div class="ClassifyList">
-        <header>
+<!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">分类列表</div>
             <div class="add"></div>
-        </header>
+        </header> -->
         <div class="nav_list">
             <van-tabs @change="getGoodsList" v-model="active">
                 <van-tab v-for="(item,index) in AllCate" :title="item.c_name" :key="index">
@@ -30,8 +30,8 @@
                         <div class="share">
                             <div class="price">
                                 <span>现价</span>
-                                <b>￥{{item.mkt_price}}</b>
-                                <a>￥{{item.goods_price}}</a>
+                                <b>￥{{item.goods_price}}</b>
+                                <a>￥{{item.mkt_price}}</a>
                             </div>
                         </div>
                     </router-link>
@@ -357,7 +357,7 @@ export default {
 
                         b {
                             font-weight: normal;
-                            font-size: .36rem;
+                            font-size: .32rem;
                             padding-left: 2px;
                             padding-right: .2rem;
                         }

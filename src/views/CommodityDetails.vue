@@ -1,6 +1,6 @@
 <template>
     <div class="CommodityDetails" id="goods">
-        <div class="top">
+<!--         <div class="top">
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <header>
                 <p :class="active == 1 ? 'active' : ''" @click="handleActive(1)">
@@ -16,7 +16,7 @@
                     <em></em>
                 </p>
             </header>
-        </div>
+        </div> -->
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,index) in GoodsDetail.def_pic" :key="index">
@@ -24,7 +24,7 @@
                   </van-swipe-item>
             </van-swipe>
             <!-- <span></span> -->
-            <div class="text" v-show="GoodsDetailsState == 1">
+            <!--             <div class="text" v-show="GoodsDetailsState == 1">
                 <yd-countdown slot="right" :time="changeTime(GoodsDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
@@ -33,7 +33,7 @@
                 <yd-countdown slot="right" :time="changeTime(GoodsDetail.sale_stime)">
                     <p>距离活动开始还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
-            </div>
+            </div> -->
         </div>
         <div class="main">
             <div class="project_title">
@@ -201,7 +201,7 @@
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城首页</p>
                 </li>
-                <!--             <li @click="collectGoods()">
+                <li @click="collectGoods()">
                     <template v-if="isCollect">
                         <span><img src="../assets/icon_collectB.png" alt=""></span>
                     </template>
@@ -209,7 +209,7 @@
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
                     <p>我要收藏</p>
-                </li> -->
+                </li>
             </ul>
             <!-- <div class="btn"> -->
             <!-- 可购买状态 -->
@@ -409,7 +409,6 @@ export default {
             let res = await this.$getRequest('/home/GetGoodsDetail', data)
             if (res.data.code == 1) {
                 this.GoodsDetail = res.data.data;
-                this.calcStatus()
                 document.title = this.GoodsDetail.goods_name
                 this.cost_price = this.GoodsDetail.cost_price
                 this.goods_price = this.GoodsDetail.goods_price
@@ -424,8 +423,12 @@ export default {
                 }
 
                 this.isCollect = Boolean(res.data.data.is_coolect);
+                this.calcStatus()
                 this.wxRegister()
-                this.timer();
+                this.$Indicator.close();
+                // this.timer();
+                // 
+                // 
             }
         },
         //获取评论
@@ -531,7 +534,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .CommodityDetails {
-    padding-top: 1.3rem;
+    // padding-top: 1.3rem;
 
     .icon_return {
         position: absolute;

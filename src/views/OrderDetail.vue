@@ -1,10 +1,10 @@
 <template>
     <div class="OrderDetail">
-        <header>
+<!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">订单详情</div>
             <div class="add"></div>
-        </header>
+        </header> -->
         <div class="header">
             <template v-if="!orderStatus">
                 <p>已过期</p>

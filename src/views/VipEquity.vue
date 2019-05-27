@@ -203,7 +203,7 @@ export default {
         getVip(index) {
             this.currVip = this.vip[index]
             this.vipIndex = index
-            this.mySwiper.slideTo(index, 1000)
+            this.mySwiper.slideTo(index + 1, 1000)
             if (this.vipIndex > 3) {
                 this.$refs.tab.scrollLeft = 500;
             } else {
@@ -405,7 +405,8 @@ export default {
 <style lang="scss" scoped>
 .buyVip {
     position: fixed;
-    bottom: 100px;
+    // bottom: 100px;
+    bottom: 1.65rem;
     padding: 0 0.8rem;
     width: 100%;
     box-sizing: border-box;
@@ -477,7 +478,7 @@ export default {
         // position: relative;
         // top: -44px;
         z-index: -1;
-        padding-bottom: 20px;
+        padding-bottom: 0.20rem;
 
         >img {
             position: absolute;
@@ -514,7 +515,7 @@ export default {
 .title {
     position: relative;
     // top: 0.73rem;
-    margin-top: 0.8rem;
+    margin-top: 0.2rem;
     width: 100%;
     // height: 60px;
     display: flex;
@@ -533,7 +534,7 @@ export default {
 
     .tab {
         width: 100%;
-        margin-top: 0.4rem;
+        margin-top: 0.2rem;
         white-space: nowrap;
         width: auto;
         box-sizing: border-box;
@@ -589,7 +590,7 @@ export default {
     white-space: nowrap;
     width: 100%;
     overflow-x: scroll;
-    margin: .66rem .33rem 0 .55rem;
+    margin: .2rem .33rem 0 .55rem;
     -webkit-overflow-scrolling: touch;
 
     &::-webkit-scrollbar {
@@ -599,7 +600,7 @@ export default {
 
     li {
         display: inline-block;
-        margin-right: .7rem;
+        margin-right: .3rem;
         height: .6rem;
 
         span {
@@ -721,7 +722,7 @@ export default {
 
                     b {
                         font-weight: normal;
-                        font-size: .36rem;
+                        font-size: .32rem;
                         padding-left: 2px;
                         padding-right: .2rem;
 

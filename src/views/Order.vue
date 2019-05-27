@@ -1,10 +1,10 @@
 <template>
     <div class="ConfirmPay">
-        <header>
+<!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">订单列表</div>
             <div class="add"></div>
-        </header>
+        </header> -->
         <van-tabs v-model="active" @change="getOrderList">
             <van-tab title="全部"></van-tab>
             <van-tab title="待付款"></van-tab>

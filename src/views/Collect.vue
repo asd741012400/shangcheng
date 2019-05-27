@@ -1,10 +1,10 @@
 <template>
     <div class="Collect">
-        <header>
+<!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">收藏</div>
             <div class="add"><span><img src="../assets/icon_search2.png" alt=""></span></div>
-        </header>
+        </header> -->
         <!--         <div class="sort">
             <p @click="sortOneFn">
                 <span>全部</span>
@@ -40,7 +40,7 @@
             <van-tab title="已失效">
                 <ul class="team_member">
                     <li class="disabled" v-for="item in list">
-                        <i></i>
+                        <i><img :src="$imgUrl + item.img"></i>
                         <div class="right">
                             <div>
                                 <p class="name">
@@ -279,6 +279,13 @@ export default {
                 overflow: hidden;
                 border-radius: 5px;
                 background: #ccc;
+
+                img {
+                    display: block;
+                    width: 100%;
+                    height: 1.28rem;
+                    object-fit: cover;
+                }
             }
 
             div {
@@ -332,6 +339,13 @@ export default {
                 overflow: hidden;
                 border-radius: 5px;
                 background: #ccc;
+
+                img {
+                    display: block;
+                    width: 100%;
+                    height: 1.28rem;
+                    object-fit: cover;
+                }
             }
 
             .right {

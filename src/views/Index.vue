@@ -8,7 +8,10 @@
                         <span @click="searchGoods"><img src="../assets/icon_search.png" alt=""></span>
                         <input type="text" @keyup.enter="searchGoods" @blur="searchGoods" v-model="keywords" placeholder="亲子卡">
                     </div>
-                    <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div>
+                    <div class="more" @click="searchGoods">
+                        搜索
+                    </div>
+                    <!-- <div class="more" @click="skipPages('ClassifyList')"><i class="iconfont icon-allgengduo"></i></div> -->
                 </div>
             </div>
             <div class="swiper-container">
@@ -186,6 +189,10 @@ export default {
         },
         //商品搜索
         async searchGoods() {
+            if (!this.keywords) {
+                this.$message('请输入搜索商品！');
+                return false
+            }
             this.pages = 1
             let res = await this.$getRequest('/home/GetGoodsList', { page: this.pages, keyword: this.keywords })
             if (res.data.code == 1) {
@@ -409,6 +416,7 @@ export default {
 
                 .more {
                     width: .64rem;
+                    color: #fff;
 
                     i {
                         font-size: .6rem;
@@ -575,7 +583,7 @@ export default {
     }
 
     .activity_list {
-        padding-top: .6rem;
+        padding-top: .1rem;
         padding-bottom: 2.1rem;
 
         h3 {
@@ -704,7 +712,7 @@ export default {
 
                         b {
                             font-weight: normal;
-                            font-size: .38rem;
+                            font-size: .32rem;
                             padding-left: 2px;
                             padding-right: .2rem;
                         }

@@ -1,6 +1,6 @@
 <template>
     <div class="CardDetails" id="goods">
-        <div class="top">
+<!--         <div class="top">
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <header>
                 <p :class="active == 1 ? 'active' : ''" @click="handleActive(1)">
@@ -16,7 +16,7 @@
                     <em></em>
                 </p>
             </header>
-        </div>
+        </div> -->
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,index) in CardDetail.def_pic" :key="index">
@@ -25,7 +25,7 @@
             </van-swipe>
             <!-- <span><img src="../assets/img2.png" alt=""></span> -->
             <!-- <span><img :src="CardDetail.def_pic[0]" alt=""></span> -->
-            <div class="text" v-show="cardDetailsState == 1">
+            <!--             <div class="text" v-show="cardDetailsState == 1">
                 <yd-countdown slot="right" :time="changeTime(CardDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
@@ -34,7 +34,7 @@
                 <yd-countdown slot="right" :time="changeTime(CardDetail.sale_stime)">
                     <p>距离活动开始还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
-            </div>
+            </div> -->
         </div>
         <div class="main">
             <div class="project_title">
@@ -96,7 +96,7 @@
           </h3>
                 <div v-if="table == 1">
                     <ul class="shop">
-                        <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)" v-if="index<2">
+                        <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)">
                             <div class="img">
                                 <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
                                 <div>
@@ -113,28 +113,6 @@
                                     <b>多店通用</b>
                                 </div>
                             </div>
-                        </li>
-                        <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)" v-if="index >= 2 && showMore">
-                            <div class="img">
-                                <span><img :src="$imgUrl+item.thumb_img" alt=""></span>
-                                <div>
-                                    <p>价值</p>
-                                    <b>￥{{item.project_price}}</b>
-                                </div>
-                            </div>
-                            <div class="share">
-                                <div class="price">
-                                    <span>{{item.project_name}}</span>
-                                    <a>畅&nbsp;&nbsp;玩</a>
-                                </div>
-                                <div class="right">
-                                    <b>多店通用</b>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="more" v-if="projects.length > 2" @click="handlwMore">
-                            <van-icon v-if="!showMore" name="arrow-down" />
-                            <van-icon v-else name="arrow-up" />
                         </li>
                     </ul>
                 </div>
@@ -150,7 +128,7 @@
                     <span><img src="../assets/icon_shopA.png" alt=""></span>
                     <p>商城首页</p>
                 </li>
-                <!--          <li @click="collectGoods()">
+                <li @click="collectGoods()">
                     <template v-if="isCollect">
                         <span><img src="../assets/icon_collectB.png" alt=""></span>
                     </template>
@@ -158,7 +136,7 @@
                         <span><img src="../assets/icon_collectA.png" alt=""></span>
                     </template>
                     <p>我要收藏</p>
-                </li> -->
+                </li>
             </ul>
             <!-- <div class="btn"> -->
             <!-- 可购买状态 -->
@@ -338,8 +316,9 @@ export default {
                 this.isCollect = Boolean(res.data.data.is_coolect);
                 // if (this.CardDetail.is_dist == 1) {
                 this.wxRegister()
+                this.$Indicator.close();
                 // }
-                this.timer()
+                // this.timer()
             }
         },
         //获取评论
@@ -450,7 +429,7 @@ export default {
 }
 
 .CardDetails {
-    padding-top: 1.3rem;
+    // padding-top: 1.3rem;
 
     .icon_return {
         position: absolute;
@@ -973,6 +952,10 @@ export default {
                                     margin-bottom: 0.40rem;
                                     color: #515C6F;
                                     font-size: 0.24rem;
+
+                                    b {
+                                        font-size: 0.22rem;
+                                    }
                                 }
 
                                 p {

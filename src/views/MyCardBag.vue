@@ -412,6 +412,7 @@ export default {
         this.user_id = user.user_id
         this.getCardList()
         document.body.style.background = "#F6F6F6";
+        document.title = "我的卡包"
 
         window.onscroll = () => {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
