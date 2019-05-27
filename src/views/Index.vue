@@ -368,7 +368,7 @@ export default {
 
             .header {
                 height: .7rem;
-                padding: .52rem .16rem;
+                padding: .2rem .16rem;
                 display: flex;
                 justify-content: center;
                 font-size: .28rem;
@@ -429,7 +429,7 @@ export default {
 
     .nav {
         // padding: .4rem .76rem .24rem;
-        padding: .4rem .24rem;
+        padding: .1rem .24rem 0.2rem;
 
         ul {
             display: flex;
@@ -837,9 +837,9 @@ export default {
 <style>
 .swiper-container {
     margin: 0 .16rem;
-    height: 2.76rem;
+    height: 3rem;
     background: #ccc;
-    top: -1.2rem;
+    top: -1.7rem;
     border-radius: 5px;
 }
 
