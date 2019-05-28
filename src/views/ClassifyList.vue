@@ -1,6 +1,6 @@
 <template>
     <div class="ClassifyList">
-<!--         <header>
+        <!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">分类列表</div>
             <div class="add"></div>
@@ -122,6 +122,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.title = "商品分类"
         document.body.style.background = "#F6F6F6";
         this.getAllCate()
 
@@ -140,10 +141,6 @@ export default {
                 this.getGoodsList()
             }
         }, 300)
-
-
-
-
     },
 
     // 挂载前状态
@@ -151,6 +148,7 @@ export default {
 
     // 挂载结束状态
     mounted() {
+        info.project_name
         window.onscroll = () => {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -161,7 +159,7 @@ export default {
             //滚动条到底部的条件
             if (scrollTop + windowHeight == scrollHeight) {
                 if (this.currSize >= this.pageSize) {
-                    console.log(1111111111);
+
                     this.page++;
                     this.getGoodsListMore(this.cid)
                 }
@@ -178,7 +176,7 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         this.$refs.loadMore.hideTip()
-          // window.onscroll = null
+        // window.onscroll = null
     },
 
     // 销毁完成状态

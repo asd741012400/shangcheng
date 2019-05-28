@@ -14,7 +14,7 @@
             </div>
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
         </header>
-        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="invitation">
+        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="goVip">
         </div>
         <div class="share" @click="invitation">
             <p>
@@ -101,6 +101,9 @@ export default {
     methods: {
         goGoods(item) {
             this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
+        },
+        goVip() {
+            this.$router.push({ name: "VipEquity" })
         },
         invitation() {
             this.$router.push({ name: "VipPlus" })
@@ -196,6 +199,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "圈豆商城"
         document.body.style.background = "#F6F6F6";
         let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {
@@ -207,7 +211,7 @@ export default {
         }
 
         this.url = this.$HOME_URL + '/?#/MyShopUser?share_id=' + this.userInfo.user_id + '&type=4'
-        
+
 
         this.getInfo()
         this.getPlUS()

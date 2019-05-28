@@ -1,15 +1,15 @@
 <template>
-    <div class="footer">
+    <div class="common-footer">
         <div class="footer-bar">
             <div class="personal_center" @click="goLink('Index')">
                 <!-- <router-link :to="{name:'Index'}"> -->
-                    <template v-if="$route.name == 'Index' || $route.name == 'Home'">
-                        <span><a><img src="@/assets/1-1.png" alt=""></a></span>
-                    </template>
-                    <template v-else>
-                        <span><a><img src="@/assets/1.png" alt=""></a></span>
-                    </template>
-                    <p :class="($route.name == 'Index' || $route.name == 'Home') ? 'active' : ''">商城</p>
+                <template v-if="$route.name == 'Index' || $route.name == 'Home'">
+                    <span><a><img src="@/assets/1-1.png" alt=""></a></span>
+                </template>
+                <template v-else>
+                    <span><a><img src="@/assets/1.png" alt=""></a></span>
+                </template>
+                <p :class="($route.name == 'Index' || $route.name == 'Home') ? 'active' : ''">商城</p>
                 <!-- </router-link> -->
             </div>
             <div class="personal_center" @click="goLink('VipEquity')">
@@ -25,24 +25,24 @@
                     <p :class="($route.name == 'VipEquity') ? 'active' : ''">会员</p>
                 </router-link> -->
                 <!-- <router-link :to="{name:'VipEquity'}"> -->
-                    <template v-if="$route.name == 'VipEquity'">
-                        <span><a><img src="@/assets/2-2.png" alt=""></a></span>
-                    </template>
-                    <template v-else>
-                        <span><a><img src="@/assets/2.png" alt=""></a></span>
-                    </template>
-                    <p :class="($route.name == 'VipEquity') ? 'active' : ''">会员</p>
+                <template v-if="$route.name == 'VipEquity'">
+                    <span><a><img src="@/assets/2-2.png" alt=""></a></span>
+                </template>
+                <template v-else>
+                    <span><a><img src="@/assets/2.png" alt=""></a></span>
+                </template>
+                <p :class="($route.name == 'VipEquity') ? 'active' : ''">会员</p>
                 <!-- </router-link> -->
             </div>
             <div class="personal_center" @click="goLink('PersonalCenter')">
                 <!-- <router-link :to="{name:'PersonalCenter'}"> -->
-                    <template v-if="$route.name == 'PersonalCenter'">
-                        <span><a><img src="@/assets/3-3.png" alt=""></a></span>
-                    </template>
-                    <template v-else>
-                        <span><a><img src="@/assets/3.png" alt=""></a></span>
-                    </template>
-                    <p :class="($route.name == 'PersonalCenter') ? 'active' : ''">个人中心</p>
+                <template v-if="$route.name == 'PersonalCenter'">
+                    <span><a><img src="@/assets/3-3.png" alt=""></a></span>
+                </template>
+                <template v-else>
+                    <span><a><img src="@/assets/3.png" alt=""></a></span>
+                </template>
+                <p :class="($route.name == 'PersonalCenter') ? 'active' : ''">个人中心</p>
                 <!-- </router-link> -->
             </div>
         </div>
@@ -58,8 +58,8 @@ export default {
     },
     components: {},
     methods: {
-        goLink(link){
-            this.$router.push({name:link})
+        goLink(link) {
+            this.$router.push({ name: link })
         }
     },
 
@@ -92,14 +92,14 @@ export default {
 }
 </script>
 <style lang="scss">
-.footer {
+.common-footer {
     position: fixed;
     bottom: 0;
     box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
     height: auto;
     width: 100%;
     // padding: 0.1rem 0.2rem;
-    padding: 0.05rem 0;
+    // padding: 0.05rem 0;
     background: #fff;
 
     .footer-bar {
@@ -109,6 +109,7 @@ export default {
         justify-content: space-between;
         height: 100%;
         text-align: center;
+        padding: 0.05rem 0;
 
         .shop {
             display: flex;
@@ -194,21 +195,24 @@ export default {
 
                 a {
                     display: block;
-
-                    // width: .6rem;
                     img {
-                        width: 0.78rem;
-                        height: 0.78rem;
+                        width: 0.50rem;
                     }
+                }
+            }
+
+            p {
+                font-size: 0.24rem;
+
+                &.active {
+                    font-weight: bold;
+                    font-size: 0.26rem;
+                    color: #515C6F;
                 }
             }
         }
     }
 
-    .active {
-        font-weight: bold;
-        font-size: 0.28rem;
-        color: #515C6F;
-    }
+
 }
 </style>

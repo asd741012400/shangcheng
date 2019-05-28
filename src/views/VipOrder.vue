@@ -103,10 +103,10 @@ export default {
                 this.$message('你未同意会员协议！')
                 return false
             }
-           if (!this.plus) {
+            if (!this.plus) {
                 return false;
             }
-            
+
             let WxAuth = this.$localstore.get('wx_user')
             let postData = {
                 order_type: 2,
@@ -125,7 +125,7 @@ export default {
                 message: '正在提交订单中,请耐心等待。。。。',
                 duration: 5000
             });
-            
+
             let res = await this.$postRequest('/order/AddOrder', postData)
             this.$message(res.data.msg)
             if (res.data.code == 1) {
@@ -142,6 +142,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "购买会员"
         document.body.style.background = "#f6f6f6";
         let has_share = this.$localstore.session.get('has_share')
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {

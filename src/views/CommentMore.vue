@@ -107,6 +107,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.title = "更多评论"
         this.getComment()
         document.body.style.background = "#fff";
 

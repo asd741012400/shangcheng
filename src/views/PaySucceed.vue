@@ -204,9 +204,9 @@ export default {
                 // if (!this.$validatenull(this.give_goods) && !this.$validatenull(this.give_cards)) {
                 //     this.PlusPop = true
                 // } else {
-                    if (!this.$validatenull(this.give_cards)) {
-                        this.popShow1 = true
-                    }
+                if (!this.$validatenull(this.give_cards)) {
+                    this.popShow1 = true
+                }
                 // }
             }
             if (this.order_type == 3) {
@@ -255,7 +255,7 @@ export default {
         },
         // 用于微信JS-SDK回调
         wxRegCallback() {
-               wx.ready(() => {
+            wx.ready(() => {
                 //微信分享到朋友圈
                 wx.onMenuShareTimeline({
                     title: this.order.goods_title, // 分享标题, 请自行替换
@@ -295,6 +295,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "支付成功"
         document.body.style.background = "#fff";
         let user = this.$localstore.get('wx_user')
         this.user = user
@@ -303,7 +304,6 @@ export default {
         this.order_type = this.$route.query.type
         this.goods_id = this.$route.query.goods_id
         this.getOrder()
-
     },
 
     // 挂载前状态
@@ -661,8 +661,8 @@ export default {
 
         .footer-box {
             display: flex;
-            position:relative;
-            z-index:999;
+            position: relative;
+            z-index: 999;
         }
 
         .pop {
@@ -670,7 +670,7 @@ export default {
             border-radius: 10px;
             width: 5rem;
             position: relative;
-            z-index:999;
+            z-index: 999;
             margin-top: 5px;
             padding: .4rem .3rem .54rem;
 

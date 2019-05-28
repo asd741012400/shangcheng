@@ -246,7 +246,7 @@ export default {
     created() {
         let userInfo = this.$localstore.get('wx_user')
         document.body.style.background = "#F6F6F6";
-        document.title = "测试商城"
+        document.title = "圈豆商城"
         const that = this;
 
         //卡片列表
@@ -322,7 +322,6 @@ export default {
             }
         }
 
-
         new Swiper('.swiper-container', {
             paginationClickable: true,
             observer: true, //修改swiper自己或子元素时，自动初始化swiper
@@ -367,12 +366,19 @@ export default {
             background: linear-gradient(90deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
 
             .header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(90deg, #ff6666 0%, #ffb389 100%);
+                z-index: 999;
                 height: .7rem;
-                padding: .2rem .16rem;
+                padding: .16rem 0.1rem;
                 display: flex;
                 justify-content: center;
                 font-size: .28rem;
                 align-items: center;
+                // box-sizing:border-box;
 
                 .site {
                     width: .64rem;

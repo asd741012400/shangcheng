@@ -1,6 +1,6 @@
 <template>
     <div class="Collect">
-<!--         <header>
+        <!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">收藏</div>
             <div class="add"><span><img src="../assets/icon_search2.png" alt=""></span></div>
@@ -23,7 +23,7 @@
                     <li class="disabled" v-for="item in list">
                         <i><img :src="$imgUrl + item.img"></i>
                         <div class="right">
-                            <div>
+                            <div @click="goGoods(item)">
                                 <p class="name">
                                     <b>{{item.names}}</b>
                                 </p>
@@ -42,7 +42,7 @@
                     <li class="disabled" v-for="item in list">
                         <i><img :src="$imgUrl + item.img"></i>
                         <div class="right">
-                            <div>
+                            <div @click="goGoods(item)">
                                 <p class="name">
                                     <b>{{item.names}}</b>
                                 </p>
@@ -67,7 +67,7 @@ export default {
     data() {
         return {
             list: [],
-            active: 1,
+            active: 0,
             sortOne: true,
             sortTow: true,
             status: 0,
@@ -87,6 +87,13 @@ export default {
         },
         changeTabs() {
             this.getList()
+        },
+        goGoods(item) {
+            if (item.type == 1) {
+                this.$router.push({ name: "CommodityDetails", query: { id: item.goods_id, type: 1 } })
+            } else if (item.type == 3) {
+                this.$router.push({ name: "CardDetails", query: { id: item.goods_id, type: 3 } })
+            }
         },
         //删除收藏
         async delCollect(id) {
@@ -141,6 +148,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "我的收藏"
         let user = this.$localstore.get('wx_user')
         if (user) {
             this.user = user

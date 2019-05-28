@@ -1,15 +1,18 @@
 <template>
     <div class="Comment">
-        <header>
+<!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">发表评价</div>
             <div class="add"></div>
-        </header>
+        </header> -->
         <div class="commodity">
             <span><img :src="$imgUrl + this.thumb_img" alt=""></span>
-            <div>
-                <a>服务态度</a>
-                <van-rate v-model="star_level" />
+            <div class="right">
+                <p>{{title}}</p>
+                <div class="bottom">
+                    <a>评分</a>
+                    <van-rate v-model="star_level" />
+                </div>
             </div>
         </div>
         <div class="comment_text">
@@ -45,6 +48,7 @@ export default {
     data() {
         return {
             star_level: 0,
+            title: '',
             thumb_img: '',
             content: '',
             imagesUrl: [],
@@ -56,8 +60,8 @@ export default {
         //图片上传
         handleInputChange(ev) {
             const that = this;
-            if (this.imagesUrl.length >= 5) {
-                this.$message('最多只能上传5张！');
+            if (this.imagesUrl.length >= 10) {
+                this.$message('最多只能上传10张！');
                 return false;
             }
 
@@ -109,22 +113,7 @@ export default {
                         instance.close();
                     })
 
-                // var reader = new FileReader();
-                // reader.readAsDataURL(arr[i]);
-                // reader.onload = async function(event) {
-                //     let url = event.target.result;
-                //     postRequest('/upload/UpBase64Image', { img: url })
-                //         .then(res => {
-                //             if (res.data.code == 1) {
-                //                 that.imagesUrl.push(res.data.data)
-                //             } else {
-                //                 that.$message(res.data.msg);
-                //             }
-                //         })
-                //         .catch(function(error) {
-                //             console.log(error);
-                //         });
-                // }
+
             }
             that.imagesUrlLength = that.imagesUrl.length
         },
@@ -142,19 +131,34 @@ export default {
         async getGoods() {
             var url = ''
             let type = this.$route.query.type
+            let data = { id: this.$route.query.goods_id }
             if (type == 1) {
                 url = '/home/GetGoodsDetail'
             } else if (type == 2) {
                 url = '/home/GetPlus'
             } else if (type == 3) {
                 url = '/home/GetCardDetail'
+            } else if (type == 4) {
+                url = '/home/GetStoreDetail'
+                data = { store_id: this.$route.query.goods_id }
             }
 
             //获取详情
-            let data = { id: this.$route.query.goods_id }
             let res = await this.$getRequest(url, data);
             if (res.data.code == 1) {
-                this.thumb_img = res.data.data.thumb_img || res.data.data.thumb
+                if (type != 4) {
+                    if (type == 1) {
+                        this.title = res.data.data.goods_name
+                    } else if (type == 2) {
+                        this.title = res.data.data.name
+                    } else if (type == 3) {
+                        this.title = res.data.data.card_name
+                    }
+                    this.thumb_img = res.data.data.thumb_img || res.data.data.thumb
+                } else {
+                    this.title = res.data.data.business_name
+                    this.thumb_img = res.data.data.thumb_img || res.data.data.business_img[0]
+                }
             }
         },
 
@@ -187,6 +191,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "评论"
         document.body.style.background = "#F6F6F6";
         this.getGoods()
     },
@@ -256,6 +261,7 @@ export default {
         display: flex;
         align-items: center;
 
+
         span {
             overflow: hidden;
             width: 2.04rem;
@@ -270,10 +276,19 @@ export default {
             }
         }
 
-        div {
+        .right {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
+            // align-items: center;
+            // justify-content: center;
+
+            .bottom {
+                margin-top: 0.2rem;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+            }
 
             a {
                 font-size: .28rem;

@@ -171,6 +171,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "我的评价"
         document.body.style.background = "#fff";
         let user = this.$localstore.get('wx_user')
         if (user) {

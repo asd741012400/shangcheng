@@ -312,6 +312,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "添加订单"
         document.body.style.background = "#F6F6F6";
         let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {

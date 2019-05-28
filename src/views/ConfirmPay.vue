@@ -132,7 +132,7 @@ export default {
                             console.log(11111111111111);
                             let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
                             if (res.data.code == 1) {
-                                       console.log(2222222222222);
+                                console.log(2222222222222);
                                 clearInterval(timer)
                                 that.$localstore.session('PaySucceed', res.data.data)
                                 that.$router.replace({
@@ -190,6 +190,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.title = "支付订单"
         this.getOrder()
         // wxapi.wxRegister() //微信config注册
         document.body.style.background = "#F6F6F6";

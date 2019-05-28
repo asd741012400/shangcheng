@@ -1,6 +1,6 @@
 <template>
     <div class="CommodityDetails" id="goods">
-<!--         <div class="top">
+        <div class="top" v-show="toFixed">
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <header>
                 <p :class="active == 1 ? 'active' : ''" @click="handleActive(1)">
@@ -16,8 +16,8 @@
                     <em></em>
                 </p>
             </header>
-        </div> -->
-        <div class="banner">
+        </div>
+        <div class="banner" id="main">
             <van-swipe :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,index) in GoodsDetail.def_pic" :key="index">
                     <img :src="$imgUrl+item" alt="">
@@ -79,11 +79,8 @@
                                 <div class="tle">
                                     <h4>{{item.business_name}}</h4>
                                     <div>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in getLevel(item)"><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in 5-getLevel(item)"><img src="../assets/icon_enshrineB.png" alt=""></span>
                                     </div>
                                 </div>
                                 <div class="timer">
@@ -116,11 +113,8 @@
                                 <div class="tle">
                                     <h4>{{item.business_name}}</h4>
                                     <div>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in getLevel(item)"><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in 5-getLevel(item)"><img src="../assets/icon_enshrineB.png" alt=""></span>
                                     </div>
                                 </div>
                                 <div class="timer">
@@ -175,7 +169,6 @@
                         <div class="grade">
                             <span v-for="(item,index) in Number(item.star_level)"><img src="../assets/icon_enshrineA.png" alt=""></span>
                             <span v-for="(item,index) in 5-Number(item.star_level)"><img src="../assets/icon_enshrineB.png" alt=""></span>
-                            <!-- <van-rate v-model="item.star_level - 0" readonly /> -->
                         </div>
                     </div>
                     <div class="text">{{item.content}}</div>
@@ -198,15 +191,15 @@
         <footer>
             <ul>
                 <li @click="goHome">
-                    <span><img src="../assets/icon_shopA.png" alt=""></span>
+                    <span><img src="../assets/1.png" alt=""></span>
                     <p>商城首页</p>
                 </li>
                 <li @click="collectGoods()">
                     <template v-if="isCollect">
-                        <span><img src="../assets/icon_collectB.png" alt=""></span>
+                        <span><img src="../assets/collect1.png" alt=""></span>
                     </template>
                     <template v-else>
-                        <span><img src="../assets/icon_collectA.png" alt=""></span>
+                        <span><img src="../assets/collect.png" alt=""></span>
                     </template>
                     <p>我要收藏</p>
                 </li>
@@ -275,6 +268,7 @@ export default {
             active: 1,
             table: 1,
             show: false,
+            toFixed: false,
             showMore: false,
             isCollect: false,
             comments: [],
@@ -289,6 +283,16 @@ export default {
     methods: {
         handlwMore() {
             this.showMore = !this.showMore
+        },
+        //获取评分等级
+        getLevel(item) {
+            let num = item.star_level / item.comment_num
+            if (num > 5) {
+                return 5
+            } else {
+                return Math.ceil(num)
+            }
+
         },
         //切换规格选择
         changeAttr(index) {
@@ -485,6 +489,16 @@ export default {
 
         },
 
+        //滚动吸顶
+        handleScroll() {
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+            if (scrollTop > 320) {
+                this.toFixed = true
+            } else {
+                this.toFixed = false
+            }
+        },
+
     },
 
     // 创建前状态
@@ -514,7 +528,9 @@ export default {
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {},
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll)
+    },
 
     // 更新前状态
     beforeUpdate() {},
@@ -524,7 +540,8 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-        document.title = "测试商城"
+        document.title = "圈豆商城"
+        window.addEventListener('scroll', null)
     },
 
     // 销毁完成状态
@@ -543,7 +560,8 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        top: .3rem;
+        // top: .3rem;
+        top: 0;
         left: .2rem;
 
         span {
@@ -567,7 +585,7 @@ export default {
         width: 3.5rem;
         justify-content: space-between;
         margin: 0 auto;
-        padding-top: .3rem;
+        // padding-top: .3rem;
         background: #fff;
 
         p {
@@ -1165,7 +1183,8 @@ export default {
     footer {
         position: fixed;
         bottom: 0;
-        height: 1.16rem;
+        // height: 1.16rem;
+        height: 1rem;
         display: flex;
         background: #fff;
         width: 100%;
@@ -1182,8 +1201,12 @@ export default {
                 align-items: center;
 
                 span {
-                    overflow: hidden;
-                    width: .5rem;
+                    // overflow: hidden;
+                    display: block;
+
+                    img {
+                        width: .6rem;
+                    }
                 }
 
                 p {

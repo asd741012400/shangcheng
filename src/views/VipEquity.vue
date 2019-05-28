@@ -74,8 +74,8 @@
                                         <div class="share">
                                             <div class="price">
                                                 <span>现价</span>
-                                                <b>￥{{item.mkt_price}}</b>
-                                                <a>￥{{item.goods_price}}</a>
+                                                <b>￥{{item.goods_price}}</b>
+                                                <a>￥{{item.mkt_price}}</a>
                                             </div>
                                         </div>
                                     </router-link>
@@ -312,6 +312,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "会员权益"
         document.body.style.background = "#FBF9F2";
         let user = this.$localstore.get('wx_user')
         if (user) {

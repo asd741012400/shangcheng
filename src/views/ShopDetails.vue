@@ -1,6 +1,6 @@
 <template>
     <div class="ShopDetails">
-<!--         <header>
+        <!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">门店详情</div>
             <div class="add"></div>
@@ -92,7 +92,7 @@ export default {
                 address: this.shop.address,
                 key: 'QPGBZ-LJFCX-AAG4W-TD3HL-VTJR3-ZUB3K'
             }
-            
+
             let url = 'https://apis.map.qq.com/ws/geocoder/v1/'
 
             this.$jsonp(url, data).then(res => {
@@ -114,6 +114,7 @@ export default {
         async getShop() {
             let res = await this.$getRequest('/home/GetStoreDetail', { store_id: this.$route.query.store_id })
             this.shop = res.data.data;
+            document.title = this.shop.address
             let arr = res.data.data.business_img.map(item => {
                 return item = this.$imgUrl + item
             })

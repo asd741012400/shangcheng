@@ -95,7 +95,7 @@ export default {
                     var options = config;
                     // 支付成功后的操作
                     options.success = () => {
-                    that.$localstore.session.set('has_share', '')
+                        that.$localstore.session.set('has_share', '')
 
                         let timer = setInterval(async () => {
                             console.log(33333333333);
@@ -158,6 +158,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.title = "支付订单"
         document.body.style.background = "#f6f6f6";
         this.getPlus()
         this.getOrder()

@@ -39,11 +39,8 @@
                                 <div class="tle">
                                     <h4>{{item.business_name}}</h4>
                                     <div>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in getLevel(item)"><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in 5-getLevel(item)"><img src="../assets/icon_enshrineB.png" alt=""></span>
                                     </div>
                                 </div>
                                 <div class="timer">
@@ -74,11 +71,8 @@
                                 <div class="tle">
                                     <h4>{{item.business_name}}</h4>
                                     <div>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
-                                        <span><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in getLevel(item)"><img src="../assets/icon_enshrineA.png" alt=""></span>
+                                        <span v-for="(item,index) in 5-getLevel(item)"><img src="../assets/icon_enshrineB.png" alt=""></span>
                                     </div>
                                 </div>
                                 <div class="timer">
@@ -164,6 +158,15 @@ export default {
     },
     components: {},
     methods: {
+        //获取评分等级
+        getLevel(item) {
+            let num = item.star_level / item.comment_num
+            if (num > 5) {
+                return 5
+            } else {
+                return Math.ceil(num)
+            }
+        },
         handlwMore() {
             this.showMore = !this.showMore
         },
@@ -178,6 +181,7 @@ export default {
             let data = { project_id: this.project_id }
             let res = await this.$getRequest('/home/GetCardProjectDetail', data)
             this.info = res.data.data
+            document.title = this.info.project_name
             if (this.info.def_pic) {
                 this.imgList = this.info.def_pic.split(',')
             }
@@ -518,7 +522,7 @@ export default {
         position: fixed;
         bottom: .76rem;
         width: 100%;
-        height: .8rem;
+        height: 1rem;
         background: transparent;
         box-shadow: none;
 

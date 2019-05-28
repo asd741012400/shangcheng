@@ -12,7 +12,7 @@
             </div>
             <b><img src="../assets/my_shopBg.png" alt="" srcset=""></b>
         </header>
-        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}">
+        <div class="vip_card" :style="{backgroundImage: 'url('+$imgUrl+plus.photo+')'}" @click="goVip">
         </div>
         <template v-if="!userInfo || userInfo.status == 0">
             <div class="share" @click="BuyPlus">
@@ -100,6 +100,9 @@ export default {
         invitation() {
             this.$router.push({ name: "VipPlus" })
         },
+        goVip() {
+            this.$router.push({ name: "VipEquity" })
+        },
         shareShowFn() {
             this.$refs.myShare.shareShowFn();
         },
@@ -170,6 +173,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.title = "圈豆商城"
         document.body.style.background = "#F6F6F6";
         let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {

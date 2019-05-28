@@ -269,6 +269,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "卡片权益"
         document.body.style.background = "#F6F6F6";
         let card = this.$localstore.get('usecard')
         this.card = card

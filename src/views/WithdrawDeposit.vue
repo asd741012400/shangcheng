@@ -79,6 +79,8 @@ export default {
 
     // 创建完毕状态
     created() {
+        //申请提现
+        document.title = "使用卡片"
         document.body.style.background = "#F6F6F6";
         let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {

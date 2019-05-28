@@ -212,6 +212,11 @@ export default {
         document.body.style.background = "#fff";
         document.title = "PLUS会员"
         this.user = this.$localstore.get('wx_user')
+        if (this.user.status != 1) {
+            this.$router.replace({name:"Index"})
+            return false
+        }
+
         var url = this.user.wechat_img;
         this.wechat_img = 'http://' + window.location.host + '/upload/wechat_image' + url.substring(23)
         // this.wechat_img = this.$imgUrl + '/wechat_image' + url.substring(23)

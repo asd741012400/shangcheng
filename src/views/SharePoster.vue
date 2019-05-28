@@ -167,7 +167,7 @@ export default {
                 this.goods = res.data.data
                 this.price = res.data.data.goods_price
                 this.title = res.data.data.goods_name
-                this.desc = res.data.data.goods_info  || ''
+                this.desc = res.data.data.goods_info || ''
                 this.share_img = res.data.data.dist_poster || res.data.data.def_pic[0]
                 // this.poster_img = await this.toBase64(this.$imgUrl + this.share_img)
                 this.poster_img = this.$imgUrl + this.share_img
@@ -241,6 +241,7 @@ export default {
 
     // 创建完毕状态
     async created() {
+        document.title = "分享海报"
         document.body.style.background = "#fff";
         this.user = this.$localstore.get('wx_user')
         this.goods_id = this.$route.query.id

@@ -96,15 +96,15 @@
         </div>
         <ul :class="userInfo.status == 1 ? 'vip_function' : 'user_function'">
             <li>
-                <router-link :to="{name:'Collect'}">
-                    <span><img src="../assets/icon_collect.png" alt=""></span>
-                    <p>我的收藏</p>
-                </router-link>
-            </li>
-            <li>
                 <router-link :to="{name:'MyCardBag'}">
                     <span><img src="../assets/icon_card_bag2.png" alt=""></span>
                     <p>我的卡包</p>
+                </router-link>
+            </li>
+            <li>
+                <router-link :to="{name:'Collect'}">
+                    <span><img src="../assets/icon_collect.png" alt=""></span>
+                    <p>我的收藏</p>
                 </router-link>
             </li>
             <li>
@@ -323,6 +323,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "个人中心"
         document.body.style.background = "#fff";
         let userInfo = this.$localstore.get('wx_user')
         if (userInfo) {

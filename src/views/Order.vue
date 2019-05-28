@@ -1,6 +1,6 @@
 <template>
     <div class="ConfirmPay">
-<!--         <header>
+        <!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">订单列表</div>
             <div class="add"></div>
@@ -88,11 +88,11 @@
                             <div>X {{item.order_num}}</div>
                         </div>
                     </div>
-                    <div>
-                        <div class="footer">
+                    <div class="footer-box">
+                        <div class="footer-left">
                             <span style="font-size:0.3rem;font-weight:700">合计 ￥{{item.total_amount}}</span>
                         </div>
-                        <div class="footer">
+                        <div class="footer-right">
                             <!-- 判断是否过期 -->
                             <!-- <template v-if="$calcTime(item.card_info.limit_type,item.pay_time,item.card_info.limit_days,item.card_info.limit_stime,item.card_info.limit_etime)"> -->
                             <!-- 全部 -->
@@ -306,6 +306,7 @@ export default {
 
     // 创建完毕状态
     created() {
+        document.title = "我的订单"
         this.active = this.$route.query.index - 1
         let user = this.$localstore.get('wx_user')
         this.user_id = user.user_id
@@ -345,7 +346,7 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         this.$refs.loadMore.hideTip()
-          window.onscroll = null
+        window.onscroll = null
     },
 
     // 销毁完成状态
@@ -414,11 +415,12 @@ export default {
             }
         }
 
-        .footer {
+        .footer-box {
             margin-top: 0.2rem;
             display: flex;
             flex-direction: row;
-            justify-content: flex-end;
+            justify-content: space-between;
+            align-items: center;
 
             button {
                 margin-left: 10px;

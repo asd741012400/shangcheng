@@ -1,10 +1,10 @@
 <template>
     <div class="CommentSucceed">
-        <header>
+<!--         <header>
             <div class="icon_return" @click="$router.go(-2)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">评价成功</div>
             <div class="add"></div>
-        </header>
+        </header> -->
         <div class="header">
             <div class="use_card_message">
                 <i><img src="../assets/CommentSucceed.png" alt=""></i>
@@ -66,6 +66,7 @@ export default {
 
     // 创建完毕状态 
     created() {
+        document.title = "评论成功"
         document.body.style.background = "#F6F6F6";
         this.getGoods()
     },
@@ -249,7 +250,7 @@ export default {
                 }
 
                 p {
-                    width:3rem;
+                    width: 3rem;
                     font-size: .24rem;
                     color: #515C6F;
                     padding-top: .14rem;
