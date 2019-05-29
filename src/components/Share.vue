@@ -7,11 +7,11 @@
                     <p>好友通过你的购买链接进行购买，你将获得至少<span>{{calcMoney(money)}}</span>元的分享收益</p>
                 </template>
                 <ul>
-                    <li @click="maskingShowFn">
+                    <li @click="maskingShowFn" v-if="$route.name == 'MyShop'">
                         <span><img src="../assets/share_wx.png" alt=""></span>
                         <a>发送好友</a>
                     </li>
-                    <li @click="maskingShowFn">
+                    <li @click="maskingShowFn" v-if="$route.name == 'MyShop'">
                         <span><img src="../assets/share_circle_of_friends.png" alt=""></span>
                         <a>朋友圈</a>
                     </li>

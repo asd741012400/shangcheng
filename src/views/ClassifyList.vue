@@ -29,8 +29,8 @@
                         </div>
                         <div class="share">
                             <div class="price">
-                                <span>现价</span>
-                                <b>￥{{item.goods_price}}</b>
+                                <span v-if="item.is_vip == 0">现价</span>
+                                <b v-if="item.is_vip == 0">￥{{item.goods_price}}</b>
                                 <a>￥{{item.mkt_price}}</a>
                             </div>
                         </div>
@@ -148,7 +148,6 @@ export default {
 
     // 挂载结束状态
     mounted() {
-        info.project_name
         window.onscroll = () => {
             //变量scrollTop是滚动条滚动时，距离顶部的距离
             var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -274,6 +273,7 @@ export default {
                 background: #fff;
                 padding-top: .2rem;
                 margin-bottom: .2rem;
+                padding-bottom: .2rem;
 
                 .img {
                     margin: 0 .2rem;
@@ -344,7 +344,7 @@ export default {
                     .price {
                         display: flex;
                         align-items: baseline;
-                        padding-bottom: .2rem;
+                        // padding-bottom: .2rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
                         color: #515C6F;

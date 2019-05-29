@@ -25,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <ul class="share_type">
+<!--                 <ul class="share_type">
                     <li @click="maskingShowFn">
                         <span><img src="../assets/share_wx.png" alt=""></span>
                         <p>微信</p>
@@ -38,7 +38,7 @@
                         <span><img src="../assets/share_download.png" alt=""></span>
                         <p>保存图片</p>
                     </li>
-                </ul>
+                </ul> -->
             </div>
             <div class="masking" v-if="maskingShow">
                 <span @click="maskingHideFn"><img src="../assets/share_img2.png" alt=""></span>

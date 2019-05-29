@@ -80,8 +80,8 @@
                         <!-- <span>已售　{{item.sale_num}}/{{parseInt(item.sale_num) + parseInt(item.store)}}</span> -->
                     </div>
                     <div class="price">
-                        <span>现价</span>
-                        <b>￥{{item.goods_price}}</b>
+                        <span v-if="item.is_vip == 0">现价</span>
+                        <b v-if="item.is_vip == 0">￥{{item.goods_price}}</b>
                         <a>￥{{item.mkt_price}}</a>
                     </div>
                     <div class="status" v-if="item.store <= 0"><span><img src="../assets/icon_null.png" alt=""></span></div>
@@ -617,6 +617,7 @@ export default {
                 padding-top: .2rem;
                 margin-bottom: .2rem;
                 position: relative;
+                padding-bottom: .2rem;
 
                 &.shopping {
                     .img {
@@ -795,7 +796,6 @@ export default {
                     .price {
                         display: flex;
                         align-items: baseline;
-                        padding-bottom: .2rem;
                         justify-content: flex-start;
                         padding-left: .46rem;
                         color: #515C6F;

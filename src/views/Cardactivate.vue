@@ -213,17 +213,15 @@ export default {
                 return false;
             }
 
-            if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.child_name)) {
-                this.$message('真实姓名填写有误');
-                return false;
-            }
-
+            // if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.child_name)) {
+            //     this.$message('真实姓名填写有误');
+            //     return false;
+            // }
 
             if (!(/^1(3|4|5|6|9|7|8)\d{9}$/.test(this.tel_phone))) {
                 this.$message("手机号码有误，请重填");
                 return false;
             }
-
 
             document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.confirmPop = true

@@ -213,7 +213,7 @@ export default {
         document.title = "PLUS会员"
         this.user = this.$localstore.get('wx_user')
         if (this.user.status != 1) {
-            this.$router.replace({name:"Index"})
+            this.$router.replace({ name: "Index" })
             return false
         }
 
@@ -271,7 +271,9 @@ export default {
 
     // 销毁前状态
     beforeDestroy() {
-        this.instance.close();
+        if (this.instance) {
+            this.instance.close();
+        }
         // wx.ready(() => {
         //     wx.showOptionMenu();
         // })

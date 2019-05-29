@@ -101,6 +101,7 @@ export default {
     methods: {
         goGoods(item) {
             this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
+            // window.location.href = this.$HOME_URL + '/?#/CommodityDetails?&type=1&id=' + item.goods_id
         },
         goVip() {
             this.$router.push({ name: "VipEquity" })

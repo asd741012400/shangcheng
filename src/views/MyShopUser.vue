@@ -93,6 +93,7 @@ export default {
     methods: {
         goGoods(item) {
             this.$router.push({ name: 'CommodityDetails', query: { id: item.goods_id, type: 1 } })
+            // window.location.href = this.$HOME_URL + '/?#/CommodityDetails?&type=1&id=' + item.goods_id
         },
         goHome() {
             this.$router.push({ name: "Index" })
@@ -123,10 +124,40 @@ export default {
             if (res.data.code == 1 && res.data.data.tel_phone) {
                 this.userInfo = res.data.data
                 this.$localstore.set('wx_user', this.userInfo)
-                this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+
+                let WxAuth = this.$localstore.get('wx_user')
+                let postData = {
+                    order_type: 2,
+                    share_id: this.share_id,
+                    goods_id: this.plus.setting_id,
+                    goods_title: this.plus.name,
+                    goods_img: this.plus.thumb,
+                    union_id: WxAuth.union_id,
+                    is_wechat: 1,
+                    order_num: 1,
+                    amount: this.plus.sale_price,
+                    total_amount: this.plus.sale_price
+                }
+
+                let instance = this.$message({
+                    message: '正在提交中,请耐心等待。。。。',
+                    duration: 5000
+                });
+
+                let result = await this.$postRequest('/order/AddOrder', postData)
+                if (result.data.code == 1) {
+                    instance.close();
+                    this.$router.push({ name: 'VipOrder', query: { id: result.data.data } })
+                    // window.location.href = this.$HOME_URL + '/?#/VipOrder?&id=' + result.data.data
+                } else {
+                    this.$message(result.data.msg)
+                    instance.close();
+                }
+
             } else {
                 this.$refs.bindPhone.showBind(true)
             }
+
         },
         async getUser() {
             let res = await this.$getRequest('/wechat/GetUser', { uid: this.share_id })

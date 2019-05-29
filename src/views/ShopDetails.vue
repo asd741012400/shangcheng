@@ -7,20 +7,20 @@
         </header> -->
         <div class="shop_message">
             <div>
-                <a>营业时间</a>：
+                <a>营业时间：</a>
                 <p>
                     <span>{{shop.sale_time}}</span>
                     <span>{{shop.sale_time2}}</span>
                 </p>
             </div>
             <div>
-                <a>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址</a>：
+                <a>地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：</a>
                 <p>
                     <span>{{shop.address}}</span>
                 </p>
             </div>
             <div>
-                <a>电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话</a>：
+                <a>电&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话：</a>
                 <p>
                     <span>{{shop.tel_phone}}</span>
                 </p>
@@ -210,8 +210,8 @@ export default {
 
             a {
                 display: inline-block;
-
-                &:after {}
+                // width: 1.5rem;
+                padding-right: 0.1rem;
             }
 
             p {
@@ -271,7 +271,7 @@ export default {
         padding: .26rem .16rem;
 
         .detail {
-            padding: 0.2rem .6rem;
+            padding: 0.2rem .25rem;
             background: #fff;
             overflow: hidden;
             display: inherit;

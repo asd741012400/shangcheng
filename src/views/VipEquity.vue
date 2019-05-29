@@ -73,8 +73,8 @@
                                         </div>
                                         <div class="share">
                                             <div class="price">
-                                                <span>现价</span>
-                                                <b>￥{{item.goods_price}}</b>
+                                                <span v-if="item.is_vip == 0">现价</span>
+                                                <b v-if="item.is_vip == 0">￥{{item.goods_price}}</b>
                                                 <a>￥{{item.mkt_price}}</a>
                                             </div>
                                         </div>
@@ -147,7 +147,37 @@ export default {
             if (res.data.code == 1 && res.data.data.tel_phone) {
                 this.userInfo = res.data.data
                 this.$localstore.set('wx_user', this.userInfo)
-                this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+
+                let WxAuth = this.$localstore.get('wx_user')
+                let postData = {
+                    order_type: 2,
+                    share_id: this.share_id,
+                    goods_id: this.plus.setting_id,
+                    goods_title: this.plus.name,
+                    goods_img: this.plus.thumb,
+                    union_id: WxAuth.union_id,
+                    is_wechat: 1,
+                    order_num: 1,
+                    amount: this.plus.sale_price,
+                    total_amount: this.plus.sale_price
+                }
+
+                let instance = this.$message({
+                    message: '正在提交中,请耐心等待。。。。',
+                    duration: 5000
+                });
+
+                let result = await this.$postRequest('/order/AddOrder', postData)
+                if (result.data.code == 1) {
+                    // this.$router.replace({ name: 'VipOrderBuy', query: { id: result.data.data } })
+                    instance.close();
+                    this.$router.push({ name: 'VipOrder', query: { id: result.data.data } })
+                    // this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+                } else {
+                    this.$message(result.data.msg)
+                    instance.close();
+                }
+
             } else {
                 this.$refs.bindPhone.showBind(true)
             }
@@ -320,9 +350,15 @@ export default {
         }
         let has_share = this.$localstore.session.get('has_share')
         this.share_id = this.$route.query.share_id
+        //用户分享
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
             this.share_id = has_share.query.share_id
         }
+        //店铺分享
+        if (has_share && has_share.query.type == 4) {
+            this.share_id = has_share.query.share_id
+        }
+
         this.getPlUS()
         this.getMoney()
         this.getVipList()
@@ -643,6 +679,7 @@ export default {
             background: #fff;
             padding-top: .2rem;
             margin-bottom: .2rem;
+            padding-bottom: .2rem;
 
             .img {
                 margin: 0 .2rem;
@@ -712,7 +749,7 @@ export default {
                 .price {
                     display: flex;
                     align-items: baseline;
-                    padding-bottom: .2rem;
+                    // padding-bottom: .2rem;
                     justify-content: flex-start;
                     padding-left: .46rem;
                     color: #515C6F;

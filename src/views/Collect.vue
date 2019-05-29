@@ -21,7 +21,7 @@
             <van-tab title="全部">
                 <ul class="team_member">
                     <li class="disabled" v-for="item in list">
-                        <i><img :src="$imgUrl + item.img"></i>
+                        <i @click="goGoods(item)"><img :src="$imgUrl + item.img"></i>
                         <div class="right">
                             <div @click="goGoods(item)">
                                 <p class="name">
@@ -40,7 +40,7 @@
             <van-tab title="已失效">
                 <ul class="team_member">
                     <li class="disabled" v-for="item in list">
-                        <i><img :src="$imgUrl + item.img"></i>
+                        <i @click="goGoods(item)"><img :src="$imgUrl + item.img"></i>
                         <div class="right">
                             <div @click="goGoods(item)">
                                 <p class="name">
@@ -88,10 +88,11 @@ export default {
         changeTabs() {
             this.getList()
         },
+        //查看收藏商品详情
         goGoods(item) {
             if (item.type == 1) {
                 this.$router.push({ name: "CommodityDetails", query: { id: item.goods_id, type: 1 } })
-            } else if (item.type == 3) {
+            } else if (item.type == 2) {
                 this.$router.push({ name: "CardDetails", query: { id: item.goods_id, type: 3 } })
             }
         },
@@ -109,7 +110,7 @@ export default {
         },
         //收藏列表
         async getList() {
-            if (this.active == 1) {
+            if (this.active == 0) {
                 this.status = 0
             } else {
                 this.status = 2
@@ -299,6 +300,9 @@ export default {
             div {
                 padding-left: .4rem;
                 flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
 
                 p {
                     font-size: .28rem;
@@ -317,8 +321,10 @@ export default {
                     }
 
                     a {
+                        display: block;
+                        // padding: .1rem .2rem;
                         font-size: .36rem;
-                        color: #000;
+                        // color: #000;
                     }
 
                     em {
@@ -366,6 +372,9 @@ export default {
                     padding-left: .4rem;
                     flex: 1;
                     height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
 
                     p {
                         font-size: .28rem;
@@ -385,12 +394,14 @@ export default {
 
                         a {
                             font-size: .24rem;
-                            color: #000;
-                            background: #FF6C5F;
-                            color: #fff;
+                            // color: #000;
+                            // background: #FF6C5F;
+                            // color: #fff;
                             width: 1rem;
                             text-align: center;
                             line-height: .4rem;
+                            display:block;
+                            // padding:.1rem .12rem;
                         }
                     }
 

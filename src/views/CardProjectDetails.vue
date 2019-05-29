@@ -494,7 +494,7 @@ export default {
             // overflow: hidden;
 
             .detail {
-                padding: 0.2rem .6rem;
+                padding: 0.2rem .25rem;
                 background: #fff;
                 // display: flex;
 

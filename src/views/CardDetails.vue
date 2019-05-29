@@ -51,7 +51,7 @@
             </div>
             <div class="attention">
                 <h3>购买须知</h3>
-                <div class="detail" v-html="CardDetail.buy_things">
+                <div class="detail" ref="detail" v-html="CardDetail.buy_things">
                 </div>
             </div>
             <div class="comment" id="comments">
@@ -117,7 +117,7 @@
                     </ul>
                 </div>
                 <div v-if="table == 2" class="shop_del_div">
-                    <div v-html="CardDetail.goods_info">
+                    <div ref="detail" v-html="CardDetail.goods_info">
                     </div>
                 </div>
             </div>
@@ -269,10 +269,6 @@ export default {
                 return false
             }
 
-            if (this.timeSatrt < 3) {
-                return false
-            }
-
             const that = this;
             that.$router.push({
                 name: "ConfirmAnOrder",
@@ -317,17 +313,27 @@ export default {
         //获取卡片详情
         async getDetail() {
             this.$Indicator.open({ spinnerType: 'fading-circle' });
-            let data = { id: this.$route.query.id }
+            let data = { id: this.$route.query.id,user_id: this.user.user_id  }
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
                 this.calcStatus()
                 document.title = this.CardDetail.card_name
                 this.isCollect = Boolean(res.data.data.is_coolect);
-                // if (this.CardDetail.is_dist == 1) {
+
                 this.wxRegister()
                 this.$Indicator.close();
-                // }
+                //文章详情表格处理
+                this.$nextTick(() => {
+                    let arr = Array.from(this.$refs.detail.children)
+                    arr.forEach(item => {
+                        if (item.nodeName == 'TABLE') {
+                            item.style.width = '100%'
+                        }
+                    })
+                })
+
+
                 // this.timer()
             }
         },
@@ -606,18 +612,18 @@ export default {
                     padding-right: 0.2rem;
 
                     em {
-                        font-size: .30rem;
+                        font-size: .28rem;
                         font-style: normal;
                     }
 
                     i {
-                        font-size: .30rem;
+                        font-size: .32rem;
                         font-style: normal;
                     }
 
                     a {
                         color: #fff;
-                        font-size: .30rem;
+                        font-size: .34rem;
                     }
                 }
 
@@ -625,12 +631,13 @@ export default {
                     font-weight: normal;
                     color: #515C6F;
                     font-size: .26rem;
-                    padding: 0 .26rem;
+                    margin-left: .26rem;
                 }
 
                 p {
                     color: #999;
                     font-size: .24rem;
+                    margin-left: .26rem;
 
                     span {
                         text-decoration: line-through;
@@ -820,6 +827,7 @@ export default {
             background: #fff;
             // margin-bottom: 2.5rem;
 
+
             h3 {
                 font-size: .28rem;
                 color: #515C6F;
@@ -844,6 +852,11 @@ export default {
             .shop_del_div {
                 padding: 0.2rem .6rem;
                 background: #fff;
+                display: inherit;
+
+                table {
+                    width: 100% !important;
+                }
             }
 
             div {

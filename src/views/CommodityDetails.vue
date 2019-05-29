@@ -21,7 +21,7 @@
             <van-swipe :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,index) in GoodsDetail.def_pic" :key="index">
                     <img :src="$imgUrl+item" alt="">
-                  </van-swipe-item>
+                </van-swipe-item>
             </van-swipe>
             <!-- <span></span> -->
             <!--             <div class="text" v-show="GoodsDetailsState == 1">
@@ -44,7 +44,7 @@
                         <i>￥</i>
                         <a>{{cost_price}}</a>
                     </div>
-                    <b>现价￥{{goods_price}}</b>
+                    <b v-if="GoodsDetail.is_vip == 0">现价￥{{goods_price}}</b>
                     <p>市场价<span>￥{{mkt_price}}</span></p>
                 </div>
                 <div v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</div>
@@ -54,7 +54,7 @@
                         <div class="footer-box">
                             <div class="left">
                                 <span class="price1">会员价￥{{vv.attr_vip_price}}</span>
-                                <span class="price2">现价￥{{vv.attr_price}}</span>
+                                <span v-if="GoodsDetail.is_vip == 0" class="price2">现价￥{{vv.attr_price}}</span>
                                 <!-- <del class="price3">￥{{mkt_price}}</del> -->
                             </div>
                             <div class="right">
@@ -67,7 +67,7 @@
             </div>
             <div class="attention">
                 <h3>购买须知</h3>
-                <div class="detail" v-html="GoodsDetail.buy_things">
+                <div class="detail" ref="detail" v-html="GoodsDetail.buy_things">
                 </div>
             </div>
             <div class="shop">
@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="timer">
                                     <!--                          <p>营业时间：{{item.sale_time}}</p>
-                                    <p>{{item.sale_time2}}</p> -->
+                                        <p>{{item.sale_time2}}</p> -->
                                     <a>营业时间</a>：
                                     <p>
                                         <span>{{item.sale_time}}</span>
@@ -101,10 +101,10 @@
                         </div>
                         <div class="advance">
                             <span>
-                                <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                    <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                         <img src="../assets/icon_advance.png" alt="">
-                                </router-link>
-                            </span>
+                                    </router-link>
+                                </span>
                         </div>
                     </li>
                     <li v-for="(item,index) in storeList" :key="index" v-if="index >= 2 && showMore">
@@ -133,10 +133,10 @@
                         </div>
                         <div class="advance">
                             <span>
-                                <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
+                                    <router-link :to="{name:'ShopDetails',query:{store_id:item.business_id}}">
                                         <img src="../assets/icon_advance.png" alt="">
-                                </router-link>
-                            </span>
+                                    </router-link>
+                                </span>
                         </div>
                     </li>
                     <li class="more" v-if="!$validatenull(storeList) && storeList.length > 2" @click="handlwMore">
@@ -147,17 +147,17 @@
             </div>
             <div class="comment" id="comments">
                 <h3>
-            <p>用户评价</p>
-                          <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:1}}">
-            查看全部 &gt;
-         </router-link>
-          </h3>
+                        <p>用户评价</p>
+                        <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:1}}">
+                            查看全部 &gt;
+                        </router-link>
+                    </h3>
                 <div class="user_comment" v-for="(item,index) in comments" v-if="index < 3">
                     <div class="user">
                         <div class="user_message">
                             <i>
-                               <template v-if="item.anonymous == 0">
-                                <img :src="item.wechat_img" alt="" />
+                                 <template v-if="item.anonymous == 0">
+                                    <img :src="item.wechat_img" alt="" />
                                 </template>
                             </i>
                             <div class="user_name">
@@ -181,7 +181,7 @@
             </div>
             <div class="shop_del" id="details">
                 <h3>商品详情</h3>
-                <div class="detail" v-html="GoodsDetail.goods_info">
+                <div class="detail" ref="detail" v-html="GoodsDetail.goods_info">
                 </div>
                 <div v-if="GoodsDetail.goods_info" style="text-align: center;margin: 5px 0;background: #fff;">
                     <p>没有更多了</p>
@@ -348,14 +348,6 @@ export default {
                 return false
             }
 
-            // if (this.timeSatrt < 3) {
-            //     return false
-            // }
-
-            // if (this.limit_num == 0) {
-            //     this.$message('当前限购0件!');
-            //     return false;
-            // }
 
             if (!this.attr_id) {
                 if (!this.$validatenull(this.GoodsDetail.goods_attr) && this.GoodsDetail.goods_attr.length > 0) {
@@ -427,12 +419,24 @@ export default {
                 }
 
                 this.isCollect = Boolean(res.data.data.is_coolect);
-                this.calcStatus()
+
+                //文章详情表格处理
+                this.$nextTick(() => {
+                    let arr = Array.from(this.$refs.detail.children)
+                    arr.forEach(item => {
+                        if (item.nodeName == 'TABLE') {
+                            item.style.width = '100%'
+                        }
+                    })
+                })
+
+
                 this.wxRegister()
                 this.$Indicator.close();
+                //动态计算商品过期时间
+                this.calcStatus()
                 // this.timer();
-                // 
-                // 
+
             }
         },
         //获取评论
@@ -700,18 +704,18 @@ export default {
                     padding-right: 0.2rem;
 
                     em {
-                        font-size: .30rem;
+                        font-size: .28rem;
                         font-style: normal;
                     }
 
                     i {
-                        font-size: .30rem;
+                        font-size: .32rem;
                         font-style: normal;
                     }
 
                     a {
                         color: #fff;
-                        font-size: .30rem;
+                        font-size: .34rem;
                     }
                 }
 
@@ -719,12 +723,13 @@ export default {
                     font-weight: normal;
                     color: #515C6F;
                     font-size: .26rem;
-                    padding: 0 .26rem;
+                    margin-left: .26rem;
                 }
 
                 p {
                     color: #999;
                     font-size: .24rem;
+                    margin-left: .26rem;
 
                     span {
                         text-decoration: line-through;
@@ -827,6 +832,10 @@ export default {
                 background: #fff;
                 display: inherit;
                 opacity: 0.8;
+
+                table {
+                    width: 100% !important;
+                }
 
                 p {
                     display: block;
@@ -1147,6 +1156,10 @@ export default {
                 display: inherit;
                 // margin-bottom: 3.5rem;
                 overflow: hidden;
+
+                table {
+                    width: 100% !important;
+                }
 
                 p {
                     display: block;

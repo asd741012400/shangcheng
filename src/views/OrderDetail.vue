@@ -252,9 +252,12 @@ export default {
             this.goods_info = res.data.data.goods_info
             this.goods_cancle = res.data.data.goods_cancle
 
-            this.goods_cancle = this.goods_cancle.filter(item => {
-                return item.cancle_status != 2
-            })
+            if (!this.$validatenull) {
+                this.goods_cancle = this.goods_cancle.filter(item => {
+                    return item.cancle_status != 2
+                })
+            }
+
 
             //计算过期时间
             this.orderStatus = this.$calcTime(this.goods_info.limit_type, this.order.pay_time, this.goods_info.limit_days, this.goods_info.limit_stime, this.goods_info.limit_etime)

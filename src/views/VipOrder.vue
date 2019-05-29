@@ -2,7 +2,7 @@
     <div class="VipOrder">
         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
-            <div class="tel">确认订单</div>
+            <div class="tel">确认支付</div>
             <div class="add"></div>
         </header>
         <div class="mian">
@@ -22,14 +22,14 @@
                 </ul>
             </div>
             <div class="agreement">
-                <span v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
-                <span v-else><img src="../assets/icon_unselected.png" alt=""></span>
+                <span @click.stop="changeAgree" v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
+                <span @click.stop="changeAgree" v-else><img src="../assets/icon_unselected.png" alt=""></span>
                 <p @click.stop="changeAgree">同意</p>&nbsp;&nbsp;
                 <a herf="javascript:;" @click="changeStatus">PLUS协议</a>
             </div>
-            <div class="total">
+            <!--            <div class="total">
                 <p>合计:￥{{plus.sale_price}}</p>
-            </div>
+            </div> -->
         </div>
         <div class="confirm_pop_bg" v-if="confirmPop">
             <div class="confirm_pop">
@@ -42,19 +42,21 @@
         </div>
         <footer>
             <p>合计:￥{{plus.sale_price}}</p>
-            <b @click="addOrder">
-                提交订单
+            <b @click="payOrder">
+                确认支付
             </b>
         </footer>
     </div>
 </template>
 <script>
+import wx from 'weixin-js-sdk' //微信sdk依赖
 export default {
     name: 'VipOrder',
     data() {
         return {
             share_id: '',
             plus: {},
+            order: {},
             vip: [],
             confirmPop: false,
             agreementState: true
@@ -76,7 +78,7 @@ export default {
             this.confirmPop = false
         },
         //获取PlUS
-        async getOrder() {
+        async getPlus() {
             let plus = this.$localstore.session.get('plus')
             if (plus) {
                 this.plus = plus
@@ -98,43 +100,121 @@ export default {
             }
         },
         //添加订单
-        async addOrder() {
-            if (!this.agreementState) {
-                this.$message('你未同意会员协议！')
-                return false
-            }
-            if (!this.plus) {
+        // async addOrder() {
+        //     if (!this.agreementState) {
+        //         this.$message('你未同意会员协议！')
+        //         return false
+        //     }
+        //     if (!this.plus) {
+        //         return false;
+        //     }
+
+        //     let WxAuth = this.$localstore.get('wx_user')
+        //     let postData = {
+        //         order_type: 2,
+        //         share_id: this.share_id,
+        //         goods_id: this.plus.setting_id,
+        //         goods_title: this.plus.name,
+        //         goods_img: this.plus.thumb,
+        //         union_id: WxAuth.union_id,
+        //         is_wechat: 1,
+        //         order_num: 1,
+        //         amount: this.plus.sale_price,
+        //         total_amount: this.plus.sale_price
+        //     }
+
+        //     let instance = this.$message({
+        //         message: '正在提交订单中,请耐心等待。。。。',
+        //         duration: 5000
+        //     });
+
+        //     let res = await this.$postRequest('/order/AddOrder', postData)
+        //     this.$message(res.data.msg)
+        //     if (res.data.code == 1) {
+        //         this.$router.replace({ name: 'VipOrderBuy', query: { id: res.data.data } })
+        //         instance.close();
+        //     } else {
+        //         instance.close();
+        //     }
+        // },
+        // 
+        //获取订单
+        async getOrder() {
+            let id = this.$route.query.id
+            let res = await this.$getRequest('/order/getOrder', { id: id })
+            this.order = res.data.data
+        },
+        //支付
+        async payOrder() {
+            let that = this
+            if (!this.order) {
                 return false;
             }
-
-            let WxAuth = this.$localstore.get('wx_user')
-            let postData = {
-                order_type: 2,
-                share_id: this.share_id,
-                goods_id: this.plus.setting_id,
-                goods_title: this.plus.name,
-                goods_img: this.plus.thumb,
-                union_id: WxAuth.union_id,
-                is_wechat: 1,
-                order_num: 1,
-                amount: this.plus.sale_price,
-                total_amount: this.plus.sale_price
-            }
-
-            let instance = this.$message({
-                message: '正在提交订单中,请耐心等待。。。。',
-                duration: 5000
-            });
-
-            let res = await this.$postRequest('/order/AddOrder', postData)
-            this.$message(res.data.msg)
+            // that.$router.replace({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
+            //获取微信支付
+            let res = await this.$getRequest('/wechat/GetWxPay', { transaction_sn: this.order.transaction_sn })
             if (res.data.code == 1) {
-                this.$router.replace({ name: 'VipOrderBuy', query: { id: res.data.data } })
-                instance.close();
-            } else {
-                instance.close();
+                let config = JSON.parse(res.data.data)
+
+                wx.ready(function() {
+                    // 这里获取到PHP生成签名参数包，注意是JSON格式
+                    var options = config;
+                    // 支付成功后的操作
+                    options.success = () => {
+                        that.$localstore.session.set('has_share', '')
+
+                        let timer = setInterval(async () => {
+                            let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+
+                            if (res.data.code == 1) {       
+                                clearInterval(timer)
+                                that.$localstore.session('PaySucceed', res.data.data)
+                                that.$router.replace({
+                                    name: 'PaySucceed',
+                                    query: {
+                                        id: that.order.order_id,
+                                        goods_id: that.order.goods_id,
+                                        type: that.order.order_type,
+                                    }
+                                })
+                            } else {
+                                clearInterval(timer)
+                                // that.$message(res.data.msg)
+                            }
+
+                        }, 30)
+
+                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        // if (res.data.code == 1) {
+                        //     that.$localstore.session('PaySucceed', res.data.data)
+                        //     that.$router.replace({
+                        //         name: 'PaySucceed',
+                        //         query: {
+                        //             id: that.order.order_id,
+                        //             goods_id: that.order.goods_id,
+                        //             type: that.order.order_type,
+                        //         }
+                        //     })
+                        // } else {
+                        //     that.$message(res.data.msg)
+                        // }
+                    };
+
+                    //  取消支付的操作
+                    options.cancel = function() {
+                        that.$message('已取消')
+                    };
+
+                    // 支付失败的处理 
+                    options.fail = function(res) {
+                        that.$message('支付失败')
+                    };
+
+                    // 传入参数，发起JSAPI支付
+                    wx.chooseWXPay(options);
+                });
             }
-        },
+        }
     },
 
     // 创建前状态
@@ -142,7 +222,7 @@ export default {
 
     // 创建完毕状态
     created() {
-        document.title = "购买会员"
+        document.title = "支付订单"
         document.body.style.background = "#f6f6f6";
         let has_share = this.$localstore.session.get('has_share')
         if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
@@ -153,6 +233,7 @@ export default {
         }
 
         this.getOrder()
+        this.getPlus()
         this.getVipList()
     },
 
@@ -384,6 +465,7 @@ export default {
                 border-radius: 10px;
                 position: relative;
                 overflow: hidden;
+                padding-bottom: 20px;
 
                 .detail {
                     padding: 0.2rem .6rem;

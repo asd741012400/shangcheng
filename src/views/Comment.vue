@@ -1,6 +1,6 @@
 <template>
     <div class="Comment">
-<!--         <header>
+        <!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">发表评价</div>
             <div class="add"></div>
@@ -263,14 +263,12 @@ export default {
 
 
         span {
-            overflow: hidden;
-            width: 2.04rem;
-            height: 2.04rem;
+            display: block;
             margin-right: .2rem;
 
             img {
                 display: block;
-                width: 100%;
+                width: 2.04rem;
                 height: 2.04rem;
                 object-fit: cover
             }
@@ -287,7 +285,6 @@ export default {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
-                justify-content: center;
             }
 
             a {
@@ -298,6 +295,8 @@ export default {
 
             p {
                 display: flex;
+                font-size: .28rem;
+                word-break: break-all;
 
                 i {
                     width: .28rem;
