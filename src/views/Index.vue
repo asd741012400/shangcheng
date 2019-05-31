@@ -34,7 +34,7 @@
             </ul>
         </div>
         <!-- <div class="activity_img"><img src="../assets/activity_img1.png" alt=""></div> -->
-        <div class="play_freely">
+        <div class="play_freely" v-if="!$validatenull(Cardlist)">
             <h3>
                 <span><img src="../assets/icon_play_freely.png" alt=""></span>
                 <a>宝贝计划</a>

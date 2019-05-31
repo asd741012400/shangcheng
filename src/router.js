@@ -86,7 +86,9 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Login,
+            component: Index,//商城端
+            // component: DistributionTow,//商家端主页
+            // component: Administrator,//核销端
         },
         {
             path: '/Index',
@@ -186,16 +188,6 @@ let router = new Router({
             component: () => import( /* webpackChunkName: "Home" */ '@/views/ConfirmPay.vue')
         },
         {
-            path: '/DistributionTow',
-            name: 'DistributionTow',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/DistributionTow.vue')
-        },
-        {
-            path: '/DistributionThree',
-            name: 'DistributionThree',
-            component: () => import( /* webpackChunkName: "Home" */ '@/views/DistributionThree.vue')
-        },
-        {
             path: '/CardEquity',
             name: 'CardEquity',
             component: () => import( /* webpackChunkName: "Home" */ '@/views/CardEquity.vue')
@@ -284,11 +276,6 @@ let router = new Router({
 
         /*核销端*/
         {
-            path: '/Login2',
-            name: 'Login2',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Login.vue')
-        },
-        {
             path: '/Administrator',
             name: 'Administrator',
             component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Administrator.vue')
@@ -296,43 +283,51 @@ let router = new Router({
         {
             path: '/CheckHome',
             name: 'CheckHome',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Home.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Home.vue'),
+            meta: { business: true }
         },
         {
             path: '/CheckCode',
             name: 'CheckCode',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CheckCode.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CheckCode.vue'),
+            meta: { business: true }
         },
         {
             path: '/CardCheck',
             name: 'CardCheck',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CardCheck.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CardCheck.vue'),
+            meta: { business: true }
         },
 
         {
             path: '/Commodity',
             name: 'Commodity',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Commodity.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Commodity.vue'),
+            meta: { business: true }
         },
         {
             path: '/CheckList',
             name: 'CheckList',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CheckList.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/CheckList.vue'),
+            meta: { business: true }
         },
         {
             path: '/StoreList',
             name: 'StoreList',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/StoreList.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/StoreList.vue'),
+            meta: { business: true }
         },
         {
             path: '/Appointment',
             name: 'Appointment',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Appointment.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Appointment.vue'),
+            meta: { business: true }
         },
         {
             path: '/CheckWithdrawDeposit',
             name: 'CheckWithdrawDeposit',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/WithdrawDeposit.vue')
+            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/WithdrawDeposit.vue'),
+            meta: { business: true }
         },
 
         /*商家端*/
@@ -342,64 +337,87 @@ let router = new Router({
             component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/Login.vue')
         },
         {
+            path: '/DistributionTow',
+            name: 'DistributionTow',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/DistributionTow.vue'),
+            meta: { shop: true }
+        },
+        {
+            path: '/DistributionThree',
+            name: 'DistributionThree',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/DistributionThree.vue'),
+            meta: { shop: true }
+        },
+        {
             path: '/MerchantShop',
             name: 'MerchantShop',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MerchantShop.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MerchantShop.vue'),
+            meta: { shop: true }
         },
         {
             path: '/WithdrawList',
             name: 'WithdrawList',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawList.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawList.vue'),
+            meta: { shop: true }
         },
         {
             path: '/WithdrawDepositDel',
             name: 'WithdrawDepositDel',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawDepositDel.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawDepositDel.vue'),
+            meta: { shop: true }
         },
         {
             path: '/TeamDel',
             name: 'TeamDel',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/TeamDel.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/TeamDel.vue'),
+            meta: { shop: true }
         },
         {
             path: '/MyTeam',
             name: 'MyTeam',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyTeam.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyTeam.vue'),
+            meta: { shop: true }
         },
         {
             path: '/MyTeamTow',
             name: 'MyTeamTow',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyTeamTow.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyTeamTow.vue'),
+            meta: { shop: true }
         },
         {
             path: '/ChageShop',
             name: 'ChageShop',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/checkstore/ChageShop.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/checkstore/ChageShop.vue'),
+            meta: { shop: true }
         },
         {
             path: '/TeamDelTow',
             name: 'TeamDelTow',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/TeamDelTow.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/TeamDelTow.vue'),
         },
         {
             path: '/MemberDel',
             name: 'MemberDel',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MemberDel.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MemberDel.vue'),
+            meta: { shop: true }
         },
         {
             path: '/Generalize',
             name: 'Generalize',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/Generalize.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/Generalize.vue'),
+            meta: { shop: true }
         },
         {
             path: '/MyGeneralize',
             name: 'MyGeneralize',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyGeneralize.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyGeneralize.vue'),
+            meta: { shop: true }
         },
         {
             path: '/PersonalStores',
             name: 'PersonalStores',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/PersonalStores.vue')
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/PersonalStores.vue'),
+            meta: { shop: true }
         },
         {
             path: '*', //404页面跳转
@@ -466,10 +484,34 @@ router.beforeEach((to, from, next) => {
 
     //用户关系绑定
     bindUser(union_id)
-    //每次进入自动计算用户金额
-    AutoCount(union_id)
     //海报图预加载
     getPlUS()
+
+
+    if (to.meta && !to.meta.business) {
+        //每次进入自动计算用户金额
+        AutoCount(union_id)
+    }
+
+
+    //商家端用户鉴权 拦截非法用户
+    if (to.meta && to.meta.shop) {
+        if (user && user.level < 2) {
+            // this.$router.replace({ name: 'Login' })
+            window.location.href = '/?#/Login'
+        }
+    }
+
+
+    //核销端用户鉴权 拦截非法用户
+    if (to.meta && to.meta.business) {
+        let business_user = localstore.get('business_user')
+        if (!business_user) {
+            // this.$router.replace({ name: 'error404' })
+            window.location.href = '/?#/error403'
+        }
+    }
+
 
     next()
 })
@@ -518,7 +560,7 @@ function getPlUS() {
 //用户关系绑定
 function bindUser(union_id) {
     let has_share = localstore.session.get('has_share')
-    if (has_share && has_share.query.share_id) {
+    if (union_id && has_share && has_share.query.share_id) {
         let data = {
             share_id: has_share.query.share_id,
             union_id: union_id

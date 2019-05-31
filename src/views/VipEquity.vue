@@ -162,17 +162,10 @@ export default {
                     total_amount: this.plus.sale_price
                 }
 
-                let instance = this.$message({
-                    message: '正在提交中,请耐心等待。。。。',
-                    duration: 5000
-                });
-
                 let result = await this.$postRequest('/order/AddOrder', postData)
                 if (result.data.code == 1) {
-                    // this.$router.replace({ name: 'VipOrderBuy', query: { id: result.data.data } })
                     instance.close();
                     this.$router.push({ name: 'VipOrder', query: { id: result.data.data } })
-                    // this.$router.push({ name: 'VipOrder', query: { type: 2 } })
                 } else {
                     this.$message(result.data.msg)
                     instance.close();

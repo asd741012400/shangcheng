@@ -256,7 +256,8 @@ export default {
         }
         this.wechat_img = this.user.wechat_img
         var url = this.user.wechat_img;
-        this.wechat_img = this.$imgUrl + '/wechat_image' + url.substring(23)
+        // this.wechat_img = this.$imgUrl + '/wechat_image' + url.substring(23)
+        this.wechat_img = 'http://' + window.location.host + '/upload/wechat_image' + url.substring(23)
 
         this.instance = this.$message({
             message: '海报正在生成中。。。',

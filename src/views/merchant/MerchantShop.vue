@@ -94,10 +94,6 @@ export default {
         document.body.style.background = "#fff";
         this.user = this.$localstore.get('wx_user');
 
-        if (this.user.level < 2) {
-            this.$router.push({ name: 'Login' })
-        }
-
         this.getInfo()
     },
 

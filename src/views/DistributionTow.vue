@@ -120,14 +120,32 @@ export default {
             }
         },
         //每次进入自动计算用户金额
-        async check(index) {
-            let user = this.$localstore.get('wx_user')
+        // async check(index) {
+        //     let user = this.$localstore.get('wx_user')
+        //     let union_id = ''
+        //     if (user && user.union_id) {
+        //         union_id = user.union_id
+        //     }
+        //     let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
+        // },
+        //检查以后是否登录
+        async checkAuth() {
+            let WxAuth = this.$localstore.get('wx')
             let union_id = ''
-            if (user && user.union_id) {
-                union_id = user.union_id
+            if (WxAuth && WxAuth.unionid) {
+                union_id = WxAuth.unionid
             }
-            let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
-        },
+            let res = await this.$getRequest('/wechat/GetUserInfo', { union_id: union_id })
+            if (res.data.code == 1) {
+                this.$localstore.set('wx_user', res.data.data)
+                let user = res.data.data
+                if (user.level < 2) {
+                    this.$router.replace({ name: 'Login' })
+                }
+            } else {
+                this.$router.replace({ name: 'Login' })
+            }
+        }
     },
 
     // 创建前状态
@@ -141,7 +159,7 @@ export default {
         if (!user) {
             this.$router.push({ name: 'Login' })
         }
-        // this.check()
+        this.checkAuth()
         this.getInfo()
     },
 

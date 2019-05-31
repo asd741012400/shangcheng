@@ -81,7 +81,6 @@ export default {
                      this.$router.push({ name: 'DistributionTow' })
                 }
             }
-
         }
     },
 

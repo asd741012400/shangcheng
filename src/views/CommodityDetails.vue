@@ -23,8 +23,8 @@
                     <img :src="$imgUrl+item" alt="">
                 </van-swipe-item>
             </van-swipe>
-            <!-- <span></span> -->
-            <!--             <div class="text" v-show="GoodsDetailsState == 1">
+            <!--             <span></span>
+            <div class="text" v-show="GoodsDetailsState == 1">
                 <yd-countdown slot="right" :time="changeTime(GoodsDetail.sale_etime)">
                     <p>距离活动结束还有<em></em><b><em>{%d0}{%d1}{%d2}</em></b><em>天</em></b><b><em>{%h1}{%h2}</em></b><em>时</em><b><em>{%m1}{%m2}</em></b><em>分</em><b><em>{%s1}{%s2}</em></b><em>秒</em></p>
                 </yd-countdown>
@@ -189,7 +189,7 @@
             </div>
         </div>
         <footer>
-            <ul>
+<!--             <ul>
                 <li @click="goHome">
                     <span><img src="../assets/1.png" alt=""></span>
                     <p>商城首页</p>
@@ -203,8 +203,8 @@
                     </template>
                     <p>我要收藏</p>
                 </li>
-            </ul>
-            <!-- <div class="btn"> -->
+            </ul> -->
+
             <!-- 可购买状态 -->
             <div class="btn" v-show="GoodsDetailsState == 1">
                 <div class="share" @click="shareShowFn">
@@ -233,7 +233,12 @@
                 </div>
             </div>
             <div class="btn" v-show="GoodsDetailsState == 5">
-                <div class="buy_null"><span>等待开售</span></div>
+                <div class="buy_null">
+                    <span>等待开售</span>
+                    <yd-countdown slot="right" :time="changeTime(GoodsDetail.sale_stime)">
+                        <p><b>{%d0}{%d1}{%d2}</b>天</b><b>{%h1}{%h2}</b>时<b>{%m1}{%m2}</b>分<b>{%s1}{%s2}</b>秒</p>
+                    </yd-countdown>
+                </div>
             </div>
             <div class="btn" v-show="GoodsDetailsState == 6">
                 <div class="buy_null"><span>售卖截止</span></div>
@@ -435,7 +440,7 @@ export default {
                 this.$Indicator.close();
                 //动态计算商品过期时间
                 this.calcStatus()
-                // this.timer();
+                this.timer();
 
             }
         },
@@ -452,7 +457,10 @@ export default {
 
         // 用于微信JS-SDK回调
         async wxRegister() {
-
+            let user = this.$localstore.get('wx_user')
+            if (user) {
+                this.user = user
+            }
             wx.ready(() => {
                 this.url = this.$HOME_URL + '/?#/CommodityDetails?share_id=' + this.user.user_id +
                     '&type=1&id=' + this.id
@@ -1206,8 +1214,9 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-around;
-            flex: 1;
+            width: 2.8rem;
 
+            // flex: 1;
             li {
                 display: flex;
                 flex-direction: column;
@@ -1234,8 +1243,10 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 4.6rem;
+            // width: 100%;
+            // width: 4.6rem;
             height: 100%;
+            flex: 1;
 
             .share {
                 background: #FFB389;

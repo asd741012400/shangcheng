@@ -58,9 +58,6 @@ export default {
         document.title = "成员详情"
         document.body.style.background = "#fff";
         this.user_id = this.$route.query.id
-        if (!this.user_id) {
-            this.$router.go(-1)
-        }
         this.getInfo()
     },
 

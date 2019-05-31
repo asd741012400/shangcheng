@@ -98,11 +98,9 @@ export default {
                         that.$localstore.session.set('has_share', '')
 
                         let timer = setInterval(async () => {
-                            console.log(33333333333);
                             let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
 
                             if (res.data.code == 1) {
-                                console.log(2222222222222);
                                 clearInterval(timer)
                                 that.$localstore.session('PaySucceed', res.data.data)
                                 that.$router.replace({

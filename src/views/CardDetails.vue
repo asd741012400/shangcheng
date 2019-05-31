@@ -160,7 +160,12 @@
                 </div>
             </div>
             <div class="btn" v-show="cardDetailsState == 5">
-                <div class="buy_null"><span>等待开售</span></div>
+                <div class="buy_null">
+                    <span>等待开售</span>
+                    <yd-countdown slot="right" :time="changeTime(cardDetailsState.sale_stime)">
+                        <p><b>{%d0}{%d1}{%d2}</b>天</b><b>{%h1}{%h2}</b>时<b>{%m1}{%m2}</b>分<b>{%s1}{%s2}</b>秒</p>
+                    </yd-countdown>
+                </div>
             </div>
             <div class="btn" v-show="cardDetailsState == 6">
                 <div class="buy_null"><span>售卖截止</span></div>
@@ -313,7 +318,7 @@ export default {
         //获取卡片详情
         async getDetail() {
             this.$Indicator.open({ spinnerType: 'fading-circle' });
-            let data = { id: this.$route.query.id,user_id: this.user.user_id  }
+            let data = { id: this.$route.query.id, user_id: this.user.user_id }
             let res = await this.$getRequest('/home/GetCardDetail', data)
             if (res.data.code == 1) {
                 this.CardDetail = res.data.data;
@@ -332,9 +337,7 @@ export default {
                         }
                     })
                 })
-
-
-                // this.timer()
+                this.timer()
             }
         },
         //获取评论

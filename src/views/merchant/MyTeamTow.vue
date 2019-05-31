@@ -53,7 +53,7 @@ export default {
         //时间转换
         toTime(time) {
             return this.$dayjs.unix(time).format('YYYY-MM-DD')
-        },      
+        },
         //tab切换  
         tabkeChage(num) {
             const that = this;
@@ -129,12 +129,8 @@ export default {
     created() {
         document.body.style.background = "#fff";
         let user = this.$localstore.get('wx_user')
-        if (user) {
-            this.user = user
-            document.title = "我的团队（三级）"
-        } else {
-            this.$router.psuh({ name: "Login" })
-        }
+        document.title = "我的团队（三级）"
+
         this.getNum()
         this.getList()
 

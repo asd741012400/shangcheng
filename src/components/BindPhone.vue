@@ -81,7 +81,38 @@ export default {
                 this.$localstore.set('wx_user', res.data.data)
                 this.status = false
                 if (this.type == 2) {
-                    this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+                    let has_share = this.$localstore.session.get('has_share')
+                    //用户分享
+                    if (has_share && has_share.query.share_id && has_share.name == "VipEquity") {
+                        this.id = has_share.query.share_id
+                    }
+                    //店铺分享
+                    if (has_share && has_share.query.type == 4) {
+                        this.id = has_share.query.share_id
+                    }
+
+                    let plus = this.$localstore.session.get('plus')
+                    let WxAuth = this.$localstore.get('wx_user')
+                    let postData = {
+                        order_type: 2,
+                        share_id: this.id,
+                        goods_id: plus.setting_id,
+                        goods_title: plus.name,
+                        goods_img: plus.thumb,
+                        union_id: WxAuth.union_id,
+                        is_wechat: 1,
+                        order_num: 1,
+                        amount: plus.sale_price,
+                        total_amount: plus.sale_price
+                    }
+
+                    let result = await this.$postRequest('/order/AddOrder', postData)
+                    if (result.data.code == 1) {
+                        this.$router.push({ name: 'VipOrder', query: { id: result.data.data } })
+                    } else {
+                        this.$message(result.data.msg)
+                    }
+
                 } else {
                     this.$router.push({
                         path: 'ConfirmAnOrder',

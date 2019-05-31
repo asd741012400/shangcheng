@@ -53,9 +53,7 @@ export default {
     created() {
         document.body.style.background = "#F0F0F0";
         document.title = "核销码核销"
-        if (!this.$localstore.get('business_id') && !this.$localstore.get('business_user')) {
-            this.$router.push({ name: 'Administrator' })
-        }
+
     },
 
     // 挂载前状态

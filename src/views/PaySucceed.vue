@@ -1,10 +1,10 @@
 <template>
     <div class="PaySucceed">
-        <header>
+<!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">支付成功</div>
             <div class="add"></div>
-        </header>
+        </header> -->
         <div class="shop" v-if="order_type == 1">
             <div class="header">
                 <div class="use_card_message">
@@ -17,7 +17,7 @@
                 <b><img src="../assets/PersonalCenter_headerBg4.png" alt="" srcset=""></b>
             </div>
             <div class="btn">
-                <div class="continue" @click="goHome">继续逛逛</div>
+                <!-- <div class="continue" @click="goHome">继续逛逛</div> -->
                 <div class="employ" @click="goOrder">去使用</div>
             </div>
         </div>

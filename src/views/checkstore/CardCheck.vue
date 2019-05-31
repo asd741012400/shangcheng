@@ -114,10 +114,6 @@ export default {
         // this.cardInfo = list.product_info
         this.code = this.$route.query.code
 
-        if (!this.$localstore.get('business_user')) {
-            this.$router.push({ name: 'Administrator' })
-        }
-
         this.getInfo()
 
     },

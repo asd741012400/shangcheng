@@ -147,7 +147,12 @@ export default {
         //支付
         async payOrder() {
             let that = this
+            if (!this.agreementState) {
+                this.$message('你未同意会员协议！')
+                return false
+            }
             if (!this.order) {
+                that.$message('订单正在获取中请耐心等待！')
                 return false;
             }
             // that.$router.replace({ name: 'PaySucceed', query: { id: that.order.order_id, type: that.order.order_type } })
@@ -166,7 +171,7 @@ export default {
                         let timer = setInterval(async () => {
                             let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
 
-                            if (res.data.code == 1) {       
+                            if (res.data.code == 1) {
                                 clearInterval(timer)
                                 that.$localstore.session('PaySucceed', res.data.data)
                                 that.$router.replace({
