@@ -17,7 +17,7 @@
                 <b><img src="../assets/PersonalCenter_headerBg4.png" alt="" srcset=""></b>
             </div>
             <div class="btn">
-                <!-- <div class="continue" @click="goHome">继续逛逛</div> -->
+                <div class="continue" @click="goHome">继续逛逛</div>
                 <div class="employ" @click="goOrder">去使用</div>
             </div>
         </div>

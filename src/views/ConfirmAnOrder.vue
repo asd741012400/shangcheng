@@ -182,19 +182,19 @@ export default {
             let postData = {
                 order_type: this.$route.query.order_type,
                 goods_id: this.$route.query.id,
-                goods_title: this.title,
-                goods_img: this.goods.thumb_img,
+                // goods_title: this.title,
+                // goods_img: this.goods.thumb_img,
                 real_name: this.real_name,
                 share_id: this.share_id,
                 play_time: this.play_time,
                 is_wechat: this.is_wechat,
                 attr_id: this.$route.query.attr_id,
-                attr_name: this.attr_name,
+                // attr_name: this.attr_name,
                 tel: this.tel,
                 union_id: WxAuth.union_id,
                 order_num: this.num,
-                amount: this.price,
-                total_amount: this.total,
+                // amount: this.price,
+                // total_amount: this.total,
                 card_ID: this.card_ID,
             }
 
@@ -336,7 +336,7 @@ export default {
     computed: {
         total() {
             let total = this.num * this.price
-            return total
+            return Math.floor(total * 100) / 100
         }
     },
 

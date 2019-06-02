@@ -255,6 +255,9 @@ export default {
     beforeDestroy() {
         this.$refs.loadMore.hideTip()
         window.onscroll = null
+        if (this.$Indicator) {
+            this.$Indicator.close()
+        }
     },
 
     // 销毁完成状态

@@ -86,7 +86,7 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index,//商城端
+            component: Index, //商城端
             // component: DistributionTow,//商家端主页
             // component: Administrator,//核销端
         },
@@ -312,12 +312,6 @@ let router = new Router({
             meta: { business: true }
         },
         {
-            path: '/StoreList',
-            name: 'StoreList',
-            component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/StoreList.vue'),
-            meta: { business: true }
-        },
-        {
             path: '/Appointment',
             name: 'Appointment',
             component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/Appointment.vue'),
@@ -347,6 +341,11 @@ let router = new Router({
             name: 'DistributionThree',
             component: () => import( /* webpackChunkName: "Home" */ '@/views/DistributionThree.vue'),
             meta: { shop: true }
+        },
+        {
+            path: '/StoreList',
+            name: 'StoreList',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/checkstore/StoreList.vue'),
         },
         {
             path: '/MerchantShop',

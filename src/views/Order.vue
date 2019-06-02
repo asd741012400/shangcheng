@@ -20,6 +20,9 @@
                     <template v-if="item.order_status == 200">
                         <span>已撤销</span>
                     </template>
+                    <template v-else-if="item.order_status == 201">
+                        <span>已撤销</span>
+                    </template>
                     <template v-else-if="item.order_status == 0">
                         <span>待付款</span>
                     </template>
@@ -39,16 +42,17 @@
                         <span>退款中</span>
                     </template>
                     <template v-else-if="item.order_status == 1 && item.order_type != 2">
-                        <template v-if="item.is_comment == 0 && order_status == 3">
-                            <span>待评价</span>
+                        <template v-if="item.is_use == 0">
+                            <span>待使用</span>
                         </template>
                         <template v-else>
-                            <template v-if="item.is_use == 0">
-                                <span>待使用</span>
+                            <template v-if="item.is_comment == 0 && order_status == 3">
+                                <span>待评价</span>
                             </template>
                             <template v-else>
                                 <span v-if="item.order_type == 1">已使用</span>
                                 <span v-else-if="item.order_type == 3">已激活</span>
+                                <span v-else-if="item.is_comment == 1">已评价</span>
                             </template>
                         </template>
                     </template>
@@ -103,7 +107,7 @@
                                     <van-button type="danger" size="small" @click.stop="payOrder(item.order_id)">去付款</van-button>
                                 </template>
                                 <template v-else-if="item.order_status == 1">
-                                    <van-button v-if="item.is_comment == 0" type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                    <van-button v-if="item.is_use == 1 && item.is_comment == 0" type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                                     <template v-if="item.is_roll == 1 && item.order_type == 1 && item.is_use ==0 && item.order_status == 1 && item.pay_type == 1">
                                         <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
                                     </template>

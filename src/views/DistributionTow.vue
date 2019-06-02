@@ -67,7 +67,7 @@
                 <li @click="goWidthdrewList">
                     <div>
                         <i><img src="../assets/icon_record2.png" alt=""></i>
-                        <p>提现记录</p>
+                        <p>账单记录</p>
                     </div>
                 </li>
             </ul>

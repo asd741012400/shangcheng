@@ -255,6 +255,9 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         window.onscroll = null
+        if (this.$Indicator) {
+            this.$Indicator.close()
+        }
     },
 
     // 销毁完成状态

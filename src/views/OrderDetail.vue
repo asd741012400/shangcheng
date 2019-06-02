@@ -10,65 +10,83 @@
                 <p>已过期</p>
             </template>
             <template v-else>
-                <template v-if="order.order_status == 200">
+                <template v-if="order_info.order_status == 200">
                     <p>已撤销</p>
                 </template>
-                <template v-else-if="order.order_status == 0">
+                <template v-else-if="order_info.order_status == 201">
+                    <p>已撤销</p>
+                </template>
+                <template v-else-if="order_info.order_status == 0">
                     <p>待付款</p>
                 </template>
-                <template v-else-if="order.order_status == 2">
+                <template v-else-if="order_info.order_status == 2">
                     <p>订单超时</p>
                 </template>
-                <template v-else-if="order.order_status == 3">
+                <template v-else-if="order_info.order_status == 3">
                     <p>分单退款</p>
                 </template>
-                <template v-else-if="order.order_status == 4">
+                <template v-else-if="order_info.order_status == 4">
                     <p>已退款</p>
                 </template>
-                <template v-else-if="order.order_status == 5">
+                <template v-else-if="order_info.order_status == 5">
                     <p>已使用</p>
                 </template>
-                <template v-else-if="order.order_status == 6">
+                <template v-else-if="order_info.order_status == 6">
                     <p>退款申请中</p>
                 </template>
-                <template v-else-if="order.order_status == 1">
-                    <template v-if="order.is_comment == 0">
+                <!--                 <template v-else-if="order_info.order_status == 1">
+                    <template v-if="order_info.is_comment == 0">
                         <p>待评价</p>
                     </template>
-                    <template v-else-if="order.is_use == 0">
+                    <template v-else-if="order_info.is_use == 0">
                         <p>待使用</p>
                     </template>
                     <template v-else>
-                        <p v-if="order.order_type == 1">已使用</p>
-                        <p v-else-if="order.order_type == 3">已激活</p>
+                        <p v-if="order_info.order_type == 1">已使用</p>
+                        <p v-else-if="order_info.order_type == 3">已激活</p>
                     </template>
-                </template>
-                <template v-if="order.order_status == 1">
-                    <template v-if="type ==1 || type == 3">
-                        <!-- <div class="limit-time" v-if="!$calcTime(goods_info.limit_type,order.pay_time,goods_info.limit_days,goods_info.limit_stime,goods_info.limit_etime)">已过期</div> -->
-                        <div class="limit-time">{{$calcTime(goods_info.limit_type,order.pay_time,goods_info.limit_days,goods_info.limit_stime,goods_info.limit_etime,3)}}</div>
-                        <!-- 
-                    <template v-if="goods_info.limit_type == 2">
-                        {{toTime(order.pay_time,goods_info.limit_days)}} 到期
+                </template> -->
+                <template v-else-if="order_info.order_status == 1">
+                    <template v-if="order_info.is_use == 0">
+                        <p>待使用</p>
                     </template>
                     <template v-else>
-                        <span>{{goods_info.limit_etime}}到期</span>
+                        <template v-if="order_info.is_comment == 0">
+                            <p>待评价</p>
+                        </template>
+                        <template v-else>
+                            <p v-if="order_info.order_type == 1">已使用</p>
+                            <p v-else-if="order_info.order_type == 3">已激活</p>
+                            <p v-else-if="order_info.is_comment == 1">已评价</p>
+                        </template>
+                    </template>
+                </template>
+                <template v-if="order_info.order_status == 1">
+                    <template v-if="type ==1 || type == 3">
+                        <!-- <div class="limit-time" v-if="!$calcTime(order_info.limit_type,order_info.pay_time,order_info.limit_days,order_info.limit_stime,order_info.limit_etime)">已过期</div> -->
+                        <div v-if="!$validatenull(order_info) && !$validatenull(order_info)" class="limit-time">{{$calcTime(order_info.limit_type,order_info.pay_time,order_info.limit_days,order_info.limit_stime,order_info.limit_etime,3)}}</div>
+                        <!-- 
+                    <template v-if="order_info.limit_type == 2">
+                        {{toTime(order_info.pay_time,order_info.limit_days)}} 到期
+                    </template>
+                    <template v-else>
+                        <span>{{order_info.limit_etime}}到期</span>
                     </template> -->
                     </template>
                 </template>
             </template>
         </div>
-        <!--  <div class="header" v-else-if="order.order_status == 0">
+        <!--  <div class="header" v-else-if="order_info.order_status == 0">
             <p>待付款</p>
             <span>订单还有1天00:00:00取消</span>
         </div> -->
-        <!--  <div class="header" v-else-if="order.order_status == 1">
-            <template v-if="goods_info.limit_type == 2">
+        <!--  <div class="header" v-else-if="order_info.order_status == 1">
+            <template v-if="order_info.limit_type == 2">
                 <p>付款成功</p>
                 <span>下单时间2019-02-02</span>
             </template>
         </div> -->
-        <!--  <div class="header" v-else-if="order.order_status == 4">
+        <!--  <div class="header" v-else-if="order_info.order_status == 4">
             <p>退款申请中</p>
             <span>您的退款正在申请</span>
         </div> -->
@@ -76,23 +94,23 @@
             <li class="not_comment_list">
                 <h3>产品名称</h3>
                 <div class="img">
-                    <span><img :src="$imgUrl+order.goods_img" alt=""></span>
+                    <span><img :src="$imgUrl+order_info.goods_img" alt=""></span>
                     <div class="box">
-                        <p class="text1" @click="goDetail(order.goods_id)">
-                            <a>{{order.goods_title}}</a>
-                            <i>￥{{order.total_amount}}</i>
+                        <p class="text1" @click="goDetail(order_info.goods_id)">
+                            <a>{{order_info.goods_title}}</a>
+                            <i>￥{{order_info.total_amount}}</i>
                         </p>
                         <p class="text2">
-                            <a class="text-hide"  v-if="order.attr_name">{{order.attr_name}}</a>
-                            <i>x{{order.order_num}}</i>
+                            <a class="text-hide"  v-if="order_info.attr_name">{{order_info.attr_name}}</a>
+                            <i>x{{order_info.order_num}}</i>
                         </p>
                         <div class="btn">
                             <template v-if="orderStatus">
-                                <template v-if="order.order_status == 0">
-                                    <van-button type="primary" size="mini" @click.stop="payOrder(order.order_id)">去付款</van-button>
+                                <template v-if="order_info.order_status == 0">
+                                    <van-button type="primary" size="mini" @click.stop="payOrder(order_info.order_id)">去付款</van-button>
                                 </template>
-                                <template v-else-if="order.order_status == 1">
-                                    <van-button v-if="order.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(order.order_id,order.order_type,order.goods_id)">去评价</van-button>
+                                <template v-else-if="order_info.order_status == 1">
+                                    <van-button v-if="order_info.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(order_info.order_id,order_info.order_type,order_info.goods_id)">去评价</van-button>
                                 </template>
                             </template>
                         </div>
@@ -101,7 +119,7 @@
             </li>
         </ul>
         <!-- 核销信息 -->
-        <!-- <div class="timer" v-if="order.order_status == 1 && type == 1"> -->
+        <!-- <div class="timer" v-if="order_info.order_status == 1 && type == 1"> -->
         <div class="timer" v-if="type == 1">
             <!-- <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="item.cancle_status != 2"> -->
             <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="index<3">
@@ -133,10 +151,10 @@
             </div>
         </div>
         <!-- 用户信息 -->
-        <div class="user" v-if="order.real_name || order.play_time || order.tel_phone">
-            <p v-if="order.real_name">姓名：{{order.real_name}}</p>
-            <!-- <p v-if="order.play_time">游玩时间：{{order.play_time}}</p> -->
-            <p v-if="order.tel_phone">监护人电话：{{order.tel_phone}}</p>
+        <div class="user" v-if="order_info.real_name || order_info.play_time || order_info.tel_phone">
+            <p v-if="order_info.real_name">姓名：{{order_info.real_name}}</p>
+            <!-- <p v-if="order_info.play_time">游玩时间：{{order_info.play_time}}</p> -->
+            <p v-if="order_info.tel_phone">监护人电话：{{order_info.tel_phone}}</p>
         </div>
         <!-- <div class="group_purchase" v-if="groupPurchaseState">
             <div class="imgs">
@@ -155,19 +173,19 @@
             <h3>订单详情</h3>
             <ul v-if="state == 1">
                 <li> <span>支付方式 :</span>微信支付</li>
-                <li><span>订单号:</span>{{order.order_sn}}</li>
-                <li v-if="order.add_time"><span>创建时间:</span>{{toDate(order.add_time)}}</li>
-                <li v-if="order.pay_time"><span>付款时间:</span>{{toDate(order.pay_time)}}</li>
+                <li><span>订单号:</span>{{order_info.order_sn}}</li>
+                <li v-if="order_info.add_time"><span>创建时间:</span>{{toDate(order_info.add_time)}}</li>
+                <li v-if="order_info.pay_time"><span>付款时间:</span>{{toDate(order_info.pay_time)}}</li>
             </ul>
             <ul v-else-if="state == 2">
-                <li><span>订单号:</span>{{order.order_sn}}</li>
-                <li v-if="order.add_time"><span>创建时间:</span>{{toDate(order.add_time)}}</li>
+                <li><span>订单号:</span>{{order_info.order_sn}}</li>
+                <li v-if="order_info.add_time"><span>创建时间:</span>{{toDate(order_info.add_time)}}</li>
             </ul>
             <ul v-if="state == 3">
                 <li> <span>支付方式 :</span>微信支付</li>
-                <li><span>订单号:</span>{{order.order_sn}}</li>
-                <li v-if="order.add_time"><span>创建时间:</span>{{toDate(order.add_time)}}</li>
-                <li v-if="order.pay_time"><span>付款时间:</span>{{toDate(order.pay_time)}}</li>
+                <li><span>订单号:</span>{{order_info.order_sn}}</li>
+                <li v-if="order_info.add_time"><span>创建时间:</span>{{toDate(order_info.add_time)}}</li>
+                <li v-if="order_info.pay_time"><span>付款时间:</span>{{toDate(order_info.pay_time)}}</li>
             </ul>
         </div>
         <van-image-preview v-model="show" :showIndex="false" :start-position="index" :images="images"></van-image-preview>
@@ -186,12 +204,11 @@ export default {
             showMore: false,
             id: '',
             type: '',
-            order: '',
             show: false,
             index: 1,
             images: [],
             attr_name: '',
-            goods_info: {},
+            order_info: {},
             goods_cancle: {},
         }
     },
@@ -247,9 +264,10 @@ export default {
         },
         //获取订单
         async getOrder() {
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
             let id = this.$route.query.id
             let res = await this.$getRequest('/order/OrderDetail', { order_id: id })
-            this.goods_info = res.data.data.goods_info
+            this.order_info = res.data.data.order_info
             this.goods_cancle = res.data.data.goods_cancle
 
             if (!this.$validatenull) {
@@ -258,9 +276,8 @@ export default {
                 })
             }
 
-
             //计算过期时间
-            this.orderStatus = this.$calcTime(this.goods_info.limit_type, this.order.pay_time, this.goods_info.limit_days, this.goods_info.limit_stime, this.goods_info.limit_etime)
+            this.orderStatus = this.$calcTime(this.order_info.limit_type, this.order_info.pay_time, this.order_info.limit_days, this.order_info.limit_stime, this.order_info.limit_etime)
 
             setTimeout(() => {
                 this.$nextTick(() => {
@@ -289,16 +306,16 @@ export default {
                     })
                 })
             }, 50)
+            this.$Indicator.close();
         },
 
         //获取订单详情
-        async getOrderDetail() {
-            this.$Indicator.open({ spinnerType: 'fading-circle' });
-            let res = await this.$getRequest('/order/getOrder', { id: this.id })
-            this.getOrder()
-            this.order = res.data.data
-            this.$Indicator.close();
-        }
+        // async getOrderDetail() {
+        //     this.$Indicator.open({ spinnerType: 'fading-circle' });
+        //     let res = await this.$getRequest('/order_info/getOrder', { id: this.id })
+        //     this.order_info = res.data.data
+        //     this.$Indicator.close();
+        // }
     },
 
     // 创建前状态
@@ -310,7 +327,8 @@ export default {
         document.body.style.background = "#F6F6F6";
         this.id = this.$route.query.id
         this.type = this.$route.query.type
-        this.getOrderDetail()
+        this.getOrder()
+        // this.getOrderDetail()
     },
 
     // 挂载前状态

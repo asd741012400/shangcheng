@@ -189,7 +189,7 @@
             </div>
         </div>
         <footer>
-<!--             <ul>
+            <ul>
                 <li @click="goHome">
                     <span><img src="../assets/1.png" alt=""></span>
                     <p>商城首页</p>
@@ -203,8 +203,7 @@
                     </template>
                     <p>我要收藏</p>
                 </li>
-            </ul> -->
-
+            </ul>
             <!-- 可购买状态 -->
             <div class="btn" v-show="GoodsDetailsState == 1">
                 <div class="share" @click="shareShowFn">
@@ -268,6 +267,7 @@ export default {
             mkt_price: 0,
             limit_num: 0,
             attrActive: 0,
+            store: '',
             attr_id: '',
             share_id: '',
             active: 1,
@@ -307,6 +307,8 @@ export default {
             this.goods_price = this.GoodsDetail.goods_attr[index].attr_price
             // this.mkt_price = this.GoodsDetail.goods_attr[index].attr_dist_money
             this.limit_num = this.GoodsDetail.goods_attr[index].attr_limit_num
+            this.store = this.GoodsDetail.goods_attr[index].attr_store
+            this.calcStatus()
         },
         async collectGoods() {
             let data = {
@@ -327,9 +329,15 @@ export default {
                 document.getElementById("goods").scrollIntoView();
             } else if (index == 2) {
                 document.getElementById("comments").scrollIntoView();
+                // 距离顶部距离
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                this.$ScrollTop(scrollTop - 20, 30)
             } else {
                 this.table = 2
                 document.getElementById("details").scrollIntoView();
+                // 距离顶部距离
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                this.$ScrollTop(scrollTop - 20, 30)
             }
         },
         goPlus() {
@@ -353,6 +361,10 @@ export default {
                 return false
             }
 
+            if (this.store == 0) {
+                this.$message('该商品库存不足！')
+                return false
+            }
 
             if (!this.attr_id) {
                 if (!this.$validatenull(this.GoodsDetail.goods_attr) && this.GoodsDetail.goods_attr.length > 0) {
@@ -392,7 +404,7 @@ export default {
             }
 
             if (!start_time && !end_time) {
-                if (that.GoodsDetail.store == 0) {
+                if (that.store == 0) {
                     that.GoodsDetailsState = 2
                 } else if (that.GoodsDetail.is_online == 0) {
                     that.GoodsDetailsState = 3
@@ -415,12 +427,14 @@ export default {
                 this.goods_price = this.GoodsDetail.goods_price
                 this.mkt_price = this.GoodsDetail.mkt_price
                 this.limit_num = this.GoodsDetail.limit_num
+                this.store = this.GoodsDetail.store
 
                 if (!this.$validatenull(this.GoodsDetail.goods_attr) && this.GoodsDetail.goods_attr.length > 0) {
                     this.attr_id = this.GoodsDetail.goods_attr[0].attr_id
                     this.cost_price = this.GoodsDetail.goods_attr[0].attr_vip_price
                     this.goods_price = this.GoodsDetail.goods_attr[0].attr_price
                     this.limit_num = this.GoodsDetail.goods_attr[0].attr_limit_num
+                    this.store = this.GoodsDetail.goods_attr[0].attr_store
                 }
 
                 this.isCollect = Boolean(res.data.data.is_coolect);
@@ -428,11 +442,13 @@ export default {
                 //文章详情表格处理
                 this.$nextTick(() => {
                     let arr = Array.from(this.$refs.detail.children)
-                    arr.forEach(item => {
-                        if (item.nodeName == 'TABLE') {
-                            item.style.width = '100%'
-                        }
-                    })
+                    if (!this.$validatenull(arr)) {
+                        arr.forEach(item => {
+                            if (item.nodeName == 'TABLE') {
+                                item.style.width = '100%'
+                            }
+                        })
+                    }
                 })
 
 

@@ -97,13 +97,13 @@ export default {
                         order_type: 2,
                         share_id: this.id,
                         goods_id: plus.setting_id,
-                        goods_title: plus.name,
-                        goods_img: plus.thumb,
+                        // goods_title: plus.name,
+                        // goods_img: plus.thumb,
                         union_id: WxAuth.union_id,
                         is_wechat: 1,
                         order_num: 1,
-                        amount: plus.sale_price,
-                        total_amount: plus.sale_price
+                        // amount: plus.sale_price,
+                        // total_amount: plus.sale_price
                     }
 
                     let result = await this.$postRequest('/order/AddOrder', postData)

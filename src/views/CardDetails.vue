@@ -21,7 +21,7 @@
             <van-swipe :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,index) in CardDetail.def_pic" :key="index">
                     <img :src="$imgUrl+item" alt="">
-                  </van-swipe-item>
+                </van-swipe-item>
             </van-swipe>
             <!-- <span><img src="../assets/img2.png" alt=""></span> -->
             <!-- <span><img :src="CardDetail.def_pic[0]" alt=""></span> -->
@@ -56,19 +56,19 @@
             </div>
             <div class="comment" id="comments">
                 <h3>
-            <p>用户评价</p>
-                 <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:3}}">
-            查看全部 &gt;
-        </router-link>
-          </h3>
+                    <p>用户评价</p>
+                    <router-link :to="{name:'CommentMore',query:{id:$route.query.id,type:3}}">
+                        查看全部 &gt;
+                    </router-link>
+                </h3>
                 <div class="user_comment" v-for="(item,index) in comments" v-if="index < 3">
                     <div class="user">
                         <div class="user_message">
                             <i>
-                               <template v-if="item.anonymous == 0">
+                             <template v-if="item.anonymous == 0">
                                 <img :src="item.wechat_img" alt="" />
-                                </template>
-                            </i>
+                            </template>
+                        </i>
                             <div class="user_name">
                                 <p v-if="item.anonymous == 1">匿名</p>
                                 <p v-else>{{item.user_name}}</p>
@@ -91,9 +91,9 @@
             </div>
             <div class="shop_del" id="details">
                 <h3>
-            <p :class="table == 1 ? 'active' : ''" @click="tabkeChage(1)">卡内商家</p>
-            <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">卡片详情</p>
-          </h3>
+                <p :class="table == 1 ? 'active' : ''" @click="tabkeChage(1)">卡内商家</p>
+                <p :class="table == 2 ? 'active' : ''" @click="tabkeChage(2)">卡片详情</p>
+            </h3>
                 <div v-if="table == 1">
                     <ul class="shop">
                         <li class="vip_price" v-for="(item,index) in projects" @click="goProject(item)">
@@ -247,9 +247,15 @@ export default {
             } else if (index == 2) {
                 this.table = 1
                 document.getElementById("comments").scrollIntoView();
+                // 距离顶部距离
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                this.$ScrollTop(scrollTop - 20, 30)
             } else {
                 this.table = 2
                 document.getElementById("details").scrollIntoView();
+                // 距离顶部距离
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                this.$ScrollTop(scrollTop - 20, 30)
             }
         },
         shareShowFn() {
@@ -271,6 +277,11 @@ export default {
             }
 
             if (!this.CardDetail) {
+                return false
+            }
+
+            if (this.CardDetail.store == 0) {
+                this.$message('该卡片库存不足！')
                 return false
             }
 
@@ -331,12 +342,15 @@ export default {
                 //文章详情表格处理
                 this.$nextTick(() => {
                     let arr = Array.from(this.$refs.detail.children)
-                    arr.forEach(item => {
-                        if (item.nodeName == 'TABLE') {
-                            item.style.width = '100%'
-                        }
-                    })
+                    if (!this.$validatenull(arr)) {
+                        arr.forEach(item => {
+                            if (item.nodeName == 'TABLE') {
+                                item.style.width = '100%'
+                            }
+                        })
+                    }
                 })
+
                 this.timer()
             }
         },
@@ -423,8 +437,8 @@ export default {
         this.id = this.$route.query.id
         this.type = this.$route.query.type
 
-        this.getComment()
         this.getDetail()
+        this.getComment()
         this.GetCardProject()
     },
 

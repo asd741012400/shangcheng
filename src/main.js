@@ -11,7 +11,7 @@ import common from '../public/commonality'
 import { getRequest, postRequest } from './lib/axios'
 import localstore from 'store2' //本地存储
 import { ENV, IMG_URL, API_URL, HOME_URL } from './config/index.js'
-import { validatenull, calcTime,calcTime2 } from './config/util.js'
+import { validatenull, calcTime, calcTime2, ScrollTop } from './config/util.js'
 
 import VueJsonp from 'vue-jsonp'
 Vue.use(VueJsonp)
@@ -62,8 +62,9 @@ Vue.prototype.$message = Toast;
 Vue.prototype.$Indicator = Indicator;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$localstore = localstore;
-Vue.prototype.$calcTime = calcTime;
-Vue.prototype.$calcTime2 = calcTime2;
+Vue.prototype.$calcTime = calcTime; //到期时间计算
+Vue.prototype.$calcTime2 = calcTime2; //到期时间计算
+Vue.prototype.$ScrollTop = ScrollTop; // 页面滚动
 Vue.prototype.$http = axios;
 Vue.prototype.$common = common;
 
