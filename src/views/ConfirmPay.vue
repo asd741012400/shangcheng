@@ -89,6 +89,9 @@ export default {
             let res = await this.$getRequest('/order/getOrder', { id: id })
             this.order = res.data.data
 
+            //订单缓存
+            this.$localstore.session('order', this.order)
+
             if (this.order.order_type == 1) {
                 let res1 = await this.$getRequest('home/GetGoodsDetail', { id: this.order.goods_id })
                 this.goods = res1.data.data
@@ -127,9 +130,9 @@ export default {
                             }
                         }
 
-                        let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        if (res.data.code == 1) {
-                            that.$localstore.session('PaySucceed', res.data.data)
+                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        // if (res.data.code == 1) {
+                        //     that.$localstore.session('PaySucceed', res.data.data)
                             that.$router.replace({
                                 name: 'PaySucceed',
                                 query: {
@@ -138,29 +141,29 @@ export default {
                                     type: that.order.order_type,
                                 }
                             })
-                        } else {
-                            that.$message(res.data.msg)
-                        }
+                        // } else {
+                        //     that.$message(res.data.msg)
+                        // }
 
                         //10s钟后重新发起请求
-                        let timer = setInterval(async () => {
-                            let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                            if (res.data.code == 1) {
-                                clearInterval(timer)
-                                that.$localstore.session('PaySucceed', res.data.data)
-                                that.$router.replace({
-                                    name: 'PaySucceed',
-                                    query: {
-                                        id: that.order.order_id,
-                                        goods_id: that.order.goods_id,
-                                        type: that.order.order_type,
-                                    }
-                                })
-                            } else {
-                                // that.$message(res.data.msg)
-                                clearInterval(timer)
-                            }
-                        }, 10000)
+                        // let timer = setInterval(async () => {
+                        //     let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
+                        //     if (res.data.code == 1) {
+                        //         clearInterval(timer)
+                        //         that.$localstore.session('PaySucceed', res.data.data)
+                        //         that.$router.replace({
+                        //             name: 'PaySucceed',
+                        //             query: {
+                        //                 id: that.order.order_id,
+                        //                 goods_id: that.order.goods_id,
+                        //                 type: that.order.order_type,
+                        //             }
+                        //         })
+                        //     } else {
+                        //         // that.$message(res.data.msg)
+                        //         clearInterval(timer)
+                        //     }
+                        // }, 10000)
 
                         // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
                         // if (res.data.code == 1) {

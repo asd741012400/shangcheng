@@ -14,7 +14,7 @@
                         <div>
                             <p>卡号：{{item.card_sn}}</p>
                             <span class="color_hei">已过期</span>
-                            <em><img src="../assets/icon_close.png" alt=""></em>
+                            <em @click="delCard(item)"><img src="../assets/icon_close.png" alt=""></em>
                         </div>
                     </div>
                     <div class="content">
@@ -76,7 +76,7 @@
                             <div>
                                 <p>卡号：{{item.card_sn}}</p>
                                 <span class="color_hei">已过期</span>
-                                <em><img src="../assets/icon_close.png" alt=""></em>
+                                <em @click="delCard(item)"><img src="../assets/icon_close.png" alt=""></em>
                             </div>
                         </div>
                         <div class="content">
@@ -192,7 +192,7 @@ export default {
                 showCancelButton: true,
                 message: '你确定删除该卡片吗？'
             }).then(async () => {
-                let res = await this.$getRequest('/card/delcard', { user_id: this.user.user_id, card_id: item.card_id })
+                let res = await this.$getRequest('/card/delcard', { user_id: this.user_id, cd_id: item.cdid })
                 this.$message(res.data.msg)
                 if (res.data.code == 1) {
                     setTimeout(() => {
@@ -214,11 +214,11 @@ export default {
             this.$localstore.set('usecard', card)
             this.$router.push({ name: 'UseCard' })
         },
-        //激活
+        //兑换后激活
         goActiveCard() {
             this.$router.push({ name: 'CardActivate', query: { id: this.cg_id, 'status': 0 } })
         },
-        //激活
+        //卡片列表激活
         activeCard(index) {
             let card = this.cardList[index]
             this.$localstore.set('usecard', card)

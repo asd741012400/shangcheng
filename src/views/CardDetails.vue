@@ -246,12 +246,14 @@ export default {
                 document.getElementById("goods").scrollIntoView();
             } else if (index == 2) {
                 this.table = 1
+                this.$ScrollTop(0, 10)
                 document.getElementById("comments").scrollIntoView();
                 // 距离顶部距离
                 var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
                 this.$ScrollTop(scrollTop - 20, 30)
             } else {
                 this.table = 2
+                this.$ScrollTop(0, 10)
                 document.getElementById("details").scrollIntoView();
                 // 距离顶部距离
                 var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -341,6 +343,9 @@ export default {
                 this.$Indicator.close();
                 //文章详情表格处理
                 this.$nextTick(() => {
+                    if (this.$validatenull(this.$refs.detail.children)) {
+                        return false
+                    }
                     let arr = Array.from(this.$refs.detail.children)
                     if (!this.$validatenull(arr)) {
                         arr.forEach(item => {
@@ -459,7 +464,7 @@ export default {
     // 销毁前状态
     beforeDestroy() {
         document.title = "圈豆商城"
-        window.addEventListener('scroll', null)
+        // window.removeEventListener('scroll', null)
     },
 
     // 销毁完成状态

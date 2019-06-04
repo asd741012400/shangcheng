@@ -1,6 +1,6 @@
 <template>
     <div class="PaySucceed">
-<!--         <header>
+        <!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">支付成功</div>
             <div class="add"></div>
@@ -134,6 +134,7 @@ export default {
             goods_id: '',
             share_url: '',
             value: '',
+            instance: '',
             give_goods: {},
             give_cards: {},
             card: {},
@@ -190,39 +191,71 @@ export default {
         },
         //激活
         activeCard() {
-            this.$router.replace({ name: 'CardActivate', query: { id: this.cg_id } })
+            if (this.cg_id) {
+                this.$router.replace({ name: 'CardActivate', query: { id: this.cg_id } })
+            }
         },
         maskingHideFn() {
             this.maskingShow = false;
         },
         //获取支付成功后回调
         async getPay() {
-            let data = this.$localstore.session.get('PaySucceed')
-            if (this.order_type == 2) {
-                this.give_goods = data.goods_count
-                this.give_cards = data.card_count
-                // if (!this.$validatenull(this.give_goods) && !this.$validatenull(this.give_cards)) {
-                //     this.PlusPop = true
-                // } else {
-                if (!this.$validatenull(this.give_cards)) {
-                    this.popShow1 = true
-                }
-                // }
-            }
-            if (this.order_type == 3) {
-                this.cd_id = data.cd_id
-                this.cg_id = data.cg_id
-                this.share_url = this.$HOME_URL + '/?#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
+            this.$Indicator.open({ spinnerType: 'fading-circle' });
 
-                this.wxRegCallback()
+            let res = await this.$getRequest('/order/PaySuccess', { id: this.order_id })
+            let data = res.data.data
+            if (res.data.code == 1) {
+                if (this.order_type == 2) {
+                    this.give_goods = data.goods_count
+                    this.give_cards = data.card_count
+                    if (!this.$validatenull(this.give_cards)) {
+                        this.popShow1 = true
+                    }
+                }
+                if (this.order_type == 3) {
+                    this.cd_id = data.cd_id
+                    this.cg_id = data.cg_id
+                    this.share_url = this.$HOME_URL + '/?#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
+                    this.wxRegCallback()
+                }
+            } else {
+                this.$message(res.data.msg);
             }
-            this.$localstore.remove('PaySucceed')
+
+            this.$Indicator.close();
+
+            // let data = this.$localstore.session.get('PaySucceed')
+            // if (this.order_type == 2) {
+            //     this.give_goods = data.goods_count
+            //     this.give_cards = data.card_count
+            //     // if (!this.$validatenull(this.give_goods) && !this.$validatenull(this.give_cards)) {
+            //     //     this.PlusPop = true
+            //     // } else {
+            //     if (!this.$validatenull(this.give_cards)) {
+            //         this.popShow1 = true
+            //     }
+            //     // }
+            // }
+            // if (this.order_type == 3) {
+            //     this.cd_id = data.cd_id
+            //     this.cg_id = data.cg_id
+            //     this.share_url = this.$HOME_URL + '/?#/GiveCard?give_id=' + this.cd_id + '&title=' + this.order.goods_title
+            //     this.wxRegCallback()
+            // }
+            // this.$localstore.remove('PaySucceed')
         },
         //获取订单
         async getOrder() {
-            let res = await this.$getRequest('/order/getOrder', { id: this.order_id })
-            this.order = res.data.data
-            this.getPay()
+            //订单缓存
+            let order = this.$localstore.session.get('order')
+            if (order) {
+                this.order = order
+            } else {
+                let res = await this.$getRequest('/order/getOrder', { id: this.order_id })
+                this.order = res.data.data
+            }
+
+
         },
         //获取卡片
         async getCard() {
@@ -304,6 +337,7 @@ export default {
         this.order_type = this.$route.query.type
         this.goods_id = this.$route.query.goods_id
         this.getOrder()
+        this.getPay()
     },
 
     // 挂载前状态
@@ -321,7 +355,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        this.$Indicator.close();
+    },
 
     // 销毁完成状态
     destroyed() {}

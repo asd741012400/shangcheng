@@ -14,7 +14,7 @@
                     <p>已撤销</p>
                 </template>
                 <template v-else-if="order_info.order_status == 201">
-                    <p>已撤销</p>
+                    <p>系统撤销</p>
                 </template>
                 <template v-else-if="order_info.order_status == 0">
                     <p>待付款</p>
@@ -106,11 +106,14 @@
                         </p>
                         <div class="btn">
                             <template v-if="orderStatus">
+                                <template v-if="order_info.is_roll == 1 && order_info.order_type == 1 && order_info.is_use ==0 && order_info.order_status == 1  && order_info.pay_type == 1">
+                                    <van-button type="warning" size="small" @click="refundApply(order_info.order_id)">申请退款</van-button>
+                                </template>
                                 <template v-if="order_info.order_status == 0">
                                     <van-button type="primary" size="mini" @click.stop="payOrder(order_info.order_id)">去付款</van-button>
                                 </template>
                                 <template v-else-if="order_info.order_status == 1">
-                                    <van-button v-if="order_info.is_comment == 0" type="primary" size="mini" @click.stop="handleComment(order_info.order_id,order_info.order_type,order_info.goods_id)">去评价</van-button>
+                                    <van-button v-if="order_info.is_comment == 0 && order_info.is_use == 1" type="primary" size="mini" @click.stop="handleComment(order_info.order_id,order_info.order_type,order_info.goods_id)">去评价</van-button>
                                 </template>
                             </template>
                         </div>

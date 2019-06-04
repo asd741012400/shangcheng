@@ -1,8 +1,22 @@
 <template>
-    <div class="CardProjectDetails">
-        <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
-        <header>
-        </header>
+    <div class="CardProjectDetails" id="goods">
+        <div class="top" v-show="toFixed">
+            <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
+            <header>
+                <p :class="active == 1 ? 'active' : ''" @click="handleActive(1)">
+                    <span>项目</span>
+                    <em></em>
+                </p>
+                <p :class="active == 2 ? 'active' : ''" @click="handleActive(2)">
+                    <span>门店</span>
+                    <em></em>
+                </p>
+                <p :class="active == 3 ? 'active' : ''" @click="handleActive(3)">
+                    <span>介绍</span>
+                    <em></em>
+                </p>
+            </header>
+        </div>
         <div class="banner">
             <van-swipe :autoplay="3000" indicator-color="white">
                 <van-swipe-item v-for="(item,index) in imgList" :key="index">
@@ -14,7 +28,7 @@
             <div class="titles">
                 <p>价值￥{{info.project_price}}</p>
                 <b>{{info.project_name}}</b>
-                <span>项目详情</span>
+                <span>{{info.project_dsc}}</span>
             </div>
             <div class="message">
                 <p>
@@ -30,7 +44,7 @@
                     <span>是</span>
                 </p>
             </div>
-            <div class="shop">
+            <div class="shop" id="comments">
                 <h3>使用门店</h3>
                 <ul>
                     <li v-for="(item,index) in storeList" :key="index" v-if="index<2">
@@ -103,8 +117,8 @@
                     </li>
                 </ul>
             </div>
-            <div class="shop_del">
-                <h3>商品详情</h3>
+            <div class="shop_del" id="details">
+                <h3>项目介绍</h3>
                 <div class="detail" v-html="info.project_info"></div>
             </div>
         </div>
@@ -146,6 +160,8 @@ export default {
             cardDetailsState: 4,
             state: false,
             showMore: false,
+            toFixed: false,
+            active: 1,
             user: '',
             info: '',
             imgList: [],
@@ -176,6 +192,39 @@ export default {
         goPlus() {
             this.$router.push({ name: 'VipEquity' })
         },
+        //切换顶部导航
+        handleActive(index) {
+            this.active = index
+            if (index == 1) {
+                this.table = 1
+                document.getElementById("goods").scrollIntoView();
+            } else if (index == 2) {
+                this.table = 1
+                this.$ScrollTop(0, 10)
+                document.getElementById("comments").scrollIntoView();
+                // 距离顶部距离
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                this.$ScrollTop(scrollTop - 20, 30)
+            } else {
+                this.table = 2
+                this.$ScrollTop(0, 10)
+                document.getElementById("details").scrollIntoView();
+                // 距离顶部距离
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                this.$ScrollTop(scrollTop - 20, 30)
+            }
+        },
+
+        //滚动吸顶
+        handleScroll() {
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+            if (scrollTop > 320) {
+                this.toFixed = true
+            } else {
+                this.toFixed = false
+            }
+        },
+
         //获取项目详情
         async getDetail() {
             let data = { project_id: this.project_id }
@@ -185,6 +234,7 @@ export default {
             if (this.info.def_pic) {
                 this.imgList = this.info.def_pic.split(',')
             }
+
         },
         //获取门店
         async getStore() {
@@ -240,6 +290,7 @@ export default {
         if (this.type) {
             this.state = true
         }
+
         this.getDetail()
         this.getStore()
         this.getCardDetail()
@@ -249,7 +300,9 @@ export default {
     beforeMount() {},
 
     // 挂载结束状态
-    mounted() {},
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll)
+    },
 
     // 更新前状态
     beforeUpdate() {},
@@ -258,7 +311,9 @@ export default {
     updated() {},
 
     // 销毁前状态
-    beforeDestroy() {},
+    beforeDestroy() {
+        // window.removeEventListener('scroll', null)
+    },
 
     // 销毁完成状态
     destroyed() {}
@@ -267,6 +322,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .CardProjectDetails {
+    overflow: hidden;
+
     .icon_return {
         position: absolute;
         width: 1rem;
@@ -274,7 +331,8 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        top: .3rem;
+        // top: .3rem;
+        top: 0rem;
         left: .2rem;
 
         span {
@@ -283,14 +341,24 @@ export default {
         }
     }
 
+    .top {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 999;
+    }
+
     header {
+        // position:fixed;
+        // top:0;
         height: 1rem;
         display: flex;
         align-items: center;
         width: 3.5rem;
         justify-content: space-between;
         margin: 0 auto;
-        padding-top: .3rem;
+        // padding-top: .3rem;
         background: #fff;
 
         p {
@@ -512,7 +580,6 @@ export default {
             }
 
             div {
-                height: 4.6rem;
                 background: #C8C8C8;
             }
         }

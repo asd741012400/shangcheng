@@ -21,7 +21,7 @@
                         <span>已撤销</span>
                     </template>
                     <template v-else-if="item.order_status == 201">
-                        <span>已撤销</span>
+                        <span>系统撤销</span>
                     </template>
                     <template v-else-if="item.order_status == 0">
                         <span>待付款</span>

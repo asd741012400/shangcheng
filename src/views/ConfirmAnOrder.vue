@@ -295,7 +295,8 @@ export default {
                 this.goods = res.data.data
                 this.title = this.goods.card_name
                 this.form_table = res.data.data.form_table.split(',');
-
+                this.limit_num = this.goods.limit_num
+                this.store = this.goods.store
 
                 if (this.userInfo.status == 0) {
                     this.price = this.goods.card_price

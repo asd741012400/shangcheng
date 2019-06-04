@@ -108,13 +108,13 @@ export default {
 
                     let result = await this.$postRequest('/order/AddOrder', postData)
                     if (result.data.code == 1) {
-                        this.$router.push({ name: 'VipOrder', query: { id: result.data.data } })
+                        this.$router.replace({ name: 'VipOrder', query: { id: result.data.data } })
                     } else {
                         this.$message(result.data.msg)
                     }
 
                 } else {
-                    this.$router.push({
+                    this.$router.replace({
                         path: 'ConfirmAnOrder',
                         query: {
                             id: this.id,
