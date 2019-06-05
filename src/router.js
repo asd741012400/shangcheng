@@ -94,16 +94,19 @@ let router = new Router({
             path: '/Index',
             name: 'Index',
             component: Index,
+            meta: { auto: true }
         },
         {
             path: '/PersonalCenter',
             name: 'PersonalCenter',
-            component: PersonalCenter
+            component: PersonalCenter,
+            meta: { auto: true }
         },
         {
             path: '/MyShop',
             name: 'MyShop',
-            component: MyShop
+            component: MyShop,
+            meta: { auto: true }
         },
         {
             path: '/MyShopUser',
@@ -241,6 +244,7 @@ let router = new Router({
             path: '/VipEquity',
             name: 'VipEquity',
             component: VipEquity,
+            meta: { auto: true }
         },
         {
             path: '/Order',
@@ -487,7 +491,7 @@ router.beforeEach((to, from, next) => {
     getPlUS()
 
 
-    if (to.meta && !to.meta.business) {
+    if (to.meta && to.meta.auto) {
         //每次进入自动计算用户金额
         AutoCount(union_id)
     }

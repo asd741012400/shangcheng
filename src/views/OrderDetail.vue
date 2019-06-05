@@ -123,7 +123,7 @@
         </ul>
         <!-- 核销信息 -->
         <!-- <div class="timer" v-if="order_info.order_status == 1 && type == 1"> -->
-        <div class="timer" v-if="type == 1">
+        <div class="timer" v-if="type == 1 && orderStatus">
             <!-- <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="item.cancle_status != 2"> -->
             <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="index<3">
                 <p>

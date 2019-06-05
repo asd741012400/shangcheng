@@ -203,13 +203,25 @@ export default {
                 duration: 5000
             });
 
-            let res = await this.$postRequest('/order/AddOrder', postData)
-            this.$message(res.data.msg)
-            if (res.data.code == 1) {
-                this.$router.replace({ name: 'ConfirmPay', query: { id: res.data.data } })
-                instance.close();
+            //如果金额为零 或者免费
+            if (!this.total_amount || this.goods.is_free) {
+                let res = await this.$postRequest('/order/FreeBuy', postData)
+                this.$message(res.data.msg)
+                if (res.data.code == 1) {
+                    this.$router.replace({ name: 'Order'})
+                    instance.close();
+                } else {
+                    instance.close();
+                }
             } else {
-                instance.close();
+                let res = await this.$postRequest('/order/AddOrder', postData)
+                this.$message(res.data.msg)
+                if (res.data.code == 1) {
+                    this.$router.replace({ name: 'ConfirmPay', query: { id: res.data.data } })
+                    instance.close();
+                } else {
+                    instance.close();
+                }
             }
 
         },
