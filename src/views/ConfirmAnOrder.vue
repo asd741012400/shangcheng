@@ -283,19 +283,18 @@ export default {
                     })
                 }
 
-                // if (this.goods.is_free) {
-                //     this.limit_num = 0
-                //     this.price = 0
-                //     this.is_wechat = 0
-                // }
-
 
             } else if (type == 3) {
                 let res = await this.$getRequest('home/GetCardDetail', { id: id })
                 this.goods = res.data.data
                 this.title = this.goods.card_name
                 this.form_table = res.data.data.form_table.split(',');
-                this.limit_num = this.goods.limit_num
+                if (this.goods.limit_num == 0) {
+                    this.limit_num = 99999999999
+                } else {
+                    this.limit_num = this.goods.limit_num
+                }
+
                 this.store = this.goods.store
 
                 if (this.userInfo.status == 0) {

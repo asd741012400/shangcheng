@@ -12,7 +12,7 @@
                     <div class="image">
                         <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                         <div>
-                            <p>卡号：{{item.card_sn}}</p>
+                            <p>卡号：{{item.card_num}}</p>
                             <span class="color_hei">已过期</span>
                             <em @click="delCard(item)"><img src="../assets/icon_close.png" alt=""></em>
                         </div>
@@ -33,7 +33,7 @@
                         <div class="image">
                             <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                             <div>
-                                <p>卡号：{{item.card_sn}}</p>
+                                <p>卡号：{{item.card_num}}</p>
                                 <span @click="activeCard(index)">去激活</span>
                             </div>
                         </div>
@@ -51,7 +51,7 @@
                 <template v-else-if="item.ac_status == 1">
                     <div class="to_be_used" @click="goCardDetail(index)">
                         <div class="sn">
-                            <p>卡号：{{item.card_sn}}</p>
+                            <p>卡号：{{item.card_num}}</p>
                         </div>
                         <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                         <div class="user">
@@ -74,7 +74,7 @@
                         <div class="image">
                             <i><img :src="$imgUrl + item.thumb_img" alt=""></i>
                             <div>
-                                <p>卡号：{{item.card_sn}}</p>
+                                <p>卡号：{{item.card_num}}</p>
                                 <span class="color_hei">已过期</span>
                                 <em @click="delCard(item)"><img src="../assets/icon_close.png" alt=""></em>
                             </div>

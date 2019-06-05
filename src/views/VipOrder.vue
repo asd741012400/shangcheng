@@ -171,9 +171,6 @@ export default {
                     options.success = async () => {
                         that.$localstore.session('has_share', '')
 
-                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
-                        //     that.$localstore.session('PaySucceed', res.data.data)
                         that.$router.replace({
                             name: 'PaySucceed',
                             query: {
@@ -182,44 +179,7 @@ export default {
                                 type: that.order.order_type,
                             }
                         })
-                        // } else {
-                        //     that.$message(res.data.msg)
-                        // }
 
-
-                        //10s钟后重新发起请求
-                        // let timer = setInterval(async () => {
-                        //     let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        //     if (res.data.code == 1) {
-                        //         that.$localstore.session('PaySucceed', res.data.data)
-                        //         clearInterval(timer)
-                        //         that.$router.replace({
-                        //             name: 'PaySucceed',
-                        //             query: {
-                        //                 id: that.order.order_id,
-                        //                 goods_id: that.order.goods_id,
-                        //                 type: that.order.order_type,
-                        //             }
-                        //         })
-                        //     } else {
-                        //         clearInterval(timer)
-                        //     }
-                        // }, 10000)
-
-                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
-                        //     that.$localstore.session('PaySucceed', res.data.data)
-                        //     that.$router.replace({
-                        //         name: 'PaySucceed',
-                        //         query: {
-                        //             id: that.order.order_id,
-                        //             goods_id: that.order.goods_id,
-                        //             type: that.order.order_type,
-                        //         }
-                        //     })
-                        // } else {
-                        //     that.$message(res.data.msg)
-                        // }
                     };
 
                     //  取消支付的操作

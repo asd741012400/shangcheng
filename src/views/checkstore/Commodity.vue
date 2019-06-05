@@ -19,7 +19,9 @@ export default {
     methods: {
         //提交商品核销
         async submit() {
-            console.log(this.productInfo);
+            if (!this.$validatenull(this.productInfo)) {
+                return false
+            }
             let userInfo = this.$localstore.get('business_user')
             let data = {
                 code: this.checkInfo.cancle_code,

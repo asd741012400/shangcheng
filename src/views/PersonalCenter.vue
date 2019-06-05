@@ -37,7 +37,10 @@
         <header v-else class="user_class">
             <span><img :src="userInfo.wechat_img" alt="" srcset=""></span>
             <div>
-                <p>{{userInfo.username}}</p>
+                <p>
+                    <a>{{userInfo.username}}</a>
+                    <i v-if="overTime(userInfo.over_time)" @click="BuyPlus"><img src="../assets/vt_renew.png" alt=""></i>
+                </p>
                 <a>{{userInfo.tel_phone}}</a>
             </div>
             <b><img src="../assets/PersonalCenter_headerBg.png" alt="" srcset=""></b>
@@ -201,6 +204,7 @@ export default {
             goods_count: 0,
             username: '',
             code: '',
+            plus: '',
             mobile: '',
             popState: 3,
             popShow: false,
@@ -264,7 +268,34 @@ export default {
         },
         //续费Plus
         async BuyPlus() {
-            this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+            let plus = this.$localstore.session.get('plus')
+            if (plus) {
+                this.plus = plus
+            } else {
+                let res = await this.$getRequest('/home/GetPlus')
+                this.plus = res.data.data
+                this.$localstore.session('plus', this.plus)
+            }
+
+            // this.$router.push({ name: 'VipOrder', query: { type: 2 } })
+            let WxAuth = this.$localstore.get('wx_user')
+            let postData = {
+                order_type: 2,
+                goods_id: this.plus.setting_id,
+                // goods_title: this.plus.name,
+                // goods_img: this.plus.thumb,
+                union_id: WxAuth.union_id,
+                is_wechat: 1,
+                order_num: 1,
+                // amount: this.plus.sale_price,
+                // total_amount: this.plus.sale_price
+            }
+            let result = await this.$postRequest('/order/AddOrder', postData)
+            if (result.data.code == 1) {
+                this.$router.replace({ name: 'VipOrder', query: { id: result.data.data } })
+            } else {
+                this.$message(result.data.msg)
+            }
         },
         //兑换卡片商品权益
         async getcode() {
@@ -391,6 +422,21 @@ body {
                 p {
                     font-weight: bold;
                     font-size: .28rem;
+                    align-items: center;
+                    display: flex;
+
+                    a {
+                        color: #fff;
+                        font-size: .26rem;
+                        margin-right: 20px;
+                    }
+
+                    i {
+                        width: 1.36rem;
+                        overflow: hidden;
+                        margin-left: 2px;
+                    }
+
                 }
 
                 a {
@@ -468,7 +514,7 @@ body {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: .2rem .8rem 0;
+                padding: .2rem .6rem 0;
 
                 li {
                     color: #fff;
@@ -476,6 +522,7 @@ body {
                     align-items: center;
                     flex-direction: column;
                     text-align: center;
+                    flex: 1;
 
                     a {
                         color: #fff;

@@ -7,7 +7,7 @@
                 <div class="image">
                     <i><img :src="$imgUrl + card.thumb_img" alt=""></i>
                     <div>
-                        <p>卡号： {{card.card_sn}}</p>
+                        <p>卡号：{{card.card_num}}</p>
                         <!-- <span id="qrcode"><img src="../assets/code2.png" alt=""></span> -->
                     </div>
                 </div>

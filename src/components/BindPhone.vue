@@ -41,9 +41,8 @@ export default {
     components: {},
     methods: {
         async sendSMS() {
-
             if (!(/^1(3|4|5|6|9|7|8)\d{9}$/.test(this.phone))) {
-                this.$message("手机号码有误，请重填");
+                this.$notify("手机号码有误，请重填");
                 return false;
             }
 

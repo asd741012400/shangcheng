@@ -7,7 +7,7 @@
                 <div class="image">
                     <i><img :src="$imgUrl + card.thumb_img" alt=""></i>
                     <div>
-                        <p>卡号： {{card.card_sn}}</p>
+                        <p>卡号：{{card.card_num}}</p>
                     </div>
                 </div>
                 <div class="user">
@@ -44,7 +44,7 @@
                     </h2>
                     <li class="padding" v-for="(vv,ii) in item" :class="(vv.project_cancle_status == 2) || (vv.project_cancle_status ==1 &&　vv.project_num　==　0) ? 'li_color' : ''">
                         <!-- <li class="padding" v-for="(vv,ii) in item" :class="vv.project_cancle_status == 1 ? 'li_color' : ''"> -->
-                        <div  class="image" @click="goProject(vv)">
+                        <div class="image" @click="goProject(vv)">
                             <i><img :src="$imgUrl+vv.thumb_img" alt=""></i>
                             <p v-if="vv.project_cancle_status == 2 || vv.use_status == 1"><span>失效</span></p>
                         </div>

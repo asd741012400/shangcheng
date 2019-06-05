@@ -130,55 +130,15 @@ export default {
                             }
                         }
 
-                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
-                        //     that.$localstore.session('PaySucceed', res.data.data)
-                            that.$router.replace({
-                                name: 'PaySucceed',
-                                query: {
-                                    id: that.order.order_id,
-                                    goods_id: that.order.goods_id,
-                                    type: that.order.order_type,
-                                }
-                            })
-                        // } else {
-                        //     that.$message(res.data.msg)
-                        // }
+                        that.$router.replace({
+                            name: 'PaySucceed',
+                            query: {
+                                id: that.order.order_id,
+                                goods_id: that.order.goods_id,
+                                type: that.order.order_type,
+                            }
+                        })
 
-                        //10s钟后重新发起请求
-                        // let timer = setInterval(async () => {
-                        //     let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        //     if (res.data.code == 1) {
-                        //         clearInterval(timer)
-                        //         that.$localstore.session('PaySucceed', res.data.data)
-                        //         that.$router.replace({
-                        //             name: 'PaySucceed',
-                        //             query: {
-                        //                 id: that.order.order_id,
-                        //                 goods_id: that.order.goods_id,
-                        //                 type: that.order.order_type,
-                        //             }
-                        //         })
-                        //     } else {
-                        //         // that.$message(res.data.msg)
-                        //         clearInterval(timer)
-                        //     }
-                        // }, 10000)
-
-                        // let res = await that.$getRequest('/order/PaySuccess', { id: that.order.order_id })
-                        // if (res.data.code == 1) {
-                        //     that.$localstore.session('PaySucceed', res.data.data)
-                        //     that.$router.replace({
-                        //         name: 'PaySucceed',
-                        //         query: {
-                        //             id: that.order.order_id,
-                        //             goods_id: that.order.goods_id,
-                        //             type: that.order.order_type,
-                        //         }
-                        //     })
-                        // } else {
-                        //     that.$message(res.data.msg)
-                        // }
 
                     };
 

@@ -47,7 +47,10 @@
                     <b v-if="GoodsDetail.is_vip == 0">现价￥{{goods_price}}</b>
                     <p>市场价<span>￥{{mkt_price}}</span></p>
                 </div>
-                <div v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</div>
+                <div class="store">
+                    <a v-show="limit_num >= 1" class="purchase_limitation">限购{{limit_num}}份</a>
+                    <span v-show="store" style="color">库存 {{store}}</span>
+                </div>
                 <div class="select">
                     <div class="select-item" :class="attrActive == ii ? 'active' : ''" @click="changeAttr(ii)" v-for="(vv,ii) in  GoodsDetail.goods_attr" :key="ii">
                         <h4>{{vv.attr_name}}</h4>
@@ -713,6 +716,7 @@ export default {
                 font-weight: bold;
             }
 
+
             .price {
                 display: flex;
                 align-items: center;
@@ -766,18 +770,25 @@ export default {
                 }
             }
 
-            .purchase_limitation {
-                margin-left: .56rem;
-                margin-top: .22rem;
-                margin-bottom: .32rem;
-                line-height: .46rem;
-                border: 1px solid #FFB389;
-                color: #FFB389;
-                text-align: center;
-                width: 1.34rem;
-                text-align: center;
-                border-radius: 15px;
-                font-size: 0.24rem;
+            .store {
+                margin: 10px 0;
+                display: flex;
+                align-items: center;
+                padding-left: .56rem;
+
+                a {
+                    padding: 0.01rem 0.2rem;
+                    margin-right: 10px;
+                    text-align: center;
+                    border-radius: 15px;
+                    font-size: 0.24rem;
+                    border: 1px solid #FFB389;
+                    color: #FFB389;
+                }
+
+                span {
+                    padding: 0.01rem 0.05rem;
+                }
             }
 
             .select {

@@ -289,13 +289,9 @@ export default {
                 });
         }
 
-
         this.getBanner()
         this.clearCahe()
         this.getGoodsList()
-        //每次进入自动计算用户金额
-        // this.check()
-
 
 
     },

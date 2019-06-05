@@ -29,7 +29,7 @@ import DistributionTow from './views/DistributionTow.vue' //我的推广（二�
 import DistributionThree from './views/DistributionThree.vue' //我的推广（三级）
 import CardEquity from './views/CardEquity.vue' //卡包权益中心
 import CardDetailsTow from './views/CardDetailsTow.vue' //卡片权益详情
-import Bargain from './views/Bargain.vue'
+import Bargain from './views/Bargain.vue' //砍价
 import ClassifyList from './views/ClassifyList.vue' // 商品分类
 import ShopDetails from './views/ShopDetails.vue' //门店详情
 import City from './views/City.vue'
