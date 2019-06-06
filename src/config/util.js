@@ -43,7 +43,7 @@ export function calcTime(type, pay_time, day, t1, t2, status = 2) {
         }
     } else {
         let day1 = dayjs.unix(pay_time).format('YYYY-MM-DD HH:mm:ss')
-        let day2 = dayjs().add(day, 'day').format('YYYY-MM-DD HH:mm:ss')
+        let day2 = dayjs(day1).add(day, 'day').format('YYYY-MM-DD HH:mm:ss')
         if (status == 2) {
             if (now > dayjs(day2).unix()) {
                 return false

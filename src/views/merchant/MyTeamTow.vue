@@ -129,6 +129,7 @@ export default {
     created() {
         document.body.style.background = "#fff";
         let user = this.$localstore.get('wx_user')
+        this.user = user
         document.title = "我的团队（三级）"
 
         this.getNum()

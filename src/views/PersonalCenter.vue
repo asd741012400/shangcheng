@@ -224,7 +224,11 @@ export default {
             const date2 = this.$dayjs(day)
             let num = date2.diff(date1, 'day')
             if (num <= 30) {
-                return true
+                if (this.userInfo.level >= 1) {
+                    return true
+                } else {
+                    return false
+                }
             } else {
                 return false
             }

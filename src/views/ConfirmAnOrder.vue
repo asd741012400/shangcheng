@@ -77,6 +77,7 @@
         </div>
         <div class="btns">
             <span>合计:￥{{total}}</span>
+            <!-- <b @click="addOrder" v-if="goods.is_free == 1 || total == 0">免费购买</b> -->
             <b @click="addOrder">提交订单</b>
         </div>
         <BindPhone :show="show"></BindPhone>
@@ -204,11 +205,11 @@ export default {
             });
 
             //如果金额为零 或者免费
-            if (!this.total_amount || this.goods.is_free) {
+            if (!this.total || this.goods.is_free == 1) {
                 let res = await this.$postRequest('/order/FreeBuy', postData)
                 this.$message(res.data.msg)
                 if (res.data.code == 1) {
-                    this.$router.replace({ name: 'Order'})
+                    this.$router.replace({ name: 'Order' })
                     instance.close();
                 } else {
                     instance.close();
@@ -273,6 +274,10 @@ export default {
                 } else {
                     this.price = this.goods.cost_price
                 }
+
+                       if (this.goods.is_free == 1) {
+                this.price = 0
+            }
 
                 if (this.goods.goods_attr && this.goods.goods_attr.length > 0) {
                     this.goods.goods_attr.map(item => {

@@ -222,6 +222,13 @@
                 </div>
                 <div class="buy" @click="ConfirmAnOrderPage"><span>立即领取</span></div>
             </div>
+            <div class="btn" v-show="GoodsDetailsState == 8">
+                <div class="share" @click="shareShowFn">
+                    <span>分享好友</span>
+                    <!-- <p>分享</p> -->
+                </div>
+                <div class="buy" @click="ConfirmAnOrderPage"><span>免费购买</span></div>
+            </div>
             <div class="btn" v-show="GoodsDetailsState == 2">
                 <div class="buy_null"><span>已售罄</span></div>
             </div>
@@ -300,7 +307,6 @@ export default {
             } else {
                 return Math.ceil(num)
             }
-
         },
         //切换规格选择
         changeAttr(index) {
@@ -415,6 +421,8 @@ export default {
                     that.GoodsDetailsState = 3
                 } else if (that.GoodsDetail.is_vip == 1 && that.user.status == 0) {
                     that.GoodsDetailsState = 4
+                } else if (that.GoodsDetail.is_free == 1) {
+                    that.GoodsDetailsState = 8
                 } else {
                     that.GoodsDetailsState = 1
                 }

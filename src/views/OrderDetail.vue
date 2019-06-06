@@ -281,6 +281,9 @@ export default {
 
             //计算过期时间
             this.orderStatus = this.$calcTime(this.order_info.limit_type, this.order_info.pay_time, this.order_info.limit_days, this.order_info.limit_stime, this.order_info.limit_etime)
+            if (this.order_info.order_type == 2) {
+                this.orderStatus = true
+            }
 
             setTimeout(() => {
                 this.$nextTick(() => {
