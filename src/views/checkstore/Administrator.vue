@@ -41,6 +41,7 @@ export default {
             this.store = res.data.data
             this.thumb_img = this.store.thumb_img || this.store.business_img[0]
         },
+        
         //检测是否注册过
         async checkAuth() {
             let business_id = this.business_id

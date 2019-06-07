@@ -589,7 +589,7 @@ function getAuth() {
     //存储来源地址 用于授权返回
     // localstore.set('from_url', hash)s
     //微信授权
-    postRequest('/wechat/check', { url: url }).then(res => {
+    getRequest('/wechat/check', { url: url }).then(res => {
         window.location.href = res.data
     })
 }

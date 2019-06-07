@@ -1,19 +1,26 @@
 import axios from 'axios'
 import localStore from 'store2'
 import { IMG_URL, API_URL } from '../config/index.js'
+import { Indicator } from 'mint-ui';
 
 //默认配置地址
 axios.defaults.baseURL = API_URL
 
-
 //axios:请求拦截器
 axios.interceptors.request.use(function(config) {
+    if (config.method == 'post') {
+        Indicator.open({ spinnerType: 'fading-circle' });
+    }
+
     return config;
 });
 
 
 // http 响应response 拦截器
 axios.interceptors.response.use(response => {
+
+    Indicator.close();
+
     return response;
 }, error => {
 
