@@ -28,6 +28,9 @@
                 <template v-else-if="order_info.order_status == 4">
                     <p>已退款</p>
                 </template>
+                <template v-else-if="order_info.apply_status == 3">
+                    <p>退款拒绝</p>
+                </template>
                 <template v-else-if="order_info.order_status == 5">
                     <p>已使用</p>
                 </template>
@@ -101,12 +104,12 @@
                             <i>￥{{order_info.total_amount}}</i>
                         </p>
                         <p class="text2">
-                            <a class="text-hide"  v-if="order_info.attr_name">{{order_info.attr_name}}</a>
+                            <a class="text-hide" v-if="order_info.attr_name">{{order_info.attr_name}}</a>
                             <i>x{{order_info.order_num}}</i>
                         </p>
                         <div class="btn">
                             <template v-if="orderStatus">
-                                <template v-if="order_info.is_roll == 1 && order_info.order_type == 1 && order_info.is_use ==0 && order_info.order_status == 1  && order_info.pay_type == 1">
+                                <template v-if="order_info.is_roll == 1 && order_info.order_type == 1 && !order_info.apply_status && order_info.is_use ==0 && order_info.order_status == 1  && order_info.pay_type == 1">
                                     <van-button type="warning" size="small" @click="refundApply(order_info.order_id)">申请退款</van-button>
                                 </template>
                                 <template v-if="order_info.order_status == 0">
@@ -128,10 +131,10 @@
             <div class="timer_top" v-for="(item,index) in goods_cancle" v-if="index<3">
                 <p>
                     <a>
-                    <b>{{item.cancle_code}}</b>
-                    <span v-if="item.cancle_status == 1"> 已核销</span>
-                    <span v-else> 未核销</span>
-                  </a>
+                        <b>{{item.cancle_code}}</b>
+                        <span v-if="item.cancle_status == 1"> 已核销</span>
+                        <span v-else> 未核销</span>
+                    </a>
                     <time v-if="item.cancle_status == 1">核销时间：{{toDate(item.cancle_time)}}</time>
                 </p>
                 <!-- <i @click="previewImg(index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code"><img src="../assets/code.png" alt=""></i> -->
@@ -140,10 +143,10 @@
             <div class="timer_top" v-for="(item,index) in goods_cancle" v-show="index >= 3 && showMore">
                 <p>
                     <a>
-                    <b>{{item.cancle_code}}</b>
-                    <span v-if="item.cancle_status == 1"> 已核销</span>
-                    <span v-else> 未核销</span>
-                  </a>
+                        <b>{{item.cancle_code}}</b>
+                        <span v-if="item.cancle_status == 1"> 已核销</span>
+                        <span v-else> 未核销</span>
+                    </a>
                     <time v-if="item.cancle_status == 1">核销时间：{{toDate(item.cancle_time)}}</time>
                 </p>
                 <i><img @click="previewImg('qrcode'+index)" :id="'qrcode'+index" ref="qrcodes" :data-code="item.cancle_code" src="" alt=""></i>

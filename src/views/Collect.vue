@@ -28,7 +28,8 @@
                                     <b>{{item.names}}</b>
                                 </p>
                                 <p>
-                                    <a>￥{{item.price || "0.00"}}</a>
+                                    <a v-if="item.status == 1">￥{{item.price || "0.00"}}</a>
+                                    <a v-else>失效</a>
                                     <!-- <em>￥{{item.name}}</em>/ -->
                                 </p>
                             </div>
@@ -400,7 +401,7 @@ export default {
                             width: 1rem;
                             text-align: center;
                             line-height: .4rem;
-                            display:block;
+                            display: block;
                             // padding:.1rem .12rem;
                         }
                     }

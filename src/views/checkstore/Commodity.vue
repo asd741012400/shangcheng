@@ -2,7 +2,7 @@
     <div class="Commodity">
         <i><img :src="$imgUrl + productInfo.thumb_img"></i>
         <p>{{productInfo.goods_name}}</p>
-        <a class="sub_btn" @click="submit">确定</a>
+        <button  class="sub_btn" :disabled="disable" @click="submit">确定</button>
     </div>
 </template>
 <script>
@@ -11,6 +11,7 @@ export default {
     data() {
         return {
             code: '',
+            disable: false,
             checkInfo: {},
             productInfo: {}
         }
@@ -19,7 +20,8 @@ export default {
     methods: {
         //提交商品核销
         async submit() {
-            if (!this.$validatenull(this.productInfo)) {
+            this.disable = true
+            if (this.$validatenull(this.checkInfo)) {
                 return false
             }
             let userInfo = this.$localstore.get('business_user')
@@ -37,6 +39,9 @@ export default {
                 }, 2000)
             }
             this.$message(res.data.msg);
+            setTimeout(() => {
+                this.disable = false
+            }, 3000)
         },
         //查询核销信息
         async getInfo() {
@@ -123,7 +128,9 @@ export default {
     }
 
     .sub_btn {
-        margin: 1rem .69rem 0;
+        width:90%;
+        margin: 1rem auto;
+        //padding:0 .2rem;
         height: 0.8rem;
         line-height: 0.8rem;
         background-color: #ff6c60;
@@ -131,6 +138,7 @@ export default {
         text-align: center;
         color: #fff;
         display: block;
+        box-sizing:border-box;
         font-size: 0.32rem;
     }
 }

@@ -224,7 +224,7 @@ export default {
         getVip(index) {
             this.currVip = this.vip[index]
             this.vipIndex = index
-            this.mySwiper.slideTo(index + 1, 1000)
+            this.mySwiper.slideTo(index, 1000)
             if (this.vipIndex > 3) {
                 this.$refs.tab.scrollLeft = 500;
             } else {
@@ -385,7 +385,7 @@ export default {
         var _this = this
         this.mySwiper = new Swiper('.swiper-container', {
             direction: 'horizontal',
-            loop: true,
+            // loop: true,
             autoplay: 5000,
             slidesPerView: 1.35,
             // spaceBetween: 0.1,

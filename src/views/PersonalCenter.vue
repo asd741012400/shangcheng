@@ -150,38 +150,38 @@
         </div>
         <!-- 兑换成功后提示 -->
         <div class="pop_bg" v-if="popShow1">
-            <div class="pop pop1" v-if="type == 'P'">
+            <div class="pop pop1" v-if="type == 'P' && !$validatenull(card_count)">
                 <p>恭喜你成为PLUS会员</p>
                 <time class="time1">到期时间：{{give}}</time>
                 <p>我们为你准备了一份惊喜好礼</p>
                 <div class="img">
                     <img src="../assets/gift.png">
                 </div>
-                    <div class="footer-box">
-                        <span class="btn1" @click="sharePlus">邀请好友赚100</span>
-                        <span class="btn2" @click="goMyCardBag">收下并前往</span>
-                    </div>
-                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+                <div class="footer-box">
+                    <span class="btn1" @click="sharePlus">邀请好友赚100</span>
+                    <span class="btn2" @click="goMyCardBag">收下并前往</span>
                 </div>
-                <div class="pop" v-if="type == 'G'">
-                    <p>恭喜成功兑换{{give.goods_name}}</p>
-                    <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
-                    <time v-else>到期时间：{{give.limit_etime}}</time>
-                    <span @click="goOrder">前去查看</span>
-                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
-                </div>
-                <div class="pop" v-if="type == 'C'">
-                    <p>恭喜你获得卡券1张</p>
-                    <em>前往激活即可使用</em>
-                    <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
-                    <time v-else>到期时间：{{give.limit_etime}}</time>
-                    <span @click="activeCard">立即激活</span>
-                    <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
-                </div>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
             </div>
-            <Share ref="myShare"></Share>
-            <BindPhone :show="show"></BindPhone>
+            <div class="pop" v-if="type == 'G'">
+                <p>恭喜成功兑换{{give.goods_name}}</p>
+                <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
+                <time v-else>到期时间：{{give.limit_etime}}</time>
+                <span @click="goOrder">前去查看</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+            </div>
+            <div class="pop" v-if="type == 'C'">
+                <p>恭喜你获得卡券1张</p>
+                <em>前往激活即可使用</em>
+                <time v-if="give.limit_type == 2">到期时间：{{toTime(give.limit_days)}}</time>
+                <time v-else>到期时间：{{give.limit_etime}}</time>
+                <span @click="activeCard">立即激活</span>
+                <i @click="popHideFn1"><img src="../assets/icon_close.png" alt=""></i>
+            </div>
         </div>
+        <Share ref="myShare"></Share>
+        <BindPhone :show="show"></BindPhone>
+    </div>
 </template>
 <script>
 import Share from '../components/Share'
@@ -316,15 +316,33 @@ export default {
                 this.code = ''
                 this.type = res.data.data.type
                 this.give = res.data.data.data
+
+                this.popShow = false;
+
+
                 if (this.type == 'P') {
                     this.getUser()
+                    if (!this.$validatenull(res.data.data.goods_count)) {
+                        this.goods_count = res.data.data.goods_count
+                    }
+                    if (!this.$validatenull(res.data.data.card_count)) {
+                        this.card_count = res.data.data.card_count
+                        this.popShow1 = true;
+                    }else{
+                        setTimeout(()=>{
+                            window.location.reload()
+                        },3000)
+                    }
                 }
                 if (this.type == 'C') {
                     this.cg_id = res.data.data.cg_id
+                    this.popShow1 = true;
+                }
+                if (this.type == 'G') {
+                    this.popShow1 = true;
                 }
 
-                this.popShow = false;
-                this.popShow1 = true;
+
 
             }
         },

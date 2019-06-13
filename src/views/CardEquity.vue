@@ -69,7 +69,7 @@
                           <span>{{item.project_name}}</span>
                           <b>畅玩{{item.use_num}}次</b>
                         </h3>
-                        <div class="text_div">
+                        <div class="text_div" @click="goProject(item)">
                             <div class="text-clip">{{item.project_dsc}}</div>
                             <p style="margin: 5px 0;" v-if="$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime)">{{$calcTime2(item.limit_type,item.limit_days,item.limit_stime,item.limit_etime)}}</p>
                             <p style="margin: 5px 0;" v-else>已过期</p>

@@ -35,6 +35,9 @@
                     <template v-else-if="item.order_status == 4">
                         <span>已退款</span>
                     </template>
+                    <template v-else-if="item.apply_status == 3">
+                        <span>退款拒绝</span>
+                    </template>
                     <template v-else-if="item.order_status == 5">
                         <span>已使用</span>
                     </template>
@@ -62,75 +65,53 @@
                     <div class="img-box" @click="getOrder(item.order_id,item.order_type)">
                         <img :src="$imgUrl + item.goods_img">
                     </div>
-                        <div class="center" @click="getOrder(item.order_id,item.order_type)">
-                            <div class="clip title">{{item.goods_title}}</div>
-                            <template v-if="item.order_status == 1">
-                                <template v-if="item.order_type == 1">
-                                    <div class="limit-time" v-if="!$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)">已过期</div>
-                                    <div class="limit-time" v-else>{{$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)}}</div>
-                                    <!--                 <template v-if="item.limit_type == 2">
+                    <div class="center" @click="getOrder(item.order_id,item.order_type)">
+                        <div class="clip title">{{item.goods_title}}</div>
+                        <template v-if="item.order_status == 1">
+                            <template v-if="item.order_type == 1">
+                                <div class="limit-time" v-if="!$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)">已过期</div>
+                                <div class="limit-time" v-else>{{$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)}}</div>
+                                <!--                 <template v-if="item.limit_type == 2">
                                         <div class="limit-time">{{toTime(item.pay_time,item.limit_days)}}</div>
                                     </template>
                                     <template v-else>
                                         <div class="limit-time">有效期 {{item.limit_stime}} 至 {{item.limit_etime}}</div>
                                     </template> -->
-                                </template>
-                                <template v-if="item.order_type == 3">
-                                    <div class="limit-time" v-if="!$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)">已过期</div>
-                                    <div class="limit-time" v-else>{{$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)}}</div>
-                                    <!--                  <template v-if="item.limit_type == 2">
-                                        <div class="limit-time">{{toTime(item.pay_time,item.limit_days)}}</div>
-                                    </template>
-                                    <template v-else>
-                                        <div class="limit-time">有效期 {{item.limit_stime}} 至 {{item.limit_etime}}</div>
-                                    </template> -->
-                                </template>
                             </template>
-                        </div>
-                        <div class="right">
-                            <div>￥{{item.amount}}</div>
-                            <div>X {{item.order_num}}</div>
-                        </div>
+                            <template v-if="item.order_type == 3">
+                                <div class="limit-time" v-if="!$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)">已过期</div>
+                                <div class="limit-time" v-else>{{$calcTime(item.limit_type,item.pay_time,item.limit_days,item.limit_stime,item.limit_etime)}}</div>
+                                <!--                  <template v-if="item.limit_type == 2">
+                                        <div class="limit-time">{{toTime(item.pay_time,item.limit_days)}}</div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="limit-time">有效期 {{item.limit_stime}} 至 {{item.limit_etime}}</div>
+                                    </template> -->
+                            </template>
+                        </template>
                     </div>
-                    <div class="footer-box">
-                        <div class="footer-left">
-                            <span style="font-size:0.3rem;font-weight:700">合计 ￥{{item.total_amount}}</span>
-                        </div>
-                        <div class="footer-right">
-                            <!-- 判断是否过期 -->
-                            <!-- <template v-if="$calcTime(item.card_info.limit_type,item.pay_time,item.card_info.limit_days,item.card_info.limit_stime,item.card_info.limit_etime)"> -->
-                            <!-- 全部 -->
-                            <!-- order_status`'订单状态 0:未支付;1:订单完成;2:订单超时 3分单退款 4:已退款 5已使用 6 退款中 200:用户取消订单 201:后台取消订单;', -->
-                            <template v-if="active == 0">
-                                <template v-if="item.order_status == 0">
-                                    <van-button type="danger" size="small" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
-                                    <van-button type="danger" size="small" @click.stop="payOrder(item.order_id)">去付款</van-button>
-                                </template>
-                                <template v-else-if="item.order_status == 1">
-                                    <van-button v-if="item.is_use == 1 && item.is_comment == 0" type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
-                                    <template v-if="item.is_roll == 1 && item.order_type == 1 && item.is_use ==0 && item.order_status == 1 && item.pay_type == 1">
-                                        <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
-                                    </template>
-                                    <van-button v-if="item.order_type == 1 && item.is_use == 0" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
-                                    <template v-if="item.is_use == 0">
-                                        <van-button v-if="item.order_type == 3" type="info" size="small" @click="activeCard(item.cg_id.id)">去激活</van-button>
-                                    </template>
-                                </template>
-                                <template v-else-if="item.order_status == 2">
-                                </template>
-                                <template v-else-if="item.order_status == 3">
-                                </template>
-                                <template v-else-if="item.order_status == 4">
-                                </template>
-                            </template>
-                            <!-- 待付款 -->
-                            <template v-if="active == 1">
+                    <div class="right">
+                        <div>￥{{item.amount}}</div>
+                        <div>X {{item.order_num}}</div>
+                    </div>
+                </div>
+                <div class="footer-box">
+                    <div class="footer-left">
+                        <span style="font-size:0.3rem;font-weight:700">合计 ￥{{item.total_amount}}</span>
+                    </div>
+                    <div class="footer-right">
+                        <!-- 判断是否过期 -->
+                        <!-- <template v-if="$calcTime(item.card_info.limit_type,item.pay_time,item.card_info.limit_days,item.card_info.limit_stime,item.card_info.limit_etime)"> -->
+                        <!-- 全部 -->
+                        <!-- order_status`'订单状态 0:未支付;1:订单完成;2:订单超时 3分单退款 4:已退款 5已使用 6 退款中 200:用户取消订单 201:后台取消订单;', -->
+                        <template v-if="active == 0">
+                            <template v-if="item.order_status == 0">
                                 <van-button type="danger" size="small" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
-                                <van-button type="primary" size="small" @click.stop="payOrder(item.order_id)">去付款</van-button>
+                                <van-button type="danger" size="small" @click.stop="payOrder(item.order_id)">去付款</van-button>
                             </template>
-                            <!-- 待使用 -->
-                            <template v-else-if="active == 2">
-                                <template v-if="item.is_roll == 1 && item.order_type == 1 && item.is_use ==0 && item.order_status == 1  && item.pay_type == 1">
+                            <template v-else-if="item.order_status == 1">
+                                <van-button v-if="item.is_use == 1 && item.is_comment == 0" type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                                <template v-if="item.is_roll == 1 && item.order_type == 1  && item.apply_status != 3 && item.is_use ==0 && item.order_status == 1 && item.pay_type == 1">
                                     <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
                                 </template>
                                 <van-button v-if="item.order_type == 1 && item.is_use == 0" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
@@ -138,24 +119,46 @@
                                     <van-button v-if="item.order_type == 3" type="info" size="small" @click="activeCard(item.cg_id.id)">去激活</van-button>
                                 </template>
                             </template>
-                            <!-- 待评价 -->
-                            <template v-else-if="active == 3">
-                                <van-button type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                            <template v-else-if="item.order_status == 2">
                             </template>
-                            <!-- 退款 -->
-                            <template v-else-if="active == 4">
+                            <template v-else-if="item.order_status == 3">
                             </template>
-                            <template v-else-if="active == 5">
+                            <template v-else-if="item.order_status == 4">
                             </template>
-                            <!-- <van-button type="danger" size="small">取消订单</van-button> -->
-                            <!-- <van-button type="danger" size="small">申请退款</van-button> -->
-                            <!-- <van-button type="primary" size="small">还想买</van-button> -->
-                            <!-- <van-button type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button> -->
-                            <!--                     <van-button type="info" size="small" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                        </template>
+                        <!-- 待付款 -->
+                        <template v-if="active == 1">
+                            <van-button type="danger" size="small" @click.stop="cancleOrder(item.order_id)">取消订单</van-button>
+                            <van-button type="primary" size="small" @click.stop="payOrder(item.order_id)">去付款</van-button>
+                        </template>
+                        <!-- 待使用 -->
+                        <template v-else-if="active == 2">
+                            <template v-if="item.is_roll == 1 && item.order_type == 1 && item.apply_status != 3 && item.is_use ==0 && item.order_status == 1  && item.pay_type == 1">
+                                <van-button type="warning" size="small" @click="refundApply(item.order_id)">申请退款</van-button>
+                            </template>
+                            <van-button v-if="item.order_type == 1 && item.is_use == 0" type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button>
+                            <template v-if="item.is_use == 0">
+                                <van-button v-if="item.order_type == 3" type="info" size="small" @click="activeCard(item.cg_id.id)">去激活</van-button>
+                            </template>
+                        </template>
+                        <!-- 待评价 -->
+                        <template v-else-if="active == 3">
+                            <van-button type="primary" size="small" @click.stop="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
+                        </template>
+                        <!-- 退款 -->
+                        <template v-else-if="active == 4">
+                        </template>
+                        <template v-else-if="active == 5">
+                        </template>
+                        <!-- <van-button type="danger" size="small">取消订单</van-button> -->
+                        <!-- <van-button type="danger" size="small">申请退款</van-button> -->
+                        <!-- <van-button type="primary" size="small">还想买</van-button> -->
+                        <!-- <van-button type="info" size="small" @click="getOrder(item.order_id,item.order_type)">去使用</van-button> -->
+                        <!--                     <van-button type="info" size="small" @click="handleComment(item.order_id,item.order_type,item.goods_id)">去评价</van-button>
                             <van-button type="info" size="small">激活使用</van-button> -->
-                            <!-- </template> -->
-                        </div>
+                        <!-- </template> -->
                     </div>
+                </div>
             </li>
         </ul>
         <loadMore ref="loadMore"></loadMore>

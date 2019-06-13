@@ -88,7 +88,7 @@ let router = new Router({
             name: 'Home',
             component: Index, //商城端
             // component: DistributionTow,//商家端主页
-            // component: Administrator,//核销端
+            // component: Administrator, //核销端
         },
         {
             path: '/Index',
@@ -327,6 +327,12 @@ let router = new Router({
             component: () => import( /* webpackChunkName: "checkstore" */ '@/views/checkstore/WithdrawDeposit.vue'),
             meta: { business: true }
         },
+        {
+            path: '/ChageShop',
+            name: 'ChageShop',
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/checkstore/ChageShop.vue'),
+            meta: { business: true }
+        },
 
         /*商家端*/
         {
@@ -385,12 +391,6 @@ let router = new Router({
             path: '/MyTeamTow',
             name: 'MyTeamTow',
             component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/MyTeamTow.vue'),
-            meta: { shop: true }
-        },
-        {
-            path: '/ChageShop',
-            name: 'ChageShop',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/checkstore/ChageShop.vue'),
             meta: { shop: true }
         },
         {
