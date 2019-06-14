@@ -42,8 +42,8 @@
                         <p>
                             <span><img :src="item.wechat_img" alt=""></span>
                             <a>{{item.username}}</a>
-                            <b v-if="item.get_status == 1">已结算</b>
-                            <b v-else>未结算</b>
+                            <b v-if="item.get_status == 0">未结算</b>
+                            <b v-else>已结算</b>
                         </p>
                         <h3>{{item.goods_title}}</h3>
                         <time>下单时间：{{$dayjs.unix(item.add_time).format('YYYY-MM-DD')}} </time>

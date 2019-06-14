@@ -1,98 +1,55 @@
 <template>
     <div class="CardActivate">
-        <!--         <header>
-            <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
-            <div class="tel">卡片激活</div>
-            <div class="add"></div>
-        </header> -->
-        <div class="header">
-            <div class="image">
-                <template v-if="imgUrl == ''">
-                    <img src="../assets/head_portrait2.png" alt="">
-                </template>
-                <template v-else>
-                    <img :src="$imgUrl + imgUrl" alt="">
-                </template>
-            </div>
-            <div class="text">
-                <i> <img src="../assets/icon_warning_b.png" alt=""></i>
-                <p>请按照左边范例上传激活照片</p>
-            </div>
-        </div>
-        <div class="add_image">
-            <input type="file" id="upload-ele" name="image" accept=“image/*” @change='handleInputChange'>
-            <div class="default_img">
-                <i><img src="../assets/icon_add.png" alt=""></i>
-                <p>点击上传图片</p>
-            </div>
-            <!-- <div class="images" v-else><img :src="imgUrl" alt=""></div> -->
-        </div>
-        <div class="user_message">
+        <div class="user_message" style="margin-top:20px">
             <div class="user_name box">
-                <label>孩子姓名</label>
                 <div class="boxs">
-                    <!-- <van-cell-group> -->
-                    <van-field v-model="child_name" @blur="goTop" />
-                    <!-- </van-cell-group> -->
-                    <!-- <van-field v-model="child_name" placeholder="" /> -->
-                    <!-- <input type="text" v-model="child_name"> -->
+                    <van-field v-model="real_name" placeholder="请输入姓名" />
                 </div>
             </div>
-            <div class="user_sex box">
-                <label>性别</label>
+            <div class="user_name box">
                 <div class="boxs">
-                    <van-radio-group v-model="sex">
-                        <van-radio name="1">王子</van-radio>
-                        <van-radio name="2">公主</van-radio>
-                    </van-radio-group>
+                    <van-field v-model="id_card" placeholder="请输入身份号" />
                 </div>
             </div>
-            <div class="user_date box">
-                <label>出生日期</label>
-                <div class="datePicker boxs">
-                    <mt-datetime-picker type="date" ref="picker" year-format="{value}" month-format="{value}" date-format="{value}" @confirm="handleConfirm" :startDate="startDate" :endDate="endDate" v-model="birthday" @click.native="closeDatepicter">
-                    </mt-datetime-picker>
-                    <span>{{birthday}}</span>
-                    <p @click="openPicker"></p>
-                    <i><img src="../assets/icon_pull_down.png" alt=""></i>
+            <div class="user_name box">
+                <div class="boxs">
+                    <van-field v-model="bank_card" placeholder="请输入银行卡号" />
                 </div>
             </div>
-            <div class="user_phone box">
-                <label>手机号</label>
+            <div class="user_name box">
                 <div class="boxs">
-                    <input type="text" v-model="tel_phone">
-                </div>
-            </div>
-            <div class="user_stature box">
-                <label>身高</label>
-                <div class="boxs">
-                    <span :class="tall == '1m以下' ? 'active' : ''" @click="getTall('1m以下')">1m以下</span>
-                    <span :class="tall == '1.0-1.2m' ? 'active' : ''" @click="getTall('1.0-1.2m')">1.0-1.2m</span>
-                    <span :class="tall == '1.2-1.4m' ? 'active' : ''" @click="getTall('1.2-1.4m')">1.2-1.4m</span>
-                    <span :class="tall == '1.4m以上' ? 'active' : ''" @click="getTall('1.4m以上')">1.4m以上</span>
+                    <van-field v-model="cellphone" placeholder="请输入银行预留手机号" />
                 </div>
             </div>
         </div>
-        <div class="sub_btn" @click="confirmPopShow"><span>提交激活</span></div>
+        <div class="withdraw_deposit_wx">
+            <div class="agreement">
+                <span @click="changeAgree" v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
+                <span @click="changeAgree" v-else><img src="../assets/icon_unselected.png" alt=""></span>
+                <p @click="changeAgree">我同意签署</p>&nbsp;&nbsp;
+                <a herf="javascript:;" @click="confirmPopShow">《用户服务协议》</a>
+            </div>
+        </div>
+        <div class="sub_btn" @click="submit"><span>确定签署</span></div>
+        <div class="withdraw_deposit_wx">
+            提交签署后，系统将在1-3个工作日内处理，请耐心等待
+        </div>
         <div class="confirm_pop_bg" v-if="confirmPop">
             <div class="confirm_pop">
                 <div class="boxs">
-                    <h3>激活须知</h3>
-                    <div class="detail" v-html="card.activation_things"></div>
-                    <div class="agreement">
-                        <van-checkbox v-model="agreementStuats">同意激活协议</van-checkbox>
-                    </div>
-                    <div class="btn">
-                        <a @click="confirmPopHide">取 消</a>
-                        <b @click="submit">确 定</b>
+                    <h3>用户服务协议</h3>
+                    <div class="detail">
+                        乙方：北京阿拉钉科技有限公司
+                        法定代表人：胡宝兰
+                        根据《中华人民共和国合同法》的有关规定，甲乙双方经友好协商，达成以下协议：
+                        1、甲方系具有完全民事行为能力且具备相应专业技能及许可（如有）的个人，即自由职业者，可与第三方建立业务关系并提供生产经营活动。
+                        2、乙方是一家领先的互联网信息技术服务公司，具有丰富的技术服务经验。阿拉钉平台是由乙方自主研发及运营维护的一套综合云服务平台，具备电子协议签署、电子数据存证、账户管理、交易管理、订单管理与查询等各项技术服务能力。
+                        3、甲方保证遵守国家相关法律法规及行
                     </div>
                     <div class="colse" @click="confirmPopHide"><span><img src="../assets/icon_close.png" alt=""></span></div>
                 </div>
             </div>
         </div>
-        <!--        <van-popup v-model="datePicker" position="bottom" :overlay="false">
-            <van-datetime-picker v-model="startDate" type="date" :min-date="minDate" :maxDate="maxDate" @cancel="closeDatepicter" @confirm="handleConfirm" />
-        </van-popup> -->
     </div>
 </template>
 <script>
@@ -103,29 +60,28 @@ import lrz from 'lrz'
 Vue.component(DatetimePicker.name, DatetimePicker);
 
 export default {
-    name: 'CardActivate',
+    name: 'Sigining',
     data() {
         let date = this.$dayjs().format('YYYY-MM-DD');
         return {
             card: {},
-            cd_id: '',
-            imgUrl: '',
-            child_name: '',
-            sex: '1',
-            birthday: '2000-01-01',
-            tel_phone: '',
-            tall: '1m以下',
-            startDate: new Date('2000-01-01'),
-            endDate: new Date(date),
-            datePicker: false,
+            real_name: '',
+            id_card: '',
+            bank_card: '',
+            cellphone: '',
             agreementStuats: true,
             confirmPop: false,
             status: '',
+            agreementState: true,
+            changeStatus: true,
             dateTime: ""
         }
     },
     components: {},
     methods: {
+        changeAgree() {
+            this.agreementState = !this.agreementState
+        },
         //兼容性处理
         goTop() {
             document.body.scrollTop = document.documentElement.scrollTop = 0;
@@ -193,42 +149,7 @@ export default {
             let date = this.$dayjs(this.birthday).format('YYYY-MM-DD')
             this.birthday = date
         },
-        //点击确定按钮
-        handleConfirm(data) {
-            let date = this.$dayjs(data).format('YYYY-MM-DD')
-            this.birthday = date;
-            this.$refs.picker.close()
-
-            // event.stopPropagation()
-            // document.body.scrollTop = document.documentElement.scrollTop = 0;
-            // let date = this.$dayjs(data).format('YYYY-MM-DD')
-            // this.birthday = date;
-            // this.datePicker = false
-            // this.$refs.picker.close()
-            // event.stopPropagation()
-        },
         confirmPopShow() {
-            if (!this.imgUrl) {
-                this.$message('头像未上传！');
-                return false;
-            }
-
-            if (this.child_name.length < 2) {
-                this.$message('请填写真实姓名');
-                return false;
-            }
-
-            // if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.child_name)) {
-            //     this.$message('真实姓名填写有误');
-            //     return false;
-            // }
-
-            if (!(/^1(3|4|5|6|9|7|8)\d{9}$/.test(this.tel_phone))) {
-                this.$message("手机号码有误，请重填");
-                return false;
-            }
-
-            document.body.scrollTop = document.documentElement.scrollTop = 0;
             this.confirmPop = true
         },
         confirmPopHide() {
@@ -238,35 +159,48 @@ export default {
         async submit() {
             // document.body.scrollTop = document.documentElement.scrollTop = 0;
 
+            if (!/^[\u4e00-\u9fa5]{2,4}$/.test(this.real_name)) {
+                this.$message('真实姓名填写有误');
+                return false;
+            }
+
+            var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+            if (!reg.test(this.id_card)) {
+                this.$message('身份证号码输入有误');
+                return false;
+            }
+
+            var regex = /^([1-9]{1})(\d{15}|\d{18})$/;
+            if (!regex.test(this.bank_card)) {
+                this.$message('请填写真实银行卡号');
+                return false;
+            }
+
+            var rephone = /^1[3|4|5|6|7|8|9]\d{9}$/;
+            if (!rephone.test(this.cellphone)) {
+                this.$message('手机号码有误，请重填');
+                return false;
+            }
+
             if (!this.agreementStuats) {
-                this.$message('你未同意激活协议！');
+                this.$message('你未同意签署协议！');
                 return false;
             }
 
             let userInfo = this.$localstore.get('wx_user')
             let data = {
                 user_id: userInfo.user_id,
-                cancle_id: this.$route.query.id,
-                child_name: this.child_name,
-                birthday: this.birthday,
-                tel_phone: this.tel_phone,
-                sex: this.sex,
-                tall: this.tall,
-                cd_id: this.$route.query.id,
-                head_img: this.imgUrl
+                real_name: this.real_name,
+                id_card: this.id_card,
+                bank_card: this.bank_card,
+                cellphone: this.cellphone,
             }
 
-            let res = ''
-            if (status == 2) {
-                res = await this.$postRequest('/card/ActivityUpdateCard', data)
-            } else {
-                res = await this.$postRequest('/card/ActivityCard', data)
-            }
-
+            let res = await this.$postRequest('/withdraw/SetAccount', data)
             this.$message(res.data.msg);
             if (res.data.code == 1) {
                 setTimeout(() => {
-                    this.$router.replace({ name: "MyCardBag" })
+                    this.$router.replace({ name: "WithdrawDeposit" })
                 }, 2000);
             }
 
@@ -283,10 +217,8 @@ export default {
         let card = this.$localstore.get('usecard')
         this.card = card
         this.status = this.$route.query.update_status
-        document.title = "卡片激活"
-        // if (!card) {
-        //     this.$router.push({ name: "Index" })
-        // }
+        document.title = "签署资料填写"
+
     },
 
     // 挂载前状态
@@ -310,6 +242,63 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.user_name {
+    margin-bottom: 20px;
+}
+
+
+.withdraw_deposit_wx {
+    background: #fff;
+    margin-top: .1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: .68rem;
+    // padding-left: .68rem;
+    padding: 0.24rem .68rem;
+
+    i {
+        width: .4rem;
+        overflow: hidden;
+    }
+
+    p {
+        font-size: .24rem;
+        color: #515C6F;
+        padding-left: .12rem;
+    }
+
+    .agreement {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0 .4rem;
+        height: 1.2rem;
+        font-size: .32rem;
+
+        span {
+            width: .34rem;
+            height: .34rem;
+
+            // overflow: hidden;
+            img {
+                width: .34rem;
+                height: .34rem;
+                vertical-align: baseline;
+            }
+        }
+
+        p {
+            padding-left: .2rem;
+        }
+
+        a {
+            color: #FF6666;
+        }
+    }
+
+}
+
 .CardActivate {
     padding-bottom: 55px;
 

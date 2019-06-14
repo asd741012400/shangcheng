@@ -438,6 +438,7 @@ export default {
     padding: 0 0.8rem;
     width: 100%;
     box-sizing: border-box;
+    cursor: pointer;
 
     .van-button--info {
         background: #FF6666;

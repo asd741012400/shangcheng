@@ -22,9 +22,9 @@
                 </ul>
             </div>
             <div class="agreement">
-                <span @click.stop="changeAgree" v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
-                <span @click.stop="changeAgree" v-else><img src="../assets/icon_unselected.png" alt=""></span>
-                <p @click.stop="changeAgree">同意</p>&nbsp;&nbsp;
+                <span @click="changeAgree" v-if="agreementState"><img src="../assets/icon_schedule.png" alt=""></span>
+                <span @click="changeAgree" v-else><img src="../assets/icon_unselected.png" alt=""></span>
+                <p @click="changeAgree">同意</p>&nbsp;&nbsp;
                 <a herf="javascript:;" @click="changeStatus">PLUS协议</a>
             </div>
             <!--            <div class="total">

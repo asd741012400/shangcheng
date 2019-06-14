@@ -14,21 +14,21 @@
                     </div>
                 </div>
             </div>
-            <ul>
+            <ul style="position:relative;z-index:99;">
                 <li>
-                    <p>￥{{userInfo.history_money ||　'0'}}</p>
+                    <p>￥{{user_account.history_money ||　'0'}}</p>
                     <a>历史收益</a>
                 </li>
                 <!-- <li>
-                    <p>￥{{userInfo.mymoney ||　'0'}}</p>
+                    <p>￥{{user_account.mymoney ||　'0'}}</p>
                     <a>已提现</a>
                 </li> -->
                 <li @click="goWithdrawDeposit">
-                    <p>￥{{userInfo.getmoney ||　'0'}}</p>
-                    <a>可提现</a>
+                    <p>￥{{user_account.getmoney ||　'0.00'}}</p>
+                    <a @click="goWithdrawDeposit">可提现</a>
                 </li>
                 <li>
-                    <p>￥{{userInfo.freeze_money ||　'0'}}</p>
+                    <p>￥{{user_account.freeze_money ||　'0'}}</p>
                     <a>待生效</a>
                 </li>
             </ul>
@@ -197,6 +197,7 @@ export default {
                 tel_phone: '',
                 status: 0
             },
+            user_account:{},
             avatar: '',
             cg_id: '',
             give: '',
@@ -328,10 +329,10 @@ export default {
                     if (!this.$validatenull(res.data.data.card_count)) {
                         this.card_count = res.data.data.card_count
                         this.popShow1 = true;
-                    }else{
-                        setTimeout(()=>{
+                    } else {
+                        setTimeout(() => {
                             window.location.reload()
-                        },3000)
+                        }, 3000)
                     }
                 }
                 if (this.type == 'C') {
@@ -369,6 +370,10 @@ export default {
             }
             let res = await this.$getRequest('/home/AutoCount', { union_id: union_id })
         },
+        async getMoney() {
+            let res = await this.$postRequest('/withdraw/WithdrawAccount', { user_id: this.userInfo.user_id })
+            this.user_account = res.data.data
+        },
     },
 
     // 创建前状态
@@ -386,6 +391,7 @@ export default {
         }
 
         this.getMobile()
+        this.getMoney()
         //每次进入自动计算用户金额
         // this.check()
     },
@@ -471,6 +477,7 @@ body {
         &.vip_class {
             height: 3.96rem;
             background: linear-gradient(91deg, rgba(255, 102, 102, 1) 0%, rgba(255, 179, 137, 1) 100%);
+            position: relative;
 
             .user_message {
                 display: flex;
@@ -537,6 +544,7 @@ body {
                 align-items: center;
                 justify-content: space-between;
                 padding: .2rem .6rem 0;
+                position: relative;
 
                 li {
                     color: #fff;
