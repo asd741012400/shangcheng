@@ -100,6 +100,8 @@ export default {
                         // goods_img: plus.thumb,
                         union_id: WxAuth.union_id,
                         is_wechat: 1,
+                        subject_type: 0,
+                        subject_type: 0,
                         order_num: 1,
                         // amount: plus.sale_price,
                         // total_amount: plus.sale_price

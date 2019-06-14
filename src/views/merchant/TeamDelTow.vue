@@ -21,8 +21,8 @@
                 <div>
                     <p class="name">
                         <b>{{item.goods_title}}</b>
-                        <span v-if="item.get_status == 1">已结算</span>
-                        <span v-else>未结算</span>
+                        <span v-if="item.get_status == 0">未结算</span>
+                        <span v-else>已结算</span>
                     </p>
                     <p>下单时间：{{$dayjs.unix(item.add_time).format('YYYY-MM-DD')}} </p>
                     <p>收益：￥{{item.get_money}}</p>
@@ -54,7 +54,7 @@ export default {
             that.table = num;
             that.page = 1;
             if (num == 1) {
-                that.get_status = 3;
+                that.get_status = -1;
             } else if (num == 2) {
                 that.get_status = 0;
             } else if (num == 3) {

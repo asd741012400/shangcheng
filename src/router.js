@@ -86,8 +86,8 @@ let router = new Router({
     routes: [{
             path: '/',
             name: 'Home',
-            component: Index, //商城端
-            // component: DistributionTow,//商家端主页
+            // component: Index, //商城端
+            component: DistributionTow,//商家端主页
             // component: Administrator, //核销端
         },
         {
@@ -276,6 +276,11 @@ let router = new Router({
             name: 'VipPlus',
             component: () => import( /* webpackChunkName: "Home" */ '@/views/VipPlus.vue')
         },
+        {
+            path: '/Sigining',
+            name: 'Sigining',
+            component: () => import( /* webpackChunkName: "Home" */ '@/views/Sigining.vue')
+        },
 
 
         /*核销端*/
@@ -372,8 +377,7 @@ let router = new Router({
         {
             path: '/WithdrawDepositDel',
             name: 'WithdrawDepositDel',
-            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawDepositDel.vue'),
-            meta: { shop: true }
+            component: () => import( /* webpackChunkName: "merchant" */ '@/views/merchant/WithdrawDepositDel.vue')
         },
         {
             path: '/TeamDel',
@@ -452,13 +456,7 @@ router.beforeEach((to, from, next) => {
                 localstore.set('wx_user', res.data.data.user)
                 localstore.set('wx', res.data.data.wx)
                 union_id = res.data.data.wx.unionid
-                // let from_url = localstore.get('from_url')
-                // if (from_url) {
-                //     localstore.remove('from_url')
-                //     if (from_url.length > 2) {
-                //         window.location.href = '/#' + from_url
-                //     }
-                // }
+
                 bindUser(union_id)
             }
         })

@@ -16,7 +16,7 @@ axios.interceptors.request.use(function(config) {
 });
 
 
-// http 响应response 拦截器
+// http 响应response 拦截器 
 axios.interceptors.response.use(response => {
 
     Indicator.close();

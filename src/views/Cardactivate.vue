@@ -1,6 +1,6 @@
 <template>
     <div class="CardActivate">
-<!--         <header>
+        <!--         <header>
             <div class="icon_return" @click="$router.go(-1)"><span><img src="../assets/icon_return_h.png" alt=""></span></div>
             <div class="tel">卡片激活</div>
             <div class="add"></div>
@@ -9,10 +9,10 @@
             <div class="image">
                 <template v-if="imgUrl == ''">
                     <img src="../assets/head_portrait2.png" alt="">
-                        </template>
-                    <template v-else>
-                        <img :src="$imgUrl + imgUrl" alt="">
-                    </template>
+                </template>
+                <template v-else>
+                    <img :src="$imgUrl + imgUrl" alt="">
+                </template>
             </div>
             <div class="text">
                 <i> <img src="../assets/icon_warning_b.png" alt=""></i>
@@ -50,7 +50,7 @@
             <div class="user_date box">
                 <label>出生日期</label>
                 <div class="datePicker boxs">
-                    <mt-datetime-picker type="date" ref="picker" year-format="{value}" month-format="{value}" date-format="{value}" @confirm="handleConfirm" :startDate="startDate" :endDate="endDate"  v-model="birthday" @click.native="closeDatepicter">
+                    <mt-datetime-picker type="date" ref="picker" year-format="{value}" month-format="{value}" date-format="{value}" @confirm="handleConfirm" :startDate="startDate" :endDate="endDate" v-model="birthday" @click.native="closeDatepicter">
                     </mt-datetime-picker>
                     <span>{{birthday}}</span>
                     <p @click="openPicker"></p>
@@ -210,6 +210,11 @@ export default {
         confirmPopShow() {
             if (!this.imgUrl) {
                 this.$message('头像未上传！');
+                return false;
+            }
+
+            if (this.child_name.length < 2) {
+                this.$message('请填写真实姓名');
                 return false;
             }
 

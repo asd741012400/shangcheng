@@ -27,7 +27,7 @@
             </li>
             <li>
                 <p>提现去向</p>
-                <span>微信零钱</span>
+                <span>{{detail.bank_card}}</span>
             </li>
             <li>
                 <p>提现单号</p>
